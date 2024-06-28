@@ -41,13 +41,8 @@ function App() {
       <div className="selectButton" onClick={() => subtract()}>
         <AiFillCaretLeft className="icon" />
       </div>
-      <Canvas shadows camera={{ position: [2, 7, 8] }}>
-        <OrbitControls
-          makeDefault
-          ref={controls}
-          autoRotate
-          autoRotateSpeed={0.5}
-        />
+      <Canvas camera={{ position: [2, 6, 12] }}>
+        <OrbitControls makeDefault ref={controls} autoRotate />
         <Lights />
         <Fixture
           fixtureNumber={0}
