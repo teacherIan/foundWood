@@ -15,7 +15,6 @@
 }
 
 .menu {
-
   color: #77481C;
   font-size: calc(1vw + 1vh + 5px);
   font-family: cursive;
@@ -33,7 +32,12 @@
   height: 100%;
   padding-left: 10px;
   cursor: pointer;
+  /* font-size: 100vw; */
+
+
 }
+
+
 
 .selectButton {
   cursor: pointer;
@@ -44,7 +48,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: calc(2vw + 2vh+ 15px);
+  /* font-size: calc(2vw + 2vh+ 15px); */
   z-index: 100;
 }
 
@@ -56,11 +60,19 @@
 
 }
 
-.icon {
-  font-size: clamp(20px, 70px, 100px);
-  color: #77481C;
-}
-
 .menu-item {
   cursor: pointer;
+}
+
+.arrow {
+  color: #77481C;
+  max-width: 100%;
+  height: auto;
+  transform: scale(4);
+}
+
+@media only screen and (max-width: 1000px) {
+  .arrow {
+    transform: scale(1.5);
+  }
 }

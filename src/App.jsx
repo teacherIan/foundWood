@@ -39,7 +39,7 @@ function App() {
         </div>
       </div>
       <div className="selectButton" onClick={() => subtract()}>
-        <AiFillCaretLeft className="icon" />
+        <AiFillCaretLeft className="arrow" />
       </div>
       <Canvas camera={{ position: [2, 6, 12] }}>
         <OrbitControls makeDefault ref={controls} autoRotate />
@@ -62,7 +62,7 @@ function App() {
         />
       </Canvas>
       <div className="selectButton right" onClick={() => add()}>
-        <AiFillCaretRight className="icon" />
+        <AiFillCaretRight className="arrow" />
       </div>
     </>
   );
