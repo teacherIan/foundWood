@@ -1,0 +1,141 @@
+import { useState, useEffect, useRef } from 'react';
+import './form.css';
+import { FaFacebook } from 'react-icons/fa6';
+
+export default function Form() {
+  const [nameLabel, setNameLabel] = useState(['']);
+  const [emailLabel, setEmailLabel] = useState(['']);
+  const [messageLabel, setMessageLabel] = useState(['']);
+  const nameInputRef = useRef(null);
+  const nameLabelRef = useRef(null);
+  const emailInputRef = useRef(null);
+  const emailLabelRef = useRef(null);
+  const messageInputRef = useRef(null);
+  const messageLabelRef = useRef(null);
+
+  useEffect(() => {
+    if (nameLabelRef.current) {
+      const label = nameLabelRef.current;
+      const text = label.innerText;
+      const letters = text.split('').map((letter, idx) => ({
+        letter,
+        delay: idx * 50,
+      }));
+
+      const timer = setInterval(() => {
+        if (letters.length > 0) {
+          const [currentLetter, ...restLetters] = letters;
+          setNameLabel((prevLabels) => [
+            ...prevLabels,
+            <span
+              key={prevLabels.length}
+              style={{ transitionDelay: `${currentLetter.delay}ms` }}
+            >
+              {currentLetter.letter}
+            </span>,
+          ]);
+          letters.splice(0, 1);
+        } else {
+          clearInterval(timer);
+        }
+      }, 50);
+
+      return () => clearInterval(timer);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (emailLabelRef.current) {
+      const label = emailLabelRef.current;
+      const text = label.innerText;
+      const letters = text.split('').map((letter, idx) => ({
+        letter,
+        delay: idx * 50,
+      }));
+
+      const timer = setInterval(() => {
+        if (letters.length > 0) {
+          const [currentLetter, ...restLetters] = letters;
+          setEmailLabel((prevLabels) => [
+            ...prevLabels,
+            <span
+              key={prevLabels.length}
+              style={{ transitionDelay: `${currentLetter.delay}ms` }}
+            >
+              {currentLetter.letter}
+            </span>,
+          ]);
+          letters.splice(0, 1);
+        } else {
+          clearInterval(timer);
+        }
+      }, 50);
+
+      return () => clearInterval(timer);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (messageLabelRef.current) {
+      const label = messageLabelRef.current;
+      const text = label.innerText;
+      const letters = text.split('').map((letter, idx) => ({
+        letter,
+        delay: idx * 50,
+      }));
+
+      const timer = setInterval(() => {
+        if (letters.length > 0) {
+          const [currentLetter, ...restLetters] = letters;
+          setMessageLabel((prevLabels) => [
+            ...prevLabels,
+            <span
+              key={prevLabels.length}
+              style={{ transitionDelay: `${currentLetter.delay}ms` }}
+            >
+              {currentLetter.letter}
+            </span>,
+          ]);
+          letters.splice(0, 1);
+        } else {
+          clearInterval(timer);
+        }
+      }, 50);
+
+      return () => clearInterval(timer);
+    }
+  }, []);
+
+  return (
+    <div className="form-container">
+      <h1>Contact Doug's Found Wood</h1>
+      <form>
+        <div className="form-control">
+          <input ref={nameInputRef} type="text" required />
+          <label ref={nameLabelRef}>
+            {nameLabel.length > 1 ? nameLabel : 'Name'}
+          </label>
+        </div>
+
+        <div className="form-control">
+          <input ref={emailInputRef} type="text" required />
+          <label ref={emailLabelRef}>
+            {emailLabel.length > 1 ? emailLabel : 'Email'}
+          </label>
+        </div>
+
+        <div className="form-control" style={{ width: '50vw' }}>
+          <input ref={messageInputRef} type="text" required />
+          <label ref={messageLabelRef}>
+            {messageLabel.length > 1 ? messageLabel : 'Message'}
+          </label>
+        </div>
+
+        <button className="btn">Email</button>
+      </form>
+      <a href="https://www.facebook.com/DougsFoundWood/" target="_blank">
+        <FaFacebook className="facebookIcon" />
+      </a>
+    </div>
+  );
+}

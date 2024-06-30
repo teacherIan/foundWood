@@ -1,13 +1,6 @@
 import { useSpring, animated, config } from '@react-spring/three';
 import { useState, useEffect } from 'react';
-import {
-  useGLTF,
-  ContactShadows,
-  Stage,
-  Backdrop,
-  Sky,
-} from '@react-three/drei';
-import { MeshStandardMaterial } from 'three';
+import { useGLTF, Sky } from '@react-three/drei';
 
 export default function Fixture({
   counter,
@@ -19,22 +12,20 @@ export default function Fixture({
   const configAnimation = {
     mass: 2,
     tension: 70,
-    friction: 100,
+    friction: 70,
     precision: 0.0001,
   };
 
   const [springs, api] = useSpring(() => ({
-    position: [0, 10, -0],
+    position: [0, 5, -0],
     config: configAnimation,
     scale: 0,
   }));
 
   const modelImport = useGLTF(model);
-  console.log(modelImport.scene.children[0].material);
 
   useEffect(() => {
     if (fixtureNumber === counter) {
-      console.log('Same');
       // Perform the action here
       api.start({
         position: [0, -4.5 + offset, 0],
@@ -44,7 +35,6 @@ export default function Fixture({
     }
 
     if (fixtureNumber > counter) {
-      console.log('Greater');
       api.start({
         position: [0, 60, 0],
         scale: 0,
@@ -53,7 +43,6 @@ export default function Fixture({
     }
 
     if (fixtureNumber < counter) {
-      console.log('Less');
       api.start({
         position: [0, -60, 0],
         scale: 0,
@@ -62,21 +51,8 @@ export default function Fixture({
     }
   }, [counter]);
 
-  const material = new MeshStandardMaterial({
-    color: 'white',
-  });
-
   return (
     <>
-      {/* <ContactShadows
-        smooth
-        position={[0, -1.3, 0]}
-        opacity={0.5}
-        scale={5}
-        blur={10}
-        far={2}
-      /> */}
-
       <Sky
         distance={450000}
         sunPosition={[0, 1, 0]}

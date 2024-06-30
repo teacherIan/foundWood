@@ -15,26 +15,23 @@
 }
 
 .menu {
+  user-select: none;
+  padding: 0px 50px 0px 50px;
   color: #77481C;
   font-size: calc(1vw + 1vh + 5px);
   font-family: cursive;
   display: flex;
-  width: 85%;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding-right: 10px;
+  /* padding-right: 10px; */
 }
 
 .icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding-left: 10px;
+  max-width: 10vh;
+  max-height: 10vh;
+  user-select: none;
   cursor: pointer;
-  /* font-size: 100vw; */
-
-
 }
 
 
@@ -74,5 +71,10 @@
 @media only screen and (max-width: 1000px) {
   .arrow {
     transform: scale(1.5);
+  }
+
+  .menu {
+    padding: 2px;
+
   }
 }

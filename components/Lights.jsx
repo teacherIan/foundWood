@@ -3,7 +3,7 @@ export default function Lights() {
     <>
       <ambientLight intensity={5} />
 
-      <pointLight position={[5, 10, 5]} intensity={100} castShadow />
+      <pointLight position={[5, 10, 5]} intensity={1000} castShadow />
       <pointLight
         position={[3, 10, 1]}
         intensity={100}

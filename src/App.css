@@ -1,3 +1,7 @@
+.app-container {
+    position: relative;
+}
+
 canvas {
     width: 100vw;
     height: 100svh;

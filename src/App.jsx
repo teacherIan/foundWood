@@ -1,21 +1,19 @@
 import Fixture from '../components/Fixture';
 import Lights from '../components/Lights';
 import './App.css';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { AiFillCaretRight } from 'react-icons/ai';
 import { AiFillCaretLeft } from 'react-icons/ai';
-import {
-  OrbitControls,
-  ContactShadows,
-  Stage,
-  Backdrop,
-} from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import plantStandA from '/plantStandAFixed.glb?url';
 import chairA from '/chairA.glb?url';
+import chairC from '/chairC.glb?url';
 import found_wood from '/found_wood_icon.png?url';
+import Contact from '../components/Contact';
 
 function App() {
+  const [showContactPage, setShowContactPage] = useState(false);
   const [counter, setCounter] = useState(0);
   const controls = useRef();
 
@@ -29,13 +27,22 @@ function App() {
 
   return (
     <>
+      <Contact
+        showContactPage={showContactPage}
+        setShowContactPage={setShowContactPage}
+      />
       <div className="header">
-        <img src={found_wood} className="icon"></img>
         <div className="menu">
+          <img src={found_wood} className="icon"></img>
           <div className="menu-item">Gallery</div>
           <div className="menu-item">Mission</div>
           <div className="menu-item">Showroom</div>
-          <div className="menu-item">Contact</div>
+          <div
+            onClick={() => setShowContactPage(!showContactPage)}
+            className="menu-item"
+          >
+            Contact
+          </div>
         </div>
       </div>
       <div className="selectButton" onClick={() => subtract()}>
@@ -59,6 +66,14 @@ function App() {
           scale={4}
           offset={1.1}
           model={chairA}
+        />
+        <Fixture
+          fixtureNumber={2}
+          counter={counter}
+          setCounter={setCounter}
+          scale={4}
+          offset={1.1}
+          model={chairC}
         />
       </Canvas>
       <div className="selectButton right" onClick={() => add()}>
