@@ -23,4 +23,9 @@
     font-size: 60px;
     color: white;
     cursor: pointer;
+    transition: 1s;
+}
+
+.exit-icon:hover {
+    color: #d9ebc7;
 }

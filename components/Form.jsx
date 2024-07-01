@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import './form.css';
 import { FaFacebook } from 'react-icons/fa6';
+import emailjs from '@emailjs/browser';
 
 export default function Form() {
   const [nameLabel, setNameLabel] = useState(['']);
@@ -12,6 +13,35 @@ export default function Form() {
   const emailLabelRef = useRef(null);
   const messageInputRef = useRef(null);
   const messageLabelRef = useRef(null);
+
+  const handleSubmit = async (e) => {
+    console.log('Submitted');
+    e.preventDefault();
+    const serviceId = 'service_ucr96wu';
+    const templateId = 'template_pkhjdgm';
+    console.log(e.target);
+
+    try {
+      const form = new FormData(e.target);
+      const name = form.get('name');
+      const email = form.get('email');
+      const message = form.get('message');
+
+      await emailjs.send(serviceId, templateId, {
+        name,
+        email,
+        message,
+      });
+
+      alert('Email sent successfully!');
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    emailjs.init('nsZGLCenvPQb-kW11');
+  }, []);
 
   useEffect(() => {
     if (nameLabelRef.current) {
@@ -109,23 +139,23 @@ export default function Form() {
   return (
     <div className="form-container">
       <h1>Contact Doug's Found Wood</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="form-control">
-          <input ref={nameInputRef} type="text" required />
+          <input name="name" ref={nameInputRef} type="text" required />
           <label ref={nameLabelRef}>
             {nameLabel.length > 1 ? nameLabel : 'Name'}
           </label>
         </div>
 
         <div className="form-control">
-          <input ref={emailInputRef} type="text" required />
+          <input name="email" ref={emailInputRef} type="text" required />
           <label ref={emailLabelRef}>
             {emailLabel.length > 1 ? emailLabel : 'Email'}
           </label>
         </div>
 
         <div className="form-control" style={{ width: '50vw' }}>
-          <input ref={messageInputRef} type="text" required />
+          <input name="message" ref={messageInputRef} type="text" required />
           <label ref={messageLabelRef}>
             {messageLabel.length > 1 ? messageLabel : 'Message'}
           </label>
