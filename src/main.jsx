@@ -3,9 +3,15 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 
+function handleResize() {
+  location.reload();
+}
+
+window.addEventListener('resize', handleResize);
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <div id="app-container">
+    <div onResize={location.reload} id="app-container">
       <App />
     </div>
   </React.StrictMode>

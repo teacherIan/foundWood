@@ -11,8 +11,10 @@ import chairA from '/chairA.glb?url';
 import chairC from '/chairC.glb?url';
 import found_wood from '/found_wood_icon.png?url';
 import Contact from '../components/Contact';
+import Gallery from '../components/Gallery';
 
 function App() {
+  const [showGallery, setShowGallery] = useState(false);
   const [showContactPage, setShowContactPage] = useState(false);
   const [counter, setCounter] = useState(0);
   const controls = useRef();
@@ -27,58 +29,64 @@ function App() {
 
   return (
     <>
-      <Contact
-        showContactPage={showContactPage}
-        setShowContactPage={setShowContactPage}
-      />
-      <div className="header">
-        <div className="menu">
-          <img src={found_wood} className="icon"></img>
-          <div className="menu-item">Gallery</div>
-          <div className="menu-item">Mission</div>
-          <div className="menu-item">Showroom</div>
-          <div
-            onClick={() => setShowContactPage(!showContactPage)}
-            className="menu-item"
-          >
-            Contact
+      {showGallery ? (
+        <Gallery />
+      ) : (
+        <>
+          <Contact
+            showContactPage={showContactPage}
+            setShowContactPage={setShowContactPage}
+          />
+          <div className="header">
+            <div className="menu">
+              <img src={found_wood} className="icon"></img>
+              <div className="menu-item">Gallery</div>
+              <div className="menu-item">Mission</div>
+              <div className="menu-item">Showroom</div>
+              <div
+                onClick={() => setShowContactPage(!showContactPage)}
+                className="menu-item"
+              >
+                Contact
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="selectButton" onClick={() => subtract()}>
-        <AiFillCaretLeft className="arrow" />
-      </div>
-      <Canvas camera={{ position: [2, 6, 12] }}>
-        <OrbitControls makeDefault ref={controls} autoRotate />
-        <Lights />
-        <Fixture
-          fixtureNumber={0}
-          counter={counter}
-          setCounter={setCounter}
-          scale={6}
-          offset={0}
-          model={plantStandA}
-        />
-        <Fixture
-          fixtureNumber={1}
-          counter={counter}
-          setCounter={setCounter}
-          scale={4}
-          offset={1.1}
-          model={chairA}
-        />
-        <Fixture
-          fixtureNumber={2}
-          counter={counter}
-          setCounter={setCounter}
-          scale={4}
-          offset={1.1}
-          model={chairC}
-        />
-      </Canvas>
-      <div className="selectButton right" onClick={() => add()}>
-        <AiFillCaretRight className="arrow" />
-      </div>
+          <div className="selectButton" onClick={() => subtract()}>
+            <AiFillCaretLeft className="arrow" />
+          </div>
+          <Canvas camera={{ position: [2, 6, 12] }}>
+            <OrbitControls makeDefault ref={controls} autoRotate />
+            <Lights />
+            <Fixture
+              fixtureNumber={0}
+              counter={counter}
+              setCounter={setCounter}
+              scale={6}
+              offset={0}
+              model={plantStandA}
+            />
+            <Fixture
+              fixtureNumber={1}
+              counter={counter}
+              setCounter={setCounter}
+              scale={4}
+              offset={1.1}
+              model={chairA}
+            />
+            <Fixture
+              fixtureNumber={2}
+              counter={counter}
+              setCounter={setCounter}
+              scale={4}
+              offset={1.1}
+              model={chairC}
+            />
+          </Canvas>
+          <div className="selectButton right" onClick={() => add()}>
+            <AiFillCaretRight className="arrow" />
+          </div>
+        </>
+      )}
     </>
   );
 }
