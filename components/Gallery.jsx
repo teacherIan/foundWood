@@ -6,7 +6,7 @@ import tableA from '/gallery/real_tableA.jpg?url';
 import hobbit_house from '/gallery/cropped/hobbit_house.jpg?url';
 import doubleChairB from '/gallery/new/double_seat.jpg?url';
 import doubleChairNoBG from '/gallery/new/double_chair_noBG.png?url';
-import Information from './information';
+import Information from './Information';
 
 import { useState } from 'react';
 
