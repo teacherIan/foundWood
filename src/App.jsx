@@ -6,9 +6,9 @@ import { Canvas } from '@react-three/fiber';
 import { AiFillCaretRight } from 'react-icons/ai';
 import { AiFillCaretLeft } from 'react-icons/ai';
 import { OrbitControls } from '@react-three/drei';
-import plantStandA from '/plantStandAFixed.glb?url';
-import chairA from '/chairA.glb?url';
-import chairC from '/chairC.glb?url';
+import plantStandA from '/3d/plantStandAFixed.glb?url';
+import chairA from '/3d/chairA.glb?url';
+import chairC from '/3d/chairC.glb?url';
 import found_wood from '/found_wood_icon.png?url';
 import Contact from '../components/Contact';
 import Gallery from '../components/Gallery';
@@ -33,6 +33,11 @@ function App() {
         <Gallery />
       ) : (
         <>
+          <div className="infoGraphic">
+            Unique Handcrafted Furniture
+            <br />
+            Beautiful yet Functional
+          </div>
           <Contact
             showContactPage={showContactPage}
             setShowContactPage={setShowContactPage}
@@ -40,9 +45,14 @@ function App() {
           <div className="header">
             <div className="menu">
               <img src={found_wood} className="icon"></img>
-              <div className="menu-item">Gallery</div>
+              <div
+                className="menu-item"
+                onClick={() => setShowGallery(!showGallery)}
+              >
+                Gallery
+              </div>
               <div className="menu-item">Mission</div>
-              <div className="menu-item">Showroom</div>
+
               <div
                 onClick={() => setShowContactPage(!showContactPage)}
                 className="menu-item"

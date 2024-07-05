@@ -1,12 +1,24 @@
 import './gallery.css';
-import doubleChair from '/real_double_chair.jpg?url';
-import highChair from '/cropped/real_high_chair.jpg?url';
-import picnicTable from '/cropped/real_picnic_table.jpg?url';
-import tableA from '/real_tableA.jpg?url';
-import hobbit_house from '/cropped/hobbit_house.jpg?url';
+import doubleChair from '/gallery/real_double_chair.jpg?url';
+import highChair from '/gallery/cropped/real_high_chair.jpg?url';
+import picnicTable from '/gallery/cropped/real_picnic_table.jpg?url';
+import tableA from '/gallery/real_tableA.jpg?url';
+import hobbit_house from '/gallery/cropped/hobbit_house.jpg?url';
+import doubleChairB from '/gallery/new/double_seat.jpg?url';
+import doubleChairNoBG from '/gallery/new/double_chair_noBG.png?url';
+import Information from './information';
+
 import { useState } from 'react';
 
-const images = [doubleChair, highChair, picnicTable, tableA, hobbit_house];
+const images = [
+  doubleChair,
+  highChair,
+  picnicTable,
+  tableA,
+  hobbit_house,
+  doubleChairB,
+  doubleChairNoBG,
+];
 
 export default function Gallery() {
   const [currentPhoto, setCurrentPhoto] = useState(-1);
@@ -24,6 +36,7 @@ export default function Gallery() {
 
   return (
     <div className="galleryContainer">
+      <Information />
       <div className="thumbNails" onMouseOver={handleThumbNailHover}>
         {images.map((image, index) => (
           <img src={image} key={index} className="thumbNailPhoto" />
