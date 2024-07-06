@@ -3,7 +3,7 @@ import './form.css';
 import { FaFacebook } from 'react-icons/fa6';
 import emailjs from '@emailjs/browser';
 
-export default function Form() {
+export default function Form({ setShowContactPage }) {
   const [nameLabel, setNameLabel] = useState(['']);
   const [emailLabel, setEmailLabel] = useState(['']);
   const [messageLabel, setMessageLabel] = useState(['']);
@@ -15,11 +15,9 @@ export default function Form() {
   const messageLabelRef = useRef(null);
 
   const handleSubmit = async (e) => {
-    console.log('Submitted');
     e.preventDefault();
     const serviceId = 'service_ucr96wu';
     const templateId = 'template_pkhjdgm';
-    console.log(e.target);
 
     try {
       const form = new FormData(e.target);
@@ -32,9 +30,10 @@ export default function Form() {
         email,
         message,
       });
-
+      setShowContactPage(false);
       alert('Email sent successfully!');
     } catch (error) {
+      alert('Unable to send email. Please check connection');
       console.log('Error:', error);
     }
   };

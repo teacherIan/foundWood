@@ -10,8 +10,8 @@ export default function Contact({ showContactPage, setShowContactPage }) {
 
   const configAnimation = {
     mass: 1,
-    tension: 5,
-    friction: 4,
+    tension: 15,
+    friction: 7,
     precision: 0.0005,
   };
 
@@ -61,7 +61,7 @@ export default function Contact({ showContactPage, setShowContactPage }) {
       className="container"
       style={{ ...springs, left: hasAnimated ? springs.left : '100%' }}
     >
-      <Form />
+      <Form setShowContactPage={setShowContactPage} />
       <MdExitToApp
         className="exit-icon"
         onClick={() => setShowContactPage(!showContactPage)}

@@ -1,11 +1,14 @@
 export default function Lights() {
   return (
     <>
-      <ambientLight intensity={5} />
-
-      <pointLight position={[5, 10, 5]} intensity={1000} castShadow />
+      <ambientLight intensity={3} />
+      <pointLight position={[5, 10, 5]} intensity={100} castShadow />
+      <pointLight position={[-5, 10, -5]} intensity={100} castShadow />
+      <pointLight position={[0, 10, 0]} intensity={100} castShadow />
+      <pointLight position={[5, 1, 5]} intensity={100} castShadow />
+      <pointLight position={[0, 1, 5]} intensity={100} castShadow />
       <pointLight
-        position={[3, 10, 1]}
+        position={[3, 1, 1]}
         intensity={100}
         castShadow
         shadow-mapSize-width={1024}

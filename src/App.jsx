@@ -9,11 +9,14 @@ import { OrbitControls } from '@react-three/drei';
 import plantStandA from '/3d/plantStandAFixed.glb?url';
 import chairA from '/3d/chairA.glb?url';
 import chairC from '/3d/chairC.glb?url';
+import plantStandB from '/3d/tableACompact.glb?url';
 import found_wood from '/found_wood_icon.png?url';
 import Contact from '../components/Contact';
 import Gallery from '../components/Gallery';
+import Types from '../components/Types';
 
 function App() {
+  const [showTypes, setShowTypes] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [showContactPage, setShowContactPage] = useState(false);
   const [counter, setCounter] = useState(0);
@@ -27,12 +30,23 @@ function App() {
     setCounter(counter - 1);
   }
 
+  function handleGalleryClick() {
+    console.log('Gallery Clicked');
+    setShowTypes(!showTypes);
+  }
+
   return (
     <>
+      <Types showTypes={showTypes} setShowTypes={setShowTypes} />
       {showGallery ? (
         <Gallery />
       ) : (
-        <>
+        <div
+          className="appContainer"
+          style={
+            showTypes ? { filter: 'blur(700px)' } : { filter: 'blur(0px)' }
+          }
+        >
           <div className="infoGraphic">
             Unique Handcrafted Furniture
             <br />
@@ -47,7 +61,8 @@ function App() {
               <img src={found_wood} className="icon"></img>
               <div
                 className="menu-item"
-                onClick={() => setShowGallery(!showGallery)}
+                // onClick={() => setShowGallery(!showGallery)}
+                onClick={() => handleGalleryClick()}
               >
                 Gallery
               </div>
@@ -91,11 +106,19 @@ function App() {
               offset={1.1}
               model={chairC}
             />
+            <Fixture
+              fixtureNumber={3}
+              counter={counter}
+              setCounter={setCounter}
+              scale={5}
+              offset={1.1}
+              model={plantStandB}
+            />
           </Canvas>
           <div className="selectButton right" onClick={() => add()}>
             <AiFillCaretRight className="arrow" />
           </div>
-        </>
+        </div>
       )}
     </>
   );
