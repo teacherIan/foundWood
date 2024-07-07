@@ -1,12 +1,11 @@
 import './gallery.css';
-import doubleChair from '/gallery/real_double_chair.jpg?url';
-import highChair from '/gallery/cropped/real_high_chair.jpg?url';
-import picnicTable from '/gallery/cropped/real_picnic_table.jpg?url';
-import tableA from '/gallery/real_tableA.jpg?url';
-import hobbit_house from '/gallery/cropped/hobbit_house.jpg?url';
-import doubleChairB from '/gallery/new/double_seat.jpg?url';
-import doubleChairNoBG from '/gallery/new/double_chair_noBG.png?url';
-import Information from './Information';
+import doubleChair from '../../src/assets/gallery/real_double_chair.jpg';
+import highChair from '../../src/assets/gallery/cropped/real_high_chair.jpg';
+import picnicTable from '../../src/assets/gallery/cropped/real_picnic_table.jpg';
+import tableA from '../../src/assets/gallery/real_tableA.jpg';
+import hobbit_house from '../../src/assets/gallery/cropped/hobbit_house.jpg';
+import doubleChairB from '../../src/assets/gallery/new/double_seat.jpg';
+import doubleChairNoBG from '../../src/assets/gallery/new/double_chair_noBG.png';
 
 import { useState } from 'react';
 
@@ -36,7 +35,6 @@ export default function Gallery() {
 
   return (
     <div className="galleryContainer">
-      <Information />
       <div className="thumbNails" onMouseOver={handleThumbNailHover}>
         {images.map((image, index) => (
           <img src={image} key={index} className="thumbNailPhoto" />

@@ -1,12 +1,12 @@
-import { useSpring, animated, config } from '@react-spring/web';
+import { useSpring, animated } from '@react-spring/web';
 import Type from './Type';
 import './types.css';
 import { useEffect } from 'react';
-import chair from '/noBG/double_chair_final_noBG.png?url';
-import table from '/noBG/table_noBG.png?url';
-import picnicTable from '/noBG/picnic_table_B.png?url';
-import house from '/noBG/hobbit_house_noBG.png?url';
-import light from '/noBG/light_noBG.png?url';
+import chair from '../../src/assets/noBG/double_chair_final_noBG.png';
+import table from '../../src/assets/noBG/table_noBG.png';
+import picnicTable from '../../src/assets/noBG/picnic_table_B.png';
+import house from '../../src/assets/noBG/hobbit_house_noBG.png';
+import light from '../../src/assets/noBG/light_noBG.png';
 
 function useTypeSpring(showTypes, index) {
   const configAnimation = {

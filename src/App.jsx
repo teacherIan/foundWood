@@ -1,19 +1,19 @@
-import Fixture from '../components/Fixture';
-import Lights from '../components/Lights';
+import Fixture from '../components/experience/Fixture';
+import Lights from '../components/experience/Lights';
 import './App.css';
 import { useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { AiFillCaretRight } from 'react-icons/ai';
 import { AiFillCaretLeft } from 'react-icons/ai';
 import { OrbitControls } from '@react-three/drei';
-import plantStandA from '/3d/plantStandAFixed.glb?url';
-import chairA from '/3d/chairA.glb?url';
-import chairC from '/3d/chairC.glb?url';
-import plantStandB from '/3d/tableACompact.glb?url';
-import found_wood from '/found_wood_icon.png?url';
-import Contact from '../components/Contact';
-import Gallery from '../components/Gallery';
-import Types from '../components/Types';
+import plantStandA from './assets/3d/plantStandAFixed.glb';
+import chairA from './assets/3d/chairA.glb';
+import chairC from './assets/3d/chairC.glb';
+import plantStandB from './assets/3d/tableACompact.glb';
+import found_wood from './assets/found_wood_icon.png';
+import Contact from '../components/contact/Contact';
+import Gallery from '../components/galleries/Gallery';
+import Types from '../components/select_gallery/Types';
 
 function App() {
   const [showTypes, setShowTypes] = useState(false);
@@ -90,7 +90,7 @@ function App() {
             <div className="selectButton" onClick={() => subtract()}>
               <AiFillCaretLeft className="arrow" />
             </div>
-            <Canvas camera={{ position: [2, 6, 12] }}>
+            <Canvas camera={{ position: [0, 5, 7] }}>
               <OrbitControls makeDefault ref={controls} autoRotate />
               <Lights />
               <Fixture
@@ -106,7 +106,7 @@ function App() {
                 counter={counter}
                 setCounter={setCounter}
                 scale={4}
-                offset={1.1}
+                offset={3}
                 model={chairA}
               />
               <Fixture
@@ -114,7 +114,7 @@ function App() {
                 counter={counter}
                 setCounter={setCounter}
                 scale={4}
-                offset={1.1}
+                offset={2}
                 model={chairC}
               />
               <Fixture
@@ -122,7 +122,7 @@ function App() {
                 counter={counter}
                 setCounter={setCounter}
                 scale={5}
-                offset={1.1}
+                offset={2}
                 model={plantStandB}
               />
             </Canvas>

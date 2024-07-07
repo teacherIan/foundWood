@@ -20,14 +20,14 @@ export default function Type({ img, header }) {
   useEffect(() => {
     if (active) {
       api.start({
-        background: `linear-gradient(to bottom, #00000000,#00000000, #77481C22)`,
+        background: `linear-gradient(to bottom, #77481C11,#00000000, #77481C11)`,
       });
     } else {
       api.start({
         background: `linear-gradient(to bottom, #00000000,#00000000, #77481C00)`,
       });
     }
-  }, [active, api]); // Add springs to the dependency array
+  }, [active, api]);
 
   return (
     <animated.div
