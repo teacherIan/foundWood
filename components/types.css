@@ -7,7 +7,7 @@
 .typesContainer {
     background-color: red;
     position: absolute;
-    z-index: 3000;
+    z-index: 100;
     width: 100vw;
     height: 100vh;
     top: -100vh;

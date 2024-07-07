@@ -24,6 +24,7 @@
   width: 100%;
   justify-content: space-around;
   align-items: center;
+  z-index: 1000;
 
 }
 
@@ -59,6 +60,7 @@
 
 .menu-item {
   cursor: pointer;
+  z-index: 10000;
 }
 
 .arrow {
@@ -79,6 +81,7 @@
   font-size: calc(1.0vw + 1.0vh + 7px);
   font-family: cursive;
   text-align: center;
+  transition: 5s;
 
 }
 
@@ -96,4 +99,8 @@
     padding: 2px;
 
   }
+}
+
+.blur {
+  transition: 5s;
 }

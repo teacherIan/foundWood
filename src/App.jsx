@@ -43,15 +43,10 @@ function App() {
       ) : (
         <div
           className="appContainer"
-          style={
-            showTypes ? { filter: 'blur(700px)' } : { filter: 'blur(0px)' }
-          }
+          // style={
+          //   showTypes ? { filter: 'blur(200px)' } : { filter: 'blur(0px)' }
+          // }
         >
-          <div className="infoGraphic">
-            Unique Handcrafted Furniture
-            <br />
-            Beautiful yet Functional
-          </div>
           <Contact
             showContactPage={showContactPage}
             setShowContactPage={setShowContactPage}
@@ -76,47 +71,64 @@ function App() {
               </div>
             </div>
           </div>
-          <div className="selectButton" onClick={() => subtract()}>
-            <AiFillCaretLeft className="arrow" />
+          <div
+            className="infoGraphic"
+            style={
+              showTypes ? { filter: 'blur(700px)' } : { filter: 'blur(0px)' }
+            }
+          >
+            Unique Handcrafted Furniture
+            <br />
+            Beautiful yet Functional
           </div>
-          <Canvas camera={{ position: [2, 6, 12] }}>
-            <OrbitControls makeDefault ref={controls} autoRotate />
-            <Lights />
-            <Fixture
-              fixtureNumber={0}
-              counter={counter}
-              setCounter={setCounter}
-              scale={6}
-              offset={0}
-              model={plantStandA}
-            />
-            <Fixture
-              fixtureNumber={1}
-              counter={counter}
-              setCounter={setCounter}
-              scale={4}
-              offset={1.1}
-              model={chairA}
-            />
-            <Fixture
-              fixtureNumber={2}
-              counter={counter}
-              setCounter={setCounter}
-              scale={4}
-              offset={1.1}
-              model={chairC}
-            />
-            <Fixture
-              fixtureNumber={3}
-              counter={counter}
-              setCounter={setCounter}
-              scale={5}
-              offset={1.1}
-              model={plantStandB}
-            />
-          </Canvas>
-          <div className="selectButton right" onClick={() => add()}>
-            <AiFillCaretRight className="arrow" />
+          <div
+            className="blur"
+            style={
+              showTypes ? { filter: 'blur(700px)' } : { filter: 'blur(0px)' }
+            }
+          >
+            <div className="selectButton" onClick={() => subtract()}>
+              <AiFillCaretLeft className="arrow" />
+            </div>
+            <Canvas camera={{ position: [2, 6, 12] }}>
+              <OrbitControls makeDefault ref={controls} autoRotate />
+              <Lights />
+              <Fixture
+                fixtureNumber={0}
+                counter={counter}
+                setCounter={setCounter}
+                scale={6}
+                offset={0}
+                model={plantStandA}
+              />
+              <Fixture
+                fixtureNumber={1}
+                counter={counter}
+                setCounter={setCounter}
+                scale={4}
+                offset={1.1}
+                model={chairA}
+              />
+              <Fixture
+                fixtureNumber={2}
+                counter={counter}
+                setCounter={setCounter}
+                scale={4}
+                offset={1.1}
+                model={chairC}
+              />
+              <Fixture
+                fixtureNumber={3}
+                counter={counter}
+                setCounter={setCounter}
+                scale={5}
+                offset={1.1}
+                model={plantStandB}
+              />
+            </Canvas>
+            <div className="selectButton right" onClick={() => add()}>
+              <AiFillCaretRight className="arrow" />
+            </div>
           </div>
         </div>
       )}

@@ -10,10 +10,10 @@
     align-items: center;
     flex-direction: column;
     width: 20vw;
-    height: 100svh;
+    height: 80svh;
     color: var(--brown);
-
-
+    cursor: pointer;
+    border-radius: 2000px;
 
 }
 
@@ -25,4 +25,5 @@
 
 .typeHeader {
     display: block;
+    font-size: calc(1vh + 1vw + 10px);
 }
