@@ -16,6 +16,8 @@ import Gallery from '../components/galleries/Gallery';
 import Types from '../components/select_gallery/Types';
 
 function App() {
+  const amtFixtures = 4;
+  const [showMission, setShowMission] = useState(false);
   const [showTypes, setShowTypes] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [showContactPage, setShowContactPage] = useState(false);
@@ -23,115 +25,112 @@ function App() {
   const controls = useRef();
 
   function add() {
-    setCounter(counter + 1);
+    if (counter < amtFixtures - 1) {
+      setCounter(counter + 1);
+    }
   }
 
   function subtract() {
-    setCounter(counter - 1);
+    if (counter > 0) {
+      setCounter(counter - 1);
+    }
   }
 
   function handleGalleryClick() {
-    console.log('Gallery Clicked');
     setShowTypes(!showTypes);
   }
 
   return (
     <>
       <Types showTypes={showTypes} setShowTypes={setShowTypes} />
-      {showGallery ? (
-        <Gallery />
-      ) : (
-        <div
-          className="appContainer"
-          // style={
-          //   showTypes ? { filter: 'blur(200px)' } : { filter: 'blur(0px)' }
-          // }
-        >
-          <Contact
-            showContactPage={showContactPage}
-            setShowContactPage={setShowContactPage}
-          />
-          <div className="header">
-            <div className="menu">
-              <img src={found_wood} className="icon"></img>
-              <div
-                className="menu-item"
-                // onClick={() => setShowGallery(!showGallery)}
-                onClick={() => handleGalleryClick()}
-              >
-                Gallery
-              </div>
-              <div className="menu-item">Mission</div>
-
-              <div
-                onClick={() => setShowContactPage(!showContactPage)}
-                className="menu-item"
-              >
-                Contact
-              </div>
+      <div className="appContainer">
+        <Contact
+          showContactPage={showContactPage}
+          setShowContactPage={setShowContactPage}
+        />
+        <div className="header">
+          <div className="menu">
+            <img src={found_wood} className="icon"></img>
+            <div className="menu-item" onClick={() => handleGalleryClick()}>
+              Gallery
             </div>
-          </div>
-          <div
-            className="infoGraphic"
-            style={
-              showTypes ? { filter: 'blur(700px)' } : { filter: 'blur(0px)' }
-            }
-          >
-            Unique Handcrafted Furniture
-            <br />
-            Beautiful yet Functional
-          </div>
-          <div
-            className="blur"
-            style={
-              showTypes ? { filter: 'blur(700px)' } : { filter: 'blur(0px)' }
-            }
-          >
-            <div className="selectButton" onClick={() => subtract()}>
-              <AiFillCaretLeft className="arrow" />
-            </div>
-            <Canvas camera={{ position: [0, 5, 7] }}>
-              <OrbitControls makeDefault ref={controls} autoRotate />
-              <Lights />
-              <Fixture
-                fixtureNumber={0}
-                counter={counter}
-                setCounter={setCounter}
-                scale={6}
-                offset={0}
-                model={plantStandA}
-              />
-              <Fixture
-                fixtureNumber={1}
-                counter={counter}
-                setCounter={setCounter}
-                scale={4}
-                offset={3}
-                model={chairA}
-              />
-              <Fixture
-                fixtureNumber={2}
-                counter={counter}
-                setCounter={setCounter}
-                scale={4}
-                offset={2}
-                model={chairC}
-              />
-              <Fixture
-                fixtureNumber={3}
-                counter={counter}
-                setCounter={setCounter}
-                scale={5}
-                offset={2}
-                model={plantStandB}
-              />
-            </Canvas>
-            <div className="selectButton right" onClick={() => add()}>
-              <AiFillCaretRight className="arrow" />
+            <div className="menu-item">Mission</div>
+            <div
+              onClick={() => setShowContactPage(!showContactPage)}
+              className="menu-item"
+            >
+              Contact
             </div>
           </div>
         </div>
-      )}
+        <div
+          className="infoGraphic"
+          style={
+            showTypes ? { filter: 'blur(700px)' } : { filter: 'blur(0px)' }
+          }
+        >
+          Unique Handcrafted Furniture
+          <br />
+          Beautiful yet Functional
+        </div>
+        <div
+          className="blur"
+          style={
+            showTypes ? { filter: 'blur(700px)' } : { filter: 'blur(0px)' }
+          }
+        >
+          <div className="selectButton" onClick={() => subtract()}>
+            <AiFillCaretLeft
+              className="arrow"
+              style={counter > 0 ? { opacity: 1 } : { opacity: 0.5 }}
+            />
+          </div>
+          <Canvas camera={{ position: [0, 5, 7] }}>
+            <OrbitControls makeDefault ref={controls} autoRotate />
+            <Lights />
+            <Fixture
+              fixtureNumber={0}
+              counter={counter}
+              setCounter={setCounter}
+              scale={6}
+              offset={0}
+              model={plantStandA}
+            />
+            <Fixture
+              fixtureNumber={1}
+              counter={counter}
+              setCounter={setCounter}
+              scale={4}
+              offset={3}
+              model={chairA}
+            />
+            <Fixture
+              fixtureNumber={2}
+              counter={counter}
+              setCounter={setCounter}
+              scale={4}
+              offset={2}
+              model={chairC}
+            />
+            <Fixture
+              fixtureNumber={3}
+              counter={counter}
+              setCounter={setCounter}
+              scale={5}
+              offset={2}
+              model={plantStandB}
+            />
+          </Canvas>
+          <div className="selectButton right" onClick={() => add()}>
+            <AiFillCaretRight
+              className="arrow"
+              style={
+                counter >= amtFixtures - 1 ? { opacity: 0.5 } : { opacity: 1 }
+              }
+            />
+          </div>
+        </div>
+      </div>
     </>
   );
 }
