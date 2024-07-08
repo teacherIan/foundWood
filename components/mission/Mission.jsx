@@ -4,7 +4,11 @@ export default function Mission({ showMission }) {
   return (
     <div
       className="missionContainer"
-      style={showMission ? { filter: 'blur(0px)' } : { filter: 'blur(500px)' }}
+      style={
+        showMission
+          ? { filter: 'blur(0px)', zIndex: 10000 }
+          : { filter: 'blur(1000px)', zIndex: 0 }
+      }
     >
       <div className="missionHeader">
         Original handcrafted work that blurs the line between function and the

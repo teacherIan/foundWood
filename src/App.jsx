@@ -12,7 +12,7 @@ import Mission from '../components/mission/Mission';
 function App() {
   const amtFixtures = 4;
 
-  const [showMission, setShowMission] = useState(true);
+  const [showMission, setShowMission] = useState(false);
   const [showTypes, setShowTypes] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [showContactPage, setShowContactPage] = useState(false);
@@ -40,6 +40,11 @@ function App() {
     setShowMission(!showMission);
   }
 
+  function handleEmblemClick() {
+    setShowMission(false);
+    setShowTypes(false);
+  }
+
   return (
     <>
       <Mission showMission={showMission} />
@@ -52,7 +57,11 @@ function App() {
         />
         <div className="header">
           <div className="menu">
-            <img src={found_wood} className="icon"></img>
+            <img
+              onClick={() => handleEmblemClick()}
+              src={found_wood}
+              className="icon"
+            ></img>
             <div className="menu-item" onClick={() => handleGalleryClick()}>
               Gallery
             </div>
