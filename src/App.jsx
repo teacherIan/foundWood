@@ -7,10 +7,12 @@ import Contact from '../components/contact/Contact';
 import Gallery from '../components/galleries/Gallery';
 import Types from '../components/select_gallery/Types';
 import Canvas from '../components/experience/Experience';
+import Mission from '../components/mission/Mission';
 
 function App() {
   const amtFixtures = 4;
-  const [showMission, setShowMission] = useState(false);
+
+  const [showMission, setShowMission] = useState(true);
   const [showTypes, setShowTypes] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [showContactPage, setShowContactPage] = useState(false);
@@ -30,10 +32,18 @@ function App() {
 
   function handleGalleryClick() {
     setShowTypes(!showTypes);
+    setShowMission(false);
+  }
+
+  function handleMissionButtonClick() {
+    setShowTypes(false);
+    setShowMission(!showMission);
   }
 
   return (
     <>
+      <Mission showMission={showMission} />
+
       <Types showTypes={showTypes} setShowTypes={setShowTypes} />
       <div className="appContainer">
         <Contact
@@ -46,7 +56,12 @@ function App() {
             <div className="menu-item" onClick={() => handleGalleryClick()}>
               Gallery
             </div>
-            <div className="menu-item">Mission</div>
+            <div
+              onClick={() => handleMissionButtonClick()}
+              className="menu-item"
+            >
+              Mission
+            </div>
             <div
               onClick={() => setShowContactPage(!showContactPage)}
               className="menu-item"
@@ -58,7 +73,9 @@ function App() {
         <div
           className="infoGraphic"
           style={
-            showTypes ? { filter: 'blur(700px)' } : { filter: 'blur(0px)' }
+            showTypes || showMission
+              ? { filter: 'blur(700px)' }
+              : { filter: 'blur(0px)' }
           }
         >
           Unique Handcrafted Furniture
@@ -68,7 +85,9 @@ function App() {
         <div
           className="blur"
           style={
-            showTypes ? { filter: 'blur(700px)' } : { filter: 'blur(0px)' }
+            showTypes || showMission
+              ? { filter: 'blur(700px)' }
+              : { filter: 'blur(0px)' }
           }
         >
           <div className="selectButton" onClick={() => subtract()}>

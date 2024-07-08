@@ -1,0 +1,19 @@
+.missionContainer {
+    width: 100vw;
+    height: 100svh;
+    position: absolute;
+    /* top: 10vh; */
+    color: var(--brown);
+    z-index: 1000;
+    padding-left: calc(4vh + 4vw + 10px);
+    padding-right: calc(4vh + 4vw + 10px);
+    font-family: Arial, Helvetica, sans-serif;
+    transform: translate(0%, 20%);
+    text-align: center;
+    transition: 4s;
+}
+
+.missionHeader {
+    font-size: calc(2vw + 2vh + 15px);
+    transition: 4s;
+}
