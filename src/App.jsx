@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { AiFillCaretRight } from 'react-icons/ai';
 import { AiFillCaretLeft } from 'react-icons/ai';
 import found_wood from './assets/found_wood_icon.png';
@@ -10,8 +10,9 @@ import Canvas from '../components/experience/Experience';
 import Mission from '../components/mission/Mission';
 
 function App() {
-  const amtFixtures = 4;
+  const amtFixtures = 2;
 
+  const [activeGalleryType, setActiveGalleryType] = useState(0);
   const [showMission, setShowMission] = useState(false);
   const [showTypes, setShowTypes] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
@@ -30,26 +31,34 @@ function App() {
     }
   }
 
-  function handleGalleryClick() {
+  const handleGalleryTypesClickCallback = useCallback(() => {
     setShowTypes(!showTypes);
     setShowMission(false);
-  }
+    setShowGallery(false);
+  }, [setShowTypes, setShowGallery, setShowMission, showTypes]);
 
-  function handleMissionButtonClick() {
+  const handleMissionButtonClickCallback = useCallback(() => {
     setShowTypes(false);
-    setShowMission(!showMission);
-  }
+    setShowMission(true);
+    setShowGallery(false);
+  }, [setShowTypes, setShowGallery, setShowMission]);
 
-  function handleEmblemClick() {
+  const handleGalleryButtonClickCallback = useCallback(() => {
+    setShowTypes(false);
     setShowMission(false);
-    setShowTypes(false);
-  }
+    setShowGallery(true);
+  }, [setShowTypes, setShowGallery, setShowMission]);
 
   return (
     <>
       <Mission showMission={showMission} />
-
-      <Types showTypes={showTypes} setShowTypes={setShowTypes} />
+      <Gallery showGallery={showGallery} />
+      <Types
+        showTypes={showTypes}
+        onGalleryTypesClick={handleGalleryTypesClickCallback}
+        onMissionButtonClick={handleMissionButtonClickCallback}
+        onTypeSelect={handleGalleryButtonClickCallback}
+      />
       <div className="appContainer">
         <Contact
           showContactPage={showContactPage}
@@ -62,11 +71,14 @@ function App() {
               src={found_wood}
               className="icon"
             ></img>
-            <div className="menu-item" onClick={() => handleGalleryClick()}>
+            <div
+              className="menu-item"
+              onClick={() => handleGalleryTypesClickCallback()}
+            >
               Gallery
             </div>
             <div
-              onClick={() => handleMissionButtonClick()}
+              onClick={() => handleMissionButtonClickCallback()}
               className="menu-item"
             >
               Mission
@@ -79,10 +91,11 @@ function App() {
             </div>
           </div>
         </div>
+
         <div
           className="infoGraphic"
           style={
-            showTypes || showMission
+            showTypes || showMission || showGallery
               ? { filter: 'blur(700px)' }
               : { filter: 'blur(0px)' }
           }
@@ -94,7 +107,7 @@ function App() {
         <div
           className="blur"
           style={
-            showTypes || showMission
+            showTypes || showMission || showGallery
               ? { filter: 'blur(700px)' }
               : { filter: 'blur(0px)' }
           }

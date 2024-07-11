@@ -6,8 +6,8 @@ export default function Mission({ showMission }) {
       className="missionContainer"
       style={
         showMission
-          ? { filter: 'blur(0px)', zIndex: 10000 }
-          : { filter: 'blur(1000px)', zIndex: 0 }
+          ? { filter: 'blur(0px)', zIndex: 10000, left: '0' }
+          : { filter: 'blur(1000px)', zIndex: 0, left: '-100vw' }
       }
     >
       <div className="missionHeader">

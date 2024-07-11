@@ -17,23 +17,23 @@ function useTypeSpring(showTypes, index) {
   };
 
   const [spring, setSpring] = useSpring(() => ({
-    opacity: showTypes ? 1 : 0,
+    opacity: showTypes ? '1' : '0',
     top: showTypes ? '110svh' : '0svh',
     config: configAnimation,
   }));
 
   useEffect(() => {
     if (showTypes) {
-      setSpring({ top: '110vh', opacity: 1, delay: index * 800 });
+      setSpring({ top: '110vh', opacity: '1', delay: index * 800 });
     } else {
-      setSpring({ top: '0vh', opacity: 0, delay: index * 800 });
+      setSpring({ top: '0vh', opacity: '0', delay: index * 800 });
     }
   }, [showTypes, index, setSpring]);
 
   return spring;
 }
 
-export default function Types({ showTypes, setShowTypes }) {
+export default function Types({ showTypes, onTypeSelect }) {
   const imgArray = [chair, table, picnicTable, house, light];
   const imgHeader = [
     'Chairs',
@@ -59,7 +59,12 @@ export default function Types({ showTypes, setShowTypes }) {
               ...spring,
             }}
           >
-            <Type img={imgArray[index]} header={imgHeader[index]} />
+            <Type
+              img={imgArray[index]}
+              header={imgHeader[index]}
+              onTypeSelect={onTypeSelect}
+              index={index}
+            />
           </animated.div>
         ))}
       </animated.div>

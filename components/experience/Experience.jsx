@@ -6,11 +6,14 @@ import plantStandA from '../../src/assets/3d/plantStandAFixed.glb';
 import chairA from '../../src/assets/3d/chairA.glb';
 import chairC from '../../src/assets/3d/chairC.glb';
 import plantStandB from '../../src/assets/3d/tableACompact.glb';
+import coffeeTableA from '../../src/assets/3d/coffee_table_A.glb';
+import plantStandNew from '../../src/assets/3d/coffee_table_b.glb';
+import plantStandC from '../../src/assets/3d/plant_stand_c.glb';
 
 export default function Experience({ counter, setCounter }) {
   return (
     <>
-      <Canvas camera={{ position: [0, 5, 7] }}>
+      <Canvas camera={{ position: [0, 5, 5] }}>
         <OrbitControls makeDefault autoRotate />
         <Lights />
         <Fixture
@@ -18,32 +21,16 @@ export default function Experience({ counter, setCounter }) {
           counter={counter}
           setCounter={setCounter}
           scale={6}
-          offset={0}
-          model={plantStandA}
+          offset={1}
+          model={plantStandC}
         />
         <Fixture
           fixtureNumber={1}
           counter={counter}
           setCounter={setCounter}
           scale={4}
-          offset={3}
-          model={chairA}
-        />
-        <Fixture
-          fixtureNumber={2}
-          counter={counter}
-          setCounter={setCounter}
-          scale={4}
-          offset={2}
-          model={chairC}
-        />
-        <Fixture
-          fixtureNumber={3}
-          counter={counter}
-          setCounter={setCounter}
-          scale={5}
-          offset={2}
-          model={plantStandB}
+          offset={4}
+          model={coffeeTableA}
         />
       </Canvas>
     </>

@@ -1,20 +1,17 @@
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
 .galleryContainer {
-    width: 100vw;
-    height: 100svh;
+    width: 0vw;
+    height: 0svh;
     display: flex;
-
+    z-index: 20000;
+    position: absolute;
+    top: calc(10svh + 10px);
+    left: 0vw;
+    transition: 4s ease-in;
 }
 
 .thumbNails {
     width: calc(50vw -50px);
     display: grid;
-    /* grid-auto-flow: column; */
     grid-template-columns: repeat(5, 1fr);
     grid-auto-rows: 10vw;
     gap: 10px;
@@ -27,7 +24,6 @@
 
 .currentPhoto {
     width: 50vw;
-    /* height: 50vh; */
     align-items: center;
     justify-content: center;
     display: flex;

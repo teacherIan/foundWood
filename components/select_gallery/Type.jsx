@@ -2,7 +2,7 @@ import './type.css';
 import { useState, useEffect } from 'react';
 import { useSpring, animated } from '@react-spring/web';
 
-export default function Type({ img, header }) {
+export default function Type({ img, header, onTypeSelect }) {
   const [active, setActive] = useState(false);
 
   const configAnimation = {
@@ -31,6 +31,7 @@ export default function Type({ img, header }) {
 
   return (
     <animated.div
+      onClick={onTypeSelect}
       onMouseEnter={() => setActive(true)}
       onMouseLeave={() => setActive(false)}
       className="typeContainer"
