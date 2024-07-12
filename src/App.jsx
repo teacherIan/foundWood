@@ -49,6 +49,12 @@ function App() {
     setShowGallery(true);
   }, [setShowTypes, setShowGallery, setShowMission]);
 
+  function handleEmblemClick() {
+    setShowTypes(false);
+    setShowMission(false);
+    setShowGallery(false);
+  }
+
   return (
     <>
       <Mission showMission={showMission} />

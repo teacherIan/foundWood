@@ -28,7 +28,7 @@ function useTypeSpring(showTypes, index) {
     } else {
       setSpring({ top: '0vh', opacity: '0', delay: index * 800 });
     }
-  }, [showTypes, index, setSpring]);
+  }, [showTypes, setSpring]);
 
   return spring;
 }
