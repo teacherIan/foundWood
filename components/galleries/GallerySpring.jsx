@@ -75,11 +75,13 @@ export default function Gallery({ showGallery, galleryType }) {
         </>
       </div>
       <div className="currentPhoto">
-        <animated.img
-          style={{ ...spring }}
-          className="masterImage"
-          src={galleryTypeArr[currentPhoto]?.img}
-        />
+        {galleryTypeArr.length > 0 && (
+          <animated.img
+            style={{ ...spring }}
+            className="masterImage"
+            src={galleryTypeArr[currentPhoto]?.img}
+          />
+        )}
       </div>
     </div>
   );
