@@ -9,10 +9,10 @@ export default function Contact({ showContactPage, setShowContactPage }) {
   const [hasAnimated, setHasAnimated] = useState(false);
 
   const configAnimation = {
-    mass: 1,
-    tension: 15,
-    friction: 7,
-    precision: 0.0005,
+    mass: 3,
+    tension: 40,
+    friction: 20,
+    precision: 0.001,
   };
 
   const [springs, api] = useSpring(() => ({

@@ -1,6 +1,7 @@
 import './gallery.css';
 import imgData from './imgData';
 import { useState, useEffect } from 'react';
+import { useSpring, animated } from '@react-spring/web';
 
 const images = [
   imgData[0].img,
@@ -28,6 +29,10 @@ export default function Gallery({ showGallery }) {
       setCurrentPhoto(index);
     }
   };
+
+  const [spring, api] = useSpring(() => ({
+    opacity: 1,
+  }));
 
   return (
     <div
@@ -61,7 +66,11 @@ export default function Gallery({ showGallery }) {
         </>
       </div>
       <div className="currentPhoto">
-        <img className="masterImage" src={images[currentPhoto]} />
+        <animated.img
+          style={{ ...spring }}
+          className="masterImage"
+          src={images[currentPhoto]}
+        />
       </div>
     </div>
   );

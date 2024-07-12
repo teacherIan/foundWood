@@ -2,6 +2,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+
 }
 
 .header {
@@ -75,14 +76,14 @@
   position: absolute;
   /* background-color: blue; */
   z-index: 2000;
-  bottom: 10%;
+  bottom: 5%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: #77481C;
   font-size: calc(1.0vw + 1.0vh + 7px);
   font-family: cursive;
   text-align: center;
-  transition: 5s;
+  transition: 1s;
 
 }
 
@@ -103,5 +104,5 @@
 }
 
 .blur {
-  transition: 5s;
+  transition: 1s;
 }

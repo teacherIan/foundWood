@@ -10,10 +10,10 @@
     font-family: Arial, Helvetica, sans-serif;
     transform: translate(0%, 20%);
     text-align: center;
-    transition: 4s;
+    transition: 1.5s;
 }
 
 .missionHeader {
     font-size: calc(2vw + 2vh + 15px);
-    transition: 4s;
+
 }

@@ -14,7 +14,14 @@ export default function Experience({ counter, setCounter }) {
   return (
     <>
       <Canvas camera={{ position: [0, 5, 5] }}>
-        <OrbitControls makeDefault autoRotate />
+        <OrbitControls
+          makeDefault
+          autoRotate
+          minDistance={7}
+          maxDistance={15}
+          minPolarAngle={Math.PI / 6} // 45 degrees
+          maxPolarAngle={Math.PI / 3} // 90 degrees
+        />
         <Lights />
         <Fixture
           fixtureNumber={0}

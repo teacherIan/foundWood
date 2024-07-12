@@ -1,7 +1,7 @@
 import { useSpring, animated } from '@react-spring/web';
 import Type from './Type';
 import './types.css';
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import chair from '../../src/assets/noBG/double_chair_final_noBG.png';
 import table from '../../src/assets/noBG/table_noBG.png';
 import picnicTable from '../../src/assets/noBG/picnic_table_B.png';
@@ -24,11 +24,11 @@ function useTypeSpring(showTypes, index) {
 
   useEffect(() => {
     if (showTypes) {
-      setSpring({ top: '110vh', opacity: '1', delay: index * 800 });
+      setSpring.start({ top: '110vh', opacity: '1', delay: index * 100 });
     } else {
-      setSpring({ top: '0vh', opacity: '0', delay: index * 800 });
+      setSpring.start({ top: '0vh', opacity: '0', delay: index * 100 });
     }
-  }, [showTypes, setSpring]);
+  }, [showTypes]);
 
   return spring;
 }

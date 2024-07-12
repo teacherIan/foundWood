@@ -10,8 +10,8 @@ export default function Fixture({
   offset,
 }) {
   const configAnimation = {
-    mass: 2,
-    tension: 70,
+    mass: 3,
+    tension: 100,
     friction: 70,
     precision: 0.0001,
   };

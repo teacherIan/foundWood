@@ -5,6 +5,7 @@ import { AiFillCaretLeft } from 'react-icons/ai';
 import found_wood from './assets/found_wood_icon.png';
 import Contact from '../components/contact/Contact';
 import Gallery from '../components/galleries/Gallery';
+import GallerySpring from '../components/galleries/GallerySpring';
 import Types from '../components/select_gallery/Types';
 import Canvas from '../components/experience/Experience';
 import Mission from '../components/mission/Mission';
@@ -35,30 +36,34 @@ function App() {
     setShowTypes(!showTypes);
     setShowMission(false);
     setShowGallery(false);
+    showTypes ? setCounter(0) : setCounter(-1);
   }, [setShowTypes, setShowGallery, setShowMission, showTypes]);
 
   const handleMissionButtonClickCallback = useCallback(() => {
     setShowTypes(false);
-    setShowMission(true);
+    setShowMission(!showMission);
     setShowGallery(false);
-  }, [setShowTypes, setShowGallery, setShowMission]);
+    showMission ? setCounter(0) : setCounter(-1);
+  }, [setShowTypes, setShowGallery, setShowMission, showMission]);
 
   const handleGalleryButtonClickCallback = useCallback(() => {
     setShowTypes(false);
     setShowMission(false);
     setShowGallery(true);
-  }, [setShowTypes, setShowGallery, setShowMission]);
+    showGallery ? setCounter(0) : setCounter(-1);
+  }, [setShowTypes, setShowGallery, setShowMission, showGallery]);
 
   function handleEmblemClick() {
     setShowTypes(false);
     setShowMission(false);
     setShowGallery(false);
+    setCounter(0);
   }
 
   return (
     <>
       <Mission showMission={showMission} />
-      <Gallery showGallery={showGallery} />
+      <GallerySpring showGallery={showGallery} />
       <Types
         showTypes={showTypes}
         onGalleryTypesClick={handleGalleryTypesClickCallback}
@@ -100,10 +105,15 @@ function App() {
 
         <div
           className="infoGraphic"
+          // style={
+          //   showTypes || showMission || showGallery
+          //     ? { filter: 'blur(200px)', opacity: 0 }
+          //     : { filter: 'blur(0px)', opacity: 1 }
+          // }
           style={
-            showTypes || showMission || showGallery
-              ? { filter: 'blur(700px)' }
-              : { filter: 'blur(0px)' }
+            counter == -1
+              ? { bottom: '-20%', opacity: 0 }
+              : { bottom: '5%', opacity: 1 }
           }
         >
           Unique Handcrafted Furniture
@@ -112,16 +122,22 @@ function App() {
         </div>
         <div
           className="blur"
-          style={
-            showTypes || showMission || showGallery
-              ? { filter: 'blur(700px)' }
-              : { filter: 'blur(0px)' }
-          }
+          // style={
+          //   showTypes || showMission || showGallery
+          //     ? { filter: 'blur(200px)', opacity: 0 }
+          //     : { filter: 'blur(0px)', opacity: 1 }
+          // }
         >
           <div className="selectButton" onClick={() => subtract()}>
             <AiFillCaretLeft
               className="arrow"
-              style={counter > 0 ? { opacity: 1 } : { opacity: 0.5 }}
+              style={
+                counter > 0
+                  ? { opacity: 1 }
+                  : counter == -1
+                  ? { opacity: 0 }
+                  : { opacity: 0.5 }
+              }
             />
           </div>
           <Canvas counter={counter} setCounter={setCounter} />
@@ -129,7 +145,11 @@ function App() {
             <AiFillCaretRight
               className="arrow"
               style={
-                counter >= amtFixtures - 1 ? { opacity: 0.5 } : { opacity: 1 }
+                counter >= amtFixtures - 1
+                  ? { opacity: 0.5 }
+                  : counter == -1
+                  ? { opacity: 0 }
+                  : { opacity: 1 }
               }
             />
           </div>
