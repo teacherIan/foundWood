@@ -1,7 +1,7 @@
 import { useSpring, animated } from '@react-spring/web';
 import Type from './Type';
 import './types.css';
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import chair from '../../src/assets/noBG/double_chair_final_noBG.png';
 import table from '../../src/assets/noBG/table_noBG.png';
 import picnicTable from '../../src/assets/noBG/picnic_table_B.png';
@@ -33,7 +33,11 @@ function useTypeSpring(showTypes, index) {
   return spring;
 }
 
-export default function Types({ showTypes, onTypeSelect }) {
+export default function Types({
+  showTypes,
+  onTypeSelect,
+  setActiveGalleryType,
+}) {
   const imgArray = [chair, table, picnicTable, house, light];
   const imgHeader = [
     'Chairs',
@@ -64,6 +68,7 @@ export default function Types({ showTypes, onTypeSelect }) {
               header={imgHeader[index]}
               onTypeSelect={onTypeSelect}
               index={index}
+              setActiveGalleryType={setActiveGalleryType}
             />
           </animated.div>
         ))}

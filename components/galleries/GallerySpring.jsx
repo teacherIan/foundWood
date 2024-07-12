@@ -4,20 +4,28 @@ import { useState, useEffect } from 'react';
 import { useSpring, animated } from '@react-spring/web';
 
 const images = [
-  imgData[0].img,
-  imgData[1].img,
-  imgData[2].img,
-  imgData[3].img,
-  imgData[4].img,
-  imgData[5].img,
-  imgData[6].img,
-  imgData[7].img,
-  imgData[8].img,
-  imgData[9].img,
+  imgData[0],
+  imgData[1],
+  imgData[2],
+  imgData[3],
+  imgData[4],
+  imgData[5],
+  imgData[6],
+  imgData[7],
+  imgData[8],
+  imgData[9],
 ];
 
-export default function Gallery({ showGallery }) {
+export default function Gallery({ showGallery, galleryType }) {
   const [currentPhoto, setCurrentPhoto] = useState(0);
+  const [galleryTypeArr, setGalleryTypeArr] = useState([]);
+
+  useEffect(() => {
+    const newGalleryTypeArr = images.filter(
+      (image) => image.arrayType === galleryType
+    );
+    setGalleryTypeArr(newGalleryTypeArr);
+  }, [galleryType]);
 
   const handleThumbNailHover = (event) => {
     const index = Array.prototype.indexOf.call(
@@ -45,23 +53,24 @@ export default function Gallery({ showGallery }) {
     >
       <div className="galleryLeftTop">
         <div className="thumbNails" onMouseOver={handleThumbNailHover}>
-          {images.map((image, index) => (
-            <img src={image} key={index} className="thumbNailPhoto" />
+          {galleryTypeArr.map((image, index) => (
+            <img key={index} src={image.img} className="thumbNailPhoto" />
           ))}
         </div>
         <>
           <div className="galleryLeftBottom">
-            <div className="furnitureName">{imgData[currentPhoto].name}</div>
+            <div className="furnitureName">
+              {galleryTypeArr[currentPhoto]?.name}
+            </div>
             <br />
-            {imgData[currentPhoto].description}
+            {galleryTypeArr[currentPhoto]?.description}
             <br />
             <br />
             <div className="furniturePrice">
-              Price: {imgData[currentPhoto].price}
+              Price: {galleryTypeArr[currentPhoto]?.price}
             </div>
 
             <br />
-            <div className="galleryContact">Contact</div>
           </div>
         </>
       </div>
@@ -69,7 +78,7 @@ export default function Gallery({ showGallery }) {
         <animated.img
           style={{ ...spring }}
           className="masterImage"
-          src={images[currentPhoto]}
+          src={galleryTypeArr[currentPhoto]?.img}
         />
       </div>
     </div>

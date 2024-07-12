@@ -13,7 +13,7 @@ import Mission from '../components/mission/Mission';
 function App() {
   const amtFixtures = 2;
 
-  const [activeGalleryType, setActiveGalleryType] = useState(0);
+  const [activeGalleryType, setActiveGalleryType] = useState(1);
   const [showMission, setShowMission] = useState(false);
   const [showTypes, setShowTypes] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
@@ -63,12 +63,16 @@ function App() {
   return (
     <>
       <Mission showMission={showMission} />
-      <GallerySpring showGallery={showGallery} />
+      <GallerySpring
+        galleryType={activeGalleryType}
+        showGallery={showGallery}
+      />
       <Types
         showTypes={showTypes}
         onGalleryTypesClick={handleGalleryTypesClickCallback}
         onMissionButtonClick={handleMissionButtonClickCallback}
         onTypeSelect={handleGalleryButtonClickCallback}
+        setActiveGalleryType={setActiveGalleryType}
       />
       <div className="appContainer">
         <Contact
