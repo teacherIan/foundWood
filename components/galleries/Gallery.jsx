@@ -9,6 +9,10 @@ const images = [
   imgData[3].img,
   imgData[4].img,
   imgData[5].img,
+  imgData[6].img,
+  imgData[7].img,
+  imgData[8].img,
+  imgData[9].img,
 ];
 
 export default function Gallery({ showGallery }) {
@@ -42,16 +46,20 @@ export default function Gallery({ showGallery }) {
         </div>
         <>
           <div className="galleryLeftBottom">
-            <div style={{ color: 'red' }}>
+            {/* <div style={{ color: 'red' }}>
               DevNum: {imgData[currentPhoto].orderNumber}
-            </div>
-            {imgData[currentPhoto].name}
+            </div> */}
+            <div className="furnitureName">{imgData[currentPhoto].name}</div>
             <br />
             {imgData[currentPhoto].description}
             <br />
-            Price: {imgData[currentPhoto].price}
             <br />
-            Please Contact us for more information
+            <div className="furniturePrice">
+              Price: {imgData[currentPhoto].price}
+            </div>
+
+            <br />
+            <div className="galleryContact">Contact</div>
           </div>
         </>
       </div>

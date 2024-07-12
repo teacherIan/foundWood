@@ -4,21 +4,21 @@
     display: flex;
     z-index: 0;
     position: absolute;
-    top: calc(10svh + 10px);
+    top: calc(10svh);
     left: 0vw;
     transition: 4s ease-in;
 }
 
 .thumbNails {
+    padding-top: 5vh;
     width: calc(50vw -50px);
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-auto-rows: 10vw;
     gap: 10px;
-    height: 50svh;
-
+    height: calc(45svh - 20px);
     border-radius: 2px;
-    /* border: 2px var(--brown) solid; */
+
 }
 
 .thumbNailPhoto {
@@ -35,20 +35,13 @@
 }
 
 .currentPhoto {
-    /* width: 50vw; */
-    /* align-items: stretch; */
-    /* justify-content: center; */
     display: flex;
     transition: 2s;
 }
 
 .masterImage {
-    /* width: 100%; */
-    /* height: 90svh; */
     width: 90svh;
     height: 90svh;
-    /* object-fit: cover; */
-    /* object-position: bottom; */
     border-radius: 500px 0px 0px 500px;
     border: 3px var(--brown) solid;
     transition: 2s;
@@ -56,9 +49,31 @@
 }
 
 .galleryLeftBottom {
+    height: 45svh;
+    display: flex;
+    position: relative;
     color: var(--brown);
     border-top: 2px solid var(--brown);
     font-size: calc(0.7vw + 0.7vh + 10px);
     font-family: sans-serif;
     padding: 5px;
+    flex-direction: column;
 }
+
+.galleryContact {
+
+    position: absolute;
+    font-family: cursive;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: calc(1vw + 1vh + 10px);
+    cursor: pointer;
+
+}
+
+.furnitureName {
+    text-align: center;
+}
+
+.furniturePrice {}
