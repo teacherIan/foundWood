@@ -5,7 +5,7 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import chair from '../../src/assets/noBG/double_chair_final_noBG.png';
 import table from '../../src/assets/noBG/table_noBG.png';
 import picnicTable from '../../src/assets/noBG/picnic_table_B.png';
-import house from '../../src/assets/noBG/hobbit_house_noBG.png';
+import house from '../../src/assets/noBG/hobbit_house_noBG_2.png';
 import light from '../../src/assets/noBG/light_noBG.png';
 
 function useTypeSpring(showTypes, index) {
@@ -40,8 +40,8 @@ export default function Types({
 }) {
   const imgArray = [chair, table, picnicTable, house, light];
   const imgHeader = [
-    'Chairs',
-    'Stools & Plant Stands',
+    'Chairs & Ottomans',
+    'Coffee Tables & Plant Stands',
     'Tables',
     'Structures',
     'Others',

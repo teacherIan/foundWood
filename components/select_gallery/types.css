@@ -12,6 +12,7 @@
     height: 100vh;
     top: -100vh;
     display: flex;
+    text-align: center;
 
 
 }

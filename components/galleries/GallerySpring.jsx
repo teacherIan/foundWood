@@ -3,18 +3,7 @@ import imgData from './imgData';
 import { useState, useEffect } from 'react';
 import { useSpring, animated } from '@react-spring/web';
 
-const images = [
-  imgData[0],
-  imgData[1],
-  imgData[2],
-  imgData[3],
-  imgData[4],
-  imgData[5],
-  imgData[6],
-  imgData[7],
-  imgData[8],
-  imgData[9],
-];
+const images = imgData;
 
 export default function Gallery({ showGallery, galleryType }) {
   const [currentPhoto, setCurrentPhoto] = useState(0);
@@ -79,7 +68,11 @@ export default function Gallery({ showGallery, galleryType }) {
           <animated.img
             style={{ ...spring }}
             className="masterImage"
-            src={galleryTypeArr[currentPhoto]?.img}
+            src={
+              galleryTypeArr[currentPhoto]?.img
+                ? galleryTypeArr[currentPhoto]?.img
+                : galleryTypeArr[0]
+            }
           />
         )}
       </div>
