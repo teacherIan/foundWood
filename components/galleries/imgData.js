@@ -17,7 +17,14 @@ import latch from '../../src/assets/gallery/other/latch.jpg';
 import outsideStorage from '../../src/assets/gallery/structures/outside_storage.jpeg';
 import swingA from '../../src/assets/gallery/chairs/swing_a.jpg';
 import hobbitHouseDark from '../../src/assets/gallery/structures/hobbit_house_dark.jpg';
-
+import swingB from '../../src/assets/gallery/chairs/swingB.jpeg';
+import swingC from '../../src/assets/gallery/chairs/swingC.jpeg';
+import lightA from '../../src/assets/gallery/other/lightA.jpeg';
+import plantStandCaryl from '../../src/assets/gallery/small_tables/plantStandD.jpeg';
+import picnicTableC from '../../src/assets/gallery/large_tables/picnic_table_c.jpg';
+import tree_house_steps from '../../src/assets/gallery/structures/tree_house_steps.jpg';
+import tables from '../../src/assets/gallery/small_tables/tables.jpg';
+import outside_adirondack_chair from '../../src/assets/gallery/chairs/Adirondack_chair.jpeg';
 //this would be a bit cleaner with TS --  enum
 
 // const types = ['chairs', 'smallTable', 'largeTable', 'structure', 'other'];
@@ -117,7 +124,7 @@ export default [
     arrayType: 4,
     description:
       'Exterior and interior doors have been created. In some cases new door frame are included so that nonrectangular doors are possible. Carvings, stained glass and contrasting wood colors can be added. In all cases, the rich wood finish appears in the wood rather than on it due to a hand rubbed application of the multiple coats.',
-    price: '$1500',
+    price: '$1500 ~ $3000',
   },
   {
     orderNumber: '011',
@@ -212,5 +219,81 @@ export default [
     description:
       'The Hobbit House playhouse was designed with input from the teachers at the Tuft’s University Eliot Pearson Children’s School. The house is designed so that children can use it in a variety of ways, to play store, as a jungle gym with passageways, and as a kid’s size place to sit with their friends.',
     price: '$15,000 ~ $20,000',
+  },
+  {
+    orderNumber: '021',
+    img: swingB,
+    type: types.chairs,
+    arrayType: 0,
+    name: 'Swing',
+    description: 'Need Description',
+    price: '$2000',
+  },
+  {
+    orderNumber: '022',
+    img: swingC,
+    type: types.chairs,
+    arrayType: 0,
+    name: 'Swing',
+    description: 'Need Description',
+    price: '$2000',
+  },
+  {
+    orderNumber: '023',
+    img: lightA,
+    name: 'Light',
+    types: types.other,
+    arrayType: 4,
+    description: 'Need Light description',
+    price: '$500',
+  },
+  {
+    orderNumber: '024',
+    img: plantStandCaryl,
+    name: 'End Table/Plant table',
+    types: types.smallTable,
+    arrayType: 1,
+    description:
+      'Customers have used these 30 inch high tables as both end tables and plant stands. The focal point of each is the top which is made of spalted burls. The picture shown is of a white birch burl but cherry and maple burls are also available. The legs are made with the same wood type as the top. Each leg has the bark left on though it is sanded and treated to make it firmly attached to the base wood. The process gives the bark an attractive marble like appearance and leads the eye to the top.',
+    price: '$1000',
+  },
+  {
+    orderNumber: '025',
+    img: picnicTableC,
+    type: types.largeTable,
+    arrayType: 2,
+    name: 'Picnic Table',
+    description: 'need Description',
+    price: '$3000',
+  },
+  {
+    orderNumber: '026',
+    img: tree_house_steps,
+    type: types.structure,
+    arrayType: 3,
+    name: 'Hobbit House',
+    description:
+      'The Hobbit House playhouse was designed with input from the teachers at the Tuft’s University Eliot Pearson Children’s School. The house is designed so that children can use it in a variety of ways, to play store, as a jungle gym with passageways, and as a kid’s size place to sit with their friends.',
+    price: '$15,000 ~ $20,000',
+  },
+  {
+    orderNumber: '027',
+    img: tables,
+    name: 'End Table/Plant table',
+    types: types.smallTable,
+    arrayType: 1,
+    description:
+      'Customers have used these 30 inch high tables as both end tables and plant stands. The focal point of each is the top which is made of spalted burls. The picture shown is of a white birch burl but cherry and maple burls are also available. The legs are made with the same wood type as the top. Each leg has the bark left on though it is sanded and treated to make it firmly attached to the base wood. The process gives the bark an attractive marble like appearance and leads the eye to the top.',
+    price: '$1000',
+  },
+  {
+    orderNumber: '028',
+    img: outside_adirondack_chair,
+    name: 'Adirondack Chair',
+    types: types.smallTable,
+    arrayType: 0,
+    description:
+      'This very comfortable chair has White Cedar uprights cut and shaped for lumbar support and 6/4" Cedar arms which are screwed together and covered with Mahogany plugs. This chair is made to last as four coats of spar varnish are heated into the wood. For those who will be using the chair indoors or in a more sheltered location, a different, less durable but richer finish will be used.',
+    price: '$1200',
   },
 ];
