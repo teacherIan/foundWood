@@ -20,12 +20,11 @@ export default function Type({
 
   const [springs, api] = useSpring(() => ({
     // background: `linear-gradient(to bottom, #ff000000,#ff000000, #ff000000)`,
-    scale: 0.9,
+    scale: 0.8,
     config: configAnimation,
   }));
 
   function handleClick() {
-    console.log('Clicked');
     setActiveGalleryType(index);
     onTypeSelect();
   }
@@ -34,7 +33,7 @@ export default function Type({
     if (active) {
       api.start({
         // background: `linear-gradient(to bottom, #77481C11,#00000000, #77481C11)`,
-        scale: 1.2,
+        scale: 1,
       });
     } else {
       api.start({

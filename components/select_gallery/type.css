@@ -9,7 +9,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 20vw;
+    width: 25vw;
     height: 80svh;
     color: var(--brown);
     cursor: pointer;
@@ -18,7 +18,7 @@
 }
 
 .typeImage {
-    width: 20vw;
+    width: 25vw;
     overflow: visible;
     transform: translate(0%, 0%);
 }

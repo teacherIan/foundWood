@@ -7,6 +7,7 @@ import table from '../../src/assets/noBG/table_noBG.png';
 import picnicTable from '../../src/assets/noBG/picnic_table_B.png';
 // import house from '../../src/assets/noBG/hobbit_house_noBG_2.png';
 import house from '../../src/assets/noBG/playHouse-transformed.png';
+// import house from '../../src/assets/noBG/fort_b_noBG.png';
 import light from '../../src/assets/noBG/light_noBG.png';
 
 function useTypeSpring(showTypes, index) {
@@ -45,10 +46,10 @@ export default function Types({
     'Coffee Tables & Plant Stands',
     'Tables',
     'Structures',
-    'Others',
+    // 'Others',
   ];
 
-  const springs = Array.from({ length: 5 }, (_, index) =>
+  const springs = Array.from({ length: 4 }, (_, index) =>
     useTypeSpring(showTypes, index)
   );
 
@@ -60,7 +61,7 @@ export default function Types({
             key={index}
             style={{
               position: 'absolute',
-              left: 20 * index + 'svw',
+              left: 25 * index + 'svw',
               ...spring,
             }}
           >

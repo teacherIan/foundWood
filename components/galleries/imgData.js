@@ -25,6 +25,11 @@ import picnicTableC from '../../src/assets/gallery/large_tables/picnic_table_c.j
 import tree_house_steps from '../../src/assets/gallery/structures/tree_house_steps.jpg';
 import tables from '../../src/assets/gallery/small_tables/tables.jpg';
 import outside_adirondack_chair from '../../src/assets/gallery/chairs/Adirondack_chair.jpeg';
+import new_hob from '../../src/assets/gallery/structures/new_hob_highRise.jpg';
+import fort_w_child from '../../src/assets/gallery/structures/fort_w_child.png';
+import swing_back from '../../src/assets/gallery/chairs/swing_back.jpg';
+import love_seat from '../../src/assets/gallery/chairs/doubleChair.jpg';
+
 //this would be a bit cleaner with TS --  enum
 
 // const types = ['chairs', 'smallTable', 'largeTable', 'structure', 'other'];
@@ -54,7 +59,8 @@ export default [
     type: types.chairs,
     arrayType: 0,
     name: 'Captain Chair',
-    description: 'Need Captain Description',
+    description:
+      'Like the Adirondack Chair, the Captain’s Chair is made with 5/4 Red Cedar slats, mahogany plugs, and white cedar slats. It is finished with multiple coats of Found Wood secret recipe varnish which is heated and rubbed to protect the chair from the elements.  This chair is raised, leading to superior views of the surrounding area.',
     price: '$2000',
   },
   {
@@ -198,7 +204,8 @@ export default [
     name: 'Outdoor Storage',
     types: types.structure,
     arrayType: 3,
-    description: 'Need Description',
+    description:
+      'Outdoor storage units can be constructed using various types of wood and shapes designed to match the surrounding area or buildings. The storage units are finished with the patented FoundWood finish which protects the wood from the elements.',
     price: '$3000',
   },
   {
@@ -206,8 +213,9 @@ export default [
     img: swingA,
     type: types.chairs,
     arrayType: 0,
-    name: 'Swing',
-    description: 'Need Description',
+    name: 'Found Wood Swing',
+    description:
+      'Like the Adirondack Chair, the Found Wood Swing is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
     price: '$2000',
   },
   {
@@ -225,8 +233,9 @@ export default [
     img: swingB,
     type: types.chairs,
     arrayType: 0,
-    name: 'Swing',
-    description: 'Need Description',
+    name: 'Found Wood Swing',
+    description:
+      'Like the Adirondack Chair, the Found Wood Swing is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
     price: '$2000',
   },
   {
@@ -234,8 +243,9 @@ export default [
     img: swingC,
     type: types.chairs,
     arrayType: 0,
-    name: 'Swing',
-    description: 'Need Description',
+    name: 'Found Wood Swing',
+    description:
+      'Like the Adirondack Chair, the Found Wood Swing is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
     price: '$2000',
   },
   {
@@ -295,5 +305,45 @@ export default [
     description:
       'This very comfortable chair has White Cedar uprights cut and shaped for lumbar support and 6/4" Cedar arms which are screwed together and covered with Mahogany plugs. This chair is made to last as four coats of spar varnish are heated into the wood. For those who will be using the chair indoors or in a more sheltered location, a different, less durable but richer finish will be used.',
     price: '$1200',
+  },
+  {
+    orderNumber: '029',
+    img: new_hob,
+    type: types.structure,
+    arrayType: 3,
+    name: 'Hobbit House',
+    description:
+      'The Hobbit House playhouse was designed with input from the teachers at the Tuft’s University Eliot Pearson Children’s School. The house is designed so that children can use it in a variety of ways, to play store, as a jungle gym with passageways, and as a kid’s size place to sit with their friends.',
+    price: '$15,000 ~ $20,000',
+  },
+  {
+    orderNumber: '030',
+    img: fort_w_child,
+    type: types.structure,
+    arrayType: 3,
+    name: 'Hobbit House',
+    description:
+      'This product will be built to the needs of the buyer. The one shown is the base unit and contains two platforms of different heights with an inclined ramp connecting them. Options include sunken stumps to walk on, slides, swings and a curved roof.',
+    price: '$10,000 ~ $20,000',
+  },
+  {
+    orderNumber: '031',
+    img: swing_back,
+    type: types.chairs,
+    arrayType: 0,
+    name: 'Swing',
+    description:
+      'Like the Adirondack Chair, the Found Wood Swing is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
+    price: '$2000',
+  },
+  {
+    orderNumber: '032',
+    img: love_seat,
+    type: types.chairs,
+    arrayType: 0,
+    name: 'Adirondack Loveseat',
+    description:
+      'Like the Adirondack Chair this loveseat is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
+    price: '$2000',
   },
 ];

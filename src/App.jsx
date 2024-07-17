@@ -92,12 +92,12 @@ function App() {
             >
               Gallery
             </div>
-            <div
+            {/* <div
               onClick={() => handleMissionButtonClickCallback()}
               className="menu-item"
             >
               Mission
-            </div>
+            </div> */}
             <div
               onClick={() => setShowContactPage(!showContactPage)}
               className="menu-item"

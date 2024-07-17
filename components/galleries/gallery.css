@@ -76,4 +76,18 @@
     text-align: center;
 }
 
-.furniturePrice {}
+.furniturePrice {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.furnitureDescription {
+    height: 25vh;
+
+
+}
+
+.furniturePrice {
+    /* height: 25vh; */
+}

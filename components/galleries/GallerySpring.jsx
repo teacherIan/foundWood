@@ -52,7 +52,9 @@ export default function Gallery({ showGallery, galleryType }) {
               {galleryTypeArr[currentPhoto]?.name}
             </div>
             <br />
-            {galleryTypeArr[currentPhoto]?.description}
+            <div className="furnitureDescription">
+              {galleryTypeArr[currentPhoto]?.description}
+            </div>
             <br />
             <br />
             <div className="furniturePrice">
