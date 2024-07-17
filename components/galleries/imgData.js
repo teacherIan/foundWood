@@ -21,7 +21,7 @@ import swingB from '../../src/assets/gallery/chairs/swingB.jpeg';
 import swingC from '../../src/assets/gallery/chairs/swingC.jpeg';
 import lightA from '../../src/assets/gallery/other/lightA.jpeg';
 import plantStandCaryl from '../../src/assets/gallery/small_tables/plantStandD.jpeg';
-import picnicTableC from '../../src/assets/gallery/large_tables/picnic_table_c.jpg';
+import picnicTableC from '../../src/assets/gallery/large_tables/picnic_table_b.jpg';
 import tree_house_steps from '../../src/assets/gallery/structures/tree_house_steps.jpg';
 import tables from '../../src/assets/gallery/small_tables/tables.jpg';
 import outside_adirondack_chair from '../../src/assets/gallery/chairs/Adirondack_chair.jpeg';

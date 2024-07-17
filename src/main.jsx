@@ -3,11 +3,19 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 
+document.addEventListener(
+  'touchmove',
+  function (event) {
+    event.preventDefault();
+  },
+  false
+);
+
 function handleResize() {
   location.reload();
 }
 
-window.addEventListener('resize', handleResize);
+// window.addEventListener('resize', handleResize);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

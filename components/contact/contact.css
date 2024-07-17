@@ -30,3 +30,11 @@
 .exit-icon:hover {
     color: #d9ebc7;
 }
+
+
+@media only screen and (max-width: 1000px) {
+    .exit-icon {
+        right: 2%;
+        top: 90%;
+    }
+}

@@ -141,3 +141,12 @@ body {
     color: var(--lightGreen);
     cursor: pointer;
 }
+
+@media only screen and (max-width: 1000px) {
+
+    .form-control input {
+        width: 80vw;
+
+    }
+
+}

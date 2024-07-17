@@ -1,7 +1,7 @@
 import { useSpring, animated } from '@react-spring/web';
 import Type from './Type';
 import './types.css';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect } from 'react';
 import chair from '../../src/assets/noBG/double_chair_final_noBG.png';
 import table from '../../src/assets/noBG/table_noBG.png';
 import picnicTable from '../../src/assets/noBG/picnic_table_B.png';

@@ -3,11 +3,22 @@
     outline: none;
 }
 
+html {
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: fixed;
+
+}
+
 .app-container {
     position: relative;
+    /* overflow-y: auto;
+    overflow-x: hidden;
+    position: fixed; */
 }
 
 canvas {
     width: 100vw;
     height: 100svh;
+    background-color: #dfe9f0;
 }

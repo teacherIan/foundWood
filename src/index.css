@@ -2,6 +2,10 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+body {
+  touch-action: none;
 
 }
 
@@ -36,8 +40,6 @@
   user-select: none;
   cursor: pointer;
 }
-
-
 
 .selectButton {
   cursor: pointer;
@@ -93,8 +95,17 @@
 
 
 @media only screen and (max-width: 1000px) {
+  .infoGraphic {
+    bottom: 0%;
+    transform: translate(-50%, 0%);
+
+
+  }
+
   .arrow {
-    transform: scale(1.5);
+    transform: scale(3);
+
+
   }
 
   .menu {

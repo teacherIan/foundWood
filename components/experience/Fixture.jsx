@@ -53,12 +53,13 @@ export default function Fixture({
 
   return (
     <>
-      <Sky
+      {/* <Sky
         distance={450000}
         sunPosition={[0, 1, 0]}
         inclination={0}
         azimuth={0.25}
-      />
+        // position={[0, 10, 0]}
+      /> */}
 
       <animated.mesh receiveShadow position={[0, -3, 0]}>
         <boxGeometry args={[1000, 0.1, 1000]} />
