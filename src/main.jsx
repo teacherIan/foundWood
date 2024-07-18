@@ -11,16 +11,8 @@ document.addEventListener(
   false
 );
 
-function handleResize() {
-  location.reload();
-}
-
-// window.addEventListener('resize', handleResize);
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <div onResize={location.reload} id="app-container">
-      <App />
-    </div>
+    <App />
   </React.StrictMode>
 );
