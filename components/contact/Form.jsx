@@ -136,7 +136,7 @@ export default function Form({ setShowContactPage }) {
   }, []);
 
   return (
-    <div className="form-container">
+    <div className="formContainer">
       <h1>Contact Doug's Found Wood</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-control">

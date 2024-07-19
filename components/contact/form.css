@@ -1,17 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
 
-:root {
-    --brown: #77481C;
-    --blue: lightblue;
-    --lightGreen: #d9ebc7;
-}
-
-
-* {
-    box-sizing: border-box;
-}
-
-body {
+/* .formContainer {
     user-select: none;
     color: #fff;
     font-family: cursive, 'Muli', sans-serif;
@@ -22,11 +11,11 @@ body {
     height: 100vh;
     overflow: hidden;
     margin: 0;
-}
+} */
 
-.container {
+/* .container {
     padding: 20px 40px;
-}
+} */
 
 .container h1 {
     text-align: center;

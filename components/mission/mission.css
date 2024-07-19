@@ -2,7 +2,7 @@
     width: 100vw;
     height: 100svh;
     position: absolute;
-    /* top: 10vh; */
+
     color: var(--brown);
     z-index: 1000;
     padding-left: calc(4vh + 4vw + 10px);

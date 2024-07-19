@@ -10,16 +10,16 @@ import house from '../../src/assets/noBG/playHouse-transformed.png';
 // import house from '../../src/assets/noBG/fort_b_noBG.png';
 import light from '../../src/assets/noBG/light_noBG.png';
 
-function useTypeSpring(showTypes, index) {
-  const configAnimation = {
-    mass: 6,
-    tension: 300,
-    friction: 60,
-    precision: 0.0001,
-  };
+const configAnimation = {
+  mass: 6,
+  tension: 300,
+  friction: 60,
+  precision: 0.0001,
+};
 
+function useTypeSpring(showTypes, index) {
   const [spring, setSpring] = useSpring(() => ({
-    opacity: showTypes ? '1' : '0',
+    opacity: showTypes ? '0' : '0',
     top: showTypes ? '110svh' : '0svh',
     config: configAnimation,
   }));
@@ -40,14 +40,28 @@ export default function Types({
   onTypeSelect,
   setActiveGalleryType,
 }) {
-  const imgArray = [chair, table, picnicTable, house, light];
+  const imgArray = [table, chair, picnicTable, house, light];
   const imgHeader = [
-    'Chairs & Ottomans',
     'Coffee Tables & Plant Stands',
+    'Chairs & Ottomans',
     'Tables',
     'Structures',
     // 'Others',
   ];
+
+  const [informationSpring, setInformationSpring] = useSpring(() => ({
+    opacity: '0',
+    left: 50 + '%',
+    config: configAnimation,
+  }));
+
+  useEffect(() => {
+    if (showTypes) {
+      setInformationSpring.start({ opacity: '1', top: '85vh', delay: 100 });
+    } else {
+      setInformationSpring.start({ opacity: '0', top: '20vh', delay: 150 });
+    }
+  }, [showTypes]);
 
   const springs = Array.from({ length: 4 }, (_, index) =>
     useTypeSpring(showTypes, index)
@@ -55,6 +69,18 @@ export default function Types({
 
   return (
     <>
+      <animated.div
+        className="findMe"
+        style={{
+          position: 'absolute',
+          top: '85%',
+          ...informationSpring,
+        }}
+      >
+        Everything built by DFW will be completely unique as all furniture is
+        built using the natural curvature of the wood. For more information,
+        contact us using the button found in the top right corner of the page.
+      </animated.div>
       <animated.div className="typesContainer">
         {springs.map((spring, index) => (
           <animated.div

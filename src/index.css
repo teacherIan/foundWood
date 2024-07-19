@@ -1,7 +1,8 @@
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+:root {
+  --brown: #77481C;
+  --blue: lightblue;
+  --lightGreen: #d9ebc7;
+  --white: #FFFFFF;
 }
 
 body {
@@ -45,12 +46,11 @@ body {
   cursor: pointer;
   position: absolute;
   user-select: none;
-  width: 5vw;
+  width: 10vw;
   height: 100svh;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-
   z-index: 100;
 }
 
@@ -58,7 +58,8 @@ body {
 
 .right {
   top: 0;
-  left: 95vw;
+  left: 90vw;
+  justify-content: flex-end;
 
 }
 
@@ -69,9 +70,9 @@ body {
 
 .arrow {
   color: #77481C;
-  max-width: 100%;
-  height: auto;
-  transform: scale(4);
+  font-size: 100px;
+
+
 }
 
 .infoGraphic {
@@ -105,7 +106,7 @@ body {
   }
 
   .arrow {
-    transform: scale(3);
+    font-size: 200px;
 
 
   }

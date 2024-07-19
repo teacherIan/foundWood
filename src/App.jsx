@@ -92,12 +92,7 @@ function App() {
             >
               Gallery
             </div>
-            {/* <div
-              onClick={() => handleMissionButtonClickCallback()}
-              className="menu-item"
-            >
-              Mission
-            </div> */}
+
             <div
               onClick={() => setShowContactPage(!showContactPage)}
               className="menu-item"
@@ -109,14 +104,9 @@ function App() {
 
         <div
           className="infoGraphic"
-          // style={
-          //   showTypes || showMission || showGallery
-          //     ? { filter: 'blur(200px)', opacity: 0 }
-          //     : { filter: 'blur(0px)', opacity: 1 }
-          // }
           style={
             counter == -1
-              ? { bottom: '-20%', opacity: 0 }
+              ? { bottom: '-25%', opacity: 0 }
               : { bottom: '5%', opacity: 1 }
           }
         >
@@ -124,14 +114,7 @@ function App() {
           <br />
           Beautiful yet Functional
         </div>
-        <div
-          className="blur"
-          // style={
-          //   showTypes || showMission || showGallery
-          //     ? { filter: 'blur(200px)', opacity: 0 }
-          //     : { filter: 'blur(0px)', opacity: 1 }
-          // }
-        >
+        <div className="blur">
           <div className="selectButton" onClick={() => subtract()}>
             <AiFillCaretLeft
               className="arrow"

@@ -25,31 +25,41 @@ export default function Fixture({
   const modelImport = useGLTF(model);
 
   useEffect(() => {
-    if (fixtureNumber === counter) {
-      // Perform the action here
-      api.start({
-        position: [0, -4.5 + offset, 0],
-        config: configAnimation,
-        scale: scale,
-      });
-    }
+    const handleResize = () => {
+      // Your code here will be executed on resize
+      if (fixtureNumber === counter) {
+        api.start({
+          position: [0, -4.5 + offset, 0],
+          config: configAnimation,
+          scale: scale,
+        });
+      }
 
-    if (fixtureNumber > counter) {
-      api.start({
-        position: [0, 60, 0],
-        scale: 0,
-        config: configAnimation,
-      });
-    }
+      if (fixtureNumber > counter) {
+        api.start({
+          position: [0, 60, 0],
+          scale: 0,
+          config: configAnimation,
+        });
+      }
 
-    if (fixtureNumber < counter) {
-      api.start({
-        position: [0, -60, 0],
-        scale: 0,
-        config: configAnimation,
-      });
-    }
-  }, [counter]);
+      if (fixtureNumber < counter) {
+        api.start({
+          position: [0, -60, 0],
+          scale: 0,
+          config: configAnimation,
+        });
+      }
+    };
+
+    handleResize(); // Call the function initially
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [counter, window]);
 
   return (
     <>

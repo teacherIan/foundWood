@@ -58,7 +58,7 @@ export default function Contact({ showContactPage, setShowContactPage }) {
   return (
     <animated.div
       ref={myRef}
-      className="container"
+      className="contactContainer"
       style={{ ...springs, left: hasAnimated ? springs.left : '100%' }}
     >
       <Form setShowContactPage={setShowContactPage} />

@@ -1,6 +1,11 @@
 * {
     border: none;
     outline: none;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    user-select: none;
+    font-family: cursive;
 }
 
 html {
@@ -12,9 +17,7 @@ html {
 
 .app-container {
     position: relative;
-    /* overflow-y: auto;
-    overflow-x: hidden;
-    position: fixed; */
+
 }
 
 canvas {
