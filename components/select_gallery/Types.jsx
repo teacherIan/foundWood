@@ -15,6 +15,7 @@ const configAnimation = {
   tension: 300,
   friction: 60,
   precision: 0.0001,
+  ease: true,
 };
 
 function useTypeSpring(showTypes, index) {
@@ -25,10 +26,12 @@ function useTypeSpring(showTypes, index) {
   }));
 
   useEffect(() => {
-    if (showTypes) {
+    if (showTypes && window.innerHeight < 1000) {
+      setSpring.start({ top: '125svh', opacity: '1', delay: index * 100 });
+    } else if (showTypes) {
       setSpring.start({ top: '130svh', opacity: '1', delay: index * 100 });
     } else {
-      setSpring.start({ top: '0vh', opacity: '0', delay: index * 100 });
+      setSpring.start({ top: '0svh', opacity: '0', delay: index * 100 });
     }
   }, [showTypes]);
 
@@ -65,11 +68,11 @@ export default function Types({
 
   useEffect(() => {
     if (showTypes && window.innerHeight < 1000) {
-      setInformationSpring.start({ opacity: '1', top: '75vh', delay: 100 });
+      setInformationSpring.start({ opacity: '1', top: '75svh', delay: 100 });
     } else if (showTypes) {
-      setInformationSpring.start({ opacity: '1', top: '85vh', delay: 100 });
+      setInformationSpring.start({ opacity: '1', top: '85svh', delay: 100 });
     } else {
-      setInformationSpring.start({ opacity: '0', top: '20vh', delay: 150 });
+      setInformationSpring.start({ opacity: '0', top: '20svh', delay: 150 });
     }
   }, [showTypes]);
 

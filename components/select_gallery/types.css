@@ -1,11 +1,11 @@
 .typesContainer {
-    background-color: red;
+
     position: absolute;
     z-index: 1001;
     width: 100vw;
-    height: 90vh;
-    top: -100vh;
-    display: flex;
+    height: 100svh;
+    top: -100svh;
+    /* display: flex; */
     text-align: center;
 }
 
@@ -18,10 +18,4 @@
 
 }
 
-@media only screen and (max-width: 1000px) {
-    .typesContainer {
-
-        /* flex-direction: column; */
-    }
-
-}
+/* @media only screen and (max-width: 1000px) {} */
