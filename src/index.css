@@ -1,13 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Ga+Maamli&family=Shadows+Into+Light&display=swap');
+
 :root {
   --brown: #77481C;
   --blue: lightblue;
   --lightGreen: #d9ebc7;
   --white: #FFFFFF;
+  /* --mainFont: Times, serif; */
+  --mainFont: cursive;
 }
 
 body {
   touch-action: none;
-
+  /* text-transform: capitalize; */
+  /* font-weight: bolder; */
+  cursor: grab;
 }
 
 .header {
@@ -25,14 +31,11 @@ body {
   padding: 0px 50px 0px 50px;
   color: #77481C;
   font-size: calc(1vw + 1vh + 5px);
-  font-family: cursive;
   display: flex;
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  z-index: 1000;
-
-
+  z-index: 30000;
 }
 
 .icon {
@@ -60,38 +63,33 @@ body {
   top: 0;
   left: 90vw;
   justify-content: flex-end;
-
 }
 
 .menu-item {
   cursor: pointer;
-  z-index: 10000;
+  z-index: 50000;
+  text-transform: none;
 }
 
 .arrow {
   color: #77481C;
   font-size: 100px;
-
-
 }
 
 .infoGraphic {
   position: absolute;
-  /* background-color: blue; */
   z-index: 2000;
-  bottom: 5%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: #77481C;
-  font-size: calc(1.0vw + 1.0vh + 7px);
-  font-family: cursive;
+  font-size: calc(1.5vw + 1.0vh + 7px);
   text-align: center;
   transition: 1s;
 
+  /* font-family: var(--mainFont); */
 }
 
 .appContainer {
-  /* transition: 5s; */
   width: 100svw;
   height: 100svh;
 }
@@ -107,8 +105,6 @@ body {
 
   .arrow {
     font-size: 200px;
-
-
   }
 
   .menu {

@@ -2,12 +2,29 @@ import './type.css';
 import { useState, useEffect } from 'react';
 import { useSpring, animated } from '@react-spring/web';
 
+/* img headers
+    'Coffee Tables & Plant Stands',
+    'Chairs & Ottomans',
+    'Tables',
+    'Structures',
+    // 'Others',
+*/
+
+/* names
+    chairs: 'chairs',
+    smallTable: 'smallTable',
+    largeTable: 'largeTable',
+    structure: 'structure',
+    other: 'other',
+*/
+
 export default function Type({
   img,
   header,
   onTypeSelect,
   index,
   setActiveGalleryType,
+  setActiveGalleryTypeString,
 }) {
   const [active, setActive] = useState(false);
 
@@ -25,6 +42,26 @@ export default function Type({
   }));
 
   function handleClick() {
+    if (header == 'Coffee Tables & Plant Stands') {
+      setActiveGalleryTypeString('smallTable');
+    }
+
+    if (header == 'Chairs & Ottomans') {
+      setActiveGalleryTypeString('chairs');
+    }
+
+    if (header == 'Tables') {
+      setActiveGalleryTypeString('largeTable');
+    }
+
+    if (header == 'Structures') {
+      setActiveGalleryTypeString('structure');
+    }
+
+    if (header == 'Others') {
+      setActiveGalleryTypeString('other');
+    }
+
     setActiveGalleryType(index);
     onTypeSelect();
   }

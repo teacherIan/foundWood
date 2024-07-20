@@ -5,13 +5,17 @@ import { useSpring, animated } from '@react-spring/web';
 
 const images = imgData;
 
-export default function Gallery({ showGallery, galleryType }) {
+export default function Gallery({
+  showGallery,
+  galleryType,
+  showGalleryString,
+}) {
   const [currentPhoto, setCurrentPhoto] = useState(0);
   const [galleryTypeArr, setGalleryTypeArr] = useState([]);
 
   useEffect(() => {
     const newGalleryTypeArr = images.filter(
-      (image) => image.arrayType === galleryType
+      (image) => image.type === showGalleryString
     );
     setGalleryTypeArr(newGalleryTypeArr);
   }, [galleryType]);

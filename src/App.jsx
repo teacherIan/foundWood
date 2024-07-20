@@ -13,6 +13,24 @@ import Mission from '../components/mission/Mission';
 function App() {
   const amtFixtures = 2;
 
+  const types = {
+    chairs: 'chairs',
+    smallTable: 'smallTable',
+    largeTable: 'largeTable',
+    structure: 'structure',
+    other: 'other',
+  };
+
+  const typeArray = [
+    'chairs',
+    'smallTable',
+    'largeTable',
+    'structure',
+    'other',
+  ];
+
+  const [activeGalleryTypeString, setActiveGalleryTypeString] =
+    useState('chairs');
   const [activeGalleryType, setActiveGalleryType] = useState(1);
   const [showMission, setShowMission] = useState(false);
   const [showTypes, setShowTypes] = useState(false);
@@ -66,6 +84,7 @@ function App() {
       <GallerySpring
         galleryType={activeGalleryType}
         showGallery={showGallery}
+        showGalleryString={activeGalleryTypeString}
       />
       <Types
         showTypes={showTypes}
@@ -73,6 +92,7 @@ function App() {
         onMissionButtonClick={handleMissionButtonClickCallback}
         onTypeSelect={handleGalleryButtonClickCallback}
         setActiveGalleryType={setActiveGalleryType}
+        setActiveGalleryTypeString={setActiveGalleryTypeString}
       />
       <div className="appContainer">
         <Contact
@@ -107,7 +127,7 @@ function App() {
           style={
             counter == -1
               ? { bottom: '-25%', opacity: 0 }
-              : { bottom: '5%', opacity: 1 }
+              : { bottom: '0%', opacity: 1 }
           }
         >
           Unique Handcrafted Furniture

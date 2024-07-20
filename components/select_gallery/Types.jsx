@@ -20,13 +20,13 @@ const configAnimation = {
 function useTypeSpring(showTypes, index) {
   const [spring, setSpring] = useSpring(() => ({
     opacity: showTypes ? '0' : '0',
-    top: showTypes ? '110svh' : '0svh',
+    top: showTypes ? '130svh' : '0svh',
     config: configAnimation,
   }));
 
   useEffect(() => {
     if (showTypes) {
-      setSpring.start({ top: '110vh', opacity: '1', delay: index * 100 });
+      setSpring.start({ top: '130svh', opacity: '1', delay: index * 100 });
     } else {
       setSpring.start({ top: '0vh', opacity: '0', delay: index * 100 });
     }
@@ -39,7 +39,15 @@ export default function Types({
   showTypes,
   onTypeSelect,
   setActiveGalleryType,
+  setActiveGalleryTypeString,
 }) {
+  const types = {
+    chairs: 'chairs',
+    smallTable: 'smallTable',
+    largeTable: 'largeTable',
+    structure: 'structure',
+    other: 'other',
+  };
   const imgArray = [table, chair, picnicTable, house, light];
   const imgHeader = [
     'Coffee Tables & Plant Stands',
@@ -56,7 +64,9 @@ export default function Types({
   }));
 
   useEffect(() => {
-    if (showTypes) {
+    if (showTypes && window.innerHeight < 1000) {
+      setInformationSpring.start({ opacity: '1', top: '75vh', delay: 100 });
+    } else if (showTypes) {
       setInformationSpring.start({ opacity: '1', top: '85vh', delay: 100 });
     } else {
       setInformationSpring.start({ opacity: '0', top: '20vh', delay: 150 });
@@ -73,13 +83,12 @@ export default function Types({
         className="findMe"
         style={{
           position: 'absolute',
-          top: '85%',
           ...informationSpring,
         }}
       >
-        Everything built by DFW will be completely unique as all furniture is
-        built using the natural curvature of the wood. For more information,
-        contact us using the button found in the top right corner of the page.
+        Everything built by DFW is completely unique using the natural curvature
+        of the wood. For more information, contact us using the button found in
+        the top right corner of the page.
       </animated.div>
       <animated.div className="typesContainer">
         {springs.map((spring, index) => (
@@ -97,6 +106,7 @@ export default function Types({
               onTypeSelect={onTypeSelect}
               index={index}
               setActiveGalleryType={setActiveGalleryType}
+              setActiveGalleryTypeString={setActiveGalleryTypeString}
             />
           </animated.div>
         ))}

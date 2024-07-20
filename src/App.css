@@ -5,7 +5,7 @@
     margin: 0;
     box-sizing: border-box;
     user-select: none;
-    font-family: cursive;
+    font-family: var(--mainFont);
 }
 
 html {
@@ -24,4 +24,9 @@ canvas {
     width: 100vw;
     height: 100svh;
     background-color: #dfe9f0;
+    cursor: grab;
+}
+
+canvas:active {
+    cursor: grabbing;
 }

@@ -1,9 +1,9 @@
 .typesContainer {
     background-color: red;
     position: absolute;
-    z-index: 10001;
+    z-index: 1001;
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
     top: -100vh;
     display: flex;
     text-align: center;
