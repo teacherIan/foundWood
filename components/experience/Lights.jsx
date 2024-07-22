@@ -1,8 +1,8 @@
 export default function Lights() {
-  const lightIntensity = 0;
+  const lightIntensity = 50;
   return (
     <>
-      <ambientLight intensity={7} />
+      <ambientLight intensity={5} />
       <pointLight position={[5, 10, 5]} intensity={lightIntensity} castShadow />
       <pointLight
         position={[-5, 10, -5]}

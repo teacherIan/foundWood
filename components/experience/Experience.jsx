@@ -7,9 +7,9 @@ import plantStandA from '../../src/assets/3d/plantStandAFixed.glb';
 import chairA from '../../src/assets/3d/chairA.glb';
 import chairC from '../../src/assets/3d/chairC.glb';
 import plantStandB from '../../src/assets/3d/tableACompact.glb';
-import coffeeTableA from '../../src/assets/3d/coffee_table_A.glb';
+import coffeeTableA from '../../src/assets/3d/coffee_fixed_add_effect.glb';
 import plantStandNew from '../../src/assets/3d/coffee_table_b.glb';
-import plantStandC from '../../src/assets/3d/plant_stand_c.glb';
+import plantStandC from '../../src/assets/3d/plant_table_no_floor_new.glb';
 
 export default function Experience({ counter, setCounter }) {
   return (
@@ -24,6 +24,7 @@ export default function Experience({ counter, setCounter }) {
         maxDistance={15}
         minPolarAngle={Math.PI / 6} // 45 degrees
         maxPolarAngle={Math.PI / 3} // 90 degrees
+        autoRotateSpeed={0.8}
       />
       <Lights />
       <Fixture
