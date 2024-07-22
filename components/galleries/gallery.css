@@ -19,10 +19,6 @@
     height: calc(45svh - 20px);
     border-radius: 2px;
     justify-items: center;
-
-
-
-
 }
 
 .thumbNailPhoto {
@@ -62,21 +58,20 @@
     font-family: sans-serif;
     padding: 5px;
     flex-direction: column;
+
 }
 
 .galleryContact {
-
     position: absolute;
-    font-family: cursive;
     top: 80%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: calc(1vw + 1vh + 10px);
     cursor: pointer;
-
 }
 
 .furnitureName {
+    margin-top: 5px;
     text-align: center;
 }
 
@@ -88,12 +83,12 @@
 
 .furnitureDescription {
     height: 25vh;
-
-
+    font-family: var(--secondaryFont);
 }
 
 .furniturePrice {
-    /* height: 25vh; */
+    height: 25vh;
+    left: 0;
 }
 
 @media only screen and (max-width: 1000px) {

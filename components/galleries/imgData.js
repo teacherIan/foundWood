@@ -29,7 +29,8 @@ import new_hob from '../../src/assets/gallery/structures/new_hob_highRise.jpg';
 import fort_w_child from '../../src/assets/gallery/structures/fort_w_child.png';
 import swing_back from '../../src/assets/gallery/chairs/swing_back.jpg';
 import love_seat from '../../src/assets/gallery/chairs/doubleChair.jpg';
-
+import small_table from '../../src/assets/gallery/small_tables/smallTable.jpeg';
+import largeGlassTable from '../../src/assets/gallery/large_tables/largeGlassTable.jpeg';
 //this would be a bit cleaner with TS --  enum
 
 // const types = ['chairs', 'smallTable', 'largeTable', 'structure', 'other'];
@@ -274,7 +275,7 @@ export default [
     orderNumber: '028',
     img: outside_adirondack_chair,
     name: 'Adirondack Chair',
-    type: types.smallTable,
+    type: types.chairs,
     description:
       'This very comfortable chair has White Cedar uprights cut and shaped for lumbar support and 6/4" Cedar arms which are screwed together and covered with Mahogany plugs. This chair is made to last as four coats of spar varnish are heated into the wood. For those who will be using the chair indoors or in a more sheltered location, a different, less durable but richer finish will be used.',
     price: '$1200',
@@ -314,5 +315,22 @@ export default [
     description:
       'Like the Adirondack Chair this loveseat is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
     price: '$2000',
+  },
+
+  {
+    orderNumber: '033',
+    img: small_table,
+    name: 'Burl Table',
+    type: types.smallTable,
+    description: 'Need Description',
+    price: '$1000',
+  },
+  {
+    orderNumber: '034',
+    img: largeGlassTable,
+    type: types.largeTable,
+    name: 'Glass Dining Table',
+    description: 'need Description',
+    price: '$3000',
   },
 ];

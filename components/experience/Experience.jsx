@@ -30,15 +30,15 @@ export default function Experience({ counter, setCounter }) {
         fixtureNumber={0}
         counter={counter}
         setCounter={setCounter}
-        scale={6}
-        offset={1}
+        scale={7.5}
+        offset={0.5}
         model={plantStandC}
       />
       <Fixture
         fixtureNumber={1}
         counter={counter}
         setCounter={setCounter}
-        scale={4}
+        scale={7}
         offset={4}
         model={coffeeTableA}
       />

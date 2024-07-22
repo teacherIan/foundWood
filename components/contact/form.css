@@ -39,6 +39,7 @@
     border-radius: 5px;
     color: var(--brown);
     transition: 1s;
+    margin-top: 20px;
 }
 
 .btn:focus {

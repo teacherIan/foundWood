@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Ga+Maamli&family=Shadows+Into+Light&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Redressed&display=swap');
 
 :root {
   --brown: #77481C;
@@ -6,13 +6,17 @@
   --lightGreen: #d9ebc7;
   --white: #FFFFFF;
   /* --mainFont: Times, serif; */
-  --mainFont: cursive;
+  --mainFont: "Lobster Two", sans-serif;
+  --secondaryFont: sans-serif;
+  font-weight: 400;
+  font-style: italic;
+
 }
 
 body {
   touch-action: none;
   /* text-transform: capitalize; */
-  /* font-weight: bolder; */
+  /* font-weight: lighter; */
   cursor: grab;
 }
 
@@ -30,7 +34,7 @@ body {
   user-select: none;
   padding: 0px 50px 0px 50px;
   color: #77481C;
-  font-size: calc(1vw + 1vh + 5px);
+  font-size: calc(2vw + 1vh + 5px);
   display: flex;
   width: 100%;
   justify-content: space-around;
@@ -85,6 +89,7 @@ body {
   font-size: calc(1.5vw + 1.0vh + 7px);
   text-align: center;
   transition: 1s;
+  bottom: '-25%';
 
   /* font-family: var(--mainFont); */
 }
@@ -97,7 +102,7 @@ body {
 
 @media only screen and (max-width: 1000px) {
   .infoGraphic {
-    bottom: 0%;
+    bottom: -25%;
     transform: translate(-50%, 0%);
     width: 100%;
     font-size: calc(1.5vw + 1.5vh + 10px);

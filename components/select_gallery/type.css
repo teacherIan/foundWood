@@ -20,7 +20,7 @@
 
 .typeHeader {
     display: block;
-    font-size: calc(1vh + 1vw + 10px);
+    font-size: calc(2vh + 1vw + 10px);
 
 }
 
@@ -38,4 +38,5 @@
     color: var(--brown);
     width: 95svw;
     text-align: center;
+    font-family: var(--secondaryFont);
 }

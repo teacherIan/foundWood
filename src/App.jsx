@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { AiFillCaretRight } from 'react-icons/ai';
 import { AiFillCaretLeft } from 'react-icons/ai';
 import found_wood from './assets/found_wood_icon.png';
@@ -36,7 +36,17 @@ function App() {
   const [showTypes, setShowTypes] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [showContactPage, setShowContactPage] = useState(false);
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useState(-1);
+
+  useEffect(() => {
+    const c = setTimeout(() => {
+      setCounter(0);
+    }, 200);
+
+    return () => {
+      clearInterval(c);
+    };
+  }, []);
 
   function add() {
     if (counter < amtFixtures - 1) {
@@ -127,6 +137,8 @@ function App() {
           style={
             counter == -1
               ? { bottom: '-25%', opacity: 0 }
+              : window.innerHeight < 1000
+              ? { bottom: '5%', opacity: 1 }
               : { bottom: '0%', opacity: 1 }
           }
         >

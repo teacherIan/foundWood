@@ -138,23 +138,41 @@ export default function Form({ setShowContactPage }) {
   return (
     <div className="formContainer">
       <h1>Contact Doug's Found Wood</h1>
-      <form onSubmit={handleSubmit}>
+      <form autoComplete="off" onSubmit={handleSubmit}>
         <div className="form-control">
-          <input name="name" ref={nameInputRef} type="text" required />
+          <input
+            autoComplete="off"
+            name="name"
+            ref={nameInputRef}
+            type="text"
+            required
+          />
           <label ref={nameLabelRef}>
             {nameLabel.length > 1 ? nameLabel : 'Name'}
           </label>
         </div>
 
         <div className="form-control">
-          <input name="email" ref={emailInputRef} type="text" required />
+          <input
+            autoComplete="off"
+            name="email"
+            ref={emailInputRef}
+            type="text"
+            required
+          />
           <label ref={emailLabelRef}>
             {emailLabel.length > 1 ? emailLabel : 'Email'}
           </label>
         </div>
 
         <div className="form-control" style={{ width: '50vw' }}>
-          <input name="message" ref={messageInputRef} type="text" required />
+          <input
+            autoComplete="off"
+            name="message"
+            ref={messageInputRef}
+            type="text"
+            required
+          />
           <label ref={messageLabelRef}>
             {messageLabel.length > 1 ? messageLabel : 'Message'}
           </label>
