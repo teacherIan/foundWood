@@ -34,7 +34,7 @@ export default [
     name: 'End Table/Plant table',
     type: types.smallTable,
     description:
-      'Customers have used these 30 inch high tables as both end tables and plant stands. The focal point of each is the top which is made of spalted burls. The picture shown is of a white birch burl but cherry and maple burls are also available. The legs are made with the same wood type as the top. Each leg has the bark left on though it is sanded and treated to make it firmly attached to the base wood. The process gives the bark an attractive marble like appearance and leads the eye to the top.',
+      'Customers have used these 30 inch high tables as both end tables and plant stands. The focal point of each is the top which is made of spalted burls. The picture shown is of a cherry burl but white birch and maple burls are also available. The legs are made with the same wood type as the top. Each leg has the bark left on and is sanded and treated to make it firmly attached to the base wood. The process gives the bark an attractive marble like appearance and leads the eye to the top.',
     price: '$1000',
   },
   {
@@ -60,7 +60,7 @@ export default [
     name: 'End Table/Plant table',
     type: types.smallTable,
     description:
-      'Customers have used these 30 inch high tables as both end tables and plant stands. The focal point of each is the top which is made of spalted burls. The picture shown is of a white birch burl but cherry and maple burls are also available. The legs are made with the same wood type as the top. Each leg has the bark left on though it is sanded and treated to make it firmly attached to the base wood. The process gives the bark an attractive marble like appearance and leads the eye to the top.',
+      'Customers have used these 30 inch high tables as both end tables and plant stands. The focal point of each is the top which is made of spalted burls. The legs are made with the same wood type as the top. Each leg has the bark left on though it is sanded and treated to make it firmly attached to the base wood. The process gives the bark an attractive marble like appearance and leads the eye to the top.',
     price: '$1000',
   },
   {
