@@ -1,29 +1,29 @@
 export default function Lights() {
-  const lightIntensity = 50;
+  const lightIntensity = 60;
   return (
     <>
-      <ambientLight intensity={3} />
+      <ambientLight intensity={5} />
       <pointLight
-        position={[-5, 10, 20]}
+        position={[-15, 10, 20]}
+        intensity={lightIntensity}
+        castShadow
+      />
+      {/* <pointLight position={[3, 1, 3]} intensity={lightIntensity} castShadow /> */}
+      <pointLight
+        position={[20, 10, -15]}
         intensity={lightIntensity}
         castShadow
       />
       <pointLight
-        position={[-20, 10, -5]}
+        position={[5, 10, 15]}
         intensity={lightIntensity}
         castShadow
       />
       <pointLight
-        position={[20, 10, -5]}
+        position={[12, 5, 12]}
         intensity={lightIntensity}
         castShadow
       />
-      <pointLight
-        position={[5, 20, 15]}
-        intensity={lightIntensity}
-        castShadow
-      />
-      <pointLight position={[2, 20, 2]} intensity={lightIntensity} castShadow />
     </>
   );
 }

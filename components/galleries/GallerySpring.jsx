@@ -45,6 +45,7 @@ export default function Gallery({
       }
     >
       <div className="galleryLeftTop">
+        {window.innerWidth < 1000 ? <div>Small Screen</div> : null}
         <div className="thumbNails" onMouseOver={handleThumbNailHover}>
           {galleryTypeArr.map((image, index) => (
             <img key={index} src={image.img} className="thumbNailPhoto" />

@@ -3,7 +3,7 @@ import Type from './Type';
 import './types.css';
 import { useEffect } from 'react';
 import chair from '../../src/assets/noBG/double_chair_final_noBG.png';
-import table from '../../src/assets/noBG/table_noBG.png';
+import table from '../../src/assets/noBG/plantStand_new.png';
 import picnicTable from '../../src/assets/noBG/picnic_table_B.png';
 // import house from '../../src/assets/noBG/hobbit_house_noBG_2.png';
 import house from '../../src/assets/noBG/playHouse-transformed.png';

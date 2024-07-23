@@ -112,9 +112,21 @@
 
     }
 
+    .currentPhoto {
+        height: 100svw;
+        width: 100svw;
+        overflow-x: auto;
+        overflow-y: auto;
+
+    }
+
     .masterImage {
         border-radius: 0;
-        height: 60svh;
+        height: 100svw;
+        width: 100svw;
+        /* user-select: all; */
+        /* overflow: auto; */
+        border: none;
 
     }
 
@@ -123,6 +135,7 @@
         height: 15vw;
         /* margin-top: 20px; */
         /* gap: 50px; */
+        border: none;
 
     }
 
