@@ -90,8 +90,10 @@ export default function Type({
         ...springs,
       }}
     >
-      <div className="typeHeader">{header}</div>
-      <img className="typeImage" src={img} />
+      <div className="typeHeader">
+        {header}
+        <img className="typeImage" src={img} />
+      </div>
     </animated.div>
   );
 }

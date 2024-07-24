@@ -27,9 +27,13 @@ function useTypeSpring(showTypes, index) {
 
   useEffect(() => {
     if (showTypes && window.innerHeight < 1000) {
-      setSpring.start({ top: '125svh', opacity: '1', delay: index * 100 });
+      setSpring.start({
+        top: 110 + (index > 1 ? 30 : 0) + 'svh',
+        opacity: '1',
+        delay: index * 100,
+      });
     } else if (showTypes) {
-      setSpring.start({ top: '130svh', opacity: '1', delay: index * 100 });
+      setSpring.start({ top: '115svh', opacity: '1', delay: index * 100 });
     } else {
       setSpring.start({ top: '0svh', opacity: '0', delay: index * 100 });
     }
@@ -68,9 +72,9 @@ export default function Types({
 
   useEffect(() => {
     if (showTypes && window.innerHeight < 1000) {
-      setInformationSpring.start({ opacity: '1', top: '75svh', delay: 100 });
-    } else if (showTypes) {
       setInformationSpring.start({ opacity: '1', top: '85svh', delay: 100 });
+    } else if (showTypes) {
+      setInformationSpring.start({ opacity: '1', top: '90svh', delay: 100 });
     } else {
       setInformationSpring.start({ opacity: '0', top: '20svh', delay: 150 });
     }
@@ -90,8 +94,8 @@ export default function Types({
         }}
       >
         Everything built by DFW is completely unique using the natural curvature
-        of the wood. For more information, contact us using the button found in
-        the top right corner of the page.
+        of the wood. For enquires, use the 'contact' button found in the top
+        right corner of the page.
       </animated.div>
       <animated.div className="typesContainer">
         {springs.map((spring, index) => (
@@ -99,8 +103,11 @@ export default function Types({
             key={index}
             style={{
               position: 'absolute',
-              left: 25 * index + 'svw',
-              ...spring,
+              left:
+                window.innerWidth < 1000
+                  ? 50 * (index % 2) + 'svw'
+                  : 25 * index + 'svw',
+              top: spring.top,
             }}
           >
             <Type

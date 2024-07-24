@@ -12,11 +12,16 @@ export default function Gallery({
 }) {
   const [currentPhoto, setCurrentPhoto] = useState(0);
   const [galleryTypeArr, setGalleryTypeArr] = useState([]);
+  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     const newGalleryTypeArr = images.filter(
       (image) => image.type === showGalleryString
     );
+
+    if (window.innerWidth < 1000) {
+      newGalleryTypeArr.splice(8);
+    }
     setGalleryTypeArr(newGalleryTypeArr);
   }, [galleryType]);
 
@@ -35,6 +40,10 @@ export default function Gallery({
     opacity: 1,
   }));
 
+  function handleMasterImageClick() {
+    setShowDetails(!showDetails);
+  }
+
   return (
     <div
       className="galleryContainer"
@@ -45,8 +54,23 @@ export default function Gallery({
       }
     >
       <div className="galleryLeftTop">
-        {window.innerWidth < 1000 ? <div>Small Screen</div> : null}
-        <div className="thumbNails" onMouseOver={handleThumbNailHover}>
+        {window.innerWidth < 1000 && showDetails ? (
+          <div className="smallScreenCover">
+            <div className="furnitureName">
+              {galleryTypeArr[currentPhoto]?.name}
+            </div>
+            <br />
+            <div className="furnitureDescription">
+              {galleryTypeArr[currentPhoto]?.description}
+            </div>
+          </div>
+        ) : null}
+
+        <div
+          style={showDetails ? { opacity: '0' } : { opacity: '1' }}
+          className="thumbNails"
+          onMouseOver={handleThumbNailHover}
+        >
           {galleryTypeArr.map((image, index) => (
             <img key={index} src={image.img} className="thumbNailPhoto" />
           ))}
@@ -70,7 +94,12 @@ export default function Gallery({
           </div>
         </>
       </div>
-      <div className="currentPhoto">
+      <div onClick={() => handleMasterImageClick()} className="currentPhoto">
+        {window.innerWidth < 1000
+          ? showDetails
+            ? 'Click Photo to View Thumbnails'
+            : 'Click  Photo to View Details'
+          : null}
         {galleryTypeArr.length > 0 && (
           <animated.img
             style={{ ...spring }}
