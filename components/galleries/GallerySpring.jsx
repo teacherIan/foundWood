@@ -9,10 +9,11 @@ export default function Gallery({
   showGallery,
   galleryType,
   showGalleryString,
+  showDetails,
+  setShowDetails,
 }) {
   const [currentPhoto, setCurrentPhoto] = useState(0);
   const [galleryTypeArr, setGalleryTypeArr] = useState([]);
-  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     const newGalleryTypeArr = images.filter(
@@ -62,6 +63,8 @@ export default function Gallery({
             <br />
             <div className="furnitureDescription">
               {galleryTypeArr[currentPhoto]?.description}
+              <br />
+              Price: {galleryTypeArr[currentPhoto]?.price}
             </div>
           </div>
         ) : null}

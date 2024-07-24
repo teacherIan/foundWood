@@ -37,6 +37,7 @@ function App() {
   const [showGallery, setShowGallery] = useState(false);
   const [showContactPage, setShowContactPage] = useState(false);
   const [counter, setCounter] = useState(-1);
+  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     const c = setTimeout(() => {
@@ -64,6 +65,9 @@ function App() {
     setShowTypes(!showTypes);
     setShowMission(false);
     setShowGallery(false);
+    setTimeout(() => {
+      setShowDetails(false);
+    }, 1000);
     showTypes ? setCounter(0) : setCounter(-1);
   }, [setShowTypes, setShowGallery, setShowMission, showTypes]);
 
@@ -71,6 +75,10 @@ function App() {
     setShowTypes(false);
     setShowMission(!showMission);
     setShowGallery(false);
+    setTimeout(() => {
+      setShowDetails(false);
+    }, 1000);
+
     showMission ? setCounter(0) : setCounter(-1);
   }, [setShowTypes, setShowGallery, setShowMission, showMission]);
 
@@ -78,6 +86,9 @@ function App() {
     setShowTypes(false);
     setShowMission(false);
     setShowGallery(true);
+    setTimeout(() => {
+      setShowDetails(false);
+    }, 1000);
     showGallery ? setCounter(0) : setCounter(-1);
   }, [setShowTypes, setShowGallery, setShowMission, showGallery]);
 
@@ -85,6 +96,9 @@ function App() {
     setShowTypes(false);
     setShowMission(false);
     setShowGallery(false);
+    setTimeout(() => {
+      setShowDetails(false);
+    }, 1000);
     setCounter(0);
   }
 
@@ -95,6 +109,8 @@ function App() {
         galleryType={activeGalleryType}
         showGallery={showGallery}
         showGalleryString={activeGalleryTypeString}
+        showDetails={showDetails}
+        setShowDetails={setShowDetails}
       />
       <Types
         showTypes={showTypes}
