@@ -19,7 +19,7 @@ export default function Gallery({
       (image) => image.type === showGalleryString
     );
 
-    if (window.innerWidth < 1000) {
+    if (window.innerWidth < 1200) {
       newGalleryTypeArr.splice(8);
     }
     setGalleryTypeArr(newGalleryTypeArr);
@@ -54,7 +54,7 @@ export default function Gallery({
       }
     >
       <div className="galleryLeftTop">
-        {window.innerWidth < 1000 && showDetails ? (
+        {window.innerWidth < 1200 && showDetails ? (
           <div className="smallScreenCover">
             <div className="furnitureName">
               {galleryTypeArr[currentPhoto]?.name}
@@ -95,7 +95,7 @@ export default function Gallery({
         </>
       </div>
       <div onClick={() => handleMasterImageClick()} className="currentPhoto">
-        {window.innerWidth < 1000
+        {window.innerWidth < 1200
           ? showDetails
             ? 'Click Photo to View Thumbnails'
             : 'Click  Photo to View Details'

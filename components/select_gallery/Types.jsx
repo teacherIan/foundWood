@@ -26,9 +26,9 @@ function useTypeSpring(showTypes, index) {
   }));
 
   useEffect(() => {
-    if (showTypes && window.innerHeight < 1000) {
+    if (showTypes && window.innerWidth < 1200) {
       setSpring.start({
-        top: 110 + (index > 1 ? 30 : 0) + 'svh',
+        top: 110 + (index > 1 ? 35 : 0) + 'svh',
         opacity: '1',
         delay: index * 100,
       });
@@ -71,8 +71,8 @@ export default function Types({
   }));
 
   useEffect(() => {
-    if (showTypes && window.innerHeight < 1000) {
-      setInformationSpring.start({ opacity: '1', top: '85svh', delay: 100 });
+    if (showTypes && window.innerWidth < 1200) {
+      setInformationSpring.start({ opacity: '1', top: '90svh', delay: 100 });
     } else if (showTypes) {
       setInformationSpring.start({ opacity: '1', top: '90svh', delay: 100 });
     } else {
@@ -104,7 +104,7 @@ export default function Types({
             style={{
               position: 'absolute',
               left:
-                window.innerWidth < 1000
+                window.innerWidth < 1200
                   ? 50 * (index % 2) + 'svw'
                   : 25 * index + 'svw',
               top: spring.top,

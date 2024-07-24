@@ -4,7 +4,7 @@ import { AiFillCaretRight } from 'react-icons/ai';
 import { AiFillCaretLeft } from 'react-icons/ai';
 import found_wood from './assets/found_wood_icon.png';
 import Contact from '../components/contact/Contact';
-import Gallery from '../components/galleries/Gallery';
+
 import GallerySpring from '../components/galleries/GallerySpring';
 import Types from '../components/select_gallery/Types';
 import Canvas from '../components/experience/Experience';
