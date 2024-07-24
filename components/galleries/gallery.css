@@ -76,6 +76,7 @@
 }
 
 .furniturePrice {
+
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
@@ -295,6 +296,11 @@
         grid-auto-rows: 22vw;
         row-gap: 20px;
         padding-top: 3.2svh;
+    }
+
+    .furnitureName {
+        /* margin-top: 5px; */
+        text-align: center;
     }
 
 }
