@@ -2,7 +2,6 @@ import types from './types';
 import kidsPicnicTable from '../../../src/assets/gallery/real_picnic_table_rotated.png';
 import adult_picnic_table from '../../../src/assets/gallery/large_tables/adult_picnic_table.jpg';
 import picnicTableC from '../../../src/assets/gallery/large_tables/picnic_table_b.jpg';
-
 import diningTableTop from '../../../src/assets/gallery/large_tables/dining_table_overhead.jpeg';
 import diningTableUnder from '../../../src/assets/gallery/large_tables/dining_table_under.jpeg';
 import glass_table from '../../../src/assets/gallery/large_tables/small_table.jpg';
@@ -23,7 +22,7 @@ export default [
     type: types.largeTable,
     name: 'Picnic Table',
     description:
-      'This large picnic table is made of Maine White Cedar roots and planks',
+      'This large picnic table is made of Maine White Cedar roots and planks and custom built to a variety of heights, lengths and widths.  ',
     price: '$1300 ~ $2000',
   },
   {

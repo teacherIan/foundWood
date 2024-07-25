@@ -7,6 +7,7 @@
     top: calc(10svh);
     left: 0vw;
     transition: 1s ease-in;
+    font-size: calc(1.0vw + 1.0vh + 8px);
 }
 
 .thumbNails {
@@ -46,6 +47,7 @@
     border: 1px var(--brown) solid;
     transition: 1s;
     object-fit: fill;
+    z-index: 9999;
 
 }
 
@@ -78,21 +80,19 @@
 }
 
 .furniturePrice {
-
+    position: absolute;
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
+    left: 105%;
+    top: 85%
 }
 
 .furnitureDescription {
     height: 25vh;
     font-family: var(--secondaryFont);
     width: 100%;
-}
-
-.furniturePrice {
-    height: 25vh;
-    left: 0;
+    font-size: calc(1.0vw + 1.0vh + 8px);
 }
 
 .smallScreenCover {
@@ -103,7 +103,7 @@
     align-items: center;
     width: 100vw;
     /* background: rgba(255, 0, 0, 0.309); */
-    height: 45svh;
+    height: 100%;
     color: var(--brown);
     transition: 1s;
     padding: 0 15px 0 15px;
@@ -142,12 +142,9 @@
         width: 100svw;
         overflow-x: none;
         overflow-y: none;
-
-
     }
 
     .masterImage {
-
         border-radius: 5px;
         height: 100svw;
         width: 100svw;
@@ -259,6 +256,7 @@
         display: none;
         width: 0px;
         height: 0px;
+        font-size: calc(.8vw + .8vh + 6px);
 
     }
 
@@ -302,6 +300,11 @@
     .furnitureName {
         /* margin-top: 5px; */
         text-align: center;
+    }
+
+    .furnitureDescription {
+
+        font-size: calc(.8vw + .8vh + 6px);
     }
 
 }
