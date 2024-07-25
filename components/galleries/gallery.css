@@ -84,8 +84,9 @@
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    left: 105%;
-    top: 85%
+    left: 22%;
+    top: 92%;
+    width: 100%;
 }
 
 .furnitureDescription {
@@ -200,7 +201,6 @@
         display: none;
         width: 0px;
         height: 0px;
-
     }
 
     .currentPhoto {
@@ -212,8 +212,6 @@
         width: 100svw;
         overflow-x: none;
         overflow-y: none;
-
-
     }
 
     .masterImage {
@@ -248,7 +246,6 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
-
     }
 
     .galleryContainer {
@@ -260,7 +257,6 @@
         width: 0px;
         height: 0px;
         font-size: calc(.8vw + .8vh + 6px);
-
     }
 
     .currentPhoto {
@@ -272,19 +268,14 @@
         width: 100svw;
         overflow-x: none;
         overflow-y: none;
-
-
     }
 
     .masterImage {
-
         border-radius: 5px;
         height: 100svw;
         width: 100svw;
         border: none;
         object-fit: cover;
-
-
     }
 
     .thumbNailPhoto {
