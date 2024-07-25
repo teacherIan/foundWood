@@ -39,7 +39,7 @@ body {
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  z-index: 30000;
+  z-index: 90000;
 }
 
 .icon {
@@ -71,7 +71,7 @@ body {
 
 .menu-item {
   cursor: pointer;
-  z-index: 50000;
+  z-index: 90001;
   text-transform: none;
 }
 

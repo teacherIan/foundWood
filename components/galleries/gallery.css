@@ -75,7 +75,7 @@
 }
 
 .furnitureName {
-    margin-top: 5px;
+    /* margin-top: 5px; */
     text-align: center;
 }
 
@@ -109,6 +109,9 @@
     padding: 0 15px 0 15px;
 }
 
+.galleryLeftTop {
+    position: relative;
+}
 
 
 @media only screen and (min-width: 900px) and (max-width: 1200px) {
@@ -305,6 +308,10 @@
     .furnitureDescription {
 
         font-size: calc(.8vw + .8vh + 6px);
+    }
+
+    .smallScreenCover {
+        /* top: 10svh; */
     }
 
 }

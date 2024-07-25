@@ -72,9 +72,9 @@ export default function Types({
 
   useEffect(() => {
     if (showTypes && window.innerWidth < 1200) {
-      setInformationSpring.start({ opacity: '1', top: '93svh', delay: 100 });
+      setInformationSpring.start({ opacity: '1', top: '92svh', delay: 100 });
     } else if (showTypes) {
-      setInformationSpring.start({ opacity: '1', top: '71svh', delay: 100 });
+      setInformationSpring.start({ opacity: '1', top: '73svh', delay: 100 });
     } else {
       setInformationSpring.start({ opacity: '0', top: '20svh', delay: 150 });
     }

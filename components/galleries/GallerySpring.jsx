@@ -60,7 +60,6 @@ export default function Gallery({
             <div className="furnitureName">
               {galleryTypeArr[currentPhoto]?.name}
             </div>
-            <br />
             <div className="furnitureDescription">
               {galleryTypeArr[currentPhoto]?.description}
               <br />
