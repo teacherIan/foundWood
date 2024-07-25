@@ -13,7 +13,7 @@ export default [
     type: types.largeTable,
     name: 'Kids Picnic Table',
     description:
-      'This table is child size.  It is constructed of Maine White Ceder roots and planks.  The size can be adapted to the age of the children',
+      'This table is child size.  It is constructed of Maine White Cedar roots and planks.  The size can be adapted to the age of the children',
     price: '$800 ~ $1200',
   },
   {
