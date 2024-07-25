@@ -7,7 +7,7 @@ import swing_back from '../../../src/assets/gallery/chairs/swing_back.jpg';
 import swingA from '../../../src/assets/gallery/chairs/swing_a.jpg';
 import swingB from '../../../src/assets/gallery/chairs/swingB.jpeg';
 import swingC from '../../../src/assets/gallery/chairs/swingC.jpeg';
-import love_seat from '../../../src/assets/gallery/chairs/doubleChair.jpg';
+import love_seat from '../../../src/assets/gallery/chairs/love_seat.jpeg';
 
 const types = {
   chairs: 'chairs',
@@ -33,7 +33,7 @@ export default [
     type: types.chairs,
     name: 'Captain Chair',
     description:
-      'Like the Adirondack Chair, the Captain’s Chair is made with 5/4 Red Cedar slats, mahogany plugs, and white cedar slats. It is finished with multiple coats of Found Wood secret recipe varnish which is heated and rubbed to protect the chair from the elements.  This chair is raised, leading to superior views of the surrounding area.',
+      'Like the Adirondack Chair, the Captain’s Chair is made with 5/4 Red Cedar slats, mahogany plugs, and white cedar slats. It is finished with multiple coats of Found Wood secret recipe varnish which is heated and rubbed to protect the chair from the elements.  This chair is raised, leading to superior views of the surrounding area and above porch railings.',
     price: '$2000',
   },
   {

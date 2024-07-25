@@ -21,7 +21,7 @@ const configAnimation = {
 function useTypeSpring(showTypes, index) {
   const [spring, setSpring] = useSpring(() => ({
     opacity: showTypes ? '0' : '0',
-    top: showTypes ? '130svh' : '0svh',
+    top: showTypes ? '140svh' : '0svh',
     config: configAnimation,
   }));
 
@@ -33,7 +33,7 @@ function useTypeSpring(showTypes, index) {
         delay: index * 100,
       });
     } else if (showTypes) {
-      setSpring.start({ top: '115svh', opacity: '1', delay: index * 100 });
+      setSpring.start({ top: '120svh', opacity: '1', delay: index * 100 });
     } else {
       setSpring.start({ top: '0svh', opacity: '0', delay: index * 100 });
     }
@@ -66,15 +66,15 @@ export default function Types({
 
   const [informationSpring, setInformationSpring] = useSpring(() => ({
     opacity: '0',
-    left: 50 + '%',
+    // left: 50 + 'svw',
     config: configAnimation,
   }));
 
   useEffect(() => {
     if (showTypes && window.innerWidth < 1200) {
-      setInformationSpring.start({ opacity: '1', top: '90svh', delay: 100 });
+      setInformationSpring.start({ opacity: '1', top: '93svh', delay: 100 });
     } else if (showTypes) {
-      setInformationSpring.start({ opacity: '1', top: '90svh', delay: 100 });
+      setInformationSpring.start({ opacity: '1', top: '71svh', delay: 100 });
     } else {
       setInformationSpring.start({ opacity: '0', top: '20svh', delay: 150 });
     }
@@ -94,8 +94,8 @@ export default function Types({
         }}
       >
         Everything built by DFW is completely unique using the natural curvature
-        of the wood. For enquires, use the 'contact' button found in the top
-        right corner of the page.
+        of the wood, often incorporating roots and burls. As such, no two pieces
+        are the same.
       </animated.div>
       <animated.div className="typesContainer">
         {springs.map((spring, index) => (

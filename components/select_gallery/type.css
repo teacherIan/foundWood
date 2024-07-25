@@ -34,11 +34,13 @@
     transform: translate(-50%, -50%);
     opacity: 1;
     z-index: 1000;
-    font-size: calc(1.0vw + 1.0vh + 7px);
+    font-size: calc(1.2vw + 1.2vh + 7px);
     color: var(--brown);
-    width: 95svw;
+    /* width: 95svw; */
     text-align: center;
-    font-family: var(--secondaryFont);
+    font-family: var(--mainFont);
+    left: 60svw;
+    width: 75svw;
 }
 
 
@@ -59,6 +61,7 @@
         border-radius: 2000px;
         margin-left: -10px;
 
+
     }
 
     .typeImage {
@@ -74,4 +77,19 @@
 
     }
 
+    .findMe {
+        left: 50svw;
+        font-size: calc(1.0vw + 1.0vh + 7px);
+    }
+
+
+
+}
+
+@media only screen and (max-width: 1200px) {
+    .findMe {
+
+        font-size: calc(1.0vw + 1.0vh + 7px);
+
+    }
 }
