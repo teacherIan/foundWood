@@ -48,7 +48,8 @@ export default [
     img: diningTableUnder,
     type: types.largeTable,
     name: 'Glass Dining Table',
-    description: 'Top view of the glass table.',
+    description:
+      'Top view of the glass table. Ceder grows slowly and, under the ground often takes interesting shapes that support a glass top',
     price: '$2000 ~ $3000',
   },
   {
