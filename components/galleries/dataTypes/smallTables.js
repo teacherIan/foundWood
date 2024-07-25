@@ -61,7 +61,7 @@ export default [
     name: 'Burl Side Table with "C" legs',
     type: types.smallTable,
     description:
-      'Some burls allow slices and are more interesting with this leg arrangement',
+      'A variety of unique large Maine burls are sliced and are added to a "C" shaped leg arrangement',
     price: '$500 ~ $600',
   },
 ];

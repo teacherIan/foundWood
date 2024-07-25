@@ -50,6 +50,7 @@
 }
 
 .galleryLeftBottom {
+
     height: 45svh;
     display: flex;
     position: relative;
@@ -86,6 +87,7 @@
 .furnitureDescription {
     height: 25vh;
     font-family: var(--secondaryFont);
+    width: 100%;
 }
 
 .furniturePrice {
@@ -110,8 +112,6 @@
 
 
 @media only screen and (min-width: 900px) and (max-width: 1200px) {
-
-
 
     .galleryLeftTop {
         height: 35svh;
