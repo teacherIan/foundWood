@@ -45,6 +45,7 @@
     border-radius: 500px 0px 0px 500px;
     border: 1px var(--brown) solid;
     transition: 1s;
+    object-fit: fill;
 
 }
 
