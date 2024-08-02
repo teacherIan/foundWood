@@ -3,6 +3,11 @@ import { useSpring, animated, config } from '@react-spring/web';
 import { useEffect, useRef, useState } from 'react';
 import { MdExitToApp } from 'react-icons/md';
 import Form from './Form';
+import bg_image from '../../src/assets/contact_background.JPG';
+import bg_image_long from '../../src/assets/poly-snapshot_long.JPG';
+import bg_image_cell from '../../src/assets/poly-snapshot_cell.JPG';
+import bg_image_cell_2 from '../../src/assets/poly-snapshot_2.JPG';
+import bg_image_cell_3 from '../../src/assets/poly-snapshot_3.JPG';
 
 export default function Contact({ showContactPage, setShowContactPage }) {
   const myRef = useRef();
@@ -16,7 +21,7 @@ export default function Contact({ showContactPage, setShowContactPage }) {
   };
 
   const [springs, api] = useSpring(() => ({
-    from: { left: '100%', background: '#ffffff', opacity: 0 },
+    from: { left: '100%', opacity: 0 },
     config: configAnimation,
   }));
 
@@ -29,12 +34,12 @@ export default function Contact({ showContactPage, setShowContactPage }) {
       api.start({
         from: {
           left: '100%',
-          background: '#ebf0f2',
+          // background: '#ebf0f2',
           opacity: 0,
         },
         to: {
           left: '0%',
-          background: '#77481C',
+          // background: '#77481C',
           opacity: 1,
         },
       });
@@ -43,12 +48,12 @@ export default function Contact({ showContactPage, setShowContactPage }) {
       api.start({
         from: {
           left: '0%',
-          background: '#77481C',
+          // background: '#77481C',
           opacity: 1,
         },
         to: {
           left: '100%',
-          background: '#ebf0f2',
+          // background: '#ebf0f2',
           opacity: 0,
         },
       });
@@ -59,9 +64,17 @@ export default function Contact({ showContactPage, setShowContactPage }) {
     <animated.div
       ref={myRef}
       className="contactContainer"
-      style={{ ...springs, left: hasAnimated ? springs.left : '100%' }}
+      style={{
+        ...springs,
+        left: hasAnimated ? springs.left : '100%',
+        backgroundImage:
+          window.innerWidth > window.innerHeight
+            ? `url(${bg_image_long})`
+            : `url(${bg_image_cell_3})`,
+      }}
     >
       <Form setShowContactPage={setShowContactPage} />
+      {/* <img className="contactBackgroundImage" src={bg_image} /> */}
       <MdExitToApp
         className="exit-icon"
         onClick={() => setShowContactPage(!showContactPage)}

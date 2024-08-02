@@ -25,7 +25,7 @@ export default [
     name: 'Adirondack Loveseat',
     description:
       'Like the Adirondack Chair this loveseat is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
-    price: '$2000',
+    price: '$1400 ~ $2000',
   },
   {
     orderNumber: '003',
@@ -34,7 +34,7 @@ export default [
     name: 'Captain Chair',
     description:
       'Like the Adirondack Chair, the Captain’s Chair is made with 5/4 Red Cedar slats, mahogany plugs, and white cedar slats. It is finished with multiple coats of Found Wood secret recipe varnish which is heated and rubbed to protect the chair from the elements.  This chair is raised, leading to superior views of the surrounding area and above porch railings.',
-    price: '$2000',
+    price: '$1400 ~ $2000',
   },
   {
     orderNumber: '007',
@@ -43,7 +43,7 @@ export default [
     type: types.chairs,
     description:
       'This double chair was inspired by the architect Gaudi. This chair allows each of the people sitting in it to have an intimate conversation since when sitting back, their heads are close enough so to be able to talk in whispers. The chair is done entirely in cedar with five coats of finish and mahogany plugs. ',
-    price: '$2000',
+    price: '$1400 ~ $2000',
   },
   {
     orderNumber: '014',
@@ -52,7 +52,7 @@ export default [
     name: 'Adirondack Chair With Ottoman ',
     description:
       'This very comfortable chair has White Cedar uprights cut and shaped for lumbar support and 6/4" Cedar arms which are screwed together and covered with Mahogany plugs. This chair is made to last as four coats of spar varnish are heated into the wood. For those who will be using the chair indoors or in a more sheltered location, a different, less durable but richer finish will be used.',
-    price: '$1400',
+    price: '$1400 ~ $2000',
   },
   {
     orderNumber: '028',
@@ -61,7 +61,7 @@ export default [
     type: types.chairs,
     description:
       'This very comfortable chair has White Cedar uprights cut and shaped for lumbar support and 6/4" Cedar arms which are screwed together and covered with Mahogany plugs. This chair is made to last as four coats of spar varnish are heated into the wood. For those who will be using the chair indoors or in a more sheltered location, a different, less durable but richer finish will be used.',
-    price: '$1200',
+    price: '$1400 ~ $2000',
   },
   {
     orderNumber: '031',
@@ -70,7 +70,7 @@ export default [
     name: 'Swing',
     description:
       'Like the Adirondack Chair, the Found Wood Swing is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
-    price: '$2000',
+    price: '$1400 ~ $2000',
   },
   {
     orderNumber: '019',
@@ -79,7 +79,7 @@ export default [
     name: 'Found Wood Swing',
     description:
       'Like the Adirondack Chair, the Found Wood Swing is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
-    price: '$2000',
+    price: '$1400 ~ $2000',
   },
   {
     orderNumber: '021',
@@ -88,7 +88,7 @@ export default [
     name: 'Found Wood Swing',
     description:
       'Like the Adirondack Chair, the Found Wood Swing is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
-    price: '$2000',
+    price: '$1400 ~ $2000',
   },
   {
     orderNumber: '022',
@@ -97,7 +97,7 @@ export default [
     name: 'Found Wood Swing',
     description:
       'Like the Adirondack Chair, the Found Wood Swing is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
-    price: '$2000',
+    price: '$1400 ~ $2000',
   },
   {
     orderNumber: '032',
@@ -106,6 +106,6 @@ export default [
     name: 'Adirondack Loveseat',
     description:
       'Like the Adirondack Chair this loveseat is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
-    price: '$2000',
+    price: '$1400 ~ $2000',
   },
 ];

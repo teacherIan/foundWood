@@ -14,7 +14,7 @@ export default [
     name: 'Kids Picnic Table',
     description:
       'This table is child size.  It is constructed of Maine White Cedar roots and planks.  The size can be adapted to the age of the children',
-    price: '$800 ~ $1200',
+    price: '$1000 ~ $1500',
   },
   {
     orderNumber: '312',
@@ -23,7 +23,7 @@ export default [
     name: 'Picnic Table',
     description:
       'This large picnic table is made of Maine White Cedar roots and planks and custom built to a variety of heights, lengths and widths.  ',
-    price: '$1300 ~ $2000',
+    price: '$1400 ~ $2000',
   },
   {
     orderNumber: '325',
@@ -32,7 +32,7 @@ export default [
     name: 'Picnic Table',
     description:
       'This large picnic table is made of Maine White Cedar roots and planks',
-    price: '$1300 ~ $2000',
+    price: '$1400 ~ $2000',
   },
   {
     orderNumber: '335',
@@ -41,7 +41,7 @@ export default [
     name: 'Glass Dining Table',
     description:
       'Pictured is the root system of three interconnected cedar trees.  Often the roots of the trees are interconnected & they lead themselves to the table bases.',
-    price: '$2000 ~ $3000',
+    price: '$2000 ~ $4000',
   },
   {
     orderNumber: '336',
@@ -50,7 +50,7 @@ export default [
     name: 'Glass Dining Table',
     description:
       'Top view of the glass table. Ceder grows slowly and, under the ground often takes interesting shapes that support a glass top',
-    price: '$2000 ~ $3000',
+    price: '$2000 ~ $4000',
   },
   {
     orderNumber: '013',
@@ -59,6 +59,6 @@ export default [
     name: 'Glass Table',
     description:
       'Ceder grows slowly and, under the ground often takes interesting shapes that support a glass top ',
-    price: '$800 ~ $1000',
+    price: '$1000 ~ $1200',
   },
 ];

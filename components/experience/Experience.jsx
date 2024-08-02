@@ -10,6 +10,7 @@ import plantStandB from '../../src/assets/3d/tableACompact.glb';
 import coffeeTableA from '../../src/assets/3d/coffee_fixed_add_effect.glb';
 import plantStandNew from '../../src/assets/3d/coffee_table_b.glb';
 import plantStandC from '../../src/assets/3d/plant_table_no_floor_new.glb';
+import chair_spat from '../../src/assets/3d/chair_spot.glb';
 
 export default function Experience({ counter, setCounter }) {
   return (
@@ -42,6 +43,14 @@ export default function Experience({ counter, setCounter }) {
         scale={7}
         offset={4}
         model={coffeeTableA}
+      />
+      <Fixture
+        fixtureNumber={2}
+        counter={counter}
+        setCounter={setCounter}
+        scale={3.5}
+        offset={4}
+        model={chairA}
       />
     </Canvas>
   );

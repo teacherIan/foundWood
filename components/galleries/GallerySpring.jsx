@@ -91,17 +91,18 @@ export default function Gallery({
             <div className="furniturePrice">
               Price: {galleryTypeArr[currentPhoto]?.price}
             </div>
-
             <br />
           </div>
         </>
       </div>
       <div onClick={() => handleMasterImageClick()} className="currentPhoto">
-        {window.innerWidth < 1200
-          ? showDetails
-            ? 'Click Photo to View Thumbnails'
-            : 'Click  Photo to View Details'
-          : null}
+        {window.innerWidth < 1200 ? (
+          showDetails ? (
+            <div className="infoGal">Click Photo to View Thumbnails</div>
+          ) : (
+            <div className="infoGal">Click Photo to View Details</div>
+          )
+        ) : null}
         {galleryTypeArr.length > 0 && (
           <animated.img
             style={{ ...spring }}

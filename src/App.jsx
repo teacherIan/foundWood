@@ -4,14 +4,13 @@ import { AiFillCaretRight } from 'react-icons/ai';
 import { AiFillCaretLeft } from 'react-icons/ai';
 import found_wood from './assets/found_wood_icon.png';
 import Contact from '../components/contact/Contact';
-
 import GallerySpring from '../components/galleries/GallerySpring';
 import Types from '../components/select_gallery/Types';
 import Canvas from '../components/experience/Experience';
 import Mission from '../components/mission/Mission';
 
 function App() {
-  const amtFixtures = 2;
+  const amtFixtures = 3;
 
   const types = {
     chairs: 'chairs',

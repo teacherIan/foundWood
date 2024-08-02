@@ -2,22 +2,6 @@ import './type.css';
 import { useState, useEffect } from 'react';
 import { useSpring, animated } from '@react-spring/web';
 
-/* img headers
-    'Coffee Tables & Plant Stands',
-    'Chairs & Ottomans',
-    'Tables',
-    'Structures',
-    // 'Others',
-*/
-
-/* names
-    chairs: 'chairs',
-    smallTable: 'smallTable',
-    largeTable: 'largeTable',
-    structure: 'structure',
-    other: 'other',
-*/
-
 export default function Type({
   img,
   header,

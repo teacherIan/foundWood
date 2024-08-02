@@ -7,10 +7,24 @@
     left: 100%;
     top: 50%;
     transform: translate(0%, -50%);
-    background-color: var(--brown);
-    color: var(--lightGreen);
+    /* background-color: var(--brown); */
+    /* background-image: url('../../src/assets/contact_background.JPG'); */
+    /* background-image: url('../../src/assets/poly-snapshot_cell.JPG'); */
+    background-repeat: no-repeat;
+    background-size: 100svw 100svh;
+
+    color: white;
     padding: 20px;
 }
+
+/* .contactBackgroundImage {
+
+    width: 100svw;
+    height: 100svh;
+    object-fit: contain;
+    background-color: transparent;
+
+} */
 
 .exit-icon {
     position: absolute;
