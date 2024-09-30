@@ -23,8 +23,9 @@ html {
 canvas {
     width: 100vw;
     height: 100svh;
-    background-color: #dfe9f0;
+    /* background-color: #dfe9f0; */
     cursor: grab;
+
 }
 
 canvas:active {

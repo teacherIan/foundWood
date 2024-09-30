@@ -8,6 +8,7 @@ import GallerySpring from '../components/galleries/GallerySpring';
 import Types from '../components/select_gallery/Types';
 import Canvas from '../components/experience/Experience';
 import Mission from '../components/mission/Mission';
+import NewCanvas from '../components/new_experience/Experience';
 
 function App() {
   const amtFixtures = 3;
@@ -174,7 +175,9 @@ function App() {
               }
             />
           </div>
-          <Canvas counter={counter} setCounter={setCounter} />
+          {/* <Canvas counter={counter} setCounter={setCounter} /> */}
+          <NewCanvas />
+
           <div className="selectButton right" onClick={() => add()}>
             <AiFillCaretRight
               className="arrow"

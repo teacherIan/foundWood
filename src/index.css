@@ -1,15 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Redressed&display=swap');
 
+@font-face {
+  font-family: 'CustomFont';
+  src:
+    url('../../src/assets/new_experience/bubble_font.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --brown: #77481C;
   --blue: lightblue;
   --lightGreen: #d9ebc7;
   --white: #FFFFFF;
   /* --mainFont: Times, serif; */
-  --mainFont: "Lobster Two", sans-serif;
-  --secondaryFont: sans-serif;
-  font-weight: 400;
-  font-style: italic;
+  --mainFont: "CustomFont", "Lobster Two", sans-serif;
+  --secondaryFont: "CustomFont", sans-serif;
+  /* font-weight: 400; */
+  /* font-style: italic; */
 
 }
 
@@ -23,7 +31,7 @@ body {
 .header {
   position: absolute;
   width: 100svw;
-  height: 10svh;
+  height: 15svh;
   z-index: 1000;
   display: flex;
   justify-content: space-between;
@@ -34,7 +42,7 @@ body {
   user-select: none;
   padding: 0px 50px 0px 50px;
   color: #77481C;
-  font-size: calc(2vw + 1vh + 5px);
+  font-size: calc(2vw + 2vh + 10px);
   display: flex;
   width: 100%;
   justify-content: space-around;
@@ -43,10 +51,11 @@ body {
 }
 
 .icon {
-  max-width: 10vh;
-  max-height: 10vh;
+  max-width: 12vh;
+  max-height: 12vh;
   user-select: none;
   cursor: pointer;
+  /* filter: drop-shadow(1px 1px 0px var(--lightGreen)); */
 }
 
 .selectButton {
@@ -73,6 +82,7 @@ body {
   cursor: pointer;
   z-index: 90001;
   text-transform: none;
+  filter: drop-shadow(2px 2px 0px var(--lightGreen));
 }
 
 .arrow {
@@ -90,6 +100,7 @@ body {
   text-align: center;
   transition: 1s;
   bottom: '-25%';
+  filter: drop-shadow(1px 1px 0px var(--lightGreen));
 
   /* font-family: var(--mainFont); */
 }

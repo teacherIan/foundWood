@@ -13,7 +13,8 @@
     background-repeat: no-repeat;
     background-size: 100svw 100svh;
 
-    color: white;
+    color: var(--brown);
+
     padding: 20px;
 }
 

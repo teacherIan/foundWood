@@ -1,31 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
-
-/* .formContainer {
-    user-select: none;
-    color: #fff;
-    font-family: cursive, 'Muli', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    overflow: hidden;
-    margin: 0;
-} */
-
-/* .container {
-    padding: 20px 40px;
-} */
-
-.container h1 {
+h1 {
     text-align: center;
     margin-bottom: 30px;
-}
+    filter: drop-shadow(2px 2px 1px white);
 
-/* .container a {
-    text-decoration: none;
-    color: var(--blue)
-} */
+}
 
 .btn {
     cursor: pointer;
@@ -58,6 +36,7 @@
 .text {
     margin-top: 30px;
 
+
 }
 
 .form-control {
@@ -76,7 +55,7 @@
     width: 100%;
     padding: 15px 0;
     font-size: 18px;
-    color: #fff;
+
     position: relative;
     z-index: 100;
     transition: 1s
@@ -95,14 +74,14 @@
     pointer-events: none;
     transform: translateY(0);
     transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
+    filter: drop-shadow(1px 1px 0px white);
 
 }
 
 .form-control input:focus+label,
 .form-control input:valid+label {
     transform: translateY(-30px);
-    color: var(--lightGreen)
+
 }
 
 .form-control label span {
@@ -114,7 +93,6 @@
 
 .form-control input:focus+label span,
 .form-control input:valid+label span {
-    color: var(--lightGreen);
     transform: translateY(-5px);
     transition: transform 0.3s cubic-bezier(0.68, -20, 0.265, 1.55);
 }

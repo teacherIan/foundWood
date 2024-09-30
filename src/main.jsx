@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
+import NewApp from './NewApp';
 
 document.addEventListener(
   'touchmove',
@@ -13,6 +14,7 @@ document.addEventListener(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    {/* <App /> */}
+    <NewApp />
   </React.StrictMode>
 );

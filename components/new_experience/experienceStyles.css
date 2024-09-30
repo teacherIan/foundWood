@@ -1,0 +1,25 @@
+.new_app_header {
+    user-select: none;
+    position: absolute;
+    z-index: 1000;
+    font-size: calc(7vw + 7vh + 20px);
+    font-family: CustomFont;
+    color: white;
+    left: 5svw;
+    top: 50%;
+    color: #77481C;
+    transform: translate(0, -50%);
+}
+
+.new_app_header_outline {
+    user-select: none;
+    position: absolute;
+    z-index: 1000;
+    font-size: calc(7vw + 7vh + 25px);
+    font-family: CustomFont;
+    color: white;
+    left: 5svw;
+    top: 50%;
+    color: #d9ebc7;
+    transform: translate(0, -50%);
+}
