@@ -3,7 +3,7 @@
 @font-face {
   font-family: 'CustomFont';
   src:
-    url('../../src/assets/new_experience/bubble_font.otf') format('opentype');
+    url('/src/assets/fonts/bubble_font.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
