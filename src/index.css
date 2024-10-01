@@ -13,18 +13,12 @@
   --blue: lightblue;
   --lightGreen: #d9ebc7;
   --white: #FFFFFF;
-  /* --mainFont: Times, serif; */
   --mainFont: "CustomFont", "Lobster Two", sans-serif;
   --secondaryFont: "CustomFont", sans-serif;
-  /* font-weight: 400; */
-  /* font-style: italic; */
-
 }
 
 body {
   touch-action: none;
-  /* text-transform: capitalize; */
-  /* font-weight: lighter; */
   cursor: grab;
 }
 
@@ -55,7 +49,7 @@ body {
   max-height: 12vh;
   user-select: none;
   cursor: pointer;
-  /* filter: drop-shadow(1px 1px 0px var(--lightGreen)); */
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.731));
 }
 
 .selectButton {
@@ -82,7 +76,7 @@ body {
   cursor: pointer;
   z-index: 90001;
   text-transform: none;
-  filter: drop-shadow(2px 2px 0px var(--lightGreen));
+  filter: drop-shadow(2px 2px 0px black);
 }
 
 .arrow {

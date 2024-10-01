@@ -9,7 +9,13 @@ import bg_image_cell from '../../src/assets/poly-snapshot_cell.JPG';
 import bg_image_cell_2 from '../../src/assets/poly-snapshot_2.JPG';
 import bg_image_cell_3 from '../../src/assets/poly-snapshot_3.JPG';
 
-export default function Contact({ showContactPage, setShowContactPage }) {
+export default function Contact({
+  showContactPage,
+  setShowContactPage,
+  setIsAnimating,
+  showTypes,
+  showGallery,
+}) {
   const myRef = useRef();
   const [hasAnimated, setHasAnimated] = useState(false);
 
@@ -60,6 +66,15 @@ export default function Contact({ showContactPage, setShowContactPage }) {
     }
   }, [showContactPage, hasAnimated]);
 
+  function handleExitClick() {
+    setShowContactPage(!showContactPage);
+    if (showTypes || showGallery) {
+      setIsAnimating(false);
+    } else {
+      setIsAnimating(true);
+    }
+  }
+
   return (
     <animated.div
       ref={myRef}
@@ -75,10 +90,7 @@ export default function Contact({ showContactPage, setShowContactPage }) {
     >
       <Form setShowContactPage={setShowContactPage} />
       {/* <img className="contactBackgroundImage" src={bg_image} /> */}
-      <MdExitToApp
-        className="exit-icon"
-        onClick={() => setShowContactPage(!showContactPage)}
-      />
+      <MdExitToApp className="exit-icon" onClick={() => handleExitClick()} />
     </animated.div>
   );
 }

@@ -1,8 +1,7 @@
 h1 {
     text-align: center;
     margin-bottom: 30px;
-    filter: drop-shadow(2px 2px 1px white);
-
+    filter: drop-shadow(2px 2px 1px black);
 }
 
 .btn {
@@ -54,8 +53,8 @@ h1 {
     display: block;
     width: 100%;
     padding: 15px 0;
-    font-size: 18px;
-
+    font-size: 25px;
+    color: white;
     position: relative;
     z-index: 100;
     transition: 1s
@@ -74,7 +73,8 @@ h1 {
     pointer-events: none;
     transform: translateY(0);
     transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    filter: drop-shadow(1px 1px 0px white);
+    filter: drop-shadow(1px 1px 0px black);
+
 
 }
 
@@ -86,8 +86,9 @@ h1 {
 
 .form-control label span {
     display: inline-block;
-    font-size: 18px;
+    font-size: 30px;
     min-width: 5px;
+    color: white;
 
 }
 
@@ -111,10 +112,8 @@ h1 {
 }
 
 @media only screen and (max-width: 1000px) {
-
     .form-control input {
         width: 80vw;
 
     }
-
 }

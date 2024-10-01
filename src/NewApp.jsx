@@ -12,50 +12,55 @@ function NewApp() {
   const [activeGalleryTypeString, setActiveGalleryTypeString] =
     useState('chairs');
   const [activeGalleryType, setActiveGalleryType] = useState(1);
-  const [showMission, setShowMission] = useState(false);
   const [showTypes, setShowTypes] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [showContactPage, setShowContactPage] = useState(false);
-
   const [showDetails, setShowDetails] = useState(false);
 
   const handleGalleryTypesClickCallback = useCallback(() => {
-    setIsAnimating(!isAnimating);
+    if (!showGallery) {
+      setIsAnimating(!isAnimating);
+    }
+
     setShowTypes(!showTypes);
-    setShowMission(false);
     setShowGallery(false);
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
-  }, [setShowTypes, setShowGallery, setShowMission, showTypes]);
+  }, [setShowTypes, setShowGallery, showTypes]);
 
   const handleMissionButtonClickCallback = useCallback(() => {
     setIsAnimating(!isAnimating);
     setShowTypes(false);
-    setShowMission(!showMission);
     setShowGallery(false);
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
-  }, [setShowTypes, setShowGallery, setShowMission, showMission]);
+  }, [setShowTypes, setShowGallery]);
 
   const handleGalleryButtonClickCallback = useCallback(() => {
     setShowTypes(false);
-    setShowMission(false);
+
     setShowGallery(true);
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
-  }, [setShowTypes, setShowGallery, setShowMission, showGallery]);
+  }, [setShowTypes, setShowGallery, showGallery]);
 
   function handleEmblemClick() {
     setIsAnimating(true);
     setShowTypes(false);
-    setShowMission(false);
     setShowGallery(false);
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
+  }
+
+  function handleContactPageClick() {
+    setShowContactPage(!showContactPage);
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 2000);
   }
 
   return (
@@ -75,7 +80,6 @@ function NewApp() {
         </>
       )}
 
-      <Mission showMission={showMission} />
       <GallerySpring
         galleryType={activeGalleryType}
         showGallery={showGallery}
@@ -95,6 +99,9 @@ function NewApp() {
         <Contact
           showContactPage={showContactPage}
           setShowContactPage={setShowContactPage}
+          setIsAnimating={setIsAnimating}
+          showTypes={showTypes}
+          showGallery={showGallery}
         />
         <div className="header">
           <div className="menu">
@@ -110,10 +117,7 @@ function NewApp() {
               Gallery
             </div>
 
-            <div
-              onClick={() => setShowContactPage(!showContactPage)}
-              className="menu-item"
-            >
+            <div onClick={() => handleContactPageClick()} className="menu-item">
               Contact
             </div>
           </div>
