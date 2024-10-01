@@ -19,7 +19,7 @@
 
 .typeHeader {
     display: block;
-    font-size: calc(2vh + 1vw + 10px);
+    font-size: calc(2vh + 1.5vw + 10px);
 
 }
 
@@ -69,23 +69,22 @@
     }
 
     .typeHeader {
-        font-size: calc(0.7vh + 0.7vw + 10px);
+        font-size: calc(1.2vh + 1.2vw + 10px);
 
     }
 
     .findMe {
         left: 50svw;
         font-size: calc(1.0vw + 1.0vh + 7px);
+        padding-bottom: 15px;
     }
-
-
-
 }
 
 @media only screen and (max-width: 800px) {
     .findMe {
 
-        font-size: calc(0.9vw + 0.9vh + 5px);
+        font-size: calc(1.5vw + 1.5vh + 5px);
+        padding-bottom: 25px;
 
     }
 }
