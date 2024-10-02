@@ -28,7 +28,7 @@ function NewApp() {
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
-    setIsAnimating(!isAnimating);
+    // setIsAnimating(!isAnimating);
   }, [setShowTypes, setShowGallery, showTypes, setIsAnimating, showGallery]);
 
   const handleMissionButtonClickCallback = useCallback(() => {

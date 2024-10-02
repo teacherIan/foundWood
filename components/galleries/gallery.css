@@ -270,6 +270,8 @@
         width: 100svw;
         overflow-x: none;
         overflow-y: none;
+        /* align-items: flex-end; */
+        justify-content: flex-end;
     }
 
     .masterImage {
@@ -278,6 +280,7 @@
         width: 100svw;
         border: none;
         object-fit: cover;
+
     }
 
     .thumbNailPhoto {
@@ -290,17 +293,19 @@
         /* grid-auto-rows: calc((45svh / 2) - 10svh); */
         grid-auto-rows: 22vw;
         row-gap: 20px;
-        padding-top: 3.2svh;
+        padding-top: 4.5svh;
     }
 
     .furnitureName {
         /* margin-top: 5px; */
+        padding-top: 5vh;
         text-align: center;
     }
 
     .furnitureDescription {
-
-        font-size: calc(.8vw + .8vh + 6px);
+        padding-top: 5px;
+        font-size: calc(1vw + 1vh + 12px);
+        text-align: center;
     }
 
     .smallScreenCover {
