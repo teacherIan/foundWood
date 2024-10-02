@@ -1,7 +1,8 @@
-h1 {
+.formHeader {
     text-align: center;
     margin-bottom: 30px;
     filter: drop-shadow(2px 2px 1px black);
+    font-size: calc(2.5vh + 2vw + 15px);
 }
 
 .btn {
@@ -11,7 +12,7 @@ h1 {
     background: white;
     padding: 20px;
     font-family: inherit;
-    font-size: 16px;
+    font-size: calc(1vh + 1vw + 7px);
     border: 0;
     border-radius: 5px;
     color: var(--brown);

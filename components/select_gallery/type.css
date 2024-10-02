@@ -33,7 +33,7 @@
     transform: translate(-50%, -50%);
     opacity: 1;
     z-index: 1000;
-    font-size: calc(1.2vw + 1.2vh + 7px);
+    font-size: calc(1.4vw + 1.4vh + 14px);
     color: var(--brown);
     text-align: center;
     font-family: var(--secondaryFont);

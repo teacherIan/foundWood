@@ -137,7 +137,7 @@ export default function Form({ setShowContactPage }) {
 
   return (
     <div className="formContainer">
-      <h1>Contact Doug's Found Wood</h1>
+      <div className="formHeader">Contact Doug's Found Wood</div>
       <form autoComplete="off" onSubmit={handleSubmit}>
         <div className="form-control">
           <input

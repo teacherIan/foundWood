@@ -18,16 +18,18 @@ function NewApp() {
   const [showDetails, setShowDetails] = useState(false);
 
   const handleGalleryTypesClickCallback = useCallback(() => {
+    setShowTypes(!showTypes);
+
     if (!showGallery) {
       setIsAnimating(!isAnimating);
     }
 
-    setShowTypes(!showTypes);
     setShowGallery(false);
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
-  }, [setShowTypes, setShowGallery, showTypes]);
+    setIsAnimating(!isAnimating);
+  }, [setShowTypes, setShowGallery, showTypes, setIsAnimating, showGallery]);
 
   const handleMissionButtonClickCallback = useCallback(() => {
     setIsAnimating(!isAnimating);
@@ -36,25 +38,28 @@ function NewApp() {
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
-  }, [setShowTypes, setShowGallery]);
+  }, [setShowTypes, setShowGallery, setIsAnimating]);
 
   const handleGalleryButtonClickCallback = useCallback(() => {
     setShowTypes(false);
-
     setShowGallery(true);
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
   }, [setShowTypes, setShowGallery, showGallery]);
 
-  function handleEmblemClick() {
+  const handleEmblemClickCallback = useCallback(() => {
     setIsAnimating(true);
     setShowTypes(false);
+    console.log('Show showTypes: ' + showTypes);
     setShowGallery(false);
+    console.log(showGallery);
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
-  }
+  }, [setIsAnimating, setShowTypes, setShowGallery, showGallery]);
+
+  function handleEmblemClick() {}
 
   function handleContactPageClick() {
     setShowContactPage(!showContactPage);
@@ -106,7 +111,7 @@ function NewApp() {
         <div className="header">
           <div className="menu">
             <img
-              onClick={() => handleEmblemClick()}
+              onClick={() => handleEmblemClickCallback()}
               src={found_wood}
               className="icon"
             ></img>

@@ -77,6 +77,8 @@
 .furnitureName {
     /* margin-top: 5px; */
     text-align: center;
+    font-size: calc(2vw + 2vh + 10px);
+
 }
 
 .furniturePrice {
@@ -93,7 +95,7 @@
     height: 25vh;
     font-family: var(--secondaryFont);
     width: 100%;
-    font-size: calc(1.0vw + 1.0vh + 8px);
+    font-size: calc(1vw + 1vh + 10px);
 }
 
 .smallScreenCover {
