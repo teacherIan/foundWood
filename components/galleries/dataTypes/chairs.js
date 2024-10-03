@@ -1,5 +1,5 @@
 import doubleChair from '../../../src/assets/gallery/real_double_chair.jpg';
-import captainChair from '../../../src/assets/gallery/cropped/real_high_chair.jpg';
+import captainChair from '../../../src/assets/gallery/chairs/real_high_chair.jpg';
 import gaudiChair from '../../../src/assets/gallery/double_seat.png';
 import adirondack_chair_w_stool from '../../../src/assets/gallery/chairs/chair_w_stool.jpg';
 import outside_adirondack_chair from '../../../src/assets/gallery/chairs/Adirondack_chair.jpeg';
