@@ -96,23 +96,25 @@ export default function Gallery({
         </>
       </div>
       <div onClick={() => handleMasterImageClick()} className="currentPhoto">
-        {window.innerWidth < 1200 ? (
-          showDetails ? (
-            <div className="infoGal">Click Photo to View Thumbnails</div>
-          ) : (
-            <div className="infoGal">Click Photo to View Details</div>
-          )
-        ) : null}
         {galleryTypeArr.length > 0 && (
-          <animated.img
-            style={{ ...spring }}
-            className="masterImage"
-            src={
-              galleryTypeArr[currentPhoto]?.img
-                ? galleryTypeArr[currentPhoto]?.img
-                : galleryTypeArr[0]
-            }
-          />
+          <>
+            {window.innerWidth < 1200 ? (
+              showDetails ? (
+                <div className="infoGal">Click Photo to View Thumbnails</div>
+              ) : (
+                <div className="infoGal">Click Photo to View Details</div>
+              )
+            ) : null}
+            <animated.img
+              style={{ ...spring }}
+              className="masterImage"
+              src={
+                galleryTypeArr[currentPhoto]?.img
+                  ? galleryTypeArr[currentPhoto]?.img
+                  : galleryTypeArr[0]
+              }
+            />
+          </>
         )}
       </div>
     </div>
