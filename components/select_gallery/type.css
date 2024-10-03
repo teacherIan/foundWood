@@ -1,7 +1,6 @@
 .typeContainer {
     display: flex;
     /* justify-content: space-around; */
-
     flex-direction: column;
     width: 25svw;
     height: 40svh;
@@ -69,7 +68,7 @@
     }
 
     .typeHeader {
-        font-size: calc(2.2vh + 2.2vw + 15px);
+        font-size: calc(2vh + 2vw + 15px);
 
     }
 
@@ -83,11 +82,18 @@
 @media only screen and (max-width: 800px) {
     .findMe {
 
-        font-size: calc(1.3vw + 1.3vh + 15px);
-        padding-bottom: 60px;
-        width: 95svw;
+        font-size: calc(1vw + 1vh + 15px);
+        padding-bottom: 40px;
+        width: 97svw;
 
     }
+
+    .typeHeader {
+        font-size: calc(1.5vh + 1.5vw + 15px);
+
+    }
+
+
 }
 
 
