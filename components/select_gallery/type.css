@@ -52,7 +52,7 @@
         /* align-items: center; */
         flex-direction: column;
         width: 55svw;
-        height: 55svh;
+        height: 60svh;
         color: var(--brown);
         cursor: pointer;
         border-radius: 2000px;
@@ -60,8 +60,8 @@
     }
 
     .typeImage {
-        width: 55svw;
-        height: 55svw;
+        width: 50svw;
+        height: 48svw;
         overflow: visible;
         /* transform: translate(25%, 0%); */
 
@@ -75,7 +75,8 @@
     .findMe {
         left: 50svw;
         font-size: calc(1.3vw + 1.3vh + 7px);
-        padding-bottom: 15px;
+        padding-bottom: 0;
+        width: 95svw;
     }
 }
 
