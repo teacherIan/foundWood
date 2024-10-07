@@ -15,7 +15,7 @@ import chair_spat from '../../src/assets/3d/chair_spot.glb';
 export default function Experience({ counter, setCounter }) {
   return (
     <Canvas
-      style={{ width: '100%', height: '100vh' }}
+      style={{ width: '100svw', height: '100svh' }}
       camera={{ position: [0, 5, 5] }}
     >
       <OrbitControls
