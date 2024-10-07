@@ -18,7 +18,9 @@ function NewApp() {
   const [showDetails, setShowDetails] = useState(false);
 
   const handleGalleryTypesClickCallback = useCallback(() => {
-    setShowTypes(!showTypes);
+    setTimeout(() => {
+      setShowTypes(!showTypes);
+    }, 100);
 
     if (!showGallery) {
       setIsAnimating(!isAnimating);
@@ -28,7 +30,6 @@ function NewApp() {
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
-    // setIsAnimating(!isAnimating);
   }, [setShowTypes, setShowGallery, showTypes, setIsAnimating, showGallery]);
 
   const handleMissionButtonClickCallback = useCallback(() => {
@@ -51,15 +52,11 @@ function NewApp() {
   const handleEmblemClickCallback = useCallback(() => {
     setIsAnimating(true);
     setShowTypes(false);
-    console.log('Show showTypes: ' + showTypes);
     setShowGallery(false);
-    console.log(showGallery);
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
   }, [setIsAnimating, setShowTypes, setShowGallery, showGallery]);
-
-  function handleEmblemClick() {}
 
   function handleContactPageClick() {
     setShowContactPage(!showContactPage);

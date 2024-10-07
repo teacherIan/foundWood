@@ -1,8 +1,8 @@
 import './experienceStyles.css';
 import { OrbitControls, Splat, Box } from '@react-three/drei';
-import splat from '../../src/assets/new_experience/my_splat.splat';
+import splat from '../../src/assets/new_experience/full.splat';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useState } from 'react';
+
 function App({ isAnimating }) {
   return (
     <Canvas camera={{ position: [1, 2, 2] }}>
@@ -19,8 +19,8 @@ function App({ isAnimating }) {
           position={[0, 0, 0]}
           scale={2}
           src={
-            'https://huggingface.co/datasets/ianmalloy/test/resolve/main/full.splat?'
-            //   splat
+            // 'https://huggingface.co/datasets/ianmalloy/test/resolve/main/full.splat?'
+            splat
           }
         />
       )}
