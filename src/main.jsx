@@ -11,6 +11,10 @@ document.addEventListener(
   false
 );
 
+window.addEventListener('resize', () => {
+  location.reload();
+});
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     {/* <App /> */}

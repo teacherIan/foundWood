@@ -75,11 +75,7 @@ export default function Gallery({
             </div>
           ) : null} */}
 
-          <div
-            style={showDetails ? { opacity: '1' } : { opacity: '1' }}
-            className="thumbNails"
-            onMouseOver={handleThumbNailHover}
-          >
+          <div className="thumbNails" onMouseOver={handleThumbNailHover}>
             {galleryTypeArr.map((image, index) => (
               <img key={index} src={image.img} className="thumbNailPhoto" />
             ))}
@@ -107,7 +103,7 @@ export default function Gallery({
             <>
               {window.innerWidth < 1200 ? (
                 showDetails ? (
-                  <div className="infoGal">Click to Remove Details </div>
+                  <div className="infoGal">Click to Hide Details </div>
                 ) : (
                   <div className="infoGal">Click to View Details</div>
                 )
