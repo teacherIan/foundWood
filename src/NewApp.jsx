@@ -153,7 +153,10 @@ function NewApp() {
                 : { bottom: '-50%', opacity: 0 }
             }
           >
-            {galleryTypeArr[currentPhoto]?.name}
+            <div className="gallery_description_header">
+              {galleryTypeArr[currentPhoto]?.name}
+            </div>
+
             <br />
             {galleryTypeArr[currentPhoto]?.description}
             <br />

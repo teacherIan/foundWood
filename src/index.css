@@ -90,12 +90,16 @@ body {
   left: 50%;
   transform: translate(-50%, 0%);
   color: white;
-  font-size: calc(2vw + 2vh + 14px);
+  font-size: calc(2.2vw + 2.2vh + 14px);
   text-align: center;
-  transition: 1s;
+  transition: 0.5s;
   bottom: '-25%';
   filter: drop-shadow(3px 3px 2px black);
   width: 90%;
+}
+
+.gallery_description_header {
+  font-size: calc(2.5vw + 2.5vh + 14px);
 }
 
 .appContainer {

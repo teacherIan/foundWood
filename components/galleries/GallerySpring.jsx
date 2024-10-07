@@ -36,7 +36,9 @@ export default function Gallery({
     );
 
     if (event.target.className == 'thumbNailPhoto') {
-      setCurrentPhoto(index);
+      setTimeout(() => {
+        setCurrentPhoto(index);
+      }, 0);
     }
     setShowDetails(false);
     setShowInfographic(false);
