@@ -11,10 +11,13 @@ export default function Gallery({
   showGalleryString,
   showDetails,
   setShowDetails,
+  galleryTypeArr,
+  setGalleryTypeArr,
+  currentPhoto,
+  setCurrentPhoto,
+  setShowInfographic,
+  showInfographic,
 }) {
-  const [currentPhoto, setCurrentPhoto] = useState(0);
-  const [galleryTypeArr, setGalleryTypeArr] = useState([]);
-
   useEffect(() => {
     const newGalleryTypeArr = images.filter(
       (image) => image.type === showGalleryString
@@ -43,80 +46,83 @@ export default function Gallery({
 
   function handleMasterImageClick() {
     setShowDetails(!showDetails);
+    setShowInfographic(!showInfographic);
   }
 
   return (
-    <div
-      className="galleryContainer"
-      style={
-        showGallery
-          ? { width: '100svw', height: '100svh', opacity: 1, zIndex: 20000 }
-          : { width: '100svw', height: '100svh', opacity: 0, zIndex: 0 }
-      }
-    >
-      <div className="galleryLeftTop">
-        {window.innerWidth < 1200 && showDetails ? (
-          <div className="smallScreenCover">
-            <div className="furnitureName">
-              {galleryTypeArr[currentPhoto]?.name}
+    <>
+      <div
+        className="galleryContainer"
+        style={
+          showGallery
+            ? { width: '100svw', height: '100svh', opacity: 1, zIndex: 20000 }
+            : { width: '100svw', height: '100svh', opacity: 0, zIndex: 0 }
+        }
+      >
+        <div className="galleryLeftTop">
+          {/* {window.innerWidth < 1200 && showDetails ? (
+            <div className="smallScreenCover">
+              <div className="furnitureName">
+                {galleryTypeArr[currentPhoto]?.name}
+              </div>
+              <div className="furnitureDescription">
+                {galleryTypeArr[currentPhoto]?.description}
+                <br />
+                Price: {galleryTypeArr[currentPhoto]?.price}
+              </div>
             </div>
-            <div className="furnitureDescription">
-              {galleryTypeArr[currentPhoto]?.description}
-              <br />
-              Price: {galleryTypeArr[currentPhoto]?.price}
-            </div>
-          </div>
-        ) : null}
+          ) : null} */}
 
-        <div
-          style={showDetails ? { opacity: '0' } : { opacity: '1' }}
-          className="thumbNails"
-          onMouseOver={handleThumbNailHover}
-        >
-          {galleryTypeArr.map((image, index) => (
-            <img key={index} src={image.img} className="thumbNailPhoto" />
-          ))}
-        </div>
-        <>
-          <div className="galleryLeftBottom">
-            <div className="furnitureName">
-              {galleryTypeArr[currentPhoto]?.name}
-            </div>
-            <br />
-            <div className="furnitureDescription">
-              {galleryTypeArr[currentPhoto]?.description}
-            </div>
-            <br />
-            <br />
-            <div className="furniturePrice">
-              Price: {galleryTypeArr[currentPhoto]?.price}
-            </div>
-            <br />
+          <div
+            style={showDetails ? { opacity: '1' } : { opacity: '1' }}
+            className="thumbNails"
+            onMouseOver={handleThumbNailHover}
+          >
+            {galleryTypeArr.map((image, index) => (
+              <img key={index} src={image.img} className="thumbNailPhoto" />
+            ))}
           </div>
-        </>
-      </div>
-      <div onClick={() => handleMasterImageClick()} className="currentPhoto">
-        {galleryTypeArr.length > 0 && (
           <>
-            {window.innerWidth < 1200 ? (
-              showDetails ? (
-                <div className="infoGal">Click Photo to View Thumbnails</div>
-              ) : (
-                <div className="infoGal">Click Photo to View Details</div>
-              )
-            ) : null}
-            <animated.img
-              style={{ ...spring }}
-              className="masterImage"
-              src={
-                galleryTypeArr[currentPhoto]?.img
-                  ? galleryTypeArr[currentPhoto]?.img
-                  : galleryTypeArr[0]
-              }
-            />
+            <div className="galleryLeftBottom">
+              <div className="furnitureName">
+                {galleryTypeArr[currentPhoto]?.name}
+              </div>
+              <br />
+              <div className="furnitureDescription">
+                {galleryTypeArr[currentPhoto]?.description}
+              </div>
+              <br />
+              <br />
+              <div className="furniturePrice">
+                Price: {galleryTypeArr[currentPhoto]?.price}
+              </div>
+              <br />
+            </div>
           </>
-        )}
+        </div>
+        <div onClick={() => handleMasterImageClick()} className="currentPhoto">
+          {galleryTypeArr.length > 0 && (
+            <>
+              {window.innerWidth < 1200 ? (
+                showDetails ? (
+                  <div className="infoGal">Click to Remove Details </div>
+                ) : (
+                  <div className="infoGal">Click to View Details</div>
+                )
+              ) : null}
+              <animated.img
+                style={{ ...spring }}
+                className="masterImage"
+                src={
+                  galleryTypeArr[currentPhoto]?.img
+                    ? galleryTypeArr[currentPhoto]?.img
+                    : galleryTypeArr[0]
+                }
+              />
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

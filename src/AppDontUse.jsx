@@ -151,7 +151,7 @@ function App() {
         <div
           className="infoGraphic"
           style={
-            counter == -1
+            true
               ? { bottom: '-25%', opacity: 0 }
               : window.innerHeight < 1000
               ? { bottom: '5%', opacity: 1 }

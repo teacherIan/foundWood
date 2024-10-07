@@ -15,7 +15,10 @@ function NewApp() {
   const [showTypes, setShowTypes] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [showContactPage, setShowContactPage] = useState(false);
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(true);
+  const [galleryTypeArr, setGalleryTypeArr] = useState([]);
+  const [currentPhoto, setCurrentPhoto] = useState(0);
+  const [showInfographic, setShowInfographic] = useState(false);
 
   const handleGalleryTypesClickCallback = useCallback(() => {
     setTimeout(() => {
@@ -88,6 +91,12 @@ function NewApp() {
         showGalleryString={activeGalleryTypeString}
         showDetails={showDetails}
         setShowDetails={setShowDetails}
+        galleryTypeArr={galleryTypeArr}
+        setGalleryTypeArr={setGalleryTypeArr}
+        currentPhoto={currentPhoto}
+        setCurrentPhoto={setCurrentPhoto}
+        setShowInfographic={setShowInfographic}
+        showInfographic={showInfographic}
       />
       <Types
         showTypes={showTypes}
@@ -126,6 +135,20 @@ function NewApp() {
         </div>
 
         <div className="blur">
+          <div
+            className="infoGraphic"
+            style={
+              showInfographic
+                ? { bottom: '0%', opacity: 1 }
+                : { bottom: '-50%', opacity: 0 }
+            }
+          >
+            {galleryTypeArr[currentPhoto]?.name}
+            <br />
+            {galleryTypeArr[currentPhoto]?.description}
+            <br />
+            {galleryTypeArr[currentPhoto]?.price}
+          </div>
           <NewCanvas isAnimating={isAnimating} />
         </div>
       </div>

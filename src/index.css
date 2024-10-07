@@ -86,17 +86,18 @@ body {
 
 .infoGraphic {
   position: absolute;
-  z-index: 2000;
+  z-index: 80000;
   left: 50%;
-  transform: translate(-50%, -50%);
-  color: #77481C;
-  font-size: calc(1.5vw + 1.0vh + 7px);
+  transform: translate(-50%, 0%);
+  color: white;
+  font-size: calc(2vw + 2vh + 7px);
   text-align: center;
   transition: 1s;
   bottom: '-25%';
-  filter: drop-shadow(1px 1px 0px var(--lightGreen));
+  filter: drop-shadow(1px 1px 1px black);
+  width: 90%;
 
-  /* font-family: var(--mainFont); */
+
 }
 
 .appContainer {
