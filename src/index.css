@@ -90,7 +90,7 @@ body {
   left: 50%;
   transform: translate(-50%, 0%);
   color: white;
-  font-size: calc(2.2vw + 2.2vh + 14px);
+  font-size: calc(2vw + 2vh + 14px);
   text-align: center;
   transition: 0.5s;
   bottom: '-25%';
