@@ -193,7 +193,6 @@
         justify-content: center;
         align-items: center;
 
-
     }
 
 
@@ -234,28 +233,29 @@
 
     .masterImage {
         border-radius: 5px;
-        height: 100svw;
-        width: 100svw;
+        max-height: 120svw;
+        max-width: 100svw;
         border: none;
-        object-fit: cover;
+        /* object-fit: cover; */
     }
 
     .thumbNailPhoto {
-        width: 21vw;
-        height: 21vw;
+        width: 12vw;
+        height: 12vw;
     }
 
     .thumbNails {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(8, 1fr);
         grid-auto-rows: 21vw;
-        row-gap: 20px;
-        padding-top: 1.7svh;
+        /* row-gap: 20px; */
+        padding-top: 5svh;
+        height: 17svh;
     }
 }
 
 @media only screen and (max-width: 760px) {
     .galleryLeftTop {
-        height: 35svh;
+        height: 29svh;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -283,25 +283,26 @@
     }
 
     .masterImage {
-        position: absolute;
+        /* position: absolute; */
         border-radius: 5px;
-        height: 120svw;
-        width: 100svw;
+        max-height: 135svw;
+        max-width: 100svw;
         border: none;
-        /* object-fit: cover; */
+        object-fit: fill;
         top: 0;
     }
 
     .thumbNailPhoto {
-        width: 23vw;
-        height: 23vw;
+        width: 20vw;
+        height: 20vw;
     }
 
     .thumbNails {
         grid-template-columns: repeat(4, 1fr);
         grid-auto-rows: 22vw;
-        row-gap: 10px;
+        row-gap: 2px;
         padding-top: 5svh;
+        /* height: 2svh; */
     }
 
     .furnitureName {
