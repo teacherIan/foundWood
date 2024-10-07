@@ -33,6 +33,7 @@ function NewApp() {
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
+    setShowInfographic(false);
   }, [setShowTypes, setShowGallery, showTypes, setIsAnimating, showGallery]);
 
   const handleMissionButtonClickCallback = useCallback(() => {
@@ -59,13 +60,22 @@ function NewApp() {
     setTimeout(() => {
       setShowDetails(false);
     }, 1000);
-  }, [setIsAnimating, setShowTypes, setShowGallery, showGallery]);
+    setShowInfographic(false);
+  }, [
+    setIsAnimating,
+    setShowTypes,
+    setShowGallery,
+    showGallery,
+    showInfographic,
+    setShowInfographic,
+  ]);
 
   function handleContactPageClick() {
     setShowContactPage(!showContactPage);
     setTimeout(() => {
       setIsAnimating(false);
     }, 2000);
+    setShowInfographic(false);
   }
 
   return (

@@ -38,6 +38,8 @@ export default function Gallery({
     if (event.target.className == 'thumbNailPhoto') {
       setCurrentPhoto(index);
     }
+    setShowDetails(false);
+    setShowInfographic(false);
   };
 
   const [spring, api] = useSpring(() => ({
