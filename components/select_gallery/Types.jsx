@@ -5,9 +5,7 @@ import { useEffect } from 'react';
 import chair from '../../src/assets/noBG/double_chair_final_noBG.png';
 import table from '../../src/assets/noBG/plantStand_new.png';
 import picnicTable from '../../src/assets/noBG/picnic_table_B.png';
-// import house from '../../src/assets/noBG/hobbit_house_noBG_2.png';
 import house from '../../src/assets/noBG/playHouse-transformed.png';
-// import house from '../../src/assets/noBG/fort_b_noBG.png';
 import light from '../../src/assets/noBG/light_noBG.png';
 
 const configAnimation = {
@@ -26,9 +24,9 @@ function useTypeSpring(showTypes, index) {
   }));
 
   useEffect(() => {
-    if (showTypes && window.innerWidth < 1200) {
+    if (showTypes && window.innerWidth < window.innerHeight) {
       setSpring.start({
-        top: 110 + (index > 1 ? 35 : 0) + 'svh',
+        top: 110 + (index > 1 ? 52 : 5) + 'svh',
         opacity: '1',
         delay: index * 100,
       });
@@ -40,7 +38,7 @@ function useTypeSpring(showTypes, index) {
         delay: index * 200,
       });
     } else {
-      setSpring.start({ top: '0svh', opacity: '0', delay: index * 200 });
+      setSpring.start({ top: '-50svh', opacity: '0', delay: index * 200 });
     }
   }, [showTypes]);
 
@@ -76,7 +74,7 @@ export default function Types({
   }));
 
   useEffect(() => {
-    if (showTypes && window.innerWidth < 1200) {
+    if (showTypes && window.innerWidth > window.innerHeight) {
       setInformationSpring.start({ opacity: '1', top: '92svh', delay: 100 });
     } else if (showTypes) {
       setInformationSpring.start({ opacity: '1', top: '73svh', delay: 100 });
@@ -91,17 +89,6 @@ export default function Types({
 
   return (
     <>
-      <animated.div
-        className="findMe"
-        style={{
-          position: 'absolute',
-          ...informationSpring,
-        }}
-      >
-        Everything built by DFW is completely unique using the natural curvature
-        of the wood, often incorporating roots and burls. As such, no two pieces
-        are the same.
-      </animated.div>
       <animated.div className="typesContainer">
         {springs.map((spring, index) => (
           <animated.div
@@ -109,7 +96,7 @@ export default function Types({
             style={{
               position: 'absolute',
               left:
-                window.innerWidth < 1200
+                window.innerWidth < window.innerHeight
                   ? 50 * (index % 2) + 'svw'
                   : 22 * index + 'svw',
               top: spring.top,

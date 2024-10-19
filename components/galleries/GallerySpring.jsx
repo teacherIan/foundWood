@@ -91,7 +91,7 @@ export default function Gallery({
         <div onClick={() => handleMasterImageClick()} className="currentPhoto">
           {galleryTypeArr.length > 0 && (
             <>
-              {window.innerWidth < 1200 ? (
+              {window.innerWidth < window.innerHeight ? (
                 showDetails ? (
                   <div className="infoGal">Click to Hide Details </div>
                 ) : (

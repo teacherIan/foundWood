@@ -109,8 +109,12 @@ body {
 
 .new_app_info {
   position: absolute;
+  text-align: center;
 }
 
+.new_app_header {
+  text-align: center;
+}
 
 @media only screen and (max-width: 1000px) {
   .infoGraphic {

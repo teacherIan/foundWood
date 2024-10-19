@@ -71,6 +71,7 @@ export default function Type({
       onMouseLeave={() => setActive(false)}
       className="typeContainer"
       style={{
+        width: window.innerWidth < 1200 ? 54 + 'svw' : 30 + 'svw',
         ...springs,
       }}
     >
