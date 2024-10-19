@@ -32,10 +32,15 @@ function useTypeSpring(showTypes, index) {
         opacity: '1',
         delay: index * 100,
       });
+      //wide Screen
     } else if (showTypes) {
-      setSpring.start({ top: '120svh', opacity: '1', delay: index * 100 });
+      setSpring.start({
+        top: index % 2 == 0 ? '112svh' : '150svh',
+        opacity: '1',
+        delay: index * 200,
+      });
     } else {
-      setSpring.start({ top: '0svh', opacity: '0', delay: index * 100 });
+      setSpring.start({ top: '0svh', opacity: '0', delay: index * 200 });
     }
   }, [showTypes]);
 
@@ -106,7 +111,7 @@ export default function Types({
               left:
                 window.innerWidth < 1200
                   ? 50 * (index % 2) + 'svw'
-                  : 25 * index + 'svw',
+                  : 22 * index + 'svw',
               top: spring.top,
             }}
           >

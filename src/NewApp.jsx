@@ -87,7 +87,7 @@ function NewApp() {
             <br /> Wood
             <br />
             <div className="new_app_info">
-              No two creations are alike. Handcrafted in Maine.
+              Always Unique <br /> Handcrafted in Maine
             </div>
           </div>
         </>
