@@ -128,3 +128,48 @@
 .galleryLeftTop {
     position: relative;
 }
+
+
+@media (orientation: portrait) {
+    .galleryContainer {
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
+    .thumbNailPhoto {
+        height: 25svw;
+        width: 25svw;
+
+    }
+
+    .galleryLeftBottom {
+        display: none;
+    }
+
+    .masterImage {
+        border-radius: 0px;
+        width: 100svw;
+        max-height: 65svh;
+        /* object-fit: contain; */
+        border: none;
+        /* object-position: 50% 70%; */
+        /* Center horizontally, align 20% from the top */
+    }
+
+    .thumbNails {
+        /* padding-top: 4svh; */
+        /* width: calc(50svw -50px); */
+        display: grid;
+
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: 25svw;
+        gap: 0px;
+        /* height: calc(45svh - 20px); */
+        /* border-radius: 2px; */
+
+    }
+
+    .furniturePrice {
+        display: none;
+    }
+}

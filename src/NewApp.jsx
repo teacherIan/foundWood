@@ -145,6 +145,7 @@ function NewApp() {
         <div className="blur">
           <div
             className="infoGraphic"
+            onClick={() => setShowInfographic(!showInfographic)}
             style={
               showInfographic
                 ? { bottom: '0%', opacity: 1 }
