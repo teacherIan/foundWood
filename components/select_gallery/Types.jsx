@@ -89,7 +89,13 @@ export default function Types({
 
   return (
     <>
-      <animated.div className="typesContainer">
+      <animated.div
+        style={{
+          width:
+            window.innerWidth > window.innerHeight ? 50 + 'svw' : 50 + 'svw',
+        }}
+        className="typesContainer"
+      >
         {springs.map((spring, index) => (
           <animated.div
             key={index}

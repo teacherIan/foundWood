@@ -12,6 +12,10 @@ export default function Type({
 }) {
   const [active, setActive] = useState(false);
 
+  const typeContainerStyle = {
+    width: window.innerWidth > window.innerHeight ? 54 + 'svw' : 30 + 'svw',
+  };
+
   const configAnimation = {
     mass: 1,
     tension: 100,
@@ -71,7 +75,7 @@ export default function Type({
       onMouseLeave={() => setActive(false)}
       className="typeContainer"
       style={{
-        width: window.innerWidth < 1200 ? 54 + 'svw' : 30 + 'svw',
+        typeContainerStyle,
         ...springs,
       }}
     >

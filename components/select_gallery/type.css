@@ -21,3 +21,21 @@
     font-size: calc(2vh + 1.5vw + 10px);
 
 }
+
+@media (orientation: landscape) {
+    .typeContainer {
+
+        width: 30svw;
+
+
+    }
+}
+
+@media (orientation: portrait) {
+    .typeContainer {
+
+        width: 50svw;
+
+
+    }
+}
