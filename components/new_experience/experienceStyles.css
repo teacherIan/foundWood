@@ -2,26 +2,22 @@
     user-select: none;
     position: absolute;
     z-index: 1000;
-    font-size: calc(7vw + 7vh + 20px);
+    font-size: calc(5vw + 5vh + 20px);
     font-family: CustomFont;
     color: white;
-    left: 5svw;
-    top: 50%;
+    left: 7svw;
+    top: 40%;
     color: #77481C;
     transform: translate(0, -50%);
-    filter: drop-shadow(5px 5px 1px black);
+    filter: drop-shadow(3px 3px 0px rgb(0, 0, 0));
+    /* color: white; */
 
 }
 
-.new_app_header_outline {
-    user-select: none;
-    position: absolute;
-    z-index: 1000;
-    font-size: calc(7vw + 7vh + 20px);
-    font-family: CustomFont;
-    color: white;
-    left: 5svw;
-    top: 50%;
-    color: black;
-    transform: translate(0, -50%);
+.new_app_info {
+    /* transform: translate(0, -50%); */
+    font-size: calc(1.5vw + 1.5vh + 20px);
+
+    /* width: 50svw; */
+    /* color: white; */
 }

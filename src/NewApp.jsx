@@ -82,15 +82,13 @@ function NewApp() {
     <>
       {window.innerWidth < 1000 || !isAnimating ? null : (
         <>
-          <div className="new_app_header_outline">
-            Doug's <br /> Found
-            <br /> Wood
-            <br />
-          </div>
           <div className="new_app_header">
             Doug's <br /> Found
             <br /> Wood
             <br />
+            <div className="new_app_info">
+              No two creations are alike. Handcrafted in Maine.
+            </div>
           </div>
         </>
       )}

@@ -12,7 +12,7 @@ document.addEventListener(
 );
 
 window.addEventListener('resize', () => {
-  location.reload();
+  // location.reload();
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -26,18 +26,18 @@
     grid-template-columns: repeat(5, 1fr);
     grid-auto-rows: 10svw;
     gap: 10px;
-    height: calc(45svh - 20px);
+    /* height: calc(45svh - 20px); */
     border-radius: 2px;
 
 }
 
 .thumbNailPhoto {
-    width: 10vw;
-    height: 10vw;
+    height: 100%;
+    width: 100%;
     border: 1px var(--brown) solid;
     border-radius: 150px;
     cursor: pointer;
-    transition: 1s;
+    transition: 1s cubic-bezier(0.86, 0, 0.07, 1);
 }
 
 .thumbNailPhoto:hover {
@@ -98,9 +98,10 @@
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    left: 22%;
-    top: 92%;
+    left: 10%;
+    bottom: 12%;
     width: 100%;
+    color: var(--brown);
 }
 
 .furnitureDescription {
@@ -126,273 +127,4 @@
 
 .galleryLeftTop {
     position: relative;
-}
-
-
-@media only screen and (min-width: 900px) and (max-width: 1200px) {
-
-    .galleryLeftTop {
-        height: 15svh;
-        /* display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column; */
-
-    }
-
-    .galleryContainer {
-        flex-direction: column;
-    }
-
-    .galleryLeftBottom {
-        display: none;
-        width: 0px;
-        height: 100svh;
-        position: absolute;
-        bottom: 0;
-
-    }
-
-    .smallScreenCover {
-
-        color: white;
-        z-index: 60000;
-        position: absolute;
-        top: 70svh;
-        filter: drop-shadow(5px 5px 1px black);
-
-    }
-
-    .currentPhoto {
-        color: var(--brown);
-        display: flex;
-        flex-direction: column;
-        overflow-x: none;
-        overflow-y: none;
-    }
-
-    .masterImage {
-        border-radius: 5px;
-        height: 100svw;
-        width: 100svw;
-        border: none;
-    }
-
-    .thumbNailPhoto {
-        width: 18vw;
-        height: 18vw;
-    }
-
-    .thumbNails {
-        grid-template-columns: repeat(10, 1fr);
-        /* grid-auto-rows: calc((45svh / 2) - 10svh); */
-        grid-auto-rows: 18vw;
-        row-gap: 10px;
-        column-gap: 20px;
-        /* padding-top: 3svh; */
-        justify-content: center;
-        align-items: center;
-
-    }
-
-
-    .thumbNailPhoto {
-        width: 10vw;
-        height: 10vw;
-    }
-}
-
-
-@media only screen and (min-width: 760px) and (max-width: 900px) {
-    .galleryLeftTop {
-        /* height: 35svh; */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-    }
-
-    .galleryContainer {
-        flex-direction: column;
-    }
-
-    .galleryLeftBottom {
-        display: none;
-        width: 0px;
-        height: 0px;
-    }
-
-    .currentPhoto {
-        color: var(--brown);
-        display: flex;
-        flex-direction: column;
-        overflow-x: none;
-        overflow-y: none;
-    }
-
-    .masterImage {
-        border-radius: 5px;
-        max-height: 120svw;
-        max-width: 100svw;
-        border: none;
-        /* object-fit: cover; */
-    }
-
-    .thumbNailPhoto {
-        width: 12vw;
-        height: 12vw;
-    }
-
-    .thumbNails {
-        grid-template-columns: repeat(8, 1fr);
-        grid-auto-rows: 21vw;
-        /* row-gap: 20px; */
-        padding-top: 5svh;
-        height: 17svh;
-    }
-}
-
-@media only screen and (max-width: 760px) {
-    .galleryLeftTop {
-        height: 29svh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
-
-    .galleryContainer {
-        flex-direction: column;
-    }
-
-    .galleryLeftBottom {
-        display: none;
-        width: 0px;
-        height: 0px;
-        font-size: calc(.8vw + .8vh + 6px);
-    }
-
-    .currentPhoto {
-        color: var(--brown);
-        display: flex;
-        flex-direction: column;
-        overflow-x: none;
-        overflow-y: none;
-        justify-content: center;
-    }
-
-    .masterImage {
-        /* position: absolute; */
-        border-radius: 5px;
-        max-height: 135svw;
-        max-width: 100svw;
-        border: none;
-        object-fit: fill;
-        top: 0;
-    }
-
-    .thumbNailPhoto {
-        width: 20vw;
-        height: 20vw;
-    }
-
-    .thumbNails {
-        grid-template-columns: repeat(4, 1fr);
-        grid-auto-rows: 22vw;
-        row-gap: 2px;
-        padding-top: 5svh;
-        /* height: 2svh; */
-    }
-
-    .furnitureName {
-        padding-top: 5vh;
-        text-align: center;
-    }
-
-    .furnitureDescription {
-        font-size: calc(1vw + 1vh + 12px);
-        text-align: center;
-        width: 100svw;
-    }
-
-}
-
-@media only screen and (min-width: 900px) and (max-width: 1220px) and (min-height: 700px) and (max-height:900px) {
-
-
-    .thumbNailPhoto {
-        width: 12svh;
-        height: 12svh;
-    }
-
-    .thumbNails {
-        grid-template-columns: repeat(8, 1fr);
-        height: calc(12svh - 20px);
-    }
-
-    .galleryLeftTop {
-        margin-top: 3.3svh;
-        height: calc(12svh - 20px);
-    }
-
-    .masterImage {
-        object-fit: fill;
-        margin-top: 8svh;
-        height: 80svh;
-    }
-
-    .furnitureName {
-        text-align: center;
-    }
-
-    .infoGal {
-        z-index: 9999999;
-        position: absolute;
-        top: 17svh;
-        color: white;
-        background-color: rgba(0, 0, 0, 0.268);
-        display: none;
-    }
-
-    .furnitureDescription {
-        font-size: calc(.6vw + .6vh + 6px);
-    }
-}
-
-@media only screen and (min-width: 1000px) and (max-width: 1200px) and (min-height: 300px) and (max-height:605px) {
-    .thumbNails {
-        grid-template-columns: repeat(8, 1fr);
-        grid-auto-rows: 2vw;
-        row-gap: 20px;
-        /* padding-top: 1.7svh; */
-        z-index: 99999;
-
-
-    }
-
-    .thumbNailPhoto {
-        width: 14vh;
-        height: 14vh;
-        border: 1px var(--brown) solid;
-        border-radius: 150px;
-        cursor: pointer;
-        transition: 1s;
-        justify-items: end;
-    }
-
-    .masterImage {
-        object-fit: fill;
-        margin-top: -22svh;
-        height: 90svh;
-    }
-
-    .furnitureDescription {
-        font-size: calc(.4vw + .4vh + 5px);
-        width: 97svw;
-    }
-
-    .smallScreenCover {
-        margin-top: -4vh;
-    }
 }

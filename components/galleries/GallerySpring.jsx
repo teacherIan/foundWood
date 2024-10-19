@@ -64,23 +64,13 @@ export default function Gallery({
         }
       >
         <div className="galleryLeftTop">
-          {/* {window.innerWidth < 1200 && showDetails ? (
-            <div className="smallScreenCover">
-              <div className="furnitureName">
-                {galleryTypeArr[currentPhoto]?.name}
-              </div>
-              <div className="furnitureDescription">
-                {galleryTypeArr[currentPhoto]?.description}
-                <br />
-                Price: {galleryTypeArr[currentPhoto]?.price}
-              </div>
-            </div>
-          ) : null} */}
-
           <div className="thumbNails" onMouseOver={handleThumbNailHover}>
             {galleryTypeArr.map((image, index) => (
               <img key={index} src={image.img} className="thumbNailPhoto" />
             ))}
+            <div className="furniturePrice">
+              Price: {galleryTypeArr[currentPhoto]?.price}
+            </div>
           </div>
           <>
             <div className="galleryLeftBottom">
@@ -93,9 +83,7 @@ export default function Gallery({
               </div>
               <br />
               <br />
-              <div className="furniturePrice">
-                Price: {galleryTypeArr[currentPhoto]?.price}
-              </div>
+
               <br />
             </div>
           </>
