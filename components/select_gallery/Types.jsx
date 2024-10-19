@@ -100,6 +100,7 @@ export default function Types({
           <animated.div
             key={index}
             style={{
+              marginLeft: '-10px',
               position: 'absolute',
               left:
                 window.innerWidth < window.innerHeight

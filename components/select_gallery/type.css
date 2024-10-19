@@ -25,7 +25,7 @@
 @media (orientation: landscape) {
     .typeContainer {
 
-        width: 30svw;
+        width: 32svw;
 
 
     }
@@ -34,7 +34,7 @@
 @media (orientation: portrait) {
     .typeContainer {
 
-        width: 50svw;
+        width: 55svw;
 
 
     }
