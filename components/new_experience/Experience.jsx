@@ -11,18 +11,14 @@ function App({ isAnimating }) {
         autoRotate
         autoRotateSpeed={1}
         target={[window.innerWidth > 1000 ? -1 : 0, 0, 0]}
+        minPolarAngle={Math.PI / 4}
+        maxPolarAngle={Math.PI / 2}
+        maxDistance={7}
+        minDistance={2}
       />
 
       {isAnimating && (
-        <Splat
-          chunkSize={16}
-          position={[0, 0, 0]}
-          scale={2}
-          src={
-            // 'https://huggingface.co/datasets/ianmalloy/test/resolve/main/full.splat?'
-            splat
-          }
-        />
+        <Splat chunkSize={16} position={[0, 0, 0]} scale={2} src={splat} />
       )}
     </Canvas>
   );
