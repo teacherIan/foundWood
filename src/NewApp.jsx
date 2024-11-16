@@ -97,6 +97,8 @@ function NewApp() {
         <>
           <div className="new_app_small_header">
             Doug's Found Wood <br />
+            Always Unique
+            <br />
             Handcrafted In Maine
           </div>
         </>
