@@ -42,6 +42,7 @@ body {
   justify-content: space-around;
   align-items: center;
   z-index: 90000;
+  /* background-color: rgba(0, 0, 0, 0.176) */
 }
 
 .icon {
@@ -73,10 +74,13 @@ body {
 }
 
 .menu-item {
+
+  font-size: 10vw;
   cursor: pointer;
   z-index: 90001;
-  text-transform: none;
-  filter: drop-shadow(2px 2px 0px black);
+  text-transform: uppercase;
+  filter: drop-shadow(3px 3px 2px black);
+  /* background-color: #77481C */
 }
 
 .arrow {
@@ -137,4 +141,8 @@ body {
 
 .blur {
   transition: 1s;
+}
+
+.menu-item {
+  font-size: calc(2vw + 1.8vh + 13px);
 }
