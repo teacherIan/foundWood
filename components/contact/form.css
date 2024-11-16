@@ -3,6 +3,7 @@
     margin-bottom: 30px;
     filter: drop-shadow(2px 2px 1px black);
     font-size: calc(2.5vh + 2vw + 15px);
+    color: white;
 }
 
 .btn {

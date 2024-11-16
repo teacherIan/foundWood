@@ -93,6 +93,15 @@ function NewApp() {
         </>
       )}
 
+      {(window.innerWidth < 1000) & isAnimating ? (
+        <>
+          <div className="new_app_small_header">
+            Doug's Found Wood <br />
+            Handcrafted In Maine
+          </div>
+        </>
+      ) : null}
+
       <GallerySpring
         galleryType={activeGalleryType}
         showGallery={showGallery}
