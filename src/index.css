@@ -79,7 +79,7 @@ body {
   cursor: pointer;
   z-index: 90001;
   text-transform: uppercase;
-  filter: drop-shadow(3px 3px 0px black);
+  filter: drop-shadow(2px 2px 0px black);
   /* background-color: #77481C */
 }
 
