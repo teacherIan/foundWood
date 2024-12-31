@@ -83,7 +83,7 @@ body {
   cursor: pointer;
   z-index: 90001;
   text-transform: uppercase;
-  filter: drop-shadow(2px 2px 0px #000000);
+  filter: drop-shadow(1px 1px 0px #000000);
   /* background-color: rgba(255, 255, 255, 0.105); */
   border-radius: 25px;
   color: #77481c;
@@ -92,8 +92,15 @@ body {
   /* font-weight: 900; */
   /* outline: yellow; */
   font-family: "CustomFont";
-  border-bottom: 1px solid #77481C;
+  border-bottom: 1px dotted #77481C;
   /* border-width: 1px; */
+  transition: all .3s ease-in-out;
+  /* Add smooth transition */
+}
+
+.menu-item:hover {
+  font-size: calc(3.0vw + 1.8vh + 15px);
+  border-bottom: 3px dotted #77481C;
 }
 
 .arrow {
