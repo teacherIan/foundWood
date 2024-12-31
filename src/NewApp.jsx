@@ -78,6 +78,10 @@ function NewApp() {
     setShowInfographic(false);
   }
 
+  function handleButtonHover(e) {
+    // console.log(e.target.style.border-bottom);
+  }
+
   return (
     <>
       {window.innerWidth < 1000 || !isAnimating ? null : (
@@ -143,8 +147,10 @@ function NewApp() {
             <div
               className="menu-item"
               onClick={() => handleGalleryTypesClickCallback()}
+              onMouseEnter={(e) => handleButtonHover(e)}
             >
               Gallery
+              {/* <div ></div> */}
             </div>
 
             <div onClick={() => handleContactPageClick()} className="menu-item">

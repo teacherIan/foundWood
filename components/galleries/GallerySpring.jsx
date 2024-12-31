@@ -83,7 +83,6 @@ export default function Gallery({
               </div>
               <br />
               <br />
-
               <br />
             </div>
           </>

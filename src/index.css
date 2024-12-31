@@ -74,23 +74,26 @@ body {
 }
 
 .menu-item {
-  -webkit-text-stroke-width: 2px;
+  /* -webkit-text-stroke-width: 2px; */
   /* Width of the stroke */
-  -webkit-text-stroke-color: rgba(0, 0, 0, 0.712);
+  /* -webkit-text-stroke-color: rgba(0, 0, 0, 0.712); */
   /* Color of the stroke */
   /* text-decoration: underline 3px wavy; */
   font-size: calc(3vw + 1.8vh + 10px);
   cursor: pointer;
   z-index: 90001;
   text-transform: uppercase;
-  filter: drop-shadow(0px 0px 0px #000000);
+  filter: drop-shadow(2px 2px 0px #000000);
   /* background-color: rgba(255, 255, 255, 0.105); */
   border-radius: 25px;
   color: #77481c;
   padding: 0 20 0 20px;
   /* border: 3px #77481c solid; */
-  font-weight: 900;
-  outline: yellow;
+  /* font-weight: 900; */
+  /* outline: yellow; */
+  font-family: "CustomFont";
+  border-bottom: 1px solid #77481C;
+  /* border-width: 1px; */
 }
 
 .arrow {
@@ -104,7 +107,7 @@ body {
   left: 50%;
   transform: translate(-50%, 0%);
   color: white;
-  font-size: calc(2vw + 2vh + 14px);
+  font-size: calc(1.2vw + 1.2vh + 10px);
   text-align: center;
   transition: 0.5s;
   bottom: '-25%';
@@ -114,6 +117,7 @@ body {
 
 .gallery_description_header {
   font-size: calc(2.5vw + 2.5vh + 14px);
+  font-family: 'CustomFont';
 }
 
 .appContainer {
@@ -140,7 +144,7 @@ body {
     bottom: -25%;
     transform: translate(-50%, 0%);
     width: 100%;
-    font-size: calc(1.5vw + 1.5vh + 10px);
+    font-size: calc(1vw + 1vh + 10px);
   }
 
   .arrow {

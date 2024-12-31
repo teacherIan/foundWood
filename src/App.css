@@ -23,9 +23,15 @@ html {
 canvas {
     width: 100svw;
     height: 100svh;
-    /* background-color: #dfe9f0; */
     cursor: grab;
-
+    -webkit-mask-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, .4) 0%,
+            rgba(0, 0, 0, 0.8) 30%,
+            rgba(0, 0, 0, 1) 100%);
+    mask-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.4) 0%,
+            rgba(0, 0, 0, 0.80) 30%,
+            rgba(0, 0, 0, 1) 100%);
 }
 
 canvas:active {
