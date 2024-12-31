@@ -4,6 +4,7 @@ import plantStand from '../../../src/assets/gallery/small_tables/plantStand.jpeg
 import plantStandCaryl from '../../../src/assets/gallery/small_tables/plantStandD.jpeg';
 import tables from '../../../src/assets/gallery/small_tables/tables.jpg';
 import small_table from '../../../src/assets/gallery/small_tables/smallTable.jpeg';
+import small_glass_table from '../../../src/assets/gallery/small_tables/glass_coffee_table.jpg';
 
 import types from './types';
 
@@ -15,7 +16,7 @@ export default [
     type: types.smallTable,
     description:
       'These tables are made with slices from a remarkable maple burl held up by spalted maple legs. the table is 18 inches high and well over 2 feet in diameter',
-    price: '$1000',
+    price: '$1200',
   },
   {
     orderNumber: '005',
@@ -63,5 +64,13 @@ export default [
     description:
       'A variety of unique large Maine burls are sliced and are added to a "C" shaped leg arrangement',
     price: '$500 ~ $600',
+  },
+  {
+    orderNumber: '133',
+    img: small_glass_table,
+    name: 'Tempered Glass Table',
+    type: types.smallTable,
+    description: 'Made with a single Ceder root and tempered glass',
+    price: '$1000 ~ $1500',
   },
 ];
