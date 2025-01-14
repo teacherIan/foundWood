@@ -11,10 +11,26 @@ import coffeeTableA from '../../src/assets/3d/coffee_fixed_add_effect.glb';
 import plantStandNew from '../../src/assets/3d/coffee_table_b.glb';
 import plantStandC from '../../src/assets/3d/plant_table_no_floor_new.glb';
 import chair_spat from '../../src/assets/3d/chair_spot.glb';
+import * as THREE from 'three/webgpu';
+extend(THREE);
 
 export default function Experience({ counter, setCounter }) {
   return (
     <Canvas
+      gl={(canvas) => {
+        const renderer = new THREE.WebGPURenderer({
+          canvas,
+          powerPreference: 'high-performance',
+          antialias: true,
+          alpha: true,
+          stencil: true,
+        });
+
+        // Initialize WebGPU and store renderer reference
+        renderer.init();
+        // rendererRef.current = renderer;
+        return renderer;
+      }}
       style={{ width: '100svw', height: '100svh' }}
       camera={{ position: [0, 5, 5] }}
     >
@@ -26,6 +42,9 @@ export default function Experience({ counter, setCounter }) {
         minPolarAngle={Math.PI / 6} // 45 degrees
         maxPolarAngle={Math.PI / 3} // 90 degrees
         autoRotateSpeed={0.8}
+        enableDamping
+        dampingFactor={1}
+        screenSpacePanning
       />
       <Lights />
       <Fixture
