@@ -51,8 +51,8 @@ function Scene({ isAnimating }) {
         <Splat
           ref={splatRef}
           chunkSize={1} // Reduced chunk size for slower parsing
-          position={[0, -1 * (1 - loadProgress), -0.5]} // Vertical reveal
-          scale={loadProgress * 2} // Animated scale
+          position={[0, -1 * (1 - loadProgress), 0]} // Vertical reveal
+          scale={loadProgress * 1.7} // Animated scale
           opacity={loadProgress} // Fade-in effect
           src={splat}
         />

@@ -26,16 +26,11 @@
     .typeContainer {
 
         width: 32svw;
-
-
     }
 }
 
 @media (orientation: portrait) {
     .typeContainer {
-
         width: 55svw;
-
-
     }
 }

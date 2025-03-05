@@ -21,12 +21,12 @@
   --blue: lightblue;
   --lightGreen: #d9ebc7;
   --white: #FFFFFF;
-  --mainFont: 'WoodFont', 'Poppins', "CustomFont", "Lobster Two", sans-serif;
-  --secondaryFont: 'WoodFont' "Poppins" "CustomFont", sans-serif;
+  --mainFont: 'CustomFont', 'Poppins', "CustomFont", "Lobster Two", sans-serif;
+  --secondaryFont: 'CustomFont' "Poppins" "CustomFont", sans-serif;
 }
 
 .new_app_header {
-  font-family: "WoodFont";
+  font-family: "CustomFont";
 }
 
 body {
@@ -103,7 +103,7 @@ body {
   /* border: 3px #77481c solid; */
   /* font-weight: 900; */
   /* outline: yellow; */
-  font-family: "WoodFont";
+  font-family: "CustomFont";
   border-bottom: 1px dotted #77481C;
   /* border-width: 1px; */
   transition: all .3s ease-in-out;
@@ -136,7 +136,7 @@ body {
 
 .gallery_description_header {
   font-size: calc(2.5vw + 2.5vh + 14px);
-  font-family: 'WoodFont';
+  font-family: 'CustomFont';
 }
 
 .appContainer {
@@ -151,7 +151,7 @@ body {
 
 .new_app_header {
   text-align: center;
-  font-family: "WoodFont";
+  font-family: "CustomFont";
 }
 
 @media only screen and (max-width: 1000px) {
