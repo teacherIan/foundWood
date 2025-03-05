@@ -8,13 +8,25 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'WoodFont';
+  src:
+    url('/src/assets/fonts/Jfwildwood-ldYZ.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --brown: #77481C;
   --blue: lightblue;
   --lightGreen: #d9ebc7;
   --white: #FFFFFF;
-  --mainFont: 'Poppins' "CustomFont", "Lobster Two", sans-serif;
-  --secondaryFont: "Poppins" "CustomFont", sans-serif;
+  --mainFont: 'WoodFont', 'Poppins', "CustomFont", "Lobster Two", sans-serif;
+  --secondaryFont: 'WoodFont' "Poppins" "CustomFont", sans-serif;
+}
+
+.new_app_header {
+  font-family: "WoodFont";
 }
 
 body {
@@ -91,7 +103,7 @@ body {
   /* border: 3px #77481c solid; */
   /* font-weight: 900; */
   /* outline: yellow; */
-  font-family: "CustomFont";
+  font-family: "WoodFont";
   border-bottom: 1px dotted #77481C;
   /* border-width: 1px; */
   transition: all .3s ease-in-out;
@@ -124,7 +136,7 @@ body {
 
 .gallery_description_header {
   font-size: calc(2.5vw + 2.5vh + 14px);
-  font-family: 'CustomFont';
+  font-family: 'WoodFont';
 }
 
 .appContainer {
@@ -139,6 +151,7 @@ body {
 
 .new_app_header {
   text-align: center;
+  font-family: "WoodFont";
 }
 
 @media only screen and (max-width: 1000px) {
