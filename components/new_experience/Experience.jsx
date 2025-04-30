@@ -37,7 +37,7 @@ function Scene({ isAnimating }) {
         dampingFactor={0.05}
         autoRotate
         autoRotateSpeed={1}
-        target={[targetX, -1, -2]}
+        target={[targetX, 0, 0]}
         minPolarAngle={Math.PI / 4}
         maxPolarAngle={Math.PI / 2}
         maxDistance={8}
