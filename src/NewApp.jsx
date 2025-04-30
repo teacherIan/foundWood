@@ -86,7 +86,13 @@ function NewApp() {
     <>
       {window.innerWidth < 1000 || !isAnimating ? null : (
         <>
-          <div className="new_app_header">
+          <div
+            style={{
+              fontFamily: 'driftWood',
+              filter: 'drop-shadow(2px 2px 0px rgb(0, 0, 0))',
+            }}
+            className="new_app_header"
+          >
             Doug's <br /> Found
             <br /> Wood
             <br />

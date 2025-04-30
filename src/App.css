@@ -6,6 +6,7 @@
     box-sizing: border-box;
     user-select: none;
     font-family: var(--mainFont);
+
 }
 
 html {
@@ -21,6 +22,7 @@ html {
 }
 
 canvas {
+    /* background-color: #006d124a; */
     width: 100svw;
     height: 100svh;
     cursor: grab;

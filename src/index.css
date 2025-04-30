@@ -1,6 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Redressed&display=swap');
 
 @font-face {
+  font-family: 'driftWood';
+  src:
+    url('/src/assets/fonts/DriftWood-z8W4.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'CustomFont';
   src:
     url('/src/assets/fonts/bubble_font.otf') format('opentype');
@@ -26,7 +34,8 @@
 }
 
 .new_app_header {
-  font-family: "CustomFont";
+  font-family: "driftWood";
+  text-align: center;
 }
 
 body {
@@ -43,6 +52,7 @@ body {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+  font-family: "driftWood";
 }
 
 .menu {
@@ -88,29 +98,15 @@ body {
 }
 
 .menu-item {
-  /* -webkit-text-stroke-width: 2px; */
-  /* Width of the stroke */
-  /* -webkit-text-stroke-color: rgba(0, 0, 0, 0.712); */
-  /* Color of the stroke */
-  /* text-decoration: underline 3px wavy; */
-  /* font-size: calc(3vw + 1.8vh + 10px); */
-  /* font-size: calc(3.0vw + 2vh + 15px); */
   cursor: pointer;
   z-index: 90001;
   text-transform: uppercase;
-  /* filter: drop-shadow(1px 1px 0px #000000); */
-  /* background-color: rgba(255, 255, 255, 0.105); */
-  filter: drop-shadow(2px 2px 1px #000000);
+  filter: drop-shadow(2px 2px 0px #000000);
   font-size: calc(3.2vw + 2vh + 15px);
-  border-radius: 25px;
   color: #77481c;
-  /* color: #FFFFFF; */
   padding: 0 20 0 20px;
-  /* border: 3px #77481c solid; */
-  /* font-weight: 900; */
-  /* outline: yellow; */
-  font-family: "CustomFont";
-  /* border-bottom: 1px dotted #77481C; */
+  font-family: "driftWood";
+  border-bottom: 2px solid #77481C;
   /* border-width: 1px; */
   transition: all .2s
     /* Add smooth transition */
@@ -155,18 +151,13 @@ body {
 .new_app_info {
   position: absolute;
   text-align: center;
-}
-
-.new_app_header {
-  text-align: center;
-  font-family: "CustomFont";
+  font-family: 'driftWood';
 }
 
 @media only screen and (max-width: 1000px) {
   .menu-item {
     font-size: calc(1.7vw + 1.5vh + 10px);
   }
-
 
   .infoGraphic {
     bottom: -25%;
@@ -184,8 +175,6 @@ body {
     font-size: calc(1.5vw + 1.5vh + 10px);
 
   }
-
-
 }
 
 /* devanagari */
