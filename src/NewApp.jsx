@@ -89,7 +89,7 @@ function NewApp() {
           <div
             style={{
               fontFamily: 'driftWood',
-              filter: 'drop-shadow(2px 2px 0px rgb(0, 0, 0))',
+              filter: 'drop-shadow(2px 2px 0px rgb(255, 255, 255))',
             }}
             className="new_app_header"
           >

@@ -21,7 +21,7 @@ function Scene({ isAnimating }) {
 
   useEffect(() => {
     const handleResize = () => {
-      setTargetX(window.innerWidth > 1000 ? -1 : 0);
+      setTargetX(window.innerWidth > 1000 ? -1.5 : 0);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -37,10 +37,10 @@ function Scene({ isAnimating }) {
         dampingFactor={0.05}
         autoRotate
         autoRotateSpeed={1}
-        target={[targetX, 0, 0]}
+        target={[targetX, -1, -2]}
         minPolarAngle={Math.PI / 4}
         maxPolarAngle={Math.PI / 2}
-        maxDistance={7}
+        maxDistance={8}
         minDistance={2}
       />
 
