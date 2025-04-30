@@ -32,7 +32,7 @@
 body {
   touch-action: none;
   cursor: grab;
-  background-color: #8bc1f360;
+  /* background-color: #0000001d; */
 }
 
 .header {
@@ -48,8 +48,8 @@ body {
 .menu {
   user-select: none;
   padding: 0px 50px 0px 50px;
-  /* color: #77481C; */
-  color: #FFFFFF;
+  color: #77481C;
+  /* color: #FFFFFF; */
   font-size: calc(2vw + 2vh + 10px);
   display: flex;
   width: 100%;
@@ -93,29 +93,32 @@ body {
   /* -webkit-text-stroke-color: rgba(0, 0, 0, 0.712); */
   /* Color of the stroke */
   /* text-decoration: underline 3px wavy; */
-  font-size: calc(3vw + 1.8vh + 10px);
+  /* font-size: calc(3vw + 1.8vh + 10px); */
+  font-size: calc(3.0vw + 2vh + 15px);
   cursor: pointer;
   z-index: 90001;
   text-transform: uppercase;
   filter: drop-shadow(1px 1px 0px #000000);
   /* background-color: rgba(255, 255, 255, 0.105); */
   border-radius: 25px;
-  /* color: #77481c; */
-  color: #FFFFFF;
+  color: #77481c;
+  /* color: #FFFFFF; */
   padding: 0 20 0 20px;
   /* border: 3px #77481c solid; */
   /* font-weight: 900; */
   /* outline: yellow; */
   font-family: "CustomFont";
-  border-bottom: 1px dotted #77481C;
+  /* border-bottom: 1px dotted #77481C; */
   /* border-width: 1px; */
-  transition: all .3s ease-in-out;
-  /* Add smooth transition */
+  transition: all .2s
+    /* Add smooth transition */
 }
 
 .menu-item:hover {
-  font-size: calc(3.0vw + 1.8vh + 15px);
-  border-bottom: 3px dotted #77481C;
+  filter: drop-shadow(2px 2px 1px #000000);
+  font-size: calc(3.2vw + 2vh + 15px);
+  /* border-bottom: 3px dotted #77481C; */
+  cursor: pointer;
 }
 
 .arrow {
