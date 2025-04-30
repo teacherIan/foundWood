@@ -32,6 +32,7 @@
 body {
   touch-action: none;
   cursor: grab;
+  background-color: #8bc1f360;
 }
 
 .header {
@@ -47,7 +48,8 @@ body {
 .menu {
   user-select: none;
   padding: 0px 50px 0px 50px;
-  color: #77481C;
+  /* color: #77481C; */
+  color: #FFFFFF;
   font-size: calc(2vw + 2vh + 10px);
   display: flex;
   width: 100%;
@@ -98,7 +100,8 @@ body {
   filter: drop-shadow(1px 1px 0px #000000);
   /* background-color: rgba(255, 255, 255, 0.105); */
   border-radius: 25px;
-  color: #77481c;
+  /* color: #77481c; */
+  color: #FFFFFF;
   padding: 0 20 0 20px;
   /* border: 3px #77481c solid; */
   /* font-weight: 900; */
