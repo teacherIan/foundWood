@@ -79,10 +79,12 @@ export default function Type({
         ...springs,
       }}
     >
-      <div className="typeHeader">
-        {header}
-        <img className="typeImage" src={img} />
-      </div>
+           {' '}
+      <div
+        className="typeHeader"
+        dangerouslySetInnerHTML={{ __html: header }}
+      />
+            <img className="typeImage" src={img} />
     </animated.div>
   );
 }

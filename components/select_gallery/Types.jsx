@@ -61,8 +61,8 @@ export default function Types({
   };
   const imgArray = [table, chair, picnicTable, house, light];
   const imgHeader = [
-    'Coffee Tables & Plant Stands',
-    'Chairs & Ottomans',
+    'Coffee Tables \n Plant Stands',
+    'Chairs <br /> Ottomans',
     'Tables',
     'Structures',
     // 'Others',

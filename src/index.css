@@ -29,8 +29,8 @@
   --blue: lightblue;
   --lightGreen: #d9ebc7;
   --white: #FFFFFF;
-  --mainFont: 'CustomFont', 'Poppins', "CustomFont", "Lobster Two", sans-serif;
-  --secondaryFont: 'CustomFont' "Poppins" "CustomFont", sans-serif;
+  --mainFont: 'driftWood', 'CustomFont', 'Poppins', "CustomFont", "Lobster Two", sans-serif;
+  --secondaryFont: 'driftWood', 'CustomFont', "Poppins", "CustomFont", sans-serif;
 }
 
 .new_app_header {
@@ -153,6 +153,10 @@ body {
   position: absolute;
   text-align: center;
   font-family: 'driftWood';
+}
+
+img {
+  z-index: 1000;
 }
 
 @media only screen and (max-width: 1000px) {
