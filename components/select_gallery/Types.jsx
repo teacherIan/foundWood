@@ -62,7 +62,7 @@ export default function Types({
   const imgArray = [table, chair, picnicTable, house, light];
   const imgHeader = [
     'Coffee Tables \n Plant Stands',
-    'Chairs <br /> Ottomans',
+    'Chairs \n Ottomans',
     'Tables',
     'Structures',
     // 'Others',
