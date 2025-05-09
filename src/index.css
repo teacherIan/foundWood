@@ -36,6 +36,7 @@
 .new_app_header {
   font-family: "driftWood";
   text-align: center;
+  pointer-events: none;
 }
 
 body {

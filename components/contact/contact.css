@@ -17,7 +17,7 @@
     position: absolute;
     right: .5%;
     top: .5%;
-    font-size: 60px;
+    font-size: 130px;
     color: white;
     cursor: pointer;
     transition: 1s;
@@ -32,5 +32,6 @@
     .exit-icon {
         right: 2%;
         top: 90%;
+        font-size: 60px;
     }
 }

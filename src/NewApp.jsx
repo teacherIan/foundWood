@@ -93,7 +93,7 @@ function NewApp() {
             }}
             className="new_app_header"
           >
-            Doug's <br /> Found
+            Dougs <br /> Found
             <br /> Wood
             <br />
             <div className="new_app_info">
