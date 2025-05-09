@@ -19,27 +19,30 @@ const configAnimation = {
 
 function useTypeSpring(showTypes, index) {
   const [spring, setSpring] = useSpring(() => ({
-    opacity: showTypes ? '0' : '0',
-    top: showTypes ? '140svh' : '0svh',
+    opacity: 0,
+    y: 0, // Changed from 'top' to 'y' for translateY
     config: configAnimation,
   }));
 
   useEffect(() => {
     if (showTypes && window.innerWidth < window.innerHeight) {
       setSpring.start({
-        top: 110 + (index > 1 ? 52 : 5) + 'svh',
-        opacity: '1',
+        y: 110 + (index > 1 ? 52 : 5),
+        opacity: 1,
         delay: index * 100,
       });
-      //wide Screen
     } else if (showTypes) {
       setSpring.start({
-        top: index % 2 == 0 ? '112svh' : '150svh',
-        opacity: '1',
+        y: index % 2 === 0 ? 112 : 150,
+        opacity: 1,
         delay: index * 200,
       });
     } else {
-      setSpring.start({ top: '-50svh', opacity: '0', delay: index * 200 });
+      setSpring.start({
+        y: -50,
+        opacity: 0,
+        delay: index * 200,
+      });
     }
   }, [showTypes]);
 
@@ -107,7 +110,8 @@ export default function Types({
                 window.innerWidth < window.innerHeight
                   ? 50 * (index % 2) + 'svw'
                   : 22 * index + 'svw',
-              top: spring.top,
+              transform: spring.y.to((y) => `translateY(${y}svh)`), // Use translateY
+              opacity: spring.opacity,
             }}
           >
             <Type

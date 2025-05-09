@@ -10,6 +10,7 @@ function Scene({ isAnimating, showContactPage }) {
   const controlsRef = useRef();
 
   useEffect(() => {
+    console.log('Show contact page changed');
     if (controlsRef.current) {
       controlsRef.current.autoRotate = !showContactPage;
       controlsRef.current.update();
@@ -69,7 +70,7 @@ function Scene({ isAnimating, showContactPage }) {
 export default function App({ isAnimating, showContactPage }) {
   return (
     <Canvas camera={{ position: [1, 2, 2] }}>
-      <Scene isAnimating={isAnimating} />
+      <Scene showContactPage={showContactPage} isAnimating={isAnimating} />
     </Canvas>
   );
 }

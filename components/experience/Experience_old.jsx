@@ -22,7 +22,7 @@ export default function Experience({ counter, setCounter, showContactPage }) {
         const renderer = new THREE.WebGPURenderer({
           canvas,
           powerPreference: 'high-performance',
-          antialias: true,
+          antialias: false,
           alpha: true,
           stencil: true,
         });
