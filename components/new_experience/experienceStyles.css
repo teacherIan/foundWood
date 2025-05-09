@@ -29,14 +29,14 @@
     position: absolute;
     z-index: 1000;
     font-size: calc(2vw + 2vh + 15px);
-    font-family: CustomFont;
+    /* font-family: CustomFont; */
     color: white;
     text-align: center;
     left: 0svw;
     bottom: 2%;
     color: #77481C;
     /* transform: translate(0, -50%); */
-    filter: drop-shadow(3px 3px 0px rgb(0, 0, 0));
+    filter: drop-shadow(1px 1px 0px rgb(0, 0, 0));
     /* color: white; */
 }
 

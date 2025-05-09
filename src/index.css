@@ -1,74 +1,119 @@
+/* ===== FONTS ===== */
 @import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Redressed&display=swap');
 
+/* Local Fonts */
 @font-face {
   font-family: 'driftWood';
-  src:
-    url('/src/assets/fonts/DriftWood-z8W4.ttf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
+  src: url('/src/assets/fonts/DriftWood-z8W4.ttf') format('opentype');
 }
 
 @font-face {
   font-family: 'CustomFont';
-  src:
-    url('/src/assets/fonts/bubble_font.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
+  src: url('/src/assets/fonts/bubble_font.otf') format('opentype');
 }
 
 @font-face {
   font-family: 'WoodFont';
-  src:
-    url('/src/assets/fonts/Jfwildwood-ldYZ.ttf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
+  src: url('/src/assets/fonts/Jfwildwood-ldYZ.ttf') format('opentype');
 }
 
+/* Poppins (Combined) */
+@font-face {
+  font-family: 'Poppins';
+  src:
+    url('https://fonts.gstatic.com/s/poppins/v15/pxiEyp8kv8JHgFVrJJbecnFHGPezSQ.woff2') format('woff2'),
+    url('https://fonts.gstatic.com/s/poppins/v15/pxiEyp8kv8JHgFVrJJnecnFHGPezSQ.woff2') format('woff2'),
+    url('https://fonts.gstatic.com/s/poppins/v15/pxiEyp8kv8JHgFVrJJfecnFHGPc.woff2') format('woff2');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src:
+    url('https://fonts.gstatic.com/s/poppins/v15/pxiByp8kv8JHgFVrLEj6Z11lFd2JQEl8qw.woff2') format('woff2'),
+    url('https://fonts.gstatic.com/s/poppins/v15/pxiByp8kv8JHgFVrLEj6Z1JlFd2JQEl8qw.woff2') format('woff2'),
+    url('https://fonts.gstatic.com/s/poppins/v15/pxiByp8kv8JHgFVrLEj6Z1xlFd2JQEk.woff2') format('woff2');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src:
+    url('https://fonts.gstatic.com/s/poppins/v15/pxiByp8kv8JHgFVrLCz7Z11lFd2JQEl8qw.woff2') format('woff2'),
+    url('https://fonts.gstatic.com/s/poppins/v15/pxiByp8kv8JHgFVrLCz7Z1JlFd2JQEl8qw.woff2') format('woff2'),
+    url('https://fonts.gstatic.com/s/poppins/v15/pxiByp8kv8JHgFVrLCz7Z1xlFd2JQEk.woff2') format('woff2');
+  font-weight: 700;
+}
+
+/* ===== VARIABLES ===== */
 :root {
   --brown: #77481C;
   --blue: lightblue;
   --lightGreen: #d9ebc7;
   --white: #FFFFFF;
-  --mainFont: 'driftWood', 'CustomFont', 'Poppins', "CustomFont", "Lobster Two", sans-serif;
-  --secondaryFont: 'driftWood', 'CustomFont', "Poppins", "CustomFont", sans-serif;
+  --mainFont: 'driftWood', 'CustomFont', 'Poppins', 'Lobster Two', sans-serif;
+  --secondaryFont: 'driftWood', 'CustomFont', 'Poppins', sans-serif;
 }
 
-.new_app_header {
-  font-family: "driftWood";
-  text-align: center;
-  pointer-events: none;
-}
-
+/* ===== BASE STYLES ===== */
 body {
   touch-action: none;
   cursor: grab;
-  /* background-color: #0000001d; */
+  margin: 0;
+  font-family: var(--mainFont);
+  overflow-x: hidden;
 }
 
+/* ===== HEADER & TYPOGRAPHY ===== */
+.new_app_header {
+  font-family: 'driftWood';
+  text-align: center;
+  pointer-events: none;
+  font-size: clamp(3rem, 8vw, 5rem);
+  line-height: 1.1;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.new_app_info {
+  position: absolute;
+  text-align: center;
+  font-family: 'driftWood';
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  margin-top: 0.5rem;
+}
+
+/* ===== NAVIGATION MENU ===== */
 .header {
   position: absolute;
-  width: 100svw;
-  height: 15svh;
+  width: 100vw;
+  height: 15vh;
   z-index: 1000;
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
-  font-family: "driftWood";
+  padding: 1rem 2rem;
 }
 
 .menu {
-  user-select: none;
-  padding: 0px 50px 0px 50px;
-  color: #77481C;
-  /* color: #FFFFFF; */
-  font-size: calc(2vw + 2vh + 10px);
   display: flex;
   width: 100%;
   justify-content: space-around;
-  align-items: flex-start;
-  z-index: 90000;
-  /* background-color: rgba(0, 0, 0, 0.176) */
-  /* border-bottom: 2px solid #ffffff; */
+  align-items: center;
+  color: var(--brown);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  user-select: none;
+}
+
+.menu-item {
+  cursor: pointer;
+  text-transform: uppercase;
+  filter: drop-shadow(2px 2px 0px var(--white));
+  transition: all 0.3s ease;
+  z-index: 90001;
+  padding: 0.5rem 1rem;
+}
+
+.menu-item:hover {
+  filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, 0.75));
 }
 
 .icon {
@@ -79,18 +124,80 @@ body {
   filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.731));
 }
 
+/* ===== 3D CANVAS CONTAINER ===== */
+.appContainer {
+  width: 100vw;
+  height: 100vh;
+}
+
+.blur {
+  position: relative;
+  z-index: 0;
+}
+
+canvas {
+  pointer-events: auto;
+}
+
+/* ===== GALLERY INFOGRAPHIC ===== */
+.infoGraphic {
+  position: absolute;
+  z-index: 80000;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  color: white;
+  font-size: clamp(0.8rem, 2vw, 1.2rem);
+  text-align: center;
+  transition: 0.5s;
+  bottom: -25%;
+  filter: drop-shadow(3px 3px 2px black);
+  width: 90%;
+  font-family: 'driftWood';
+  filter: drop-shadow(1px 1px 0px rgb(0, 0, 0));
+}
+
+.gallery_description_header {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  /* font-family: 'CustomFont'; */
+}
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+@media (max-width: 1000px) {
+  .menu {
+    padding: 0.5rem;
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+  }
+
+  .menu-item {
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+  }
+
+  .infoGraphic {
+    font-size: clamp(0.8rem, 2vw, 1.2rem);
+  }
+
+  .new_app_small_header {
+    font-size: 1.75rem;
+    padding: 1rem;
+    /* background: rgba(255, 255, 255, 0.8); */
+    font-family: 'driftWood';
+
+
+  }
+}
+
+/* ===== UTILITY CLASSES ===== */
 .selectButton {
   cursor: pointer;
   position: absolute;
   user-select: none;
   width: 10vw;
-  height: 100svh;
+  height: 100vh;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   z-index: 100;
 }
-
 
 .right {
   top: 0;
@@ -98,180 +205,14 @@ body {
   justify-content: flex-end;
 }
 
-.menu-item {
-
-  cursor: pointer;
-  z-index: 90001;
-  text-transform: uppercase;
-  filter: drop-shadow(2px 2px 0px #ffffff);
-  font-size: calc(3.2vw + 2vh + 15px);
-  color: #77481c;
-  padding: -100px 0px 0 20px;
-  font-family: "driftWood";
-  /* border-bottom: 2px solid #77481C; */
-  /* border-width: 1px; */
-  transition: all .2s
-    /* Add smooth transition */
-}
-
-.menu-item:hover {
-  filter: drop-shadow(2px 2px 1px #000000c3);
-  font-size: calc(3.2vw + 2vh + 15px);
-  /* border-bottom: 3px dotted #77481C; */
-  cursor: pointer;
-}
-
 .arrow {
-  color: #77481C;
+  color: var(--brown);
   font-size: 100px;
 }
 
-.infoGraphic {
-  position: absolute;
-  z-index: 80000;
-  left: 50%;
-  transform: translate(-50%, 0%);
-  color: white;
-  font-size: calc(1.2vw + 1.2vh + 10px);
-  text-align: center;
-  transition: 0.5s;
-  bottom: '-25%';
-  filter: drop-shadow(3px 3px 2px black);
-  width: 90%;
-}
-
-.gallery_description_header {
-  font-size: calc(2.5vw + 2.5vh + 14px);
-  font-family: 'CustomFont';
-}
-
-.appContainer {
-  width: 100svw;
-  height: 100svh;
-}
-
-.new_app_info {
-  position: absolute;
-  text-align: center;
+/* Fix for pointer events */
+.new_app_header,
+.new_app_small_header {
+  pointer-events: none;
   font-family: 'driftWood';
-}
-
-img {
-  z-index: 1000;
-}
-
-@media only screen and (max-width: 1000px) {
-  .menu-item {
-    font-size: calc(1.7vw + 1.5vh + 10px);
-  }
-
-  .infoGraphic {
-    bottom: -25%;
-    transform: translate(-50%, 0%);
-    width: 100%;
-    font-size: calc(1vw + 1vh + 10px);
-  }
-
-  .arrow {
-    font-size: 200px;
-  }
-
-  .menu {
-    padding: 2px;
-    font-size: calc(1.5vw + 1.5vh + 10px);
-
-  }
-}
-
-/* devanagari */
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  src: url(https://fonts.gstatic.com/s/poppins/v15/pxiEyp8kv8JHgFVrJJbecnFHGPezSQ.woff2) format("woff2");
-  unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8,
-    U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
-}
-
-/* latin-ext */
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  src: url(https://fonts.gstatic.com/s/poppins/v15/pxiEyp8kv8JHgFVrJJnecnFHGPezSQ.woff2) format("woff2");
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB,
-    U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-/* latin */
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  src: url(https://fonts.gstatic.com/s/poppins/v15/pxiEyp8kv8JHgFVrJJfecnFHGPc.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
-    U+FEFF, U+FFFD;
-}
-
-/* devanagari */
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  src: url(https://fonts.gstatic.com/s/poppins/v15/pxiByp8kv8JHgFVrLEj6Z11lFd2JQEl8qw.woff2) format("woff2");
-  unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8,
-    U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
-}
-
-/* latin-ext */
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  src: url(https://fonts.gstatic.com/s/poppins/v15/pxiByp8kv8JHgFVrLEj6Z1JlFd2JQEl8qw.woff2) format("woff2");
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB,
-    U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-/* latin */
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  src: url(https://fonts.gstatic.com/s/poppins/v15/pxiByp8kv8JHgFVrLEj6Z1xlFd2JQEk.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
-    U+FEFF, U+FFFD;
-}
-
-/* devanagari */
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 700;
-  src: url(https://fonts.gstatic.com/s/poppins/v15/pxiByp8kv8JHgFVrLCz7Z11lFd2JQEl8qw.woff2) format("woff2");
-  unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8,
-    U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
-}
-
-/* latin-ext */
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 700;
-  src: url(https://fonts.gstatic.com/s/poppins/v15/pxiByp8kv8JHgFVrLCz7Z1JlFd2JQEl8qw.woff2) format("woff2");
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB,
-    U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-/* latin */
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 700;
-  src: url(https://fonts.gstatic.com/s/poppins/v15/pxiByp8kv8JHgFVrLCz7Z1xlFd2JQEk.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
-    U+FEFF, U+FFFD;
 }

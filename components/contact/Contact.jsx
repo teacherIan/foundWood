@@ -17,54 +17,26 @@ export default function Contact({
   showGallery,
 }) {
   const myRef = useRef();
-  const [hasAnimated, setHasAnimated] = useState(false);
 
-  const configAnimation = {
-    mass: 3,
-    tension: 40,
-    friction: 20,
-    precision: 0.001,
-  };
+  const configAnimation = { mass: 3, tension: 40, friction: 20 };
 
   const [springs, api] = useSpring(() => ({
-    from: { left: '100%', opacity: 0 },
+    from: { transform: 'translateX(100%)', opacity: 0 },
     config: configAnimation,
   }));
 
   useEffect(() => {
-    if (showContactPage && !hasAnimated) {
-      setHasAnimated(true);
-      return;
-    }
     if (showContactPage) {
       api.start({
-        from: {
-          left: '100%',
-          // background: '#ebf0f2',
-          opacity: 0,
-        },
-        to: {
-          left: '0%',
-          // background: '#77481C',
-          opacity: 1,
-        },
+        from: { transform: 'translateX(100%)', opacity: 0 },
+        to: { transform: 'translateX(0%)', opacity: 1 },
       });
-    }
-    if (!showContactPage) {
+    } else {
       api.start({
-        from: {
-          left: '0%',
-          // background: '#77481C',
-          opacity: 1,
-        },
-        to: {
-          left: '100%',
-          // background: '#ebf0f2',
-          opacity: 0,
-        },
+        to: { transform: 'translateX(100%)', opacity: 0 },
       });
     }
-  }, [showContactPage, hasAnimated]);
+  }, [showContactPage, api]);
 
   function handleExitClick() {
     setShowContactPage(!showContactPage);
@@ -81,7 +53,7 @@ export default function Contact({
       className="contactContainer"
       style={{
         ...springs,
-        left: hasAnimated ? springs.left : '100%',
+
         backgroundImage:
           window.innerWidth > window.innerHeight
             ? `url(${bg_image_long})`
