@@ -93,7 +93,7 @@
     margin-bottom: -5px;
     text-align: center;
     font-size: calc(2vw + 2vh + 10px);
-    font-family: 'CustomFont'
+    /* font-family: 'CustomFont' */
 
 }
 
@@ -103,9 +103,10 @@
     justify-content: flex-end;
     align-items: flex-end;
     left: 10%;
-    bottom: 12%;
+    bottom: 10%;
     width: 100%;
     color: var(--brown);
+    font-family: "Poppins";
 }
 
 .furnitureDescription {
@@ -113,7 +114,7 @@
     height: 25vh;
     font-family: 'Poppins';
     width: 100%;
-    font-size: calc(0.8vw + 0.8vh + 10px);
+    font-size: calc(0.7vw + 0.7vh + 8px);
 }
 
 .smallScreenCover {
