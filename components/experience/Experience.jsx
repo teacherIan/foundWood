@@ -14,9 +14,10 @@ import chair_spat from '../../src/assets/3d/chair_spot.glb';
 import * as THREE from 'three/webgpu';
 extend(THREE);
 
-export default function Experience({ counter, setCounter }) {
+export default function Experience({ counter, setCounter, showContactPage }) {
   return (
     <Canvas
+      frameloop={showContactPage ? 'never' : 'always'}
       gl={(canvas) => {
         const renderer = new THREE.WebGPURenderer({
           canvas,

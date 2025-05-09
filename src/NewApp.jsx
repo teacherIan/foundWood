@@ -184,7 +184,10 @@ function NewApp() {
             <br />
             {galleryTypeArr[currentPhoto]?.price}
           </div>
-          <NewCanvas isAnimating={isAnimating} />
+          <NewCanvas
+            showContactPage={showContactPage}
+            isAnimating={isAnimating}
+          />
         </div>
       </div>
     </>

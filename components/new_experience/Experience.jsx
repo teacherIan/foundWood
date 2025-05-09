@@ -4,11 +4,17 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import './experienceStyles.css';
 import splat from '../../src/assets/new_experience/full.splat';
 
-function Scene({ isAnimating }) {
+function Scene({ isAnimating, showContactPage }) {
   const [targetX, setTargetX] = useState(0);
   const [loadProgress, setLoadProgress] = useState(0);
   const controlsRef = useRef();
-  const splatRef = useRef();
+
+  useEffect(() => {
+    if (controlsRef.current) {
+      controlsRef.current.autoRotate = !showContactPage;
+      controlsRef.current.update();
+    }
+  }, [showContactPage]);
 
   useFrame((_, delta) => {
     controlsRef.current?.update();
@@ -35,7 +41,7 @@ function Scene({ isAnimating }) {
         makeDefault
         enableDamping
         dampingFactor={0.05}
-        autoRotate
+        autoRotate={!showContactPage}
         autoRotateSpeed={1}
         target={[targetX, 0, 0]}
         minPolarAngle={Math.PI / 4}
@@ -49,7 +55,6 @@ function Scene({ isAnimating }) {
 
       {isAnimating && (
         <Splat
-          ref={splatRef}
           chunkSize={1} // Reduced chunk size for slower parsing
           position={[0, -1 * (1 - loadProgress), 0]} // Vertical reveal
           scale={loadProgress * 1.7} // Animated scale
@@ -61,9 +66,9 @@ function Scene({ isAnimating }) {
   );
 }
 
-export default function App({ isAnimating }) {
+export default function App({ isAnimating, showContactPage }) {
   return (
-    <Canvas camera={{ position: [1, 2, 2] }} gl={{ antialias: true }}>
+    <Canvas camera={{ position: [1, 2, 2] }}>
       <Scene isAnimating={isAnimating} />
     </Canvas>
   );
