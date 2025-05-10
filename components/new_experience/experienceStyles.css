@@ -40,17 +40,17 @@
     z-index: 1000;
     font-size: clamp(22px, calc(1.8svw + 1.8svh + 13px), 32px);
     /* Responsive font with limits */
-    color: #77481C;
+    color: white;
     text-align: center;
-    filter: drop-shadow(1px 1px 0px white);
+    /* filter: drop-shadow(1px 1px 0px white); */
     user-select: none;
     box-sizing: border-box;
     pointer-events: none;
     /* Allow interaction with content beneath */
 
-    -webkit-text-stroke: .3px white;
+    -webkit-text-stroke: 0.5px white;
     /* Black outline */
-    -webkit-text-fill-color: white;
+    /* -webkit-text-fill-color: white; */
     /* White fill */
 
 }

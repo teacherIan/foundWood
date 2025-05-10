@@ -4,8 +4,8 @@ import found_wood from './assets/found_wood_upscale.png';
 import Contact from '../components/contact/Contact';
 import GallerySpring from '../components/galleries/GallerySpring';
 import Types from '../components/select_gallery/Types';
-import Mission from '../components/mission/Mission';
 import NewCanvas from '../components/new_experience/Experience';
+import FontFaceObserver from 'fontfaceobserver';
 
 function NewApp() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -23,26 +23,24 @@ function NewApp() {
 
   // Font loading detection
   useEffect(() => {
-    // Use FontFaceObserver or native FontFace API to detect when fonts are loaded
-    if ('fonts' in document) {
-      Promise.all([
-        document.fonts.load('1em driftWood'),
-        document.fonts.load('1em CustomFont'),
-        document.fonts.load('1em Poppins'),
-        document.fonts.load('1em Lobster Two'),
-      ])
-        .then(() => {
-          setFontsLoaded(true);
-        })
-        .catch((err) => {
-          console.error('Font loading failed:', err);
-          // Show content anyway after timeout to prevent infinite loading
-          setTimeout(() => setFontsLoaded(true), 3000);
-        });
-    } else {
-      // Fallback for browsers without font loading API
-      setTimeout(() => setFontsLoaded(true), 2000);
-    }
+    const driftWood = new FontFaceObserver('driftWood');
+    const CustomFont = new FontFaceObserver('CustomFont');
+    const Poppins = new FontFaceObserver('Poppins');
+    const LobsterTwo = new FontFaceObserver('Lobster Two');
+
+    Promise.all([
+      driftWood.load(),
+      CustomFont.load(),
+      Poppins.load(),
+      LobsterTwo.load(),
+    ])
+      .then(() => {
+        setFontsLoaded(true);
+      })
+      .catch(() => {
+        console.error('One or more fonts failed to load.');
+        setFontsLoaded(true); // Proceed anyway
+      });
   }, []);
 
   const handleGalleryTypesClickCallback = useCallback(() => {
