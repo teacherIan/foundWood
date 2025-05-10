@@ -10,19 +10,14 @@
     color: #77481C;
     transform: translate(0, -50%);
     filter: drop-shadow(3px 3px 0px rgb(0, 0, 0));
-    /* color: white; */
     -webkit-text-stroke: 2px #77481C;
-    /* Black outline */
     -webkit-text-fill-color: #77481C;
     text-align: center;
 
 }
 
 .new_app_info {
-    /* transform: translate(0, -50%); */
-    /* font-size: calc(2svw + 1.5svh + 20px); */
     font-size: clamp(3rem, 6vw, 4rem);
-
     /* width: 50svw; */
     color: white;
     text-align: center;
@@ -42,24 +37,10 @@
     /* Responsive font with limits */
     color: white;
     text-align: center;
-    /* filter: drop-shadow(1px 1px 0px white); */
+    filter: drop-shadow(1px 1px 0px #000000);
     user-select: none;
     box-sizing: border-box;
     pointer-events: none;
-    /* Allow interaction with content beneath */
-
-    -webkit-text-stroke: 0.5px white;
-    /* Black outline */
+    -webkit-text-stroke: 0.1px #77481C;
     -webkit-text-fill-color: #77481C;
-    /* White fill */
-
 }
-
-/* Optional: Add a backdrop if text becomes hard to read */
-/* .new_app_small_header::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(255, 255, 255, 0.3) 0%, transparent 100%);
-    pointer-events: none;
-} */
