@@ -29,10 +29,10 @@
     left: 0;
     right: 0;
     /* Ensure full width */
-    padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+    padding: 0px 0px calc(20px + env(safe-area-inset-bottom));
     /* Account for safe area */
     z-index: 1000;
-    font-size: clamp(16px, calc(1.5svw + 1.5svh + 10px), 24px);
+    font-size: clamp(20px, calc(1.5svw + 1.5svh + 10px), 30px);
     /* Responsive font with limits */
     color: #77481C;
     text-align: center;
@@ -44,10 +44,10 @@
 }
 
 /* Optional: Add a backdrop if text becomes hard to read */
-/* .new_app_small_header::before {
+.new_app_small_header::before {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(to top, rgba(255, 255, 255, 0.3) 0%, transparent 100%);
     pointer-events: none;
-} */
+}
