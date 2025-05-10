@@ -23,18 +23,31 @@
 }
 
 .new_app_small_header {
-    width: 100%;
-    user-select: none;
-    position: absolute;
+    position: fixed;
+    /* Use fixed instead of absolute for viewport-relative positioning */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* Ensure full width */
+    padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+    /* Account for safe area */
     z-index: 1000;
-    font-size: calc(2svw + 1.5svh + 15px);
-    /* font-family: CustomFont; */
-    color: white;
-    text-align: center;
-    left: 0svw;
-    bottom: 0svh;
+    font-size: clamp(16px, calc(1.5svw + 1.5svh + 10px), 24px);
+    /* Responsive font with limits */
     color: #77481C;
-    /* transform: translate(0, -50%); */
-    filter: drop-shadow(1px 1px 0px rgb(255, 255, 255));
-    /* color: white; */
+    text-align: center;
+    filter: drop-shadow(1px 1px 0px white);
+    user-select: none;
+    box-sizing: border-box;
+    pointer-events: none;
+    /* Allow interaction with content beneath */
 }
+
+/* Optional: Add a backdrop if text becomes hard to read */
+/* .new_app_small_header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.3) 0%, transparent 100%);
+    pointer-events: none;
+} */
