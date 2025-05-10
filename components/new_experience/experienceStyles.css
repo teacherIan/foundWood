@@ -16,7 +16,7 @@
 
 .new_app_info {
     /* transform: translate(0, -50%); */
-    font-size: calc(1.5vw + 1.5vh + 20px);
+    font-size: calc(1.5svw + 1.5svh + 20px);
 
     /* width: 50svw; */
     /* color: white; */
@@ -32,7 +32,7 @@
     color: white;
     text-align: center;
     left: 0svw;
-    bottom: 0%;
+    bottom: 0svh;
     color: #77481C;
     /* transform: translate(0, -50%); */
     filter: drop-shadow(1px 1px 0px rgb(255, 255, 255));
