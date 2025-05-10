@@ -2,7 +2,7 @@
     user-select: none;
     position: absolute;
     z-index: 1000;
-    font-size: calc(5vw + 5vh + 20px);
+    font-size: calc(5svw + 5svh + 20px);
     font-family: CustomFont;
     color: white;
     left: 7svw;
@@ -27,7 +27,7 @@
     user-select: none;
     position: absolute;
     z-index: 1000;
-    font-size: calc(2vw + 1.5vh + 15px);
+    font-size: calc(2svw + 1.5svh + 15px);
     /* font-family: CustomFont; */
     color: white;
     text-align: center;
