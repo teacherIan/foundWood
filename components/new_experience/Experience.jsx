@@ -58,7 +58,7 @@ function Scene({ isAnimating, showContactPage }) {
         <Splat
           chunkSize={1} // Reduced chunk size for slower parsing
           position={[0, -1 * (1 - loadProgress), 0]} // Vertical reveal
-          scale={loadProgress * 1.8} // Animated scale
+          scale={loadProgress * 1.7} // Animated scale
           opacity={loadProgress} // Fade-in effect
           src={splat}
         />
