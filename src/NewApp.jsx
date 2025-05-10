@@ -103,15 +103,19 @@ function NewApp() {
         </>
       )}
 
-      {(window.innerWidth < 1000) & isAnimating ? (
-        <>
-          <div className="new_app_small_header">
-            Doug's Found Wood <br />
-            Always Unique
-            <br />
-            Handcrafted In Maine
+      {window.innerWidth < 1000 && isAnimating ? (
+        <div className="new_app_small_header">
+          <div
+            style={{
+              fontSize: 'clamp(25px, calc(2svw + 2svh + 13px), 36px)',
+            }}
+          >
+            Dougs Found Wood <br />
           </div>
-        </>
+          Always Unique
+          <br />
+          Handcrafted In Maine
+        </div>
       ) : null}
 
       <GallerySpring
