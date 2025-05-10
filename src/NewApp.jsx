@@ -8,6 +8,7 @@ import Mission from '../components/mission/Mission';
 import NewCanvas from '../components/new_experience/Experience';
 
 function NewApp() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isAnimating, setIsAnimating] = useState(true);
   const [activeGalleryTypeString, setActiveGalleryTypeString] =
     useState('chairs');
@@ -19,6 +20,30 @@ function NewApp() {
   const [galleryTypeArr, setGalleryTypeArr] = useState([]);
   const [currentPhoto, setCurrentPhoto] = useState(0);
   const [showInfographic, setShowInfographic] = useState(false);
+
+  // Font loading detection
+  useEffect(() => {
+    // Use FontFaceObserver or native FontFace API to detect when fonts are loaded
+    if ('fonts' in document) {
+      Promise.all([
+        document.fonts.load('1em driftWood'),
+        document.fonts.load('1em CustomFont'),
+        document.fonts.load('1em Poppins'),
+        document.fonts.load('1em Lobster Two'),
+      ])
+        .then(() => {
+          setFontsLoaded(true);
+        })
+        .catch((err) => {
+          console.error('Font loading failed:', err);
+          // Show content anyway after timeout to prevent infinite loading
+          setTimeout(() => setFontsLoaded(true), 3000);
+        });
+    } else {
+      // Fallback for browsers without font loading API
+      setTimeout(() => setFontsLoaded(true), 2000);
+    }
+  }, []);
 
   const handleGalleryTypesClickCallback = useCallback(() => {
     setTimeout(() => {
@@ -82,6 +107,16 @@ function NewApp() {
     // console.log(e.target.style.border-bottom);
   }
 
+  // If fonts haven't loaded yet, show loading indicator
+  if (!fontsLoaded) {
+    return (
+      <div className="font-loading-screen">
+        <div className="loading-spinner"></div>
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <>
       {window.innerWidth < 1000 || !isAnimating ? null : (
@@ -89,7 +124,7 @@ function NewApp() {
           <div
             style={{
               fontFamily: 'driftWood',
-              filter: 'drop-shadow(1px 1px 1px rgb(255, 255, 255))',
+              filter: 'drop-shadow(1px 1px 0px #ffffff)',
             }}
             className="new_app_header"
           >
@@ -153,6 +188,7 @@ function NewApp() {
               onClick={() => handleEmblemClickCallback()}
               src={found_wood}
               className="icon"
+              alt="Found Wood Logo"
             ></img>
             <div
               className="menu-item"
@@ -160,7 +196,6 @@ function NewApp() {
               onMouseEnter={(e) => handleButtonHover(e)}
             >
               Gallery
-              {/* <div ></div> */}
             </div>
 
             <div onClick={() => handleContactPageClick()} className="menu-item">
