@@ -42,9 +42,9 @@
     pointer-events: none;
     /* Allow interaction with content beneath */
 
-    -webkit-text-stroke: 1px #77481C;
+    -webkit-text-stroke: .5px #77481C;
     /* Black outline */
-    -webkit-text-fill-color: #fff;
+    -webkit-text-fill-color: #77481C;
     /* White fill */
     color: #fff;
 }
