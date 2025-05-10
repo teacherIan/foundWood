@@ -32,7 +32,7 @@
     padding: 0px 0px calc(20px + env(safe-area-inset-bottom));
     /* Account for safe area */
     z-index: 1000;
-    font-size: clamp(20px, calc(1.7svw + 1.7svh + 12px), 30px);
+    font-size: clamp(22px, calc(1.8svw + 1.8svh + 13px), 32px);
     /* Responsive font with limits */
     color: #77481C;
     text-align: center;
@@ -42,11 +42,11 @@
     pointer-events: none;
     /* Allow interaction with content beneath */
 
-    -webkit-text-stroke: .5px #77481C;
+    -webkit-text-stroke: .3px #77481C;
     /* Black outline */
     -webkit-text-fill-color: #77481C;
     /* White fill */
-    color: #fff;
+    color: #77481C;
 }
 
 /* Optional: Add a backdrop if text becomes hard to read */
