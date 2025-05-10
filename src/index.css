@@ -71,7 +71,10 @@ body {
   pointer-events: none;
   font-size: clamp(3rem, 8vw, 5rem);
   line-height: 1.1;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  /* text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); */
+  -webkit-text-stroke: 1px #77481C;
+  /* Black outline */
+  /* -webkit-text-fill-color: #fff; */
 }
 
 .new_app_info {
@@ -99,7 +102,7 @@ body {
   justify-content: space-around;
   align-items: center;
   color: var(--brown);
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-size: clamp(2rem, 3vw, 3rem);
   user-select: none;
 }
 

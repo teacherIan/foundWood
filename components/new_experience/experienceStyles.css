@@ -41,6 +41,12 @@
     box-sizing: border-box;
     pointer-events: none;
     /* Allow interaction with content beneath */
+
+    -webkit-text-stroke: 1px #77481C;
+    /* Black outline */
+    -webkit-text-fill-color: #fff;
+    /* White fill */
+    color: #fff;
 }
 
 /* Optional: Add a backdrop if text becomes hard to read */
