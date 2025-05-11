@@ -21,13 +21,13 @@ html {
 }
 
 canvas {
-    /* background-color: #006d124a; */
+
     width: 100svw;
     height: 100svh;
     cursor: grab;
     mask-image:
-        linear-gradient(to bottom, transparent 0%, #000 35%, #000 65%, transparent 100%),
-        linear-gradient(to right, transparent 0%, #000 35%, #000 65%, transparent 100%);
+        /* linear-gradient(to bottom, #ffffff 0%, transparent 40%, transparent 65%, #fff 100%); */
+        radial-gradient(ellipse 100% 50% at center, white 50%, transparent 100%)
 }
 
 canvas:active {
