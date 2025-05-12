@@ -10,7 +10,6 @@ function Scene({ isAnimating, showContactPage }) {
   const controlsRef = useRef();
 
   useEffect(() => {
-    console.log('Show contact page changed');
     if (controlsRef.current) {
       controlsRef.current.autoRotate = !showContactPage;
       controlsRef.current.update();
@@ -19,8 +18,6 @@ function Scene({ isAnimating, showContactPage }) {
 
   useFrame((_, delta) => {
     controlsRef.current?.update();
-
-    // Animate the loading progress
     if (isAnimating && loadProgress < 1) {
       setLoadProgress((prev) => Math.min(prev + delta * 0.5, 1));
     }
@@ -56,10 +53,10 @@ function Scene({ isAnimating, showContactPage }) {
 
       {isAnimating && (
         <Splat
-          chunkSize={1} // Reduced chunk size for slower parsing
-          position={[0, -1 * (1 - loadProgress), 0]} // Vertical reveal
-          scale={loadProgress * 1.5} // Animated scale
-          opacity={loadProgress} // Fade-in effect
+          chunkSize={1}
+          position={[0, -1 * (1 - loadProgress), 0]}
+          scale={loadProgress * 1.5}
+          opacity={loadProgress}
           src={splat}
         />
       )}
