@@ -41,7 +41,7 @@ function Scene({ isAnimating, showContactPage }) {
         dampingFactor={0.05}
         autoRotate={!showContactPage}
         autoRotateSpeed={1}
-        target={[targetX, 0, 0]}
+        target={[0, 0, 0]}
         minPolarAngle={Math.PI / 4}
         maxPolarAngle={Math.PI / 2}
         maxDistance={8}
