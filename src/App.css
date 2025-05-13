@@ -36,7 +36,6 @@ canvas:active {
 @media (max-width: 1000px) {
     canvas {
         mask-image:
-
-            radial-gradient(ellipse 100% 50% at center, white 50%, transparent 100%)
+            radial-gradient(ellipse 100% 40% at center, white 40%, transparent 100%)
     }
 }

@@ -145,8 +145,8 @@ function NewApp() {
           >
             Dougs Found Wood <br />
           </div>
-          Always Unique
-          <br />
+          {/* Always Unique */}
+          {/* <br /> */}
           Handcrafted In Maine
         </div>
       ) : null}
