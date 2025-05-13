@@ -1,6 +1,6 @@
 import './App.css';
 import { useState, useCallback, useEffect } from 'react';
-import found_wood from './assets/found_wood_upscale.png';
+import found_wood from './assets/found_wood_final_all.png';
 import Contact from '../components/contact/Contact';
 import GallerySpring from '../components/galleries/GallerySpring';
 import Types from '../components/select_gallery/Types';
