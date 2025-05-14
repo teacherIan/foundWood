@@ -15,7 +15,11 @@
     /* transform: translate(0, -50%); */
     /* filter: drop-shadow(3px 3px 0px rgb(0, 0, 0)); */
     /* -webkit-text-stroke: 1px #ffffff; */
-    -webkit-text-fill-color: #77481C;
+    /* -webkit-text-fill-color: #ffffff; */
+
+    -webkit-text-stroke: .3px #ffffff;
+
+    -webkit-text-fill-color: white;
     text-align: center;
 
 }

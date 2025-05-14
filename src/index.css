@@ -158,7 +158,6 @@ body {
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  color: var(--brown);
   font-size: clamp(2rem, 3vw, 3rem);
   user-select: none;
 }
@@ -166,13 +165,13 @@ body {
 .menu-item {
   cursor: pointer;
   text-transform: uppercase;
-  -webkit-text-stroke: .3px #77481C;
+  -webkit-text-stroke: 2px #77481C;
   /* Black outline */
-  -webkit-text-fill-color: #77481C;
-  /* filter: drop-shadow(0px 0px 10px var(--white)) */
+  -webkit-text-fill-color: #ffffff;
+  /* filter: drop-shadow(0px 0px 10px var(--white)); */
   transition: all 0.5s ease;
   z-index: 90001;
-  padding: 0.5rem 1rem;
+  /* padding: 0.5rem 1rem; */
 }
 
 .menu-item:hover {
