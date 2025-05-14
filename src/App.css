@@ -25,8 +25,8 @@ canvas {
     height: 100svh;
     cursor: grab;
     mask-image:
-        linear-gradient(to bottom, transparent 0%, #fff 30%, #fff 100%);
-    /* radial-gradient(ellipse 100% 50% at center, white 50%, transparent 100%) */
+        /* linear-gradient(to bottom, transparent 0%, #fff 30%, #fff 100%); */
+        radial-gradient(ellipse 100% 50% at center, white 50%, transparent 100%)
 }
 
 canvas:active {

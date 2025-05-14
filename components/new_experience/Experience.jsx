@@ -53,8 +53,8 @@ function Scene({ isAnimating, showContactPage }) {
 
       {isAnimating && (
         <Splat
-          chunkSize={1}
-          position={[0, -1 * (1 - loadProgress), 0]}
+          chunkSize={0.01}
+          // position={[0, -1 * (1 - loadProgress), 0]}
           scale={loadProgress * 1.5}
           opacity={loadProgress}
           src={splat}

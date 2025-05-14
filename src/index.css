@@ -79,6 +79,38 @@ body {
 }
 
 
+/* ===== UTILITY CLASSES ===== */
+.selectButton {
+  cursor: pointer;
+  position: absolute;
+  user-select: none;
+  width: 10vw;
+  height: 100vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  z-index: 100;
+}
+
+.right {
+  top: 0;
+  left: 90vw;
+  justify-content: flex-end;
+}
+
+.arrow {
+  color: var(--brown);
+  font-size: 100px;
+}
+
+/* Fix for pointer events */
+.new_app_header,
+.new_app_small_header {
+  /* pointer-events: none; */
+  font-family: 'driftWood';
+}
+
+
 /* ===== LOADING ===== */
 .loading-spinner {
   border: 5px solid rgba(119, 72, 28, 0.2);
@@ -213,35 +245,4 @@ canvas {
     /* background: rgba(255, 255, 255, 0.8); */
     font-family: 'driftWood';
   }
-}
-
-/* ===== UTILITY CLASSES ===== */
-.selectButton {
-  cursor: pointer;
-  position: absolute;
-  user-select: none;
-  width: 10vw;
-  height: 100vh;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  z-index: 100;
-}
-
-.right {
-  top: 0;
-  left: 90vw;
-  justify-content: flex-end;
-}
-
-.arrow {
-  color: var(--brown);
-  font-size: 100px;
-}
-
-/* Fix for pointer events */
-.new_app_header,
-.new_app_small_header {
-  pointer-events: none;
-  font-family: 'driftWood';
 }

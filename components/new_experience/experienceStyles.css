@@ -1,23 +1,27 @@
 .new_app_header {
+    width: 100svw;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
     user-select: none;
-    position: absolute;
+    position: fixed;
     z-index: 1000;
-    font-size: calc(5svw + 5svh + 17px);
+    font-size: calc(1svw + 2svh + 10px);
     font-family: CustomFont;
     color: white;
-    left: 4svw;
-    top: 50%;
+    left: 0;
+    bottom: 0;
     color: #77481C;
-    transform: translate(0, -50%);
-    filter: drop-shadow(3px 3px 0px rgb(0, 0, 0));
-    -webkit-text-stroke: 2px #77481C;
+    /* transform: translate(0, -50%); */
+    /* filter: drop-shadow(3px 3px 0px rgb(0, 0, 0)); */
+    /* -webkit-text-stroke: 1px #ffffff; */
     -webkit-text-fill-color: #77481C;
     text-align: center;
 
 }
 
 .new_app_info {
-    font-size: clamp(3rem, 6vw, 4rem);
+    /* font-size: clamp(1rem, 6vw, 4rem); */
     /* width: 50svw; */
     color: white;
     text-align: center;

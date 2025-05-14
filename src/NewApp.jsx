@@ -126,11 +126,10 @@ function NewApp() {
             }}
             className="new_app_header"
           >
-            Dougs <br /> Found
-            <br /> Wood
-            <br />
+            Dougs Found Wood
             <div className="new_app_info">
-              Always Unique <br /> Handcrafted in Maine
+              {/* Always Uniques */}
+              Handcrafted in Maine
             </div>
           </div>
         </>
