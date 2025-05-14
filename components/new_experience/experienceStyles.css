@@ -6,7 +6,8 @@
     user-select: none;
     position: fixed;
     z-index: 1000;
-    font-size: calc(1svw + 2svh + 10px);
+    font-size: clamp(2rem, 3vw, 3rem);
+    text-transform: uppercase;
     font-family: CustomFont;
     color: white;
     left: 0;
@@ -17,7 +18,7 @@
     /* -webkit-text-stroke: 1px #ffffff; */
     /* -webkit-text-fill-color: #ffffff; */
 
-    -webkit-text-stroke: .3px #ffffff;
+    -webkit-text-stroke: 2px #77481C;
 
     -webkit-text-fill-color: white;
     text-align: center;

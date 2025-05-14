@@ -51,7 +51,7 @@
   --blue: lightblue;
   --lightGreen: #d9ebc7;
   --white: #FFFFFF;
-  --mainFont: 'driftWood', 'CustomFont', 'Poppins', 'Lobster Two', sans-serif;
+  --mainFont: 'CustomFont', 'Poppins', 'Lobster Two', sans-serif;
   --secondaryFont: 'driftWood', 'CustomFont', 'Poppins', sans-serif;
 }
 
@@ -107,7 +107,7 @@ body {
 .new_app_header,
 .new_app_small_header {
   /* pointer-events: none; */
-  font-family: 'driftWood';
+  font-family: 'CustomFont';
 }
 
 
@@ -137,7 +137,7 @@ body {
 */ .new_app_info {
   position: absolute;
   text-align: center;
-  font-family: 'driftWood';
+  font-family: 'CustomFont';
   font-size: clamp(1rem, 2vw, 1.25rem);
   margin-top: 0.5rem;
 }
@@ -214,7 +214,7 @@ canvas {
   bottom: -25%;
   filter: drop-shadow(3px 3px 0px black);
   width: 90%;
-  font-family: 'driftWood';
+  font-family: 'CustomFont'
 
 }
 

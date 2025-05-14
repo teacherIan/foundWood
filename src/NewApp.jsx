@@ -120,13 +120,15 @@ function NewApp() {
       {window.innerWidth < 1000 || !isAnimating ? null : (
         <>
           <div
-            style={{
-              fontFamily: 'driftWood',
-              filter: 'drop-shadow(1px 1px 0px #ffffff)',
-            }}
+            style={
+              {
+                // fontFamily: 'driftWood',
+                // filter: 'drop-shadow(1px 1px 0px #ffffff)',
+              }
+            }
             className="new_app_header"
           >
-            Dougs Found Wood
+            Doug's Found Wood
             <div className="new_app_info">
               {/* Always Uniques */}
               Handcrafted in Maine
