@@ -24,7 +24,7 @@ canvas {
     width: 100svw;
     height: 100svh;
     cursor: grab;
-    /* mask-image: */
+    /* mask-image:   */
     /* linear-gradient(to bottom, transparent 0%, #fff 30%, #fff 100%); */
     /* radial-gradient(ellipse 70% 50% at center, white 60%, transparent 100%) */
 }

@@ -1,15 +1,15 @@
 .new_app_header {
     width: 100svw;
     display: flex;
-    align-items: end;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: space-evenly;
     user-select: none;
     position: fixed;
     z-index: 1000;
     font-size: clamp(2rem, 3vw, 3rem);
     text-transform: uppercase;
     font-family: CustomFont;
-    color: white;
+    color: #ffffff00;
     left: 0;
     bottom: 0;
     color: #77481C;
@@ -20,7 +20,7 @@
 
     -webkit-text-stroke: 2px #77481C;
 
-    -webkit-text-fill-color: white;
+    -webkit-text-fill-color: #ffffff;
     text-align: center;
 
 }
