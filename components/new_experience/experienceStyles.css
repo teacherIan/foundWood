@@ -34,7 +34,7 @@
 
 .new_app_small_header {
     position: fixed;
-    /* Use fixed instead of absolute for viewport-relative positioning */
+    font-family: CustomFont;
     bottom: 0;
     left: 0;
     right: 0;

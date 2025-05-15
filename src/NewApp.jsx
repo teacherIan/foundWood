@@ -140,11 +140,13 @@ function NewApp() {
       {window.innerWidth < 1000 && isAnimating ? (
         <div className="new_app_small_header">
           <div
-            style={{
-              fontSize: 'clamp(25px, calc(2svw + 2svh + 13px), 36px)',
-            }}
+            style={
+              {
+                // fontSize: 'clamp(25px, calc(2svw + 2svh + 13px), 36px)',
+              }
+            }
           >
-            Dougs Found Wood <br />
+            Doug's Found Wood <br />
           </div>
           {/* Always Unique */}
           {/* <br /> */}
