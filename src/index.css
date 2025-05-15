@@ -245,6 +245,7 @@ canvas {
   }
 
   .menu-item {
+    filter: drop-shadow(3px 3px 0px black);
     /* border: 1px solid #77481c; */
     /* font-size: clamp(1.2rem, 2vw, 1.8rem); */
   }
