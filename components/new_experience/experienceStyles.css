@@ -6,7 +6,7 @@
     user-select: none;
     position: fixed;
     z-index: 1000;
-    font-size: clamp(2rem, 3vw, 3rem);
+    font-size: clamp(3rem, 4vw, 5rem);
     text-transform: uppercase;
     font-family: CustomFont;
     color: #ffffff00;
