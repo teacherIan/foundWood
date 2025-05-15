@@ -176,9 +176,11 @@ body {
   /* Fixed invalid negative padding */
   background-color: #77481c00;
   border-radius: 200px;
-  border: 5px solid #ffffff;
+  border: 0.1px solid #ffffff;
   position: relative;
   /* For pseudo-element */
+  /* background: rgba(0, 0, 0, 0.8); */
+  backdrop-filter: saturate(180%) blur(2px);
 
   /* Use box-shadow instead of filter: drop-shadow */
   /* -webkit-box-shadow: 3px 3px 0px #ffffff; */
@@ -239,11 +241,11 @@ canvas {
 @media (max-width: 1000px) {
   .menu {
     padding: 0.5rem;
-    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    font-size: clamp(1.6rem, 2vw, 1.8rem);
   }
 
   .menu-item {
-    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    /* font-size: clamp(1.2rem, 2vw, 1.8rem); */
   }
 
   .infoGraphic {

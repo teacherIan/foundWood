@@ -42,8 +42,8 @@
     padding: 0px 0px calc(20px + env(safe-area-inset-bottom));
     /* Account for safe area */
     z-index: 1000;
-    font-size: clamp(22px, calc(1.8svw + 1.8svh + 13px), 32px);
-    /* Responsive font with limits */
+    /* font-size: clamp(22px, calc(1.8svw + 1.8svh + 13px), 32px); */
+    font-size: clamp(3rem, 4vw, 5rem);
     color: white;
     text-align: center;
     filter: drop-shadow(1px 1px 0px #000000);
