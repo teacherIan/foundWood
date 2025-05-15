@@ -50,6 +50,6 @@
     user-select: none;
     box-sizing: border-box;
     pointer-events: none;
-    -webkit-text-stroke: 0.5px #77481C;
-    -webkit-text-fill-color: #77481C;
+    -webkit-text-stroke: 1px #77481C;
+    -webkit-text-fill-color: white;
 }

@@ -150,7 +150,7 @@ function NewApp() {
           </div>
           {/* Always Unique */}
           {/* <br /> */}
-          Handcrafted In Maine
+          {/* Handcrafted In Maine */}
         </div>
       ) : null}
 
