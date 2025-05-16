@@ -6,6 +6,7 @@
     box-sizing: border-box;
     user-select: none;
     font-family: var(--mainFont);
+    touch-action: none;
 
 }
 
