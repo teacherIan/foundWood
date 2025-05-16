@@ -26,7 +26,19 @@ function Scene({ isAnimating, showContactPage }) {
 
       // Update camera position based on screen size
       if (camera) {
-        camera.position.set(0, width < 1300 ? 1 : 0.5, width < 1300 ? 2.2 : 2);
+        if (width < 480) {
+          // Mobile phone specific settings
+          camera.position.set(0, 1, 2); // Set camera further back for mobile
+          camera.fov = 60; // Wider field of view for mobile
+        } else if (width < 1300) {
+          // Tablet and small screens
+          camera.position.set(0, 1.5, 2.5);
+          camera.fov = 55;
+        } else {
+          // Desktop
+          camera.position.set(0, 0.5, 2.2);
+          camera.fov = 50;
+        }
         camera.updateProjectionMatrix();
       }
     };
@@ -65,11 +77,30 @@ function Scene({ isAnimating, showContactPage }) {
     };
   }, [isAnimating]);
 
-  // Determine text positions based on window width
-  const isSmallScreen = windowWidth < 1300;
-  const titlePosition = isSmallScreen ? [0, -0.15, 0.7] : [-1, -0.12, 0];
-  const foundPosition = isSmallScreen ? [0, -0.1, 1] : [0, -0.1, 1];
-  const woodPosition = isSmallScreen ? [0, -0.1, 1.25] : [1, -0.15, 0];
+  // Determine text positions and size based on window width
+  const isMobile = windowWidth < 480;
+  const isTablet = windowWidth >= 480 && windowWidth < 1300;
+  const isDesktop = windowWidth >= 1300;
+
+  // Text positions based on device size
+  let titlePosition, foundPosition, woodPosition, fontSize;
+
+  if (isMobile) {
+    titlePosition = [0, -0.065, 0];
+    foundPosition = [0, -0.07, 0.4];
+    woodPosition = [0, -0.07, 0.7];
+    fontSize = 0.25;
+  } else if (isTablet) {
+    titlePosition = [0, 0.3, 0.3];
+    foundPosition = [0, 0, 0.3];
+    woodPosition = [0, -0.3, 0.3];
+    fontSize = 0.28;
+  } else {
+    titlePosition = [-1, -0.12, 0];
+    foundPosition = [0, -0.1, 1];
+    woodPosition = [1, -0.15, 0];
+    fontSize = 0.3;
+  }
 
   return (
     <PresentationControls
@@ -78,10 +109,14 @@ function Scene({ isAnimating, showContactPage }) {
       global
       snap
       rotation={[0, 0, 0]}
-      polar={[-Math.PI / 50, Math.PI / 50]}
-      azimuth={[-Math.PI / 50, Math.PI / 50]}
-      config={{ mass: 10, tension: 100, friction: 20 }}
-      speed={2}
+      polar={[-Math.PI / 3, Math.PI / 3]} // Increased range for mobile
+      azimuth={[-Math.PI / 3, Math.PI / 3]} // Increased range for mobile
+      config={{
+        mass: isMobile ? 5 : 10,
+        tension: 100,
+        friction: isMobile ? 15 : 20,
+      }}
+      speed={isMobile ? 1.5 : 2}
     >
       {isAnimating && (
         <>
@@ -92,7 +127,7 @@ function Scene({ isAnimating, showContactPage }) {
             anchorY="middle"
             strokeColor="white"
             font={driftwood}
-            fontSize={0.3}
+            fontSize={fontSize}
           >
             DOUG'S
           </Text>
@@ -103,7 +138,7 @@ function Scene({ isAnimating, showContactPage }) {
             anchorY="middle"
             strokeColor="white"
             font={driftwood}
-            fontSize={0.3}
+            fontSize={fontSize}
           >
             Found
           </Text>
@@ -114,16 +149,18 @@ function Scene({ isAnimating, showContactPage }) {
             anchorY="middle"
             strokeColor="white"
             font={driftwood}
-            fontSize={0.3}
+            fontSize={fontSize}
           >
             Wood
           </Text>
           <Splat
-            alphaTest={0.2}
+            alphaTest={0.3}
             alphaHashing={true}
             chunkSize={0.01}
             src={splat}
-            splatSize={isSmallScreen ? 35 : 30}
+            splatSize={isMobile ? 40 : isTablet ? 35 : 30}
+            scale={isMobile ? 0.8 : 1} // Scale down splat for mobile
+            position={isMobile ? [0, 0, -0.5] : [0, 0, 0]} // Adjust position for mobile
           />
         </>
       )}
@@ -135,11 +172,17 @@ export default function App({ isAnimating, showContactPage }) {
   return (
     <Canvas
       camera={{
-        position: [0, 0.5, 2],
+        position: [0, 0.5, 2.2],
         fov: 50,
       }}
-      dpr={[1, 2]} // Optimize for different pixel ratios
-      performance={{ min: 0.5 }} // Performance optimization
+      dpr={[1, 1.5]} // Reduced maximum DPR to improve performance on mobiles
+      performance={{ min: 0.4 }} // Allow more aggressive performance scaling on mobile
+      gl={{
+        powerPreference: 'high-performance',
+        antialias: false, // Disable antialiasing on mobile for better performance
+        depth: true,
+        stencil: false,
+      }}
     >
       <Scene showContactPage={showContactPage} isAnimating={isAnimating} />
     </Canvas>
