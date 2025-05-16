@@ -176,8 +176,12 @@ body {
   /* background-color: #77481c; */
   border-radius: 200px;
   position: relative;
-  filter: drop-shadow(3px 3px 0px #00000073);
+  /* filter: drop-shadow(3px 3px 0px #00000073); */
   border: 1px solid white;
+
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.45);
+  border: 2px solid #77481c;
+  /* Increased border width */
 
 }
 
@@ -239,9 +243,15 @@ canvas {
   }
 
   .menu-item {
-    filter: drop-shadow(1px 1px 0px black);
-    /* border: 1px solid #77481c; */
-    /* font-size: clamp(1.2rem, 2vw, 1.8rem); */
+    border: 1px solid #77481c;
+    /* More visible color */
+    box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.75);
+    border-radius: 50px;
+    /* Reduce from 200px */
+    -webkit-text-stroke: 1px white;
+    /* Thinner stroke */
+    line-height: 60px;
+
   }
 
   .infoGraphic {
