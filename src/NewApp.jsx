@@ -146,7 +146,7 @@ function NewApp() {
               }
             }
           >
-            Doug's Found Wood <br />
+            {/* Doug's Found Wood <br /> */}
           </div>
           {/* Always Unique */}
           {/* <br /> */}
