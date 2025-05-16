@@ -128,10 +128,10 @@ function NewApp() {
             }
             className="new_app_header"
           >
-            Doug's Found Wood
+            {/* Doug's Found Wood */}
             <div className="new_app_info">
               {/* Always Uniques */}
-              Handcrafted in Maine
+              {/* Handcrafted in Maine */}
             </div>
           </div>
         </>
@@ -206,12 +206,12 @@ function NewApp() {
         </div>
 
         <div className="blur">
-          <div
+          {/* <div
             className="infoGraphic"
             onClick={() => setShowInfographic(!showInfographic)}
             style={
               showInfographic
-                ? { bottom: '0%', opacity: 1 }
+                ? { bottom: '0%', opacity: 1, zIndex: 999999 }
                 : { bottom: '-50%', opacity: 0 }
             }
           >
@@ -223,7 +223,8 @@ function NewApp() {
             {galleryTypeArr[currentPhoto]?.description}
             <br />
             {galleryTypeArr[currentPhoto]?.price}
-          </div>
+          </div> */}
+
           <NewCanvas
             showContactPage={showContactPage}
             isAnimating={isAnimating}
