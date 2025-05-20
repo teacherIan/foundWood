@@ -1,4 +1,3 @@
-import './contact.css';
 import { useSpring, animated, config } from '@react-spring/web';
 import { useEffect, useRef, useState } from 'react';
 import { MdExitToApp } from 'react-icons/md';

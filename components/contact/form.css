@@ -13,6 +13,20 @@
         /* Assuming this color was defined elsewhere */
 }
 
+.contactContainer {
+    z-index: 20000;
+    background-repeat: no-repeat;
+    background-size: 100svw 100svh;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    will-change: transform, opacity;
+    padding: 20px;
+    /* Optimizes for animations */
+}
+
 .formHeader {
     text-align: center;
     margin-bottom: calc(var(--spacing-unit) * 6);

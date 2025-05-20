@@ -181,7 +181,7 @@ export default function App({ isAnimating, showContactPage }) {
         powerPreference: 'high-performance',
         antialias: false, // Disable antialiasing on mobile for better performance
         depth: true,
-        stencil: false,
+        stencil: true,
       }}
     >
       <Scene showContactPage={showContactPage} isAnimating={isAnimating} />
