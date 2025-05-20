@@ -32,8 +32,8 @@ function Scene({ isAnimating, showContactPage }) {
           camera.fov = 60; // Wider field of view for mobile
         } else if (width < 1300) {
           // Tablet and small screens
-          camera.position.set(0, 1.5, 2.5);
-          camera.fov = 55;
+          camera.position.set(0, 1, 2.5);
+          camera.fov = 60;
         } else {
           // Desktop
           camera.position.set(0, 0.5, 2.2);
@@ -91,10 +91,10 @@ function Scene({ isAnimating, showContactPage }) {
     woodPosition = [0, -0.07, 0.7];
     fontSize = 0.25;
   } else if (isTablet) {
-    titlePosition = [0, 0.3, 0.3];
-    foundPosition = [0, 0, 0.3];
-    woodPosition = [0, -0.3, 0.3];
-    fontSize = 0.28;
+    titlePosition = [0, -0.1, 0.5];
+    foundPosition = [0, -0.08, 0.93];
+    woodPosition = [0, -0.07, 1.25];
+    fontSize = 0.27;
   } else {
     titlePosition = [-1, -0.12, 0];
     foundPosition = [0, -0.1, 1];
