@@ -187,7 +187,7 @@ export default function Form({ setShowContactPage, handleExitClick }) {
         </div>
 
         <button className="btn">
-          <span class="btn-text">Get in Touch</span>
+          <span className="btn-text">Get in Touch</span>
         </button>
       </form>
       <a href="https://www.facebook.com/DougsFoundWood/" target="_blank">
