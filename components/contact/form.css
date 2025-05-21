@@ -43,14 +43,14 @@
     display: inline-block;
     width: 100%;
     background: white;
-    padding: calc(var(--spacing-unit) * 4);
+    padding: calc(var(--spacing-unit) * 3);
     font-family: inherit;
     font-size: var(--button-font-size);
     border: 0;
     border-radius: calc(var(--spacing-unit));
     color: var(--brown);
     transition: 1s;
-    margin-top: calc(var(--spacing-unit) * 6);
+    margin-top: calc(var(--spacing-unit) * 4);
     border: 2px solid var(--brown);
     filter: drop-shadow(2px 2px 0px black);
     -webkit-text-stroke: 3px #77481C;
