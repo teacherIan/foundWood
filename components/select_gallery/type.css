@@ -18,7 +18,11 @@
 
 .typeHeader {
     display: block;
-    font-size: calc(2vh + 1.5vw + 10px);
+    font-size: calc(2vh + 1.5vw + 15px);
+    filter: drop-shadow(1.5px 1.5px 0px black);
+    color: white;
+    -webkit-text-stroke: 2px #77481C;
+    -webkit-text-fill-color: #ffffff;
 
 }
 

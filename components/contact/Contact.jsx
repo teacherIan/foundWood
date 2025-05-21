@@ -59,9 +59,10 @@ export default function Contact({
             : `url(${bg_image_cell_3})`,
       }}
     >
-      <Form setShowContactPage={setShowContactPage} />
-      {/* <img className="contactBackgroundImage" src={bg_image} /> */}
-      <MdExitToApp className="exit-icon" onClick={() => handleExitClick()} />
+      <Form
+        handleExitClick={handleExitClick}
+        setShowContactPage={setShowContactPage}
+      ></Form>
     </animated.div>
   );
 }

@@ -1,7 +1,7 @@
 :root {
     --base-size: 1.2rem;
     --spacing-unit: calc(var(--base-size) * 0.5);
-    --input-font-size: calc(var(--base-size) * 1.5);
+    --input-font-size: calc(var(--base-size) * 1.8);
     --label-font-size: calc(var(--base-size) * 1.8);
     --header-font-size: calc(2.5vh + 2vw + var(--base-size));
     --button-font-size: calc(1vh + 1vw + var(--base-size) * 0.7);
@@ -30,11 +30,12 @@
 .formHeader {
     text-align: center;
     margin-bottom: calc(var(--spacing-unit) * 6);
-    filter: drop-shadow(2px 2px 1px black);
+    filter: drop-shadow(2px 2px 0px black);
     font-size: var(--header-font-size);
     color: white;
-    -webkit-text-stroke: 2px #77481C;
+    -webkit-text-stroke: 1px #77481C;
     -webkit-text-fill-color: #ffffff;
+
 }
 
 .btn {
@@ -50,10 +51,18 @@
     color: var(--brown);
     transition: 1s;
     margin-top: calc(var(--spacing-unit) * 6);
-    border: 3px solid var(--brown);
+    border: 2px solid var(--brown);
     filter: drop-shadow(2px 2px 0px black);
     -webkit-text-stroke: 3px #77481C;
     -webkit-text-fill-color: #ffffff;
+}
+
+.btn-text {
+    font-size: var(--button-font-size);
+    color: var(--brown);
+    -webkit-text-stroke: 2px #77481C;
+    -webkit-text-fill-color: #ffffff;
+    filter: drop-shadow(1px 1px 0px black);
 }
 
 .btn:focus {
@@ -76,6 +85,7 @@
     position: relative;
     margin: calc(var(--spacing-unit) * 4) 0 calc(var(--spacing-unit) * 8);
     width: 25vw;
+    filter: drop-shadow(1px 1px 0px black);
 
 }
 
@@ -94,6 +104,7 @@
     transition: 1s;
     -webkit-text-stroke: 1px #77481C;
     -webkit-text-fill-color: #ffffff;
+    filter: drop-shadow(1px 1px 0px black);
 }
 
 .form-control input:focus,
@@ -137,9 +148,6 @@
     font-size: var(--icon-size);
     color: white;
     transition: 1s;
-    /* color: var(--fill-color); */
-    /* -webkit-text-stroke: 2px #77481C; */
-    /* -webkit-text-fill-color: #ffffff; */
     stroke: #77481C;
     fill: #ffffff;
     /* Stroke color */
@@ -150,33 +158,53 @@
     overflow: visible;
 }
 
+.facebookText {
+    font-size: var(--button-font-size);
+    color: white;
+    -webkit-text-stroke: 2px #77481C;
+    -webkit-text-fill-color: #ffffff;
+    filter: drop-shadow(1px 1px 0px black);
+    text-decoration: none !important;
+    text-align: center;
+
+}
+
+a {
+    text-decoration: none;
+    /* Remove underline from all links */
+}
+
 .facebookIcon:hover {
     fill: var(--lightGreen);
     cursor: pointer;
 }
 
 .exit-icon {
+    display: inline-block;
+    /* Ensures the border wraps the content */
+    /* border: 2px solid white; */
+    /* Adjust border thickness */
+    border-radius: 100%;
+    /* Makes the border circular */
+    padding: 10px;
+    /* Adjust padding to control spacing around the text */
+    font-size: calc(var(--icon-size) * 2);
+    /* Adjust font size as needed */
+    color: white;
+    text-align: center;
+    /* Centers the text */
+    line-height: 1;
+    /* Ensures the text is vertically centered */
     position: absolute;
-    right: 0.5%;
-    top: 0.5%;
-    font-size: 100px;
-    fill: white;
-    /* White fill color */
-    stroke: var(--brown);
-    /* Brown outline */
-    stroke-width: 0.1px;
-    /* Outline thickness */
-    stroke-linejoin: round;
-    /* Smooth corners */
-    stroke-linecap: round;
-    /* Smooth ends */
+    left: 1%;
+    top: 1%;
+    z-index: 999999;
+    transition: 0.3s;
+    /* Smooth hover effect */
+    -webkit-text-stroke: 1px #77481C;
+    -webkit-text-fill-color: #ffffff;
+    filter: drop-shadow(3px 3px 0px black);
     cursor: pointer;
-    transition: 1s;
-    filter: drop-shadow(1px 1px 0px black);
-    /* Optional shadow for depth */
-    z-index: 1000;
-    overflow: visible;
-    fill-rule: evenodd;
 }
 
 .exit-icon:hover {
@@ -186,6 +214,7 @@
     /* Keep the brown outline */
     stroke-width: 1px;
     cursor: pointer;
+    filter: drop-shadow(3px 3px 10px black);
 }
 
 @media only screen and (max-width: 1000px) {

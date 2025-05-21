@@ -3,7 +3,7 @@ import './form.css';
 import { FaFacebook } from 'react-icons/fa6';
 import emailjs from '@emailjs/browser';
 
-export default function Form({ setShowContactPage }) {
+export default function Form({ setShowContactPage, handleExitClick }) {
   const [nameLabel, setNameLabel] = useState(['']);
   const [emailLabel, setEmailLabel] = useState(['']);
   const [messageLabel, setMessageLabel] = useState(['']);
@@ -137,7 +137,15 @@ export default function Form({ setShowContactPage }) {
 
   return (
     <div className="formContainer">
-      <div className="formHeader">Contact Doug's Found Wood</div>
+      <span
+        onClick={() => {
+          handleExitClick();
+        }}
+        className="exit-icon"
+      >
+        {'X'}
+      </span>
+      <div className="formHeader">We'd Love to Hear From You!</div>
       <form autoComplete="off" onSubmit={handleSubmit}>
         <div className="form-control">
           <input
@@ -178,9 +186,12 @@ export default function Form({ setShowContactPage }) {
           </label>
         </div>
 
-        <button className="btn">Email</button>
+        <button className="btn">
+          <span class="btn-text">Get in Touch</span>
+        </button>
       </form>
       <a href="https://www.facebook.com/DougsFoundWood/" target="_blank">
+        <span className="facebookText">Follow us on</span>{' '}
         <FaFacebook className="facebookIcon" />
       </a>
     </div>

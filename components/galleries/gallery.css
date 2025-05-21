@@ -94,6 +94,9 @@
     text-align: center;
     font-size: calc(2vw + 2vh + 10px);
     /* font-family: 'CustomFont' */
+    filter: drop-shadow(1px 1px 0px black);
+    -webkit-text-stroke: 2px #77481C;
+    -webkit-text-fill-color: #ffffff;
 
 }
 

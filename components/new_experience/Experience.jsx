@@ -175,11 +175,11 @@ export default function App({ isAnimating, showContactPage }) {
         position: [0, 0.5, 2.2],
         fov: 50,
       }}
-      dpr={[1, 1.5]} // Reduced maximum DPR to improve performance on mobiles
-      performance={{ min: 0.4 }} // Allow more aggressive performance scaling on mobile
+      dpr={[1, 2]}
+      performance={{ min: 0.4 }}
       gl={{
         powerPreference: 'high-performance',
-        antialias: false, // Disable antialiasing on mobile for better performance
+        antialias: true,
         depth: true,
         stencil: true,
       }}

@@ -179,10 +179,10 @@ body {
   /* filter: drop-shadow(3px 3px 0px #00000073); */
   border: 1px solid white;
 
-  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.45);
-  border: 2px solid #77481c;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.763);
+  /* border: 1px solid rgba(0, 0, 0, 0.505); */
   /* Increased border width */
-  filter: drop-shadow(2px 2px 0px black);
+  filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.763));
 
 }
 
