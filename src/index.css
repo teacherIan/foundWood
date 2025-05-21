@@ -186,8 +186,9 @@ body {
 }
 
 .menu-item:hover {
-  /* filter: drop-shadow(0px 0px 40px #77481C); */
-  background-color: #ffffff;
+  scale: 1.01;
+  filter: drop-shadow(2px 2px 1px #000000);
+  /* background-color: #ffffff; */
 }
 
 .icon {
