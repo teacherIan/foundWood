@@ -5,7 +5,7 @@ import {
   PresentationControls,
   useProgress,
 } from '@react-three/drei';
-import { Canvas, useThree } from '@react-three/fiber';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import './experienceStyles.css';
 import splat from '../../src/assets/new_experience/full.splat';
 import driftwood from '../../src/assets/fonts/DriftWood-z8W4.ttf';
@@ -16,6 +16,26 @@ function Scene({ isAnimating, showContactPage }) {
   const { progress } = useProgress();
   const animationRef = useRef();
   const { camera } = useThree();
+  const idleTimeRef = useRef(0);
+
+  useFrame((state, delta) => {
+    idleTimeRef.current += delta;
+
+    // Oscillate camera position or rotation slowly
+    const idleX = Math.sin(idleTimeRef.current * 0.5) * 0.01; // Side to side
+    const idleY = Math.sin(idleTimeRef.current * 1) * 0.005; // Slight up/down
+
+    // Option 1: Move camera position gently around initial position
+    camera.position.x = idleX;
+    camera.position.y = 0.5 + idleY;
+    camera.position.z = 2.2;
+
+    // Option 2: Or rotate camera slightly (uncomment if preferred)
+    camera.rotation.y = idleX * 0.02;
+    // camera.rotation.x = idleY * 0.01;
+
+    camera.updateProjectionMatrix();
+  });
 
   // Handle resize once and store window width in state
   useEffect(() => {
