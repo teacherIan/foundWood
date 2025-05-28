@@ -70,6 +70,17 @@ export default function Gallery({
     }
   }
 
+  const handleThumbnailClick = (index) => {
+    setCurrentPhoto(index);
+    setShowDetails(false);
+    setShowInfographic(false);
+    infoApi.start({ transform: 'translateY(100%)' }); // hide info panel like swipe down
+    indicatorApi.start({
+      opacity: 1,
+      transform: 'translateY(0px)',
+    }); // show swipe indicator again
+  };
+
   const handleTouchStart = (e) => {
     setStartY(e.touches[0].clientY);
   };
@@ -162,9 +173,14 @@ export default function Gallery({
         }
       >
         <div className="galleryLeftTop">
-          <div className="thumbNails" onMouseOver={handleThumbNailHover}>
+          <div className="thumbNails">
             {galleryTypeArr.map((image, index) => (
-              <img key={index} src={image.img} className="thumbNailPhoto" />
+              <img
+                key={index}
+                src={image.img}
+                className="thumbNailPhoto"
+                onClick={() => handleThumbnailClick(index)}
+              />
             ))}
             <div className="furniturePrice">
               Price: {galleryTypeArr[currentPhoto]?.price}
