@@ -196,7 +196,8 @@ body {
   max-height: 10svh;
   user-select: none;
   cursor: pointer;
-  filter: drop-shadow(1px 1px 0px rgb(0, 0, 0));
+  filter: drop-shadow(.5px .5px 1px rgb(0, 0, 0));
+  overflow: visible;
 }
 
 /* ===== 3D CANVAS CONTAINER ===== */
