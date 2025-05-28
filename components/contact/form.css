@@ -179,42 +179,62 @@ a {
     cursor: pointer;
 }
 
-.exit-icon {
+/* .exit-icon {
     display: inline-block;
-    /* Ensures the border wraps the content */
-    /* border: 2px solid white; */
-    /* Adjust border thickness */
     border-radius: 100%;
-    /* Makes the border circular */
+    
     padding: 10px;
-    /* Adjust padding to control spacing around the text */
+    
     font-size: calc(var(--icon-size) * 2);
-    /* Adjust font size as needed */
+    
     color: white;
     text-align: center;
-    /* Centers the text */
+    
     line-height: 1;
-    /* Ensures the text is vertically centered */
+    
     position: absolute;
     left: 1%;
     top: 1%;
     z-index: 999999;
     transition: 0.3s;
-    /* Smooth hover effect */
+    
     -webkit-text-stroke: 1px #77481C;
     -webkit-text-fill-color: #ffffff;
     filter: drop-shadow(3px 3px 0px black);
     cursor: pointer;
-}
+} */
 
-.exit-icon:hover {
+/* .exit-icon:hover {
     fill: var(--lightGreen);
-    /* Light green fill on hover */
+    
     stroke: var(--brown);
-    /* Keep the brown outline */
+    
     stroke-width: 1px;
     cursor: pointer;
     filter: drop-shadow(3px 3px 10px black);
+} */
+
+.exit-icon {
+    font-size: 40px;
+    /* Adjust size for better visibility */
+    color: white;
+    border: none;
+    /* Remove border if using an icon */
+    background: none;
+    /* Transparent background */
+    cursor: pointer;
+    /* transition: transform 0.3s ease-in-out, color 0.3s ease-in-out; */
+    animation: pulse 1.5s infinite;
+
+
+
+}
+
+.exit-icon:hover {
+    color: var(--lightGreen);
+    /* Change color on hover */
+    transform: scale(1.2);
+    /* Slightly enlarge on hover */
 }
 
 @media only screen and (max-width: 1000px) {
@@ -233,5 +253,18 @@ a {
     :root {
         /* You can adjust base size for smaller screens if needed */
         --base-size: 0.9rem;
+    }
+}
+
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        /* transform: scale(1); */
+    }
+
+    50% {
+        /* transform: scale(1.1); */
     }
 }

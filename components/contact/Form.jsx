@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import './form.css';
-import { FaFacebook } from 'react-icons/fa6';
+import { FaFacebook } from 'react-icons/fa';
+import { MdExitToApp } from 'react-icons/md';
 import emailjs from '@emailjs/browser';
 
 export default function Form({ setShowContactPage, handleExitClick }) {
@@ -137,14 +138,9 @@ export default function Form({ setShowContactPage, handleExitClick }) {
 
   return (
     <div className="formContainer">
-      <span
-        onClick={() => {
-          handleExitClick();
-        }}
-        className="exit-icon"
-      >
-        {'X'}
-      </span>
+      <div className="exit-icon" onClick={handleExitClick}>
+        <MdExitToApp />
+      </div>
       <div className="formHeader">We'd Love to Hear From You!</div>
       <form autoComplete="off" onSubmit={handleSubmit}>
         <div className="form-control">
