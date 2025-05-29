@@ -69,11 +69,15 @@
     width: 70svw;
     height: 50svw;
     border-radius: 500px 0px 0px 500px;
-    border: 4px var(--brown) solid;
+    border-left: 4px var(--brown) solid;
+    border-top: 4px var(--brown) solid;
+    border-bottom: 4px var(--brown) solid;
     transition: 1s;
     /* object-fit: contain;  */
     z-index: 9999;
     position: relative;
+    margin-top: 50px;
+    ;
 
 
 }
