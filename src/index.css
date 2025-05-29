@@ -160,6 +160,7 @@ body {
   align-items: flex-start;
   font-size: clamp(2.5rem, 5vw, 5.5rem);
   user-select: none;
+  cursor: pointer;
 }
 
 .menu-item {
@@ -174,20 +175,21 @@ body {
   z-index: 90001;
   padding: 2px;
   /* background-color: #77481c; */
-  border-radius: 200px;
+
   position: relative;
   /* filter: drop-shadow(3px 3px 0px #00000073); */
   border: 1px solid white;
   box-shadow: 2px 2px 0px #77481c;
   /* border: 1px solid rgba(0, 0, 0, 0.505); */
   /* Increased border width */
-  filter: drop-shadow(2px 2px 0px #77481c);
+  filter: drop-shadow(2px 2px 2px #1c5077);
+  border-radius: 200px;
 
 }
 
 .menu-item:hover {
-  scale: 1.01;
-  filter: drop-shadow(2px 2px 1px #000000);
+  scale: 1.02;
+  filter: drop-shadow(2px 2px 2px #1c5077);
   /* background-color: #ffffff; */
 }
 
@@ -198,6 +200,14 @@ body {
   cursor: pointer;
   filter: drop-shadow(.5px .5px 1px rgb(0, 0, 0));
   overflow: visible;
+
+
+  /* border: 1px solid rgba(0, 0, 0, 0.505); */
+  /* Increased border width */
+  filter: drop-shadow(2px 2px 2px #1c5077);
+
+
+
 }
 
 /* ===== 3D CANVAS CONTAINER ===== */
