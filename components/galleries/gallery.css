@@ -264,9 +264,10 @@
     .masterImage {
         border-radius: 0px;
         width: 100svw;
-        max-height: 65svh;
-        /* object-fit: contain; */
+        height: 120svw;
+        object-fit: fill;
         border: none;
+
         /* object-position: 50% 70%; */
         /* Center horizontally, align 20% from the top */
     }
