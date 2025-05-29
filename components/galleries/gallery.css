@@ -38,11 +38,21 @@
 .thumbNailPhoto {
     height: 100%;
     width: 100%;
-    border: 1px var(--brown) solid;
+    border: 4px var(--brown) solid;
     border-radius: 150px;
     cursor: pointer;
-    transition: 1s cubic-bezier(0.86, 0, 0.07, 1);
+    transition: 0.3s ease-in-out;
 }
+
+.thumbNailPhoto.grayscale {
+    filter: grayscale(100%);
+    opacity: 0.6;
+    /* optional, for a dimmed effect */
+}
+
+/* .thumbNailPhoto:active {
+    transform: scale(0.95);
+} */
 
 .thumbNailPhoto:hover {
     border-radius: 10px;
@@ -56,15 +66,16 @@
 }
 
 .masterImage {
-    width: 90svh;
-    height: 90svh;
+    width: 70svw;
+    height: 50svw;
     border-radius: 500px 0px 0px 500px;
-    border: 1px var(--brown) solid;
+    border: 4px var(--brown) solid;
     transition: 1s;
-    object-fit: fill;
+    /* object-fit: contain;  */
     z-index: 9999;
     position: relative;
-    object-fit: cover;
+
+
 }
 
 .galleryLeftBottom {
@@ -72,10 +83,11 @@
     display: flex;
     position: relative;
     color: var(--brown);
-    border-top: 1px solid var(--brown);
+    border-top: 4px solid var(--brown);
     font-size: calc(0.7vw + 0.7vh + 10px);
     font-family: sans-serif;
-    padding: 5px;
+    margin-top: 10px;
+    padding-left: 10px;
     flex-direction: column;
 }
 
@@ -115,8 +127,9 @@
     margin-top: -10px;
     height: 25vh;
     font-family: 'Poppins';
-    width: 100%;
+    width: 50svw;
     font-size: calc(0.7vw + 0.7vh + 8px);
+    text-align: center;
 }
 
 .smallScreenCover {

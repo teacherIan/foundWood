@@ -57,7 +57,6 @@ export default function Gallery({
     transform: 'translateY(100%)',
   }));
 
-  // New spring for the swipe indicator
   const [indicatorSpring, indicatorApi] = useSpring(() => ({
     opacity: 1,
     transform: 'translateY(0px)',
@@ -178,7 +177,9 @@ export default function Gallery({
               <img
                 key={index}
                 src={image.img}
-                className="thumbNailPhoto"
+                className={`thumbNailPhoto ${
+                  index === currentPhoto ? 'grayscale' : ''
+                }`}
                 onClick={() => handleThumbnailClick(index)}
               />
             ))}
