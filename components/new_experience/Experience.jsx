@@ -27,7 +27,7 @@ function Scene({ isAnimating, showContactPage }) {
 
     // Option 1: Move camera position gently around initial position
     camera.position.x = idleX;
-    camera.position.y = 0.5 + idleY;
+    camera.position.y = 1 + idleY;
     camera.position.z = 2.2;
 
     // Option 2: Or rotate camera slightly (uncomment if preferred)
@@ -117,7 +117,7 @@ function Scene({ isAnimating, showContactPage }) {
     fontSize = 0.27;
   } else {
     titlePosition = [-1, -0.12, 0];
-    foundPosition = [0, -0.1, 1];
+    foundPosition = [0, -0.1, 0.6];
     woodPosition = [1, -0.15, 0];
     fontSize = 0.3;
   }
