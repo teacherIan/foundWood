@@ -15,7 +15,7 @@ export default [
     name: 'Coffee Table',
     type: types.smallTable,
     description:
-      'This handcrafted coffee table features a stunning tabletop cut from a single slab of maple burl, showcasing its natural edges, swirling grain, and rich character. The organic shape is preserved to highlight the wood’s raw beauty. It stands on sturdy spalted maple legs that complement the top with their rustic texture and natural coloration. At 18 inches high and over 2 feet in diameter, this piece serves as both a functional table and a sculptural centerpiece—perfect for adding warmth and artistry to any living space.',
+      'This handcrafted coffee table features a stunning tabletop cut from a single slab of maple burl, showcasing its natural edges, swirling grain, and rich character. The organic shape is preserved to highlight the wood’s raw beauty. It stands on sturdy spalted maple legs that complement the top with their rustic texture and natural coloration.',
     price: '$1200',
   },
   {
@@ -24,7 +24,7 @@ export default [
     type: types.smallTable,
     name: 'Coffee Table',
     description:
-      'These tables are made with slices from a remarkable maple burl held up by spalted maple legs. the table is 18 inches high and well over 2 feet in diameter',
+      'This handcrafted coffee table features a layered design using three organically shaped maple burl slabs, each with natural edges and rich grain patterns. The overlapping arrangement creates a dynamic, sculptural surface that’s both functional and artistic. A smaller accent slab rests atop the main surface, adding depth and visual interest. The table stands on rustic spalted maple legs that echo the natural aesthetic of the top. Ideal for those who appreciate raw, organic design with a touch of Maine craftsmanship.',
     price: '$1000',
   },
 
@@ -34,7 +34,7 @@ export default [
     name: 'End Table/Plant table',
     type: types.smallTable,
     description:
-      'Customers have used these 30 inch high tables as both end tables and plant stands. The focal point of each is the top which is made of spalted burls. The legs are made with the same wood type as the top. Each leg has the bark left on and is sanded and treated to make it firmly attached to the base wood.',
+      'This handcrafted three-tier table is a versatile piece that functions beautifully as an end table or plant stand. Each tier is made from polished spalted burl wood, showcasing natural edges and rich grain patterns. The organic shapes of the tiers give the piece a sculptural, earthy character. The legs are crafted from matching wood, with the bark left on and carefully treated to preserve its texture while ensuring durability. Standing 30 inches tall, this table brings a touch of the Maine forest into any indoor or outdoor space.',
     price: '$1000',
   },
 
@@ -44,7 +44,7 @@ export default [
     name: 'End Table/Plant table',
     type: types.smallTable,
     description:
-      'Customers have used these 30 inch high tables as both end tables and plant stands. The focal point of each is the top which is made of spalted burls. Each leg has the bark left on though it is sanded and treated to make it firmly attached to the base wood.',
+      'This handcrafted three-tier table is a versatile piece that functions beautifully as an end table or plant stand. Each tier is made from polished spalted burl wood, showcasing natural edges and rich grain patterns. The organic shapes of the tiers give the piece a sculptural, earthy character. The legs are crafted from matching wood, with the bark left on and carefully treated to preserve its texture while ensuring durability. Standing 30 inches tall, this table brings a touch of the Maine forest into any indoor or outdoor space.',
     price: '$1000',
   },
   {
@@ -53,7 +53,7 @@ export default [
     name: 'End Table/Plant table',
     type: types.smallTable,
     description:
-      'Customers have used these 30 inch high tables as both end tables and plant stands. The focal point of each is the top which is made of spalted burls. Each leg has the bark left on though it is sanded and treated to make it firmly attached to the base wood.',
+      'This handcrafted three-tier table is a versatile piece that functions beautifully as an end table or plant stand. Each tier is made from polished spalted burl wood, showcasing natural edges and rich grain patterns. The organic shapes of the tiers give the piece a sculptural, earthy character. The legs are crafted from matching wood, with the bark left on and carefully treated to preserve its texture while ensuring durability. Standing 30 inches tall, this table brings a touch of the Maine forest into any indoor or outdoor space.',
     price: '$1000',
   },
   {
@@ -62,7 +62,7 @@ export default [
     name: 'Burl Side Table with "C" legs',
     type: types.smallTable,
     description:
-      'A variety of unique large Maine burls are sliced and are added to a "C" shaped leg arrangement',
+      'This handcrafted side table features a top made from a uniquely shaped Maine burl slab, showcasing natural edges and rich wood grain. The standout feature is its trio of “C”-shaped legs—three vertical wooden panels with circular cutouts that provide both visual interest and structural support. The rustic finish and organic form make this piece a perfect accent for nature-inspired or artisanal interiors. Compact yet full of character, it works beautifully as a side table, plant stand, or sculptural decor.',
     price: '$500 ~ $600',
   },
   {
