@@ -30,26 +30,30 @@ export default function Type({
   }));
 
   function handleClick() {
-    if (header == 'Coffee Tables & Plant Stands') {
-      setActiveGalleryTypeString('smallTable');
+    let galleryTypeString;
+    console.log('header', header);
+
+    switch (header) {
+      case 'Coffee Tables <br/> Plant Stands':
+        galleryTypeString = 'smallTable';
+        break;
+      case 'Chairs <br/> Ottomans':
+        galleryTypeString = 'chairs';
+        break;
+      case 'Tables':
+        galleryTypeString = 'largeTable';
+        break;
+      case 'Structures':
+        galleryTypeString = 'structure';
+        break;
+      case 'Others':
+        galleryTypeString = 'other';
+        break;
+      default:
+        galleryTypeString = 'chairs'; // Default value
     }
 
-    if (header == 'Chairs & Ottomans') {
-      setActiveGalleryTypeString('chairs');
-    }
-
-    if (header == 'Tables') {
-      setActiveGalleryTypeString('largeTable');
-    }
-
-    if (header == 'Structures') {
-      setActiveGalleryTypeString('structure');
-    }
-
-    if (header == 'Others') {
-      setActiveGalleryTypeString('other');
-    }
-
+    setActiveGalleryTypeString(galleryTypeString);
     setActiveGalleryType(index);
     onTypeSelect();
   }

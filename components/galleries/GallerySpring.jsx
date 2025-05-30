@@ -27,12 +27,15 @@ export default function Gallery({
     const newGalleryTypeArr = images.filter(
       (image) => image.type === showGalleryString
     );
+    console.log(showGalleryString, newGalleryTypeArr);
 
     if (window.innerWidth < 1200) {
       newGalleryTypeArr.splice(8);
     }
     setGalleryTypeArr(newGalleryTypeArr);
-  }, [galleryType]);
+    // Reset current photo when gallery type changes
+    setCurrentPhoto(0);
+  }, [galleryType, showGalleryString, setGalleryTypeArr, setCurrentPhoto]);
 
   const handleThumbNailHover = (event) => {
     const index = Array.prototype.indexOf.call(
