@@ -27,7 +27,6 @@ export default function Gallery({
     const newGalleryTypeArr = images.filter(
       (image) => image.type === showGalleryString
     );
-    console.log(showGalleryString, newGalleryTypeArr);
 
     if (window.innerWidth < 1200) {
       newGalleryTypeArr.splice(8);

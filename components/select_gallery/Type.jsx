@@ -31,7 +31,6 @@ export default function Type({
 
   function handleClick() {
     let galleryTypeString;
-    console.log('header', header);
 
     switch (header) {
       case 'Coffee Tables <br/> Plant Stands':
