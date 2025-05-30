@@ -185,9 +185,9 @@ export default function Gallery({
                 onClick={() => handleThumbnailClick(index)}
               />
             ))}
-            <div className="furniturePrice">
+            {/* <div className="furniturePrice">
               Price: {galleryTypeArr[currentPhoto]?.price}
-            </div>
+            </div> */}
           </div>
           <>
             <div className="galleryLeftBottom">
@@ -243,9 +243,9 @@ export default function Gallery({
                   <h2 className="mobileProductName">
                     {galleryTypeArr[currentPhoto]?.name}
                   </h2>
-                  <div className="mobileProductPrice">
+                  {/* <div className="mobileProductPrice">
                     Price: {galleryTypeArr[currentPhoto]?.price}
-                  </div>
+                  </div> */}
                   <p className="mobileProductDescription">
                     {galleryTypeArr[currentPhoto]?.description}
                   </p>

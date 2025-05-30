@@ -15,7 +15,7 @@ export default [
     name: 'Coffee Table',
     type: types.smallTable,
     description:
-      'These tables are made with slices from a remarkable maple burl held up by spalted maple legs. the table is 18 inches high and well over 2 feet in diameter',
+      'This handcrafted coffee table features a stunning tabletop cut from a single slab of maple burl, showcasing its natural edges, swirling grain, and rich character. The organic shape is preserved to highlight the wood’s raw beauty. It stands on sturdy spalted maple legs that complement the top with their rustic texture and natural coloration. At 18 inches high and over 2 feet in diameter, this piece serves as both a functional table and a sculptural centerpiece—perfect for adding warmth and artistry to any living space.',
     price: '$1200',
   },
   {
@@ -70,7 +70,8 @@ export default [
     img: small_glass_table,
     name: 'Tempered Glass Table',
     type: types.smallTable,
-    description: 'Made with a single Ceder root and tempered glass',
+    description:
+      'This handcrafted table features a striking base sculpted from a single cedar root, showcasing its natural curves, textures, and grain patterns. A custom-cut tempered glass top rests above, following the contours of the root structure. The result is a functional piece of art that blends rustic charm with modern elegance.',
     price: '$1000 ~ $1500',
   },
 ];

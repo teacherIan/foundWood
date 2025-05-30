@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useCallback, useEffect } from 'react';
 import found_wood from './assets/found_wood_final_all.png';
 import Contact from '../components/contact/Contact';
-import GallerySpring from '../components/galleries/GallerySpring';
+import Gallery from '../components/galleries/Gallery';
 import Types from '../components/select_gallery/Types';
 import NewCanvas from '../components/new_experience/Experience';
 import FontFaceObserver from 'fontfaceobserver';
@@ -154,7 +154,7 @@ function NewApp() {
         </div>
       ) : null}
 
-      <GallerySpring
+      <Gallery
         galleryType={activeGalleryType}
         showGallery={showGallery}
         showGalleryString={activeGalleryTypeString}

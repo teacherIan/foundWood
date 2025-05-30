@@ -169,7 +169,7 @@ export default function Form({ setShowContactPage, handleExitClick }) {
           </label>
         </div>
 
-        <div className="form-control" style={{ width: '50vw' }}>
+        <div className="form-control">
           <input
             autoComplete="off"
             name="message"

@@ -209,9 +209,9 @@
     left: 0;
     right: 0;
     transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.37);
     color: white;
-    padding: 8px 15px;
+    padding: 0px 0px;
     border-radius: 20px;
     font-size: 14px;
     z-index: 10001;

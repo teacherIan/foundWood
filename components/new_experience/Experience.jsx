@@ -22,8 +22,8 @@ function Scene({ isAnimating, showContactPage }) {
     idleTimeRef.current += delta;
 
     // Oscillate camera position or rotation slowly
-    const idleX = Math.sin(idleTimeRef.current * 0.5) * 0.01; // Side to side
-    const idleY = Math.sin(idleTimeRef.current * 1) * 0.005; // Slight up/down
+    const idleX = Math.sin(idleTimeRef.current * 0.7) * 0.01; // Side to side
+    const idleY = Math.sin(idleTimeRef.current * 1.2) * 0.005; // Slight up/down
 
     // Option 1: Move camera position gently around initial position
     camera.position.x = idleX;
@@ -68,7 +68,6 @@ function Scene({ isAnimating, showContactPage }) {
     return () => window.removeEventListener('resize', handleResize);
   }, [camera]);
 
-  // More efficient animation using useRef and delta time
   useEffect(() => {
     let startTime = null;
     let loadProgress = 0;

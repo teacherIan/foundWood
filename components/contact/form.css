@@ -84,7 +84,7 @@
 .form-control {
     position: relative;
     margin: calc(var(--spacing-unit) * 4) 0 calc(var(--spacing-unit) * 8);
-    width: 25vw;
+    width: 40svw;
     filter: drop-shadow(1px 1px 0px black);
 
 }
