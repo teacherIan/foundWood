@@ -1,10 +1,11 @@
-import coffeeTableStudio from '../../../src/assets/gallery/small_tables/coffee_table_side.jpeg';
+import coffeeTableStudio from '../../../src/assets/gallery/small_tables/coffee_table_side.png';
 import coffeeTable from '../../../src/assets/gallery/small_tables/real_tableA.jpg';
 import plantStand from '../../../src/assets/gallery/small_tables/plantStand.jpeg';
 import plantStandCaryl from '../../../src/assets/gallery/small_tables/plantStandD.jpeg';
 import tables from '../../../src/assets/gallery/small_tables/tables.jpg';
 import small_table from '../../../src/assets/gallery/small_tables/smallTable.jpeg';
 import small_glass_table from '../../../src/assets/gallery/small_tables/glass_coffee_table.jpg';
+import small_glass_table_side from '../../../src/assets/gallery/small_tables/glass_table_side.png';
 
 import types from './types';
 
@@ -68,6 +69,15 @@ export default [
   {
     orderNumber: '133',
     img: small_glass_table,
+    name: 'Tempered Glass Table',
+    type: types.smallTable,
+    description:
+      'This handcrafted table features a striking base sculpted from a single cedar root, showcasing its natural curves, textures, and grain patterns. A custom-cut tempered glass top rests above, following the contours of the root structure. The result is a functional piece of art that blends rustic charm with modern elegance.',
+    price: '$1000 ~ $1500',
+  },
+  {
+    orderNumber: '134',
+    img: small_glass_table_side,
     name: 'Tempered Glass Table',
     type: types.smallTable,
     description:

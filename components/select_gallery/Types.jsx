@@ -4,8 +4,8 @@ import './types.css';
 import { useEffect } from 'react';
 import chair from '../../src/assets/noBG/double_chair_final_noBG.png';
 // import table from '../../src/assets/noBG/plantStand_new.png';
-import table from '../../src/assets/gallery/dentist.png';
-import picnicTable from '../../src/assets/noBG/picnic_table_B.png';
+import table from '../../src/assets/noBG/glass-table.png';
+import picnicTable from '../../src/assets/noBG/adult_picnic_table.png';
 import house from '../../src/assets/noBG/playHouse-transformed.png';
 import light from '../../src/assets/noBG/light_noBG.png';
 

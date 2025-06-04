@@ -1,7 +1,7 @@
-import doubleChair from '../../../src/assets/gallery/real_double_chair.jpg';
-import captainChair from '../../../src/assets/gallery/chairs/real_high_chair.jpg';
-import gaudiChair from '../../../src/assets/gallery/double_seat.png';
-import adirondack_chair_w_stool from '../../../src/assets/gallery/chairs/chair_w_stool.jpg';
+import doubleChair from '../../../src/assets/gallery/chairs/real_double_chair.png';
+import captainChair from '../../../src/assets/gallery/chairs/real_high_chair.png';
+import gaudiChair from '../../../src/assets/gallery/chairs/double_seat.png';
+import adirondack_chair_w_stool from '../../../src/assets/gallery/chairs/chair_w_stool.png';
 import outside_adirondack_chair from '../../../src/assets/gallery/chairs/Adirondack_chair.jpeg';
 import swing_back from '../../../src/assets/gallery/chairs/swing_back.jpg';
 import swingA from '../../../src/assets/gallery/chairs/swing_a.jpg';
@@ -61,15 +61,6 @@ export default [
     type: types.chairs,
     description:
       'This very comfortable chair has White Cedar uprights cut and shaped for lumbar support and 6/4" Cedar arms which are screwed together and covered with Mahogany plugs. This chair is made to last as four coats of spar varnish are heated into the wood. For those who will be using the chair indoors or in a more sheltered location, a different, less durable but richer finish will be used.',
-    price: '$1400 ~ $2000',
-  },
-  {
-    orderNumber: '031',
-    img: swing_back,
-    type: types.chairs,
-    name: 'Swing',
-    description:
-      'Like the Adirondack Chair, the Found Wood Swing is made with 5/4 Red Cedar slats, mahogany plugs and white cedar slats. It is finished with multiple coats of spar varnish that is heated and rubbed in.',
     price: '$1400 ~ $2000',
   },
   {

@@ -1,6 +1,6 @@
 import types from './types';
 import kidsPicnicTable from '../../../src/assets/gallery/real_picnic_table_rotated.png';
-import adult_picnic_table from '../../../src/assets/gallery/large_tables/adult_picnic_table.jpg';
+import adult_picnic_table from '../../../src/assets/gallery/large_tables/adult_picnic_table.png';
 import picnicTableC from '../../../src/assets/gallery/large_tables/picnic_table_b.jpg';
 import diningTableTop from '../../../src/assets/gallery/large_tables/dining_table_overhead.jpeg';
 import diningTableUnder from '../../../src/assets/gallery/large_tables/dining_table_under.jpeg';
