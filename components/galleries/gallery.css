@@ -267,6 +267,7 @@
         height: 120svw;
         object-fit: fill;
         border: none;
+        padding-bottom: 100px;
 
         /* object-position: 50% 70%; */
         /* Center horizontally, align 20% from the top */
