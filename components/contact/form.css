@@ -16,6 +16,7 @@
 .contactContainer {
     z-index: 20000;
     background-repeat: no-repeat;
+    background-size: 0;
     background-size: 100svw 100svh;
     position: fixed;
     top: 0;
@@ -215,26 +216,35 @@ a {
 } */
 
 .exit-icon {
-    font-size: 40px;
-    /* Adjust size for better visibility */
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: calc(var(--base-size) * 2.5);
     color: white;
-    border: none;
-    /* Remove border if using an icon */
     background: none;
-    /* Transparent background */
+    border: 3px solid white;
+    border-radius: 50%;
+    width: calc(var(--base-size) * 4);
+    height: calc(var(--base-size) * 4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    /* transition: transform 0.3s ease-in-out, color 0.3s ease-in-out; */
-    animation: pulse 1.5s infinite;
-
-
-
+    transition: all 0.3s ease;
+    -webkit-text-stroke: 1px #77481C;
+    -webkit-text-fill-color: #ffffff;
+    filter: drop-shadow(2px 2px 0px #77481C);
+    z-index: 100000;
+    transform: rotate(180deg);
 }
 
 .exit-icon:hover {
-    color: var(--lightGreen);
-    /* Change color on hover */
-    transform: scale(1.2);
-    /* Slightly enlarge on hover */
+    background-color: var(--lightGreen);
+    transform: rotate(0deg);
+}
+
+.exit-icon:active {
+    transform: scale(0.95) rotate(0deg);
 }
 
 @media only screen and (max-width: 1000px) {
@@ -266,5 +276,20 @@ a {
 
     50% {
         /* transform: scale(1.1); */
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .exit-icon {
+        top: 15px;
+        right: 15px;
+        font-size: calc(var(--base-size) * 2);
+        width: calc(var(--base-size) * 3.5);
+        height: calc(var(--base-size) * 3.5);
+    }
+
+    .formHeader {
+        margin-top: calc(var(--spacing-unit) * 6);
+        padding-top: calc(var(--spacing-unit) * 2);
     }
 }

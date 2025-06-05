@@ -138,9 +138,13 @@ export default function Form({ setShowContactPage, handleExitClick }) {
 
   return (
     <div className="formContainer">
-      {/* <div className="exit-icon" onClick={handleExitClick}>
+      <button
+        className="exit-icon"
+        onClick={handleExitClick}
+        aria-label="Close form"
+      >
         <MdExitToApp />
-      </div> */}
+      </button>
       <div className="formHeader">We'd Love to Hear From You!</div>
       <form autoComplete="off" onSubmit={handleSubmit}>
         <div className="form-control">

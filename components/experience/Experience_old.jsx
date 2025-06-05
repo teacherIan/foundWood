@@ -17,7 +17,7 @@ extend(THREE);
 export default function Experience({ counter, setCounter, showContactPage }) {
   return (
     <Canvas
-      frameloop={showContactPage ? 'never' : 'always'}
+      frameloop={showContactPage ? 'always' : 'always'}
       gl={(canvas) => {
         const renderer = new THREE.WebGPURenderer({
           canvas,

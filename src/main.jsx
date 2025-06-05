@@ -19,5 +19,6 @@ window.addEventListener('resize', () => {
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <NewApp />
+    <Analytics />
   </React.StrictMode>
 );
