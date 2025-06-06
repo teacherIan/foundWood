@@ -212,7 +212,7 @@ body {
   cursor: pointer;
   filter: drop-shadow(.5px .5px 1px rgb(0, 0, 0));
   overflow: visible;
-
+  z-index: 90002;
 
   /* border: 1px solid rgba(0, 0, 0, 0.505); */
   /* Increased border width */
