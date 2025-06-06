@@ -109,7 +109,7 @@ export default function Types({
               left:
                 window.innerWidth < window.innerHeight
                   ? 50 * (index % 2) + 'svw'
-                  : 22 * index + 'svw',
+                  : 23 * index + 'svw',
               transform: spring.y.to((y) => `translateY(${y}svh)`), // Use translateY
               opacity: spring.opacity,
             }}
