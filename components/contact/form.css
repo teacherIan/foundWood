@@ -1,3 +1,7 @@
+:root {
+    --spacing-unit: 3rem;
+}
+
 .contactContainer {
     z-index: 20000;
     background-repeat: no-repeat;
@@ -17,7 +21,7 @@
     text-align: center;
     margin-bottom: 2rem;
     filter: drop-shadow(2px 2px 0px black);
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-size: clamp(3.5rem, 6vw, 4.5rem);
     color: white;
     -webkit-text-stroke: 1px #77481C;
     -webkit-text-fill-color: #ffffff;
@@ -43,7 +47,7 @@
 }
 
 .btn-text {
-    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-size: clamp(2rem, 2.5vw, 3rem);
     color: var(--brown);
     -webkit-text-stroke: 2px #77481C;
     -webkit-text-fill-color: #ffffff;
@@ -63,7 +67,7 @@
 }
 
 .text {
-    margin-top: calc(var(--spacing-unit) * 6);
+    margin-top: calc(var(--spacing-unit) * 10);
 }
 
 .form-control {
@@ -80,8 +84,8 @@
     border-bottom: 2px #fff solid;
     display: block;
     width: 100%;
-    padding: 0.5rem 0;
-    font-size: clamp(1rem, 2vw, 1.25rem);
+    padding: calc(var(--spacing-unit) * 0.5) 0;
+    font-size: var(--spacing-unit);
     color: white;
     position: relative;
     z-index: 100;
@@ -89,6 +93,7 @@
     -webkit-text-stroke: 1px #77481C;
     -webkit-text-fill-color: #ffffff;
     filter: drop-shadow(1px 1px 0px black);
+    height: calc(var(--spacing-unit) * 2);
 }
 
 .form-control input:focus,
@@ -99,7 +104,7 @@
 
 .form-control label {
     position: absolute;
-    top: 0.5rem;
+    top: calc(var(--spacing-unit) * 0.3);
     left: 0;
     pointer-events: none;
     transform: translateY(0);
@@ -107,29 +112,32 @@
     filter: drop-shadow(1px 1px 0px black);
     -webkit-text-stroke: 1px #77481C;
     -webkit-text-fill-color: #ffffff;
+    font-size: var(--spacing-unit);
+    line-height: calc(var(--spacing-unit) * 2);
 }
 
 .form-control input:focus+label,
 .form-control input:valid+label {
-    transform: translateY(calc(var(--spacing-unit) * -6));
+    transform: translateY(calc(var(--spacing-unit) * -.5));
 }
 
 .form-control label span {
     display: inline-block;
-    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-size: var(--spacing-unit);
     min-width: 0.5rem;
     color: white;
+    line-height: calc(var(--spacing-unit) * 2);
 }
 
 .form-control input:focus+label span,
 .form-control input:valid+label span {
-    transform: translateY(calc(var(--spacing-unit) * -1));
-    transition: transform 0.3s cubic-bezier(0.68, -20, 0.265, 1.55);
+    transform: translateY(calc(var(--spacing-unit) * -1.01));
+    transition: transform 0.3s cubic-bezier(0.68, -1.5, 0.265, 2);
 }
 
 .facebookIcon {
     margin-top: 1rem;
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-size: clamp(3rem, 5vw, 6rem);
     color: white;
     transition: 1s;
     stroke: #77481C;
@@ -141,7 +149,7 @@
 }
 
 .facebookText {
-    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-size: clamp(2.5rem, 5vw, 5rem);
     color: white;
     -webkit-text-stroke: 2px #77481C;
     -webkit-text-fill-color: #ffffff;
@@ -199,13 +207,13 @@ a {
     position: absolute;
     top: 20px;
     right: 20px;
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-size: clamp(2rem, 4vw, 3rem);
     color: white;
     background: none;
     border: 3px solid white;
     border-radius: 50%;
-    width: clamp(2.5rem, 5vw, 3rem);
-    height: clamp(2.5rem, 5vw, 3rem);
+    width: clamp(3rem, 5vw, 4rem);
+    height: clamp(3rem, 5vw, 4rem);
     display: flex;
     align-items: center;
     justify-content: center;
