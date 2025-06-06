@@ -312,7 +312,7 @@ a {
     .exit-icon {
         top: 15px;
         right: 15px;
-        font-size: calc(var(--base-size) * 2);
+        font-size: calc(var(--base-size) * 1);
         width: calc(var(--base-size) * 3.5);
         height: calc(var(--base-size) * 3.5);
     }
@@ -320,5 +320,8 @@ a {
     .formHeader {
         margin-top: calc(var(--spacing-unit) * 0);
         padding-top: calc(var(--spacing-unit) * 0);
+    }
+    .btn {
+        margin-top: 0;
     }
 }
