@@ -266,6 +266,8 @@ canvas {
   .menu {
     /* padding: 0.5rem; */
     font-size: clamp(1.8rem, 2.5vw, 3.5rem);
+    align-items: center;
+    padding: 1rem 0.5rem;
   }
 
   .menu-item {
@@ -278,6 +280,15 @@ canvas {
     /* Thinner stroke */
     line-height: 60px;
 
+  }
+
+  .icon {
+    height: 8svh;
+    /* Adjust icon size on mobile */
+    width: 8svh;
+    max-height: 60px;
+    /* Set a max pixel height to prevent clipping */
+    max-width: 60px;
   }
 
   .infoGraphic {
