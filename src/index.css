@@ -195,6 +195,8 @@ body {
   /* Increased border width */
   filter: drop-shadow(2px 2px 2px #1c5077);
   border-radius: 200px;
+  z-index: 90005;
+  overflow: visible;
 
 }
 
