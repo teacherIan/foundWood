@@ -6,7 +6,7 @@ import chair from '../../src/assets/noBG/double_chair_final_noBG.png';
 // import table from '../../src/assets/noBG/plantStand_new.png';
 import table from '../../src/assets/noBG/glass-table.png';
 import picnicTable from '../../src/assets/noBG/adult_picnic_table.png';
-import house from '../../src/assets/noBG/playHouse-transformed.png';
+import house from '../../src/assets/noBG/Play-house-4.png';
 import light from '../../src/assets/noBG/light_noBG.png';
 
 const configAnimation = {
@@ -33,7 +33,7 @@ function useTypeSpring(showTypes, index) {
       });
     } else if (showTypes) {
       setSpring.start({
-        y: index % 2 === 0 ? 112 : 150,
+        y: index % 2 === 0 ? 112 : index === 1 ? 140 : 128,
         opacity: 1,
         delay: index * 200,
       });

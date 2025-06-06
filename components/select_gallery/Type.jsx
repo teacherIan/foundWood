@@ -61,12 +61,12 @@ export default function Type({
     if (active) {
       api.start({
         // background: `linear-gradient(to bottom, #77481C11,#00000000, #77481C11)`,
-        scale: 0.9,
+        scale: 1,
       });
     } else {
       api.start({
         // background: `linear-gradient(to bottom, #00000000,#00000000, #77481C00)`,
-        scale: 0.8,
+        scale: 0.9,
       });
     }
   }, [active, api]);

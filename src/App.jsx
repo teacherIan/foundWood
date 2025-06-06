@@ -7,7 +7,7 @@ import Types from '../components/select_gallery/Types';
 import NewCanvas from '../components/new_experience/Experience';
 import FontFaceObserver from 'fontfaceobserver';
 
-function NewApp() {
+function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isAnimating, setIsAnimating] = useState(true);
   const [activeGalleryTypeString, setActiveGalleryTypeString] =
@@ -44,20 +44,28 @@ function NewApp() {
   }, []);
 
   const handleGalleryTypesClickCallback = useCallback(() => {
-    setTimeout(() => {
-      setShowTypes(!showTypes);
-    }, 100);
+    // First determine what the new state should be (opposite of current)
+    const newShowTypesState = !showTypes;
 
-    if (!showGallery) {
-      setIsAnimating(!isAnimating);
+    // Set the new state directly without setTimeout
+    setShowTypes(newShowTypesState);
+
+    // Only toggle animation if showing Types and not already in Gallery
+    if (newShowTypesState && !showGallery) {
+      setIsAnimating(false); // Stop animation when showing Types
+    } else if (!newShowTypesState) {
+      setIsAnimating(true); // Resume animation when hiding Types
     }
 
-    setShowGallery(false);
-    setTimeout(() => {
-      setShowDetails(false);
-    }, 1000);
-    setShowInfographic(false);
-  }, [setShowTypes, setShowGallery, showTypes, setIsAnimating, showGallery]);
+    // If showing Types, hide Gallery
+    if (newShowTypesState) {
+      setShowGallery(false);
+      // setTimeout(() => {
+      //   setShowDetails(false);
+      // }, 1000);
+      setShowInfographic(false);
+    }
+  }, [setShowTypes, setShowGallery, showTypes, showGallery, setIsAnimating]);
 
   const handleMissionButtonClickCallback = useCallback(() => {
     setIsAnimating(!isAnimating);
@@ -205,34 +213,13 @@ function NewApp() {
           </div>
         </div>
 
-        <div className="blur">
-          {/* <div
-            className="infoGraphic"
-            onClick={() => setShowInfographic(!showInfographic)}
-            style={
-              showInfographic
-                ? { bottom: '0%', opacity: 1, zIndex: 999999 }
-                : { bottom: '-50%', opacity: 0 }
-            }
-          >
-            <div className="gallery_description_header">
-              {galleryTypeArr[currentPhoto]?.name}
-            </div>
-
-            <br />
-            {galleryTypeArr[currentPhoto]?.description}
-            <br />
-            {galleryTypeArr[currentPhoto]?.price}
-          </div> */}
-
-          <NewCanvas
-            showContactPage={showContactPage}
-            isAnimating={isAnimating}
-          />
-        </div>
+        <NewCanvas
+          showContactPage={showContactPage}
+          isAnimating={isAnimating}
+        />
       </div>
     </>
   );
 }
 
-export default NewApp;
+export default App;
