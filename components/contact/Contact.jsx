@@ -38,8 +38,11 @@ export default function Contact({
   }, [showContactPage, api]);
 
   function handleExitClick() {
-    setShowContactPage(!showContactPage);
-    if (showTypes || showGallery) {
+    setShowContactPage(false);
+    // If we were in gallery view before, keep it that way
+    if (showGallery) {
+      setIsAnimating(false);
+    } else if (showTypes) {
       setIsAnimating(false);
     } else {
       setIsAnimating(true);

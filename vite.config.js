@@ -19,6 +19,14 @@ export default defineConfig({
       },
     },
     chunkSizeWarningLimit: 1000,
+    cssCodeSplit: true,
+    sourcemap: true,
+  },
+  css: {
+    devSourcemap: true,
+    modules: {
+      localsConvention: 'camelCase',
+    },
   },
   resolve: {
     alias: {

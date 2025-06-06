@@ -42,12 +42,13 @@
     border-radius: 150px;
     cursor: pointer;
     transition: 0.3s ease-in-out;
+    filter: grayscale(100%);
+    opacity: 0.6;
 }
 
 .thumbNailPhoto.grayscale {
-    filter: grayscale(100%);
-    opacity: 0.6;
-    /* optional, for a dimmed effect */
+    filter: none;
+    opacity: 1;
 }
 
 /* .thumbNailPhoto:active {
