@@ -207,7 +207,7 @@ body {
 }
 
 .icon {
-  display: flex;
+  display: block;
   width: 10svh;
   height: 10svh;
   user-select: none;
