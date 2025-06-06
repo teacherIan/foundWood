@@ -264,8 +264,8 @@
     .masterImage {
         border-radius: 0px;
         width: 100svw;
-        height: 120svw;
-        object-fit: fill;
+        height: 150svw;
+        /* object-fit: fill; */
         border: none;
         padding-bottom: 100px;
 
