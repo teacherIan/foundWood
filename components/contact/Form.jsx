@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
-import './form.css';
-import { FaFacebook } from 'react-icons/fa';
-import { MdExitToApp } from 'react-icons/md';
-import emailjs from '@emailjs/browser';
+import { useState, useEffect, useRef } from "react";
+import "./form.css";
+import { FaFacebook } from "react-icons/fa";
+import { MdExitToApp } from "react-icons/md";
+import emailjs from "@emailjs/browser";
 
 export default function Form({ setShowContactPage, handleExitClick }) {
-  const [nameLabel, setNameLabel] = useState(['']);
-  const [emailLabel, setEmailLabel] = useState(['']);
-  const [messageLabel, setMessageLabel] = useState(['']);
+  const [nameLabel, setNameLabel] = useState([""]);
+  const [emailLabel, setEmailLabel] = useState([""]);
+  const [messageLabel, setMessageLabel] = useState([""]);
   const nameInputRef = useRef(null);
   const nameLabelRef = useRef(null);
   const emailInputRef = useRef(null);
@@ -17,14 +17,14 @@ export default function Form({ setShowContactPage, handleExitClick }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const serviceId = 'service_ucr96wu';
-    const templateId = 'template_pkhjdgm';
+    const serviceId = "service_ucr96wu";
+    const templateId = "template_pkhjdgm";
 
     try {
       const form = new FormData(e.target);
-      const name = form.get('name');
-      const email = form.get('email');
-      const message = form.get('message');
+      const name = form.get("name");
+      const email = form.get("email");
+      const message = form.get("message");
 
       await emailjs.send(serviceId, templateId, {
         name,
@@ -32,22 +32,22 @@ export default function Form({ setShowContactPage, handleExitClick }) {
         message,
       });
       setShowContactPage(false);
-      alert('Email sent successfully!');
+      alert("Email sent successfully!");
     } catch (error) {
-      alert('Unable to send email. Please check connection');
-      console.log('Error:', error);
+      alert("Unable to send email. Please check connection");
+      console.log("Error:", error);
     }
   };
 
   useEffect(() => {
-    emailjs.init('nsZGLCenvPQb-kW11');
+    emailjs.init("nsZGLCenvPQb-kW11");
   }, []);
 
   useEffect(() => {
     if (nameLabelRef.current) {
       const label = nameLabelRef.current;
       const text = label.innerText;
-      const letters = text.split('').map((letter, idx) => ({
+      const letters = text.split("").map((letter, idx) => ({
         letter,
         delay: idx * 50,
       }));
@@ -78,7 +78,7 @@ export default function Form({ setShowContactPage, handleExitClick }) {
     if (emailLabelRef.current) {
       const label = emailLabelRef.current;
       const text = label.innerText;
-      const letters = text.split('').map((letter, idx) => ({
+      const letters = text.split("").map((letter, idx) => ({
         letter,
         delay: idx * 50,
       }));
@@ -109,7 +109,7 @@ export default function Form({ setShowContactPage, handleExitClick }) {
     if (messageLabelRef.current) {
       const label = messageLabelRef.current;
       const text = label.innerText;
-      const letters = text.split('').map((letter, idx) => ({
+      const letters = text.split("").map((letter, idx) => ({
         letter,
         delay: idx * 50,
       }));
@@ -138,14 +138,16 @@ export default function Form({ setShowContactPage, handleExitClick }) {
 
   return (
     <div className="formContainer">
-      <button
-        className="exit-icon"
-        onClick={handleExitClick}
-        aria-label="Close form"
-      >
-        <MdExitToApp />
-      </button>
-      <div className="formHeader">We'd Love to Hear From You!</div>
+      <div className="formHeader">
+        <span className="formHeaderText">We'd Love to Hear From You!</span>
+        <button
+          className="exit-icon"
+          onClick={handleExitClick}
+          aria-label="Close form"
+        >
+          <MdExitToApp />
+        </button>
+      </div>
       <form autoComplete="off" onSubmit={handleSubmit}>
         <div className="form-control">
           <input
@@ -156,7 +158,7 @@ export default function Form({ setShowContactPage, handleExitClick }) {
             required
           />
           <label ref={nameLabelRef}>
-            {nameLabel.length > 1 ? nameLabel : 'Name'}
+            {nameLabel.length > 1 ? nameLabel : "Name:"}
           </label>
         </div>
 
@@ -165,11 +167,11 @@ export default function Form({ setShowContactPage, handleExitClick }) {
             autoComplete="off"
             name="email"
             ref={emailInputRef}
-            type="text"
+            type="email"
             required
           />
           <label ref={emailLabelRef}>
-            {emailLabel.length > 1 ? emailLabel : 'Email'}
+            {emailLabel.length > 1 ? emailLabel : "Email:"}
           </label>
         </div>
 
@@ -182,7 +184,7 @@ export default function Form({ setShowContactPage, handleExitClick }) {
             required
           />
           <label ref={messageLabelRef}>
-            {messageLabel.length > 1 ? messageLabel : 'Message'}
+            {messageLabel.length > 1 ? messageLabel : "Message:"}
           </label>
         </div>
 
@@ -191,7 +193,7 @@ export default function Form({ setShowContactPage, handleExitClick }) {
         </button>
       </form>
       <a href="https://www.facebook.com/DougsFoundWood/" target="_blank">
-        <span className="facebookText">Follow us on</span>{' '}
+        <span className="facebookText">Follow us on</span>{" "}
         <FaFacebook className="facebookIcon" />
       </a>
     </div>

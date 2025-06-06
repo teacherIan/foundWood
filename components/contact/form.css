@@ -18,13 +18,19 @@
 }
 
 .formHeader {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     margin-bottom: 2rem;
     filter: drop-shadow(2px 2px 0px black);
     font-size: clamp(3.5rem, 6vw, 4.5rem);
     color: white;
-    -webkit-text-stroke: 1px #77481C;
+    -webkit-text-stroke: 1px #77481c;
     -webkit-text-fill-color: #ffffff;
+    position: relative;
+    text-align: left;
+    padding-right: 0.5rem;
 }
 
 .btn {
@@ -42,14 +48,14 @@
     margin-top: 1.5rem;
     border: 2px solid var(--brown);
     filter: drop-shadow(2px 2px 0px black);
-    -webkit-text-stroke: 3px #77481C;
+    -webkit-text-stroke: 3px #77481c;
     -webkit-text-fill-color: #ffffff;
 }
 
 .btn-text {
     font-size: clamp(2rem, 2.5vw, 3rem);
     color: var(--brown);
-    -webkit-text-stroke: 2px #77481C;
+    -webkit-text-stroke: 2px #77481c;
     -webkit-text-fill-color: #ffffff;
     filter: drop-shadow(1px 1px 0px black);
 }
@@ -90,7 +96,7 @@
     position: relative;
     z-index: 100;
     transition: 1s;
-    -webkit-text-stroke: 1px #77481C;
+    -webkit-text-stroke: 1px #77481c;
     -webkit-text-fill-color: #ffffff;
     filter: drop-shadow(1px 1px 0px black);
     height: calc(var(--spacing-unit) * 2);
@@ -110,15 +116,15 @@
     transform: translateY(0);
     transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     filter: drop-shadow(1px 1px 0px black);
-    -webkit-text-stroke: 1px #77481C;
+    -webkit-text-stroke: 1px #77481c;
     -webkit-text-fill-color: #ffffff;
     font-size: var(--spacing-unit);
     line-height: calc(var(--spacing-unit) * 2);
 }
 
-.form-control input:focus+label,
-.form-control input:valid+label {
-    transform: translateY(calc(var(--spacing-unit) * -.5));
+.form-control input:focus + label,
+.form-control input:valid + label {
+    transform: translateY(calc(var(--spacing-unit) * -0.5));
 }
 
 .form-control label span {
@@ -129,8 +135,8 @@
     line-height: calc(var(--spacing-unit) * 2);
 }
 
-.form-control input:focus+label span,
-.form-control input:valid+label span {
+.form-control input:focus + label span,
+.form-control input:valid + label span {
     transform: translateY(calc(var(--spacing-unit) * -1.01));
     transition: transform 0.3s cubic-bezier(0.68, -1.5, 0.265, 2);
 }
@@ -140,7 +146,7 @@
     font-size: clamp(3rem, 5vw, 6rem);
     color: white;
     transition: 1s;
-    stroke: #77481C;
+    stroke: #77481c;
     fill: #ffffff;
     stroke-width: 15px;
     filter: drop-shadow(1px 1px 0px black);
@@ -151,7 +157,7 @@
 .facebookText {
     font-size: clamp(2.5rem, 5vw, 5rem);
     color: white;
-    -webkit-text-stroke: 2px #77481C;
+    -webkit-text-stroke: 2px #77481c;
     -webkit-text-fill-color: #ffffff;
     filter: drop-shadow(1px 1px 0px black);
     text-decoration: none !important;
@@ -171,22 +177,22 @@ a {
 /* .exit-icon {
     display: inline-block;
     border-radius: 100%;
-    
+
     padding: 10px;
-    
+
     font-size: calc(var(--icon-size) * 2);
-    
+
     color: white;
     text-align: center;
-    
+
     line-height: 1;
-    
+
     position: absolute;
     left: 1%;
     top: 1%;
     z-index: 999999;
     transition: 0.3s;
-    
+
     -webkit-text-stroke: 1px #77481C;
     -webkit-text-fill-color: #ffffff;
     filter: drop-shadow(3px 3px 0px black);
@@ -195,18 +201,17 @@ a {
 
 /* .exit-icon:hover {
     fill: var(--lightGreen);
-    
+
     stroke: var(--brown);
-    
+
     stroke-width: 1px;
     cursor: pointer;
     filter: drop-shadow(3px 3px 10px black);
 } */
 
 .exit-icon {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    position: static;
+    transform: rotate(180deg);
     font-size: clamp(2rem, 4vw, 3rem);
     color: white;
     background: none;
@@ -219,11 +224,11 @@ a {
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    -webkit-text-stroke: 1px #77481C;
+    -webkit-text-stroke: 1px #77481c;
     -webkit-text-fill-color: #ffffff;
-    filter: drop-shadow(2px 2px 0px #77481C);
+    filter: drop-shadow(2px 2px 0px #77481c);
     z-index: 100000;
-    transform: rotate(180deg);
+    margin-left: auto;
 }
 
 .exit-icon:hover {
@@ -236,29 +241,63 @@ a {
 }
 
 @media only screen and (max-width: 1000px) {
-    .exit-icon {
-        right: 2%;
-        top: 90%;
-        font-size: 2.5rem;
-        width: 3.5rem;
-        height: 3.5rem;
-    }
-}
-
-@media only screen and (max-width: 1000px) {
     .form-control {
-        width: 80vw;
+        width: 90vw;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
     }
-
+    .formContainer {
+        width: 98vw;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+    .exit-icon {
+        font-size: 2rem;
+        width: 3rem;
+        height: 3rem;
+        padding: 0.25rem;
+        margin-left: auto;
+    }
     :root {
-        /* You can adjust base size for smaller screens if needed */
-        --base-size: 0.9rem;
+        --spacing-unit: 1.5rem;
     }
 }
 
+@media only screen and (max-width: 600px) {
+    .formHeader {
+        font-size: clamp(2rem, 6vw, 2.5rem);
+        margin-bottom: 0.5rem;
+        padding-top: 0.5rem;
+        margin-top: 0;
+        gap: 0.5rem;
+    }
+    .btn-text {
+        font-size: clamp(1.2rem, 4vw, 1.5rem);
+    }
+    .facebookText {
+        font-size: clamp(1.2rem, 4vw, 1.5rem);
+    }
+    .form-control label,
+    .form-control label span,
+    .form-control input {
+        font-size: 1.2rem;
+        line-height: 2rem;
+    }
+    .exit-icon {
+        font-size: 1.5rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0.25rem;
+        margin-left: auto;
+    }
+    .formContainer {
+        padding: 0.5rem;
+    }
+}
 
 @keyframes pulse {
-
     0%,
     100% {
         /* transform: scale(1); */
@@ -279,7 +318,7 @@ a {
     }
 
     .formHeader {
-        margin-top: calc(var(--spacing-unit) * 6);
-        padding-top: calc(var(--spacing-unit) * 2);
+        margin-top: calc(var(--spacing-unit) * 0);
+        padding-top: calc(var(--spacing-unit) * 0);
     }
 }
