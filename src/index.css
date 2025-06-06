@@ -172,6 +172,8 @@ body {
   font-size: clamp(2.5rem, 5vw, 5.5rem);
   user-select: none;
   cursor: pointer;
+  overflow: visible;
+
 }
 
 .menu-item {
@@ -215,6 +217,7 @@ body {
   filter: drop-shadow(.5px .5px 1px rgb(0, 0, 0));
   overflow: visible;
   z-index: 900020;
+  margin: 0px 10px;
 
   /* border: 1px solid rgba(0, 0, 0, 0.505); */
   /* Increased border width */
