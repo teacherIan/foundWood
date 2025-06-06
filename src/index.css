@@ -205,8 +205,9 @@ body {
 }
 
 .icon {
-  max-width: 10svh;
-  max-height: 10svh;
+  display: flex;
+  width: 10svh;
+  height: 10svh;
   user-select: none;
   cursor: pointer;
   filter: drop-shadow(.5px .5px 1px rgb(0, 0, 0));
