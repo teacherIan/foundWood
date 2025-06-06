@@ -6,6 +6,41 @@ import Gallery from '../components/galleries/Gallery';
 import Types from '../components/select_gallery/Types';
 import NewCanvas from '../components/new_experience/Experience';
 import FontFaceObserver from 'fontfaceobserver';
+import { useSpring, animated } from '@react-spring/web';
+
+const configAnimation = {
+  mass: 2,
+  tension: 400,
+  friction: 20,
+  precision: 0.0005,
+};
+
+function AnimatedMenuItem({ children, onClick }) {
+  const [hovered, setHovered] = useState(false);
+
+  const springProps = useSpring({
+    scale: hovered ? 1.1 : 1,
+    // color: hovered ? '#77481C' : '#000000',
+    config: configAnimation,
+  });
+
+  return (
+    <animated.div
+      // className="menu-item"
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        transform: springProps.scale.to((s) => `scale(${s})`),
+        // color: springProps.color,
+        // cursor: 'pointer',
+        // userSelect: 'none',
+      }}
+    >
+      {children}
+    </animated.div>
+  );
+}
 
 function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -193,23 +228,22 @@ function App() {
         />
         <div className="header">
           <div className="menu">
-            <img
-              onClick={() => handleEmblemClickCallback()}
-              src={found_wood}
-              className="icon"
-              alt="Found Wood Logo"
-            ></img>
-            <div
-              className="menu-item"
+            <AnimatedMenuItem onClick={() => handleEmblemClickCallback()}>
+              <img
+                src={found_wood}
+                className="icon"
+                alt="Found Wood Logo"
+              ></img>
+            </AnimatedMenuItem>
+            <AnimatedMenuItem
               onClick={() => handleGalleryTypesClickCallback()}
               onMouseEnter={(e) => handleButtonHover(e)}
             >
-              Gallery
-            </div>
-
-            <div onClick={() => handleContactPageClick()} className="menu-item">
-              Contact
-            </div>
+              <div className="menu-item">Gallery</div>
+            </AnimatedMenuItem>
+            <AnimatedMenuItem onClick={() => handleContactPageClick()}>
+              <div className="menu-item">Contact</div>
+            </AnimatedMenuItem>
           </div>
         </div>
 

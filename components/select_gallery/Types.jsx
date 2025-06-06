@@ -73,7 +73,6 @@ export default function Types({
 
   const [informationSpring, setInformationSpring] = useSpring(() => ({
     opacity: '0',
-    // left: 50 + 'svw',
     config: configAnimation,
   }));
 
@@ -110,7 +109,7 @@ export default function Types({
                 window.innerWidth < window.innerHeight
                   ? 50 * (index % 2) + 'svw'
                   : 23 * index + 'svw',
-              transform: spring.y.to((y) => `translateY(${y}svh)`), // Use translateY
+              transform: spring.y.to((y) => `translateY(${y}svh)`),
               opacity: spring.opacity,
             }}
           >
