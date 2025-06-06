@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo, useCallback, memo } from 'react';
 import {
   Splat,
   Text,
@@ -10,6 +10,21 @@ import './experienceStyles.css';
 import splat from '../../src/assets/new_experience/full.splat';
 import driftwood from '../../src/assets/fonts/DriftWood-z8W4.ttf';
 
+// Memoized Text component for better performance
+const MemoizedText = memo(({ position, children, fontSize }) => (
+  <Text
+    position={position}
+    color="white"
+    anchorX="center"
+    anchorY="middle"
+    strokeColor="white"
+    font={driftwood}
+    fontSize={fontSize}
+  >
+    {children}
+  </Text>
+));
+
 function Scene({ isAnimating, showContactPage }) {
   const [targetX, setTargetX] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -18,65 +33,60 @@ function Scene({ isAnimating, showContactPage }) {
   const { camera } = useThree();
   const idleTimeRef = useRef(0);
 
-  useFrame((state, delta) => {
+  // Memoized camera animation frame
+  const animateCamera = useCallback((state, delta) => {
     idleTimeRef.current += delta;
 
-    // Oscillate camera position or rotation slowly
-    const idleX = Math.sin(idleTimeRef.current * 0.7) * 0.01; // Side to side
-    const idleY = Math.sin(idleTimeRef.current * 1.2) * 0.005; // Slight up/down
+    const idleX = Math.sin(idleTimeRef.current * 0.7) * 0.01;
+    const idleY = Math.sin(idleTimeRef.current * 1.2) * 0.005;
 
-    // Option 1: Move camera position gently around initial position
     camera.position.x = idleX;
     camera.position.y = 1 + idleY;
     camera.position.z = 2.2;
-
-    // Option 2: Or rotate camera slightly (uncomment if preferred)
     camera.rotation.y = idleX * 0.02;
-    // camera.rotation.x = idleY * 0.01;
-
     camera.updateProjectionMatrix();
-  });
+  }, [camera]);
 
-  // Handle resize once and store window width in state
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      setWindowWidth(width);
-      setTargetX(width > 1000 ? -1.5 : 0);
+  useFrame(animateCamera);
 
-      // Update camera position based on screen size
-      if (camera) {
-        if (width < 480) {
-          // Mobile phone specific settings
-          camera.position.set(0, 1, 2); // Set camera further back for mobile
-          camera.fov = 60; // Wider field of view for mobile
-        } else if (width < 1300) {
-          // Tablet and small screens
-          camera.position.set(0, 1, 2.5);
-          camera.fov = 60;
-        } else {
-          // Desktop
-          camera.position.set(0, 0.5, 2.2);
-          camera.fov = 50;
-        }
-        camera.updateProjectionMatrix();
+  // Memoized resize handler
+  const handleResize = useCallback(() => {
+    const width = window.innerWidth;
+    setWindowWidth(width);
+    setTargetX(width > 1000 ? -1.5 : 0);
+
+    if (camera) {
+      if (width < 480) {
+        camera.position.set(0, 1, 2);
+        camera.fov = 60;
+      } else if (width < 1300) {
+        camera.position.set(0, 1, 2.5);
+        camera.fov = 60;
+      } else {
+        camera.position.set(0, 0.5, 2.2);
+        camera.fov = 50;
       }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+      camera.updateProjectionMatrix();
+    }
   }, [camera]);
 
   useEffect(() => {
+    handleResize();
+    const debouncedResize = debounce(handleResize, 250);
+    window.addEventListener('resize', debouncedResize);
+    return () => window.removeEventListener('resize', debouncedResize);
+  }, [handleResize]);
+
+  // Optimized animation frame
+  useEffect(() => {
+    if (!isAnimating) return;
+
     let startTime = null;
     let loadProgress = 0;
 
     const animate = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
-
-      // Scale animation speed based on elapsed time for smoother animation
       const delta = Math.min(0.01, (elapsed / 1000) * 0.5);
       loadProgress = Math.min(loadProgress + delta, 1);
 
@@ -85,10 +95,7 @@ function Scene({ isAnimating, showContactPage }) {
       }
     };
 
-    if (isAnimating) {
-      animationRef.current = requestAnimationFrame(animate);
-    }
-
+    animationRef.current = requestAnimationFrame(animate);
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
@@ -96,30 +103,65 @@ function Scene({ isAnimating, showContactPage }) {
     };
   }, [isAnimating]);
 
-  // Determine text positions and size based on window width
-  const isMobile = windowWidth < 480;
-  const isTablet = windowWidth >= 480 && windowWidth < 1300;
-  const isDesktop = windowWidth >= 1300;
+  // Memoized device size calculations
+  const deviceConfig = useMemo(() => {
+    const isMobile = windowWidth < 480;
+    const isTablet = windowWidth >= 480 && windowWidth < 1300;
+    const isDesktop = windowWidth >= 1300;
 
-  // Text positions based on device size
-  let titlePosition, foundPosition, woodPosition, fontSize;
+    let titlePosition, foundPosition, woodPosition, fontSize, splatConfig;
 
-  if (isMobile) {
-    titlePosition = [0, -0.065, 0];
-    foundPosition = [0, -0.07, 0.4];
-    woodPosition = [0, -0.07, 0.7];
-    fontSize = 0.25;
-  } else if (isTablet) {
-    titlePosition = [0, -0.1, 0.5];
-    foundPosition = [0, -0.08, 0.93];
-    woodPosition = [0, -0.07, 1.25];
-    fontSize = 0.27;
-  } else {
-    titlePosition = [-1, -0.12, 0];
-    foundPosition = [0, -0.1, 0.6];
-    woodPosition = [1, -0.15, 0];
-    fontSize = 0.3;
-  }
+    if (isMobile) {
+      titlePosition = [0, -0.065, 0];
+      foundPosition = [0, -0.07, 0.4];
+      woodPosition = [0, -0.07, 0.7];
+      fontSize = 0.25;
+      splatConfig = {
+        size: 40,
+        scale: 0.8,
+        position: [0, 0, -0.5],
+      };
+    } else if (isTablet) {
+      titlePosition = [0, -0.1, 0.5];
+      foundPosition = [0, -0.08, 0.93];
+      woodPosition = [0, -0.07, 1.25];
+      fontSize = 0.27;
+      splatConfig = {
+        size: 35,
+        scale: 1,
+        position: [0, 0, 0],
+      };
+    } else {
+      titlePosition = [-1, -0.12, 0];
+      foundPosition = [0, -0.1, 0.6];
+      woodPosition = [1, -0.15, 0];
+      fontSize = 0.3;
+      splatConfig = {
+        size: 30,
+        scale: 1,
+        position: [0, 0, 0],
+      };
+    }
+
+    return {
+      titlePosition,
+      foundPosition,
+      woodPosition,
+      fontSize,
+      splatConfig,
+      isMobile,
+      isTablet,
+      isDesktop,
+    };
+  }, [windowWidth]);
+
+  // Memoized presentation controls config
+  const presentationConfig = useMemo(() => ({
+    mass: deviceConfig.isMobile ? 5 : 10,
+    tension: 100,
+    friction: deviceConfig.isMobile ? 15 : 20,
+    speed: deviceConfig.isMobile ? 1.5 : 2,
+  }), [deviceConfig.isMobile]);
 
   return (
     <PresentationControls
@@ -128,63 +170,56 @@ function Scene({ isAnimating, showContactPage }) {
       global
       snap
       rotation={[0, 0, 0]}
-      polar={[-Math.PI / 3, Math.PI / 3]} // Increased range for mobile
-      azimuth={[-Math.PI / 3, Math.PI / 3]} // Increased range for mobile
-      config={{
-        mass: isMobile ? 5 : 10,
-        tension: 100,
-        friction: isMobile ? 15 : 20,
-      }}
-      speed={isMobile ? 1.5 : 2}
+      polar={[-Math.PI / 3, Math.PI / 3]}
+      azimuth={[-Math.PI / 3, Math.PI / 3]}
+      config={presentationConfig}
     >
       {isAnimating && (
         <>
-          <Text
-            position={titlePosition}
-            color="white"
-            anchorX="center"
-            anchorY="middle"
-            strokeColor="white"
-            font={driftwood}
-            fontSize={fontSize}
+          <MemoizedText
+            position={deviceConfig.titlePosition}
+            fontSize={deviceConfig.fontSize}
           >
             DOUG'S
-          </Text>
-          <Text
-            position={foundPosition}
-            color="white"
-            anchorX="center"
-            anchorY="middle"
-            strokeColor="white"
-            font={driftwood}
-            fontSize={fontSize}
+          </MemoizedText>
+          <MemoizedText
+            position={deviceConfig.foundPosition}
+            fontSize={deviceConfig.fontSize}
           >
             Found
-          </Text>
-          <Text
-            position={woodPosition}
-            color="white"
-            anchorX="center"
-            anchorY="middle"
-            strokeColor="white"
-            font={driftwood}
-            fontSize={fontSize}
+          </MemoizedText>
+          <MemoizedText
+            position={deviceConfig.woodPosition}
+            fontSize={deviceConfig.fontSize}
           >
             Wood
-          </Text>
+          </MemoizedText>
           <Splat
             alphaTest={0.3}
             alphaHashing={true}
             chunkSize={0.01}
             src={splat}
-            splatSize={isMobile ? 40 : isTablet ? 35 : 30}
-            scale={isMobile ? 0.8 : 1} // Scale down splat for mobile
-            position={isMobile ? [0, 0, -0.5] : [0, 0, 0]} // Adjust position for mobile
+            splatSize={deviceConfig.splatConfig.size}
+            scale={deviceConfig.splatConfig.scale}
+            position={deviceConfig.splatConfig.position}
           />
         </>
       )}
     </PresentationControls>
   );
+}
+
+// Debounce utility function
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
 export default function App({ isAnimating, showContactPage }) {
@@ -196,11 +231,22 @@ export default function App({ isAnimating, showContactPage }) {
       }}
       dpr={[1, 2]}
       performance={{ min: 0.4 }}
+      style={{
+        background: 'transparent',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+      }}
       gl={{
         powerPreference: 'high-performance',
         antialias: true,
         depth: true,
         stencil: true,
+        alpha: true,
+        premultipliedAlpha: true,
+        clearColor: [0xf5f5f5, 0xf5f5f5, 0xf5f5f5, 1],
       }}
     >
       <Scene showContactPage={showContactPage} isAnimating={isAnimating} />

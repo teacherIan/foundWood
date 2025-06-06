@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useReducer, memo } from 'react';
 import found_wood from './assets/found_wood_final_all.png';
 import Contact from '../components/contact/Contact';
 import Gallery from '../components/galleries/Gallery';
@@ -15,141 +15,149 @@ const configAnimation = {
   precision: 0.0005,
 };
 
-function AnimatedMenuItem({ children, onClick }) {
+// Memoized AnimatedMenuItem component
+const AnimatedMenuItem = memo(({ children, onClick }) => {
   const [hovered, setHovered] = useState(false);
 
   const springProps = useSpring({
     scale: hovered ? 1.1 : 1,
-    // color: hovered ? '#77481C' : '#000000',
     config: configAnimation,
   });
 
   return (
     <animated.div
-      // className="menu-item"
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
         transform: springProps.scale.to((s) => `scale(${s})`),
-        // color: springProps.color,
-        // cursor: 'pointer',
-        // userSelect: 'none',
       }}
     >
       {children}
     </animated.div>
   );
+});
+
+// State reducer for better state management
+const initialState = {
+  fontsLoaded: false,
+  isAnimating: true,
+  activeGalleryTypeString: 'chairs',
+  activeGalleryType: 1,
+  showTypes: false,
+  showGallery: false,
+  showContactPage: false,
+  showDetails: true,
+  galleryTypeArr: [],
+  currentPhoto: 0,
+  showInfographic: false,
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'SET_FONTS_LOADED':
+      return { ...state, fontsLoaded: true };
+    case 'TOGGLE_ANIMATION':
+      return { ...state, isAnimating: !state.isAnimating };
+    case 'SET_GALLERY_TYPE':
+      return {
+        ...state,
+        activeGalleryType: action.payload.type,
+        activeGalleryTypeString: action.payload.typeString,
+      };
+    case 'TOGGLE_TYPES':
+      return {
+        ...state,
+        showTypes: !state.showTypes,
+        showGallery: false,
+        showInfographic: false,
+        isAnimating: state.showTypes,
+      };
+    case 'TOGGLE_GALLERY':
+      return {
+        ...state,
+        showGallery: true,
+        showTypes: false,
+        showDetails: false,
+      };
+    case 'TOGGLE_CONTACT':
+      return {
+        ...state,
+        showContactPage: !state.showContactPage,
+        isAnimating: false,
+        showInfographic: false,
+      };
+    case 'RESET_VIEW':
+      return {
+        ...state,
+        isAnimating: true,
+        showTypes: false,
+        showGallery: false,
+        showDetails: false,
+        showInfographic: false,
+      };
+    case 'SET_SHOW_DETAILS':
+      return { ...state, showDetails: action.payload };
+    case 'SET_GALLERY_TYPE_ARR':
+      return { ...state, galleryTypeArr: action.payload };
+    case 'SET_CURRENT_PHOTO':
+      return { ...state, currentPhoto: action.payload };
+    case 'SET_SHOW_INFOGraphic':
+      return { ...state, showInfographic: action.payload };
+    case 'SET_SHOW_CONTACT':
+      return { ...state, showContactPage: action.payload };
+    case 'SET_ANIMATING':
+      return { ...state, isAnimating: action.payload };
+    default:
+      return state;
+  }
 }
 
 function App() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(true);
-  const [activeGalleryTypeString, setActiveGalleryTypeString] =
-    useState('chairs');
-  const [activeGalleryType, setActiveGalleryType] = useState(1);
-  const [showTypes, setShowTypes] = useState(false);
-  const [showGallery, setShowGallery] = useState(false);
-  const [showContactPage, setShowContactPage] = useState(false);
-  const [showDetails, setShowDetails] = useState(true);
-  const [galleryTypeArr, setGalleryTypeArr] = useState([]);
-  const [currentPhoto, setCurrentPhoto] = useState(0);
-  const [showInfographic, setShowInfographic] = useState(false);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  // Font loading detection
+  // Font loading detection with improved error handling
   useEffect(() => {
-    const driftWood = new FontFaceObserver('driftWood');
-    const CustomFont = new FontFaceObserver('CustomFont');
-    const Poppins = new FontFaceObserver('Poppins');
-    const LobsterTwo = new FontFaceObserver('Lobster Two');
+    const fonts = [
+      new FontFaceObserver('driftWood'),
+      new FontFaceObserver('CustomFont'),
+      new FontFaceObserver('Poppins'),
+      new FontFaceObserver('Lobster Two'),
+    ];
 
-    Promise.all([
-      driftWood.load(),
-      CustomFont.load(),
-      Poppins.load(),
-      LobsterTwo.load(),
-    ])
+    Promise.all(fonts.map(font => font.load()))
       .then(() => {
-        setFontsLoaded(true);
+        dispatch({ type: 'SET_FONTS_LOADED' });
       })
-      .catch(() => {
-        console.error('One or more fonts failed to load.');
-        setFontsLoaded(true); // Proceed anyway
+      .catch((error) => {
+        console.error('Font loading error:', error);
+        dispatch({ type: 'SET_FONTS_LOADED' }); // Proceed anyway
       });
   }, []);
 
   const handleGalleryTypesClickCallback = useCallback(() => {
-    // First determine what the new state should be (opposite of current)
-    const newShowTypesState = !showTypes;
-
-    // Set the new state directly without setTimeout
-    setShowTypes(newShowTypesState);
-
-    // Only toggle animation if showing Types and not already in Gallery
-    if (newShowTypesState && !showGallery) {
-      setIsAnimating(false); // Stop animation when showing Types
-    } else if (!newShowTypesState) {
-      setIsAnimating(true); // Resume animation when hiding Types
-    }
-
-    // If showing Types, hide Gallery
-    if (newShowTypesState) {
-      setShowGallery(false);
-      // setTimeout(() => {
-      //   setShowDetails(false);
-      // }, 1000);
-      setShowInfographic(false);
-    }
-  }, [setShowTypes, setShowGallery, showTypes, showGallery, setIsAnimating]);
+    dispatch({ type: 'TOGGLE_TYPES' });
+  }, []);
 
   const handleMissionButtonClickCallback = useCallback(() => {
-    setIsAnimating(!isAnimating);
-    setShowTypes(false);
-    setShowGallery(false);
-    setTimeout(() => {
-      setShowDetails(false);
-    }, 1000);
-  }, [setShowTypes, setShowGallery, setIsAnimating]);
+    dispatch({ type: 'TOGGLE_ANIMATION' });
+    dispatch({ type: 'RESET_VIEW' });
+  }, []);
 
   const handleGalleryButtonClickCallback = useCallback(() => {
-    setShowTypes(false);
-    setShowGallery(true);
-    setTimeout(() => {
-      setShowDetails(false);
-    }, 1000);
-  }, [setShowTypes, setShowGallery, showGallery]);
+    dispatch({ type: 'TOGGLE_GALLERY' });
+  }, []);
 
   const handleEmblemClickCallback = useCallback(() => {
-    setIsAnimating(true);
-    setShowTypes(false);
-    setShowGallery(false);
-    setTimeout(() => {
-      setShowDetails(false);
-    }, 1000);
-    setShowInfographic(false);
-  }, [
-    setIsAnimating,
-    setShowTypes,
-    setShowGallery,
-    showGallery,
-    showInfographic,
-    setShowInfographic,
-  ]);
+    dispatch({ type: 'RESET_VIEW' });
+  }, []);
 
-  function handleContactPageClick() {
-    setShowContactPage(!showContactPage);
-    setTimeout(() => {
-      setIsAnimating(false);
-    }, 2000);
-    setShowInfographic(false);
-  }
-
-  function handleButtonHover(e) {
-    // console.log(e.target.style.border-bottom);
-  }
+  const handleContactPageClick = useCallback(() => {
+    dispatch({ type: 'TOGGLE_CONTACT' });
+  }, []);
 
   // If fonts haven't loaded yet, show loading indicator
-  if (!fontsLoaded) {
+  if (!state.fontsLoaded) {
     return (
       <div className="font-loading-screen">
         <div className="loading-spinner"></div>
@@ -160,96 +168,72 @@ function App() {
 
   return (
     <>
-      {window.innerWidth < 1000 || !isAnimating ? null : (
-        <>
-          <div
-            style={
-              {
-                // fontFamily: 'driftWood',
-                // filter: 'drop-shadow(1px 1px 0px #ffffff)',
-              }
-            }
-            className="new_app_header"
-          >
-            {/* Doug's Found Wood */}
-            <div className="new_app_info">
-              {/* Always Uniques */}
-              {/* Handcrafted in Maine */}
-            </div>
-          </div>
-        </>
+      {window.innerWidth < 1000 || !state.isAnimating ? null : (
+        <div className="new_app_header">
+          <div className="new_app_info" />
+        </div>
       )}
 
-      {window.innerWidth < 1000 && isAnimating ? (
+      {window.innerWidth < 1000 && state.isAnimating ? (
         <div className="new_app_small_header">
-          <div
-            style={
-              {
-                // fontSize: 'clamp(25px, calc(2svw + 2svh + 13px), 36px)',
-              }
-            }
-          >
-            {/* Doug's Found Wood <br /> */}
-          </div>
-          {/* Always Unique */}
-          {/* <br /> */}
-          {/* Handcrafted In Maine */}
+          <div />
         </div>
       ) : null}
 
       <Gallery
-        galleryType={activeGalleryType}
-        showGallery={showGallery}
-        showGalleryString={activeGalleryTypeString}
-        showDetails={showDetails}
-        setShowDetails={setShowDetails}
-        galleryTypeArr={galleryTypeArr}
-        setGalleryTypeArr={setGalleryTypeArr}
-        currentPhoto={currentPhoto}
-        setCurrentPhoto={setCurrentPhoto}
-        setShowInfographic={setShowInfographic}
-        showInfographic={showInfographic}
+        galleryType={state.activeGalleryType}
+        showGallery={state.showGallery}
+        showGalleryString={state.activeGalleryTypeString}
+        showDetails={state.showDetails}
+        setShowDetails={(value) => dispatch({ type: 'SET_SHOW_DETAILS', payload: value })}
+        galleryTypeArr={state.galleryTypeArr}
+        setGalleryTypeArr={(arr) => dispatch({ type: 'SET_GALLERY_TYPE_ARR', payload: arr })}
+        currentPhoto={state.currentPhoto}
+        setCurrentPhoto={(photo) => dispatch({ type: 'SET_CURRENT_PHOTO', payload: photo })}
+        setShowInfographic={(value) => dispatch({ type: 'SET_SHOW_INFOGraphic', payload: value })}
+        showInfographic={state.showInfographic}
       />
+
       <Types
-        showTypes={showTypes}
+        showTypes={state.showTypes}
         onGalleryTypesClick={handleGalleryTypesClickCallback}
         onMissionButtonClick={handleMissionButtonClickCallback}
         onTypeSelect={handleGalleryButtonClickCallback}
-        setActiveGalleryType={setActiveGalleryType}
-        setActiveGalleryTypeString={setActiveGalleryTypeString}
+        setActiveGalleryType={(type) => dispatch({ type: 'SET_GALLERY_TYPE', payload: { type, typeString: state.activeGalleryTypeString } })}
+        setActiveGalleryTypeString={(typeString) => dispatch({ type: 'SET_GALLERY_TYPE', payload: { type: state.activeGalleryType, typeString } })}
       />
+
       <div className="appContainer">
         <Contact
-          showContactPage={showContactPage}
-          setShowContactPage={setShowContactPage}
-          setIsAnimating={setIsAnimating}
-          showTypes={showTypes}
-          showGallery={showGallery}
+          showContactPage={state.showContactPage}
+          setShowContactPage={(value) => dispatch({ type: 'SET_SHOW_CONTACT', payload: value })}
+          setIsAnimating={(value) => dispatch({ type: 'SET_ANIMATING', payload: value })}
+          showTypes={state.showTypes}
+          showGallery={state.showGallery}
         />
+
         <div className="header">
           <div className="menu">
-            <AnimatedMenuItem onClick={() => handleEmblemClickCallback()}>
+            <AnimatedMenuItem onClick={handleEmblemClickCallback}>
               <img
                 src={found_wood}
                 className="icon"
                 alt="Found Wood Logo"
-              ></img>
+                loading="lazy"
+              />
             </AnimatedMenuItem>
-            <AnimatedMenuItem
-              onClick={() => handleGalleryTypesClickCallback()}
-              onMouseEnter={(e) => handleButtonHover(e)}
-            >
+            <AnimatedMenuItem onClick={handleGalleryTypesClickCallback}>
               <div className="menu-item">Gallery</div>
             </AnimatedMenuItem>
-            <AnimatedMenuItem onClick={() => handleContactPageClick()}>
+            <AnimatedMenuItem onClick={handleContactPageClick}>
               <div className="menu-item">Contact</div>
             </AnimatedMenuItem>
           </div>
         </div>
 
         <NewCanvas
-          showContactPage={showContactPage}
-          isAnimating={isAnimating}
+          isAnimating={state.isAnimating}
+          showContactPage={state.showContactPage}
         />
       </div>
     </>
