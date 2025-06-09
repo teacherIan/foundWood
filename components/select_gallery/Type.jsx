@@ -1,6 +1,7 @@
 import './type.css';
 import { useState, useEffect } from 'react';
 import { useSpring, animated } from '@react-spring/web';
+import types from '../galleries/dataTypes/types';
 
 export default function Type({
   img,
@@ -34,26 +35,26 @@ export default function Type({
 
     switch (header) {
       case 'Coffee Tables <br/> Plant Stands':
-        galleryTypeString = 'smallTable';
+        galleryTypeString = types.smallTable;
         break;
       case 'Chairs <br/> Ottomans':
-        galleryTypeString = 'chairs';
+        galleryTypeString = types.chairs;
         break;
       case 'Tables':
-        galleryTypeString = 'largeTable';
+        galleryTypeString = types.largeTable;
         break;
       case 'Structures':
-        galleryTypeString = 'structure';
+        galleryTypeString = types.structure;
         break;
       case 'Others':
-        galleryTypeString = 'other';
+        galleryTypeString = types.other;
         break;
       default:
-        galleryTypeString = 'chairs'; // Default value
+        galleryTypeString = types.chairs; // Default value should be 'chairs'
     }
 
-    setActiveGalleryTypeString(galleryTypeString);
-    setActiveGalleryType(index);
+    setActiveGalleryType(index, galleryTypeString);
+    setActiveGalleryTypeString(galleryTypeString, index);
     onTypeSelect();
   }
 

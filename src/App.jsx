@@ -1,12 +1,12 @@
-import "./App.css";
-import { useState, useCallback, useEffect, useReducer, memo } from "react";
-import found_wood from "./assets/found_wood_final_all.png";
-import Contact from "../components/contact/Contact";
-import Gallery from "../components/galleries/Gallery";
-import Types from "../components/select_gallery/Types";
-import NewCanvas from "../components/new_experience/Experience";
-import FontFaceObserver from "fontfaceobserver";
-import { useSpring, animated } from "@react-spring/web";
+import './App.css';
+import { useState, useCallback, useEffect, useReducer, memo } from 'react';
+import found_wood from './assets/found_wood_final_all.png';
+import Contact from '../components/contact/Contact';
+import Gallery from '../components/galleries/Gallery';
+import Types from '../components/select_gallery/Types';
+import NewCanvas from '../components/new_experience/Experience';
+import FontFaceObserver from 'fontfaceobserver';
+import { useSpring, animated } from '@react-spring/web';
 
 const configAnimation = {
   mass: 2,
@@ -48,7 +48,7 @@ const AnimatedMenuItem = memo(({ children, onClick }) => {
 const initialState = {
   fontsLoaded: false,
   isAnimating: true,
-  activeGalleryTypeString: "chairs",
+  activeGalleryTypeString: 'chairs',
   activeGalleryType: 1,
   showTypes: false,
   showGallery: false,
@@ -61,17 +61,17 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
-    case "SET_FONTS_LOADED":
+    case 'SET_FONTS_LOADED':
       return { ...state, fontsLoaded: true };
-    case "TOGGLE_ANIMATION":
+    case 'TOGGLE_ANIMATION':
       return { ...state, isAnimating: !state.isAnimating };
-    case "SET_GALLERY_TYPE":
+    case 'SET_GALLERY_TYPE':
       return {
         ...state,
         activeGalleryType: action.payload.type,
         activeGalleryTypeString: action.payload.typeString,
       };
-    case "TOGGLE_TYPES":
+    case 'TOGGLE_TYPES':
       return {
         ...state,
         showTypes: !state.showTypes,
@@ -79,21 +79,21 @@ function reducer(state, action) {
         showInfographic: false,
         isAnimating: state.showTypes,
       };
-    case "TOGGLE_GALLERY":
+    case 'TOGGLE_GALLERY':
       return {
         ...state,
         showGallery: true,
         showTypes: false,
         showDetails: false,
       };
-    case "TOGGLE_CONTACT":
+    case 'TOGGLE_CONTACT':
       return {
         ...state,
         showContactPage: !state.showContactPage,
         isAnimating: false,
         showInfographic: false,
       };
-    case "RESET_VIEW":
+    case 'RESET_VIEW':
       return {
         ...state,
         isAnimating: true,
@@ -102,17 +102,17 @@ function reducer(state, action) {
         showDetails: false,
         showInfographic: false,
       };
-    case "SET_SHOW_DETAILS":
+    case 'SET_SHOW_DETAILS':
       return { ...state, showDetails: action.payload };
-    case "SET_GALLERY_TYPE_ARR":
+    case 'SET_GALLERY_TYPE_ARR':
       return { ...state, galleryTypeArr: action.payload };
-    case "SET_CURRENT_PHOTO":
+    case 'SET_CURRENT_PHOTO':
       return { ...state, currentPhoto: action.payload };
-    case "SET_SHOW_INFOGraphic":
+    case 'SET_SHOW_INFOGraphic':
       return { ...state, showInfographic: action.payload };
-    case "SET_SHOW_CONTACT":
+    case 'SET_SHOW_CONTACT':
       return { ...state, showContactPage: action.payload };
-    case "SET_ANIMATING":
+    case 'SET_ANIMATING':
       return { ...state, isAnimating: action.payload };
     default:
       return state;
@@ -125,41 +125,41 @@ function App() {
   // Font loading detection with improved error handling
   useEffect(() => {
     const fonts = [
-      new FontFaceObserver("driftWood"),
-      new FontFaceObserver("CustomFont"),
-      new FontFaceObserver("Poppins"),
-      new FontFaceObserver("Lobster Two"),
+      new FontFaceObserver('driftWood'),
+      new FontFaceObserver('CustomFont'),
+      new FontFaceObserver('Poppins'),
+      new FontFaceObserver('Lobster Two'),
     ];
 
     Promise.all(fonts.map((font) => font.load()))
       .then(() => {
-        dispatch({ type: "SET_FONTS_LOADED" });
+        dispatch({ type: 'SET_FONTS_LOADED' });
       })
       .catch((error) => {
-        console.error("Font loading error:", error);
-        dispatch({ type: "SET_FONTS_LOADED" }); // Proceed anyway
+        console.error('Font loading error:', error);
+        dispatch({ type: 'SET_FONTS_LOADED' }); // Proceed anyway
       });
   }, []);
 
   const handleGalleryTypesClickCallback = useCallback(() => {
-    dispatch({ type: "TOGGLE_TYPES" });
+    dispatch({ type: 'TOGGLE_TYPES' });
   }, []);
 
   const handleMissionButtonClickCallback = useCallback(() => {
-    dispatch({ type: "TOGGLE_ANIMATION" });
-    dispatch({ type: "RESET_VIEW" });
+    dispatch({ type: 'TOGGLE_ANIMATION' });
+    dispatch({ type: 'RESET_VIEW' });
   }, []);
 
   const handleGalleryButtonClickCallback = useCallback(() => {
-    dispatch({ type: "TOGGLE_GALLERY" });
+    dispatch({ type: 'TOGGLE_GALLERY' });
   }, []);
 
   const handleEmblemClickCallback = useCallback(() => {
-    dispatch({ type: "RESET_VIEW" });
+    dispatch({ type: 'RESET_VIEW' });
   }, []);
 
   const handleContactPageClick = useCallback(() => {
-    dispatch({ type: "TOGGLE_CONTACT" });
+    dispatch({ type: 'TOGGLE_CONTACT' });
   }, []);
 
   // If fonts haven't loaded yet, show loading indicator
@@ -192,18 +192,18 @@ function App() {
         showGalleryString={state.activeGalleryTypeString}
         showDetails={state.showDetails}
         setShowDetails={(value) =>
-          dispatch({ type: "SET_SHOW_DETAILS", payload: value })
+          dispatch({ type: 'SET_SHOW_DETAILS', payload: value })
         }
         galleryTypeArr={state.galleryTypeArr}
         setGalleryTypeArr={(arr) =>
-          dispatch({ type: "SET_GALLERY_TYPE_ARR", payload: arr })
+          dispatch({ type: 'SET_GALLERY_TYPE_ARR', payload: arr })
         }
         currentPhoto={state.currentPhoto}
         setCurrentPhoto={(photo) =>
-          dispatch({ type: "SET_CURRENT_PHOTO", payload: photo })
+          dispatch({ type: 'SET_CURRENT_PHOTO', payload: photo })
         }
         setShowInfographic={(value) =>
-          dispatch({ type: "SET_SHOW_INFOGraphic", payload: value })
+          dispatch({ type: 'SET_SHOW_INFOGraphic', payload: value })
         }
         showInfographic={state.showInfographic}
       />
@@ -213,16 +213,19 @@ function App() {
         onGalleryTypesClick={handleGalleryTypesClickCallback}
         onMissionButtonClick={handleMissionButtonClickCallback}
         onTypeSelect={handleGalleryButtonClickCallback}
-        setActiveGalleryType={(type) =>
+        setActiveGalleryType={(type, typeString) =>
           dispatch({
-            type: "SET_GALLERY_TYPE",
-            payload: { type, typeString: state.activeGalleryTypeString },
+            type: 'SET_GALLERY_TYPE',
+            payload: { type, typeString },
           })
         }
-        setActiveGalleryTypeString={(typeString) =>
+        setActiveGalleryTypeString={(typeString, type) =>
           dispatch({
-            type: "SET_GALLERY_TYPE",
-            payload: { type: state.activeGalleryType, typeString },
+            type: 'SET_GALLERY_TYPE',
+            payload: {
+              type: typeof type === 'number' ? type : state.activeGalleryType,
+              typeString,
+            },
           })
         }
       />
@@ -231,10 +234,10 @@ function App() {
         <Contact
           showContactPage={state.showContactPage}
           setShowContactPage={(value) =>
-            dispatch({ type: "SET_SHOW_CONTACT", payload: value })
+            dispatch({ type: 'SET_SHOW_CONTACT', payload: value })
           }
           setIsAnimating={(value) =>
-            dispatch({ type: "SET_ANIMATING", payload: value })
+            dispatch({ type: 'SET_ANIMATING', payload: value })
           }
           showTypes={state.showTypes}
           showGallery={state.showGallery}
