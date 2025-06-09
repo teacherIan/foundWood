@@ -204,8 +204,8 @@ body {
 
 .icon {
     display: block;
-    width: 6em;
-    height: 6em;
+    width: 5em;
+    height: 5em;
     max-width: 160px;
     max-height: 160px;
     user-select: none;

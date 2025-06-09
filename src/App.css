@@ -8,14 +8,13 @@
     --icon-size: calc(var(--base-size) * 3);
     --brown: #8b4513;
     --light_brown: #d2b48c;
-    /* Assuming this color was defined elsewhere */
-    --lightGreen: #D2B48C
-        /* Assuming this color was defined elsewhere */
+
+    --lightGreen: #d2b48c;
 }
 
 @viewport {
     width: device-width;
-    zoom: 1.0;
+    zoom: 1;
 }
 
 * {
@@ -27,7 +26,6 @@
     user-select: none;
     font-family: var(--mainFont);
     touch-action: none;
-
 }
 
 html {
@@ -38,7 +36,6 @@ html {
 
 .app-container {
     position: relative;
-
 }
 
 canvas {
@@ -57,7 +54,10 @@ canvas:active {
 @media (max-width: 1000px) {
     canvas {
         mask-image:
-            /* radial-gradient(ellipse 100% 40% at center, white 40%, transparent 100%) */
-            linear-gradient(to top, white 50%, transparent 95%);
+            /* radial-gradient(ellipse 100% 40% at center, white 40%, transparent 100%) */ linear-gradient(
+            to top,
+            white 50%,
+            transparent 95%
+        );
     }
 }
