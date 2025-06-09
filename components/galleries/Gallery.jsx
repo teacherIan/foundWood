@@ -24,6 +24,7 @@ const MobileInfoPanel = memo(
       className="mobileProductInfo"
       style={{
         ...infoSpring,
+        // Changed from fixed positioning to relative positioning behavior
         maxHeight: showDetails ? "90svh" : "0%",
       }}
       ref={infoRef}
@@ -57,10 +58,6 @@ export default function Gallery({
     const newGalleryTypeArr = images.filter(
       (image) => image.type === showGalleryString,
     );
-
-    if (window.innerWidth < 1200) {
-      newGalleryTypeArr.splice(8);
-    }
 
     // Only update if the array has actually changed
     if (JSON.stringify(newGalleryTypeArr) !== JSON.stringify(galleryTypeArr)) {
@@ -248,10 +245,10 @@ export default function Gallery({
       >
         {galleryTypeArr.length > 0 && (
           <>
-            {window.innerWidth < window.innerHeight && (
+            {/* Only show swipe indicator on desktop/landscape */}
+            {window.innerWidth >= window.innerHeight && (
               <animated.div className="swipeIndicator" style={indicatorSpring}>
-                <span className="arrow">↑</span>
-                {/* Swipe up for details */}
+                <span className="arrow">↑</span> Swipe up for details
               </animated.div>
             )}
             <animated.img
@@ -261,7 +258,18 @@ export default function Gallery({
               loading="lazy"
               alt={currentItem?.name}
             />
+            {/* On mobile, always show MobileInfoPanel under the master image */}
             {window.innerWidth < window.innerHeight && (
+              <div className="mobileProductInfo always-visible">
+                {/* <div className="handleBar" /> */}
+                <h2 className="mobileProductName">{currentItem?.name}</h2>
+                <p className="mobileProductDescription">
+                  {currentItem?.description}
+                </p>
+              </div>
+            )}
+            {/* On desktop, keep old behavior if needed */}
+            {window.innerWidth >= window.innerHeight && showDetails && (
               <MobileInfoPanel
                 infoSpring={infoSpring}
                 infoRef={infoRef}

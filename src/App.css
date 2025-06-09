@@ -37,9 +37,12 @@ html {
 }
 
 canvas {
+    position: absolute !important;
     width: 100svw;
     height: 100svh;
     cursor: grab;
+    z-index: 0;
+
     /* mask-image:   */
     /* linear-gradient(to bottom, transparent 0%, #fff 30%, #fff 100%); */
     /* radial-gradient(ellipse 70% 50% at center, white 60%, transparent 100%) */
@@ -52,10 +55,9 @@ canvas:active {
 @media (max-width: 1000px) {
     canvas {
         mask-image:
-            /* radial-gradient(ellipse 100% 40% at center, white 40%, transparent 100%) */ linear-gradient(
-            to top,
-            white 50%,
-            transparent 95%
-        );
+            /* radial-gradient(ellipse 100% 40% at center, white 40%, transparent 100%) */
+            linear-gradient(to top,
+                white 50%,
+                transparent 95%);
     }
 }

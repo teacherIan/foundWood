@@ -122,8 +122,8 @@
     line-height: calc(var(--spacing-unit) * 2);
 }
 
-.form-control input:focus + label,
-.form-control input:valid + label {
+.form-control input:focus+label,
+.form-control input:valid+label {
     transform: translateY(calc(var(--spacing-unit) * -0.5));
 }
 
@@ -135,8 +135,8 @@
     line-height: calc(var(--spacing-unit) * 2);
 }
 
-.form-control input:focus + label span,
-.form-control input:valid + label span {
+.form-control input:focus+label span,
+.form-control input:valid+label span {
     transform: translateY(calc(var(--spacing-unit) * -1.01));
     transition: transform 0.3s cubic-bezier(0.68, -1.5, 0.265, 2);
 }
@@ -210,7 +210,7 @@ a {
 } */
 
 .exit-icon {
-    position: static;
+    /* position: static; */
     transform: rotate(180deg);
     font-size: clamp(2rem, 4vw, 3rem);
     color: white;
@@ -247,12 +247,14 @@ a {
         margin-left: auto;
         margin-right: auto;
     }
+
     .formContainer {
         width: 98vw;
         max-width: 100%;
         margin: 0 auto;
         padding: 1rem;
     }
+
     .exit-icon {
         font-size: 2rem;
         width: 3rem;
@@ -260,6 +262,7 @@ a {
         padding: 0.25rem;
         margin-left: auto;
     }
+
     :root {
         --spacing-unit: 1.5rem;
     }
@@ -273,22 +276,27 @@ a {
         margin-top: 0;
         gap: 0.5rem;
     }
+
     .btn {
         padding: 0.3em 0.7em;
         border-radius: 1em;
     }
+
     .btn-text {
         font-size: clamp(1.2rem, 4vw, 1.5rem);
     }
+
     .facebookText {
         font-size: clamp(1.2rem, 4vw, 1.5rem);
     }
+
     .form-control label,
     .form-control label span,
     .form-control input {
         font-size: 1.2rem;
         line-height: 2rem;
     }
+
     .exit-icon {
         top: 50%;
         right: 0.5rem;
@@ -298,12 +306,14 @@ a {
         padding: 0.25rem;
         margin-left: auto;
     }
+
     .formContainer {
         padding: 0.5rem;
     }
 }
 
 @keyframes pulse {
+
     0%,
     100% {
         /* transform: scale(1); */
@@ -327,6 +337,7 @@ a {
         margin-top: calc(var(--spacing-unit) * 0);
         padding-top: calc(var(--spacing-unit) * 0);
     }
+
     .btn {
         margin-top: 0;
     }
