@@ -38,17 +38,17 @@
     display: inline-block;
     width: 100%;
     background: white;
-    padding: 1rem;
+    padding: 0.3em 0.8em;
     font-family: inherit;
     font-size: clamp(1rem, 2vw, 1.25rem);
     border: 0;
-    border-radius: 0.5rem;
+    border-radius: 1.2em;
     color: var(--brown);
     transition: 1s;
     margin-top: 1.5rem;
     border: 2px solid var(--brown);
     filter: drop-shadow(2px 2px 0px black);
-    -webkit-text-stroke: 3px #77481c;
+    -webkit-text-stroke: 3px #77481C;
     -webkit-text-fill-color: #ffffff;
 }
 
@@ -273,6 +273,10 @@ a {
         margin-top: 0;
         gap: 0.5rem;
     }
+    .btn {
+        padding: 0.3em 0.7em;
+        border-radius: 1em;
+    }
     .btn-text {
         font-size: clamp(1.2rem, 4vw, 1.5rem);
     }
@@ -286,6 +290,8 @@ a {
         line-height: 2rem;
     }
     .exit-icon {
+        top: 50%;
+        right: 0.5rem;
         font-size: 1.5rem;
         width: 2.5rem;
         height: 2.5rem;

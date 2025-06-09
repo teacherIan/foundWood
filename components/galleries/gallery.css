@@ -387,6 +387,22 @@
         right: var(--space-4);
         font-size: var(--text-xl);
     }
+
+    /* Button/icon sizing fix for mobile */
+    .menu-item {
+        padding: 0.1em 0.1em;
+        border-radius: 1em;
+        min-width: 44px;
+        min-height: 44px;
+    }
+    .icon {
+        width: 2.5em;
+        height: 2.5em;
+        max-width: 56px;
+        max-height: 56px;
+        border-radius: 50%;
+        object-fit: contain;
+    }
 }
 
 @media (max-width: 600px) {
