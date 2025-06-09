@@ -1,4 +1,4 @@
-@import '../../src/styles/variables.css';
+@import "../../src/styles/variables.css";
 
 * {
     box-sizing: border-box;
@@ -13,7 +13,7 @@
     top: calc(10svh);
     left: 0svw;
     transition: 1s ease-in;
-    font-size: calc(1.0vw + 1.0vh + 8px);
+    font-size: calc(1vw + 1vh + 8px);
 }
 
 .galleryHeader {
@@ -92,7 +92,7 @@
     color: white;
     filter: drop-shadow(1px 1px 0px black);
     font-size: calc(1vw + 1vh + 15px);
-    font-family: 'CustomFont';
+    font-family: "CustomFont";
 }
 
 .thumbNails {
@@ -137,6 +137,12 @@
     overflow: hidden;
 }
 
+@media (max-width: 600px), (orientation: portrait) {
+    .currentPhoto {
+        width: 100vw;
+    }
+}
+
 .masterImage {
     width: 70svw;
     height: 50svw;
@@ -149,9 +155,6 @@
     z-index: 9999;
     position: relative;
     margin-top: 50px;
-    ;
-
-
 }
 
 .galleryLeftBottom {
@@ -183,7 +186,7 @@
     font-size: calc(2vw + 2vh + 10px);
     /* font-family: 'CustomFont' */
     filter: drop-shadow(1px 1px 0px black);
-    -webkit-text-stroke: 2px #77481C;
+    -webkit-text-stroke: 2px #77481c;
     -webkit-text-fill-color: #ffffff;
 }
 
@@ -202,7 +205,7 @@
 .furnitureDescription {
     margin-top: -10px;
     height: 25vh;
-    font-family: 'Poppins';
+    font-family: "Poppins";
     width: 50svw;
     font-size: calc(0.7vw + 0.7vh + 8px);
     text-align: center;
@@ -253,6 +256,7 @@
 }
 
 .mobileProductName {
+    font-family: var(--mainFont);
     font-size: 24px;
     margin-bottom: 10px;
     color: var(--brown);
@@ -271,27 +275,28 @@
     line-height: 1.5;
     color: #333;
     /* height: 100%; */
-
-
 }
 
 .swipeIndicator {
     position: absolute;
-    bottom: 20px;
     left: 0;
     right: 0;
+    bottom: 32px;
     transform: translateX(-50%);
     background-color: rgba(0, 0, 0, 0.37);
     color: white;
-    padding: 0px 0px;
-    border-radius: 20px;
-    font-size: 14px;
+    /* padding: 0.75em 1.5em; */
+    border-radius: 5000px;
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
     z-index: 10001;
     display: flex;
+
     align-items: center;
-    gap: 5px;
-    width: 50%;
-    margin: 0 auto;
+    /* gap: 0.5em; */
+
+    justify-content: center;
+    pointer-events: none;
+    width: 100svw;
 }
 
 .arrow {
@@ -300,7 +305,6 @@
 }
 
 @keyframes bounce {
-
     0%,
     20%,
     50%,
@@ -382,5 +386,14 @@
         top: var(--space-4);
         right: var(--space-4);
         font-size: var(--text-xl);
+    }
+}
+
+@media (max-width: 600px) {
+    .swipeIndicator {
+        /* bottom: 48px;
+        font-size: clamp(1rem, 4vw, 1.25rem);
+        padding: 1em 1.5em;
+        width: min(95vw, 350px); */
     }
 }
