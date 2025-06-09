@@ -155,7 +155,7 @@ body {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 15vh;
+    height: 10vh;
     z-index: 20000;
     background: transparent;
     display: flex;
@@ -259,11 +259,17 @@ canvas {
 
 /* ===== MOBILE RESPONSIVENESS ===== */
 @media (max-width: 1000px) {
+
+    .header {
+        height: 7vh;
+    }
+
     .menu {
         /* padding: 0.5rem; */
         font-size: clamp(1.8rem, 2.5vw, 3.5rem);
-        align-items: center;
-        padding: 1rem 0.5rem;
+        align-items: flex-start;
+        /* padding: 1rem 0.5rem; */
+        height: 7vh;
     }
 
     .menu-item {

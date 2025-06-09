@@ -144,7 +144,8 @@
     overflow: hidden;
 }
 
-@media (max-width: 600px), (orientation: portrait) {
+@media (max-width: 600px),
+(orientation: portrait) {
     .currentPhoto {
         width: 100vw;
     }
@@ -306,6 +307,7 @@
 }
 
 @keyframes bounce {
+
     0%,
     20%,
     50%,
@@ -323,7 +325,8 @@
     }
 }
 
-@media (orientation: portrait), (max-width: 600px) {
+@media (orientation: portrait),
+(max-width: 600px) {
     .galleryContainer {
         flex-direction: column;
         justify-content: flex-start;
@@ -334,6 +337,7 @@
         z-index: auto;
         /* top: 60px; */
     }
+
     .currentPhoto {
         width: 100vw;
         margin: 0;
@@ -373,7 +377,7 @@
         flex-direction: row;
         overflow-x: auto;
         gap: 0.5em;
-        padding: 1em 1.5em 1em 1em;
+        padding: 0em 1.5em 0em 1em;
         width: 100vw;
         background: transparent;
         border-radius: 5em;
@@ -381,6 +385,7 @@
         touch-action: pan-x;
         z-index: auto;
         position: static;
+        height: 8vh;
     }
 
     .furniturePrice {
@@ -481,7 +486,8 @@
 }
 
 /* Mobile adjustments */
-@media (orientation: portrait), (max-width: 600px) {
+@media (orientation: portrait),
+(max-width: 600px) {
     .currentPhoto {
         width: 100vw;
         margin: 0;
