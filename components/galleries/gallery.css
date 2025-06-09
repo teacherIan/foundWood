@@ -286,7 +286,7 @@
     background-color: rgba(0, 0, 0, 0.37);
     color: white;
     /* padding: 0.75em 1.5em; */
-    border-radius: 5000px;
+    border-radius: 5000px 5000px 0 0;
     font-size: clamp(1rem, 2.5vw, 1.25rem);
     z-index: 10001;
     display: flex;
