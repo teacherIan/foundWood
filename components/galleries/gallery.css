@@ -7,7 +7,7 @@
 .galleryContainer {
     position: relative;
     width: 100vw;
-    padding-top: 10vh;
+    padding-top: 11vh;
     display: flex;
     /* z-index: auto; */
     /* position: absolute; */
@@ -329,7 +329,7 @@
         justify-content: flex-start;
         width: 100vw;
         margin: 0;
-        padding: 8vh 0 0 0;
+        padding: 9vh 0 0 0;
         box-sizing: border-box;
         z-index: auto;
         /* top: 60px; */

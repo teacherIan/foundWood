@@ -173,7 +173,7 @@ body {
     }
 
     .menu-item {
-        padding-top: 0 !important;
+        padding-top: 10px !important;
         padding-bottom: 0 !important;
         padding: 0.1 0em !important;
         margin: 0.1em 0em !important;
@@ -203,7 +203,7 @@ body {
     -webkit-text-fill-color: #77481c;
     /* transition: all 1s ease; */
     z-index: 90001;
-    padding: 0em 0em;
+    padding: 0.5em 0.2em;
     position: relative;
     border: 1px solid white;
     box-shadow: 2px 2px 0px #77481c;
