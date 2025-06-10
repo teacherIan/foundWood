@@ -3,7 +3,7 @@
 }
 
 .contactContainer {
-    z-index: 20000;
+    z-index: 30000;
     background-repeat: no-repeat;
     background-size: 0;
     background-size: 100svw 100svh;

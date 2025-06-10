@@ -151,16 +151,16 @@ body {
 
 /* ===== NAVIGATION MENU ===== */
 .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 10vh;
-    z-index: 20000;
-    background: transparent;
-    display: flex;
-    justify-content: flex-start;
-    padding: 0rem 0rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 15vh;
+  z-index: 20000;
+  background: transparent;
+  display: flex;
+  justify-content: flex-start;
+  padding: 0.5rem 0rem;
 }
 
 .menu {
