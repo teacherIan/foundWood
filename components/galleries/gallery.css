@@ -401,10 +401,8 @@
         font-size: 1.1em;
         border-radius: 1em 1em 0 0;
         background: transparent;
-        box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+        box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
         height: 38svh;
-        max-height: 38svh;
-        min-height: 0;
         transition: none;
         overflow-y: auto;
         box-sizing: border-box;
@@ -566,7 +564,7 @@
         margin-top: -1px;
         -webkit-overflow-scrolling: touch;
         touch-action: pan-y; /* Change from pan-x to pan-y for vertical scrolling */
-
+        height: 38vh;
         overflow-y: auto; /* Enable vertical scrolling */
         /* max-height: 20vh; */
     }
@@ -574,7 +572,7 @@
     /* Ensure the always-visible mobile info panel is scrollable */
     .mobileProductInfo.always-visible {
         overflow-y: auto;
-        max-height: 20vh;
+        height: 38vh;
         -webkit-overflow-scrolling: touch;
     }
 }
