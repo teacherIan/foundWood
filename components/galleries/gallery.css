@@ -407,6 +407,7 @@
         transition: none;
         overflow-y: auto;
         box-sizing: border-box;
+        /* border removed for clean look */
     }
 
     .mobileProductName {
