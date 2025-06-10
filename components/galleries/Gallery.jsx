@@ -1,7 +1,7 @@
-import './gallery.css';
-import imgData from './imgData';
-import { useState, useEffect, useRef, useCallback, memo } from 'react';
-import { useSpring, animated } from '@react-spring/web';
+import "./gallery.css";
+import imgData from "./imgData";
+import { useState, useEffect, useRef, useCallback, memo } from "react";
+import { useSpring, animated } from "@react-spring/web";
 
 const images = imgData;
 
@@ -10,7 +10,7 @@ const Thumbnail = memo(({ image, index, currentPhoto, onClick }) => (
   <img
     key={index}
     src={image.img}
-    className={`thumbNailPhoto ${index === currentPhoto ? 'grayscale' : ''}`}
+    className={`thumbNailPhoto ${index === currentPhoto ? "grayscale" : ""}`}
     onClick={() => onClick(index)}
     loading="lazy"
     alt={`Thumbnail ${index + 1}`}
@@ -25,7 +25,8 @@ const MobileInfoPanel = memo(
       style={{
         ...infoSpring,
         // Changed from fixed positioning to relative positioning behavior
-        maxHeight: showDetails ? '90svh' : '0%',
+        maxHeight: showDetails ? "90svh" : "0%",
+        overflowY: showDetails ? "auto" : "hidden", // Enable scrolling when visible
       }}
       ref={infoRef}
     >
@@ -33,7 +34,7 @@ const MobileInfoPanel = memo(
       <h2 className="mobileProductName">{currentItem?.name}</h2>
       <p className="mobileProductDescription">{currentItem?.description}</p>
     </animated.div>
-  )
+  ),
 );
 
 export default function Gallery({
@@ -56,12 +57,12 @@ export default function Gallery({
   // Memoized gallery type filtering
   useEffect(() => {
     const newGalleryTypeArr = images.filter(
-      (image) => image.type === showGalleryString
+      (image) => image.type === showGalleryString,
     );
 
     // Debug: log what is being compared
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('Filtering gallery:', {
+    if (process.env.NODE_ENV !== "production") {
+      console.log("Filtering gallery:", {
         showGalleryString,
         typesInImages: Array.from(new Set(images.map((img) => img.type))),
         newGalleryTypeArr,
@@ -86,10 +87,10 @@ export default function Gallery({
     (event) => {
       const index = Array.prototype.indexOf.call(
         event.target.parentNode.children,
-        event.target
+        event.target,
       );
 
-      if (event.target.className === 'thumbNailPhoto') {
+      if (event.target.className === "thumbNailPhoto") {
         requestAnimationFrame(() => {
           setCurrentPhoto(index);
         });
@@ -97,7 +98,7 @@ export default function Gallery({
       setShowDetails(false);
       setShowInfographic(false);
     },
-    [setCurrentPhoto, setShowDetails, setShowInfographic]
+    [setCurrentPhoto, setShowDetails, setShowInfographic],
   );
 
   const handleMasterImageClick = useCallback(() => {
@@ -112,13 +113,13 @@ export default function Gallery({
       setCurrentPhoto(index);
       setShowDetails(false);
       setShowInfographic(false);
-      infoApi.start({ transform: 'translateY(100%)' });
+      infoApi.start({ transform: "translateY(100%)" });
       indicatorApi.start({
         opacity: 1,
-        transform: 'translateY(0px)',
+        transform: "translateY(0px)",
       });
     },
-    [setCurrentPhoto, setShowDetails, setShowInfographic]
+    [setCurrentPhoto, setShowDetails, setShowInfographic],
   );
 
   // Spring animations
@@ -127,12 +128,12 @@ export default function Gallery({
   }));
 
   const [infoSpring, infoApi] = useSpring(() => ({
-    transform: 'translateY(100%)',
+    transform: "translateY(100%)",
   }));
 
   const [indicatorSpring, indicatorApi] = useSpring(() => ({
     opacity: 1,
-    transform: 'translateY(0px)',
+    transform: "translateY(0px)",
   }));
 
   // Touch handlers
@@ -150,7 +151,7 @@ export default function Gallery({
       if (diff > 0) {
         const newTransform = Math.max(
           0,
-          100 - (diff / window.innerHeight) * 100
+          100 - (diff / window.innerHeight) * 100,
         );
         infoApi.start({ transform: `translateY(${newTransform}%)` });
 
@@ -162,19 +163,19 @@ export default function Gallery({
       } else if (diff < 0) {
         const newTransform = Math.min(
           100,
-          100 - (diff / window.innerHeight) * 100
+          100 - (diff / window.innerHeight) * 100,
         );
         infoApi.start({ transform: `translateY(${newTransform}%)` });
 
         if (!showDetails) {
           indicatorApi.start({
             opacity: 1,
-            transform: 'translateY(0px)',
+            transform: "translateY(0px)",
           });
         }
       }
     },
-    [startY, showDetails, infoApi, indicatorApi]
+    [startY, showDetails, infoApi, indicatorApi],
   );
 
   const handleTouchEnd = useCallback(
@@ -185,32 +186,32 @@ export default function Gallery({
       const diff = startY - endY;
 
       if (diff > swipeThreshold) {
-        infoApi.start({ transform: 'translateY(0%)' });
+        infoApi.start({ transform: "translateY(0%)" });
         setShowDetails(true);
         indicatorApi.start({
           opacity: 0,
-          transform: 'translateY(30px)',
+          transform: "translateY(30px)",
         });
       } else if (diff < -swipeThreshold) {
-        infoApi.start({ transform: 'translateY(100%)' });
+        infoApi.start({ transform: "translateY(100%)" });
         setShowDetails(false);
         indicatorApi.start({
           opacity: 1,
-          transform: 'translateY(0px)',
+          transform: "translateY(0px)",
         });
       } else {
         infoApi.start({
-          transform: showDetails ? 'translateY(0%)' : 'translateY(100%)',
+          transform: showDetails ? "translateY(0%)" : "translateY(100%)",
         });
         indicatorApi.start({
           opacity: showDetails ? 0 : 1,
-          transform: showDetails ? 'translateY(30px)' : 'translateY(0px)',
+          transform: showDetails ? "translateY(30px)" : "translateY(0px)",
         });
       }
 
       setStartY(null);
     },
-    [startY, showDetails, infoApi, indicatorApi, setShowDetails]
+    [startY, showDetails, infoApi, indicatorApi, setShowDetails],
   );
 
   const currentItem = galleryTypeArr[currentPhoto] || galleryTypeArr[0];
@@ -220,8 +221,8 @@ export default function Gallery({
       className="galleryContainer"
       style={
         showGallery
-          ? { width: '100svw', height: '100svh', opacity: 1, zIndex: 20000 }
-          : { width: '100svw', height: '100svh', opacity: 0, zIndex: 0 }
+          ? { width: "100svw", height: "100svh", opacity: 1, zIndex: 20000 }
+          : { width: "100svw", height: "100svh", opacity: 0, zIndex: 0 }
       }
     >
       <div className="galleryLeftTop">

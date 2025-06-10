@@ -543,3 +543,40 @@
         margin: 0;
     }
 }
+
+/* Mobile product info panel */
+.mobileProductInfo {
+    width: 100%;
+    background-color: white;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 10000;
+    box-sizing: border-box;
+    margin: 0 auto;
+    overflow-y: auto; /* Add scrolling capability */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Mobile adjustments */
+@media (orientation: portrait), (max-width: 600px) {
+    .mobileProductInfo {
+        padding: 0.3em;
+        font-size: 1em;
+        background: transparent;
+        box-shadow: 0 0px 0px rgba(0, 0, 0, 0.08);
+        margin-top: -1px;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y; /* Change from pan-x to pan-y for vertical scrolling */
+        border: 1px solid red;
+        max-height: 50vh; /* Ensure it doesn't take up the entire screen */
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    /* Ensure the always-visible mobile info panel is scrollable */
+    .mobileProductInfo.always-visible {
+        overflow-y: auto;
+        max-height: 50vh;
+        -webkit-overflow-scrolling: touch;
+    }
+}
