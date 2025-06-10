@@ -173,10 +173,10 @@ body {
     }
 
     .menu-item {
-        padding-top: 10px !important;
+        padding-top: 0px !important;
         padding-bottom: 0 !important;
-        padding: 0.1 0em !important;
-        margin: 0.1em 0em !important;
+        padding: 0.1em 0em !important;
+        margin: 0.2em 0.2em !important;
     }
 }
 
@@ -203,13 +203,14 @@ body {
     -webkit-text-fill-color: #77481c;
     /* transition: all 1s ease; */
     z-index: 90001;
-    padding: 0.5em 0.2em;
+    padding: 0em 0em;
     position: relative;
     border: 1px solid white;
     box-shadow: 2px 2px 0px #77481c;
     filter: drop-shadow(2px 2px 2px #1c5077);
     border-radius: 1.2em;
     overflow: unset;
+    margin-top: 0.2em;
     /* min-width: 44px; */
     /* min-height: 44px; */
 }
@@ -307,6 +308,7 @@ canvas {
         color: #fff;
         -webkit-text-fill-color: transparent;
         -webkit-text-stroke: 1px #77481c;
+        margin-top: 0.2em;
     }
 
     .icon {
