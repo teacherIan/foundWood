@@ -401,11 +401,11 @@
         font-size: 1.1em;
         border-radius: 1em 1em 0 0;
         background: transparent;
-        box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
-
+        box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+        max-height: 40vh;
+        min-height: 0;
         transition: none;
-        flex: 1 1 0;
-        overflow-y: visable;
+        overflow-y: auto;
         box-sizing: border-box;
     }
 
@@ -532,7 +532,6 @@
         /* Slight overlap with image */
         -webkit-overflow-scrolling: touch;
         touch-action: pan-x;
-        border: 1px solid red;
     }
 
     .mobileProductName {
