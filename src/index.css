@@ -167,17 +167,21 @@ body {
 }
 
 @media (max-width: 1000px) {
-    .header {
-        height: 5vh;
-        padding: 0;
-    }
-
-    .menu-item {
-        padding-top: 0px !important;
-        padding-bottom: 0 !important;
-        padding: 0.1em 0em !important;
-        margin: 0.2em 0.2em !important;
-    }
+  .header {
+    height: 5vh;
+    padding: 0;
+  }
+  .menu-item {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding: 0 0.8em !important;
+  }
+  .icon {
+    width: 1.5em;
+    height: 1.5em;
+    max-width: 32px;
+    max-height: 32px;
+  }
 }
 
 .menu {
