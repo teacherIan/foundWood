@@ -569,14 +569,15 @@
         -webkit-overflow-scrolling: touch;
         touch-action: pan-y; /* Change from pan-x to pan-y for vertical scrolling */
         border: 1px solid red;
-        max-height: 50vh; /* Ensure it doesn't take up the entire screen */
+
         overflow-y: auto; /* Enable vertical scrolling */
+        max-height: 10vh;
     }
 
     /* Ensure the always-visible mobile info panel is scrollable */
     .mobileProductInfo.always-visible {
         overflow-y: auto;
-        max-height: 50vh;
+        max-height: 10vh;
         -webkit-overflow-scrolling: touch;
     }
 }
