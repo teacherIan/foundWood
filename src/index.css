@@ -54,6 +54,7 @@ body,
     overflow: hidden;
     -webkit-overflow-scrolling: none;
     overflow: none;
+    overscroll-behavior: none;
 }
 
 * {
