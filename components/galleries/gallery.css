@@ -408,7 +408,7 @@
         min-height: 0;
         transition: none;
         flex: 1 1 0;
-        overflow-y: auto;
+        overflow-y: visable;
         box-sizing: border-box;
     }
 
