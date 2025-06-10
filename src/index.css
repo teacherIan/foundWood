@@ -151,23 +151,30 @@ body {
 
 /* ===== NAVIGATION MENU ===== */
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 15vh;
-  z-index: 20000;
-  background: transparent;
-  display: flex;
-  justify-content: flex-start;
-  padding: 0.5rem 0rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 15vh;
+    z-index: 20000;
+    background: transparent;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0.5rem 0rem;
 }
 
 @media (max-width: 1000px) {
-  .header {
-    height: 8vh;
-    padding: 0.1rem 0rem;
-  }
+    .header {
+        height: 5vh;
+        padding: 0;
+    }
+
+    .menu-item {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        padding: 0.1 0.0em !important;
+        margin: 0.1em 0.0em !important;
+    }
 }
 
 .menu {
@@ -193,15 +200,15 @@ body {
     -webkit-text-fill-color: #77481c;
     /* transition: all 1s ease; */
     z-index: 90001;
-    padding: 0.1em 0em;
+    padding: 0.0em 0em;
     position: relative;
     border: 1px solid white;
     box-shadow: 2px 2px 0px #77481c;
     filter: drop-shadow(2px 2px 2px #1c5077);
     border-radius: 1.2em;
     overflow: unset;
-    min-width: 44px;
-    min-height: 44px;
+    /* min-width: 44px; */
+    /* min-height: 44px; */
 }
 
 .menu-item:hover {
