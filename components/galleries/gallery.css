@@ -402,7 +402,8 @@
         border-radius: 1em 1em 0 0;
         background: transparent;
         box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
-        max-height: 40vh;
+        height: 38svh;
+        max-height: 38svh;
         min-height: 0;
         transition: none;
         overflow-y: auto;
