@@ -4,6 +4,8 @@
     box-sizing: border-box;
 }
 
+
+
 .galleryContainer {
     position: relative;
     width: 100vw;
@@ -142,9 +144,11 @@
     position: relative;
     transition: 1s;
     overflow: hidden;
+    margin-top: 0px;
 }
 
-@media (max-width: 600px), (orientation: portrait) {
+@media (max-width: 600px),
+(orientation: portrait) {
     .currentPhoto {
         width: 100vw;
     }
@@ -161,7 +165,7 @@
     /* object-fit: contain;  */
     z-index: 9999;
     position: relative;
-    margin-top: 50px;
+    margin-top: 15px;
 }
 
 .galleryLeftBottom {
@@ -306,6 +310,7 @@
 }
 
 @keyframes bounce {
+
     0%,
     20%,
     50%,
@@ -323,7 +328,8 @@
     }
 }
 
-@media (orientation: portrait), (max-width: 600px) {
+@media (orientation: portrait),
+(max-width: 600px) {
     .galleryContainer {
         flex-direction: column;
         justify-content: flex-start;
@@ -494,7 +500,8 @@
 }
 
 /* Mobile adjustments */
-@media (orientation: portrait), (max-width: 600px) {
+@media (orientation: portrait),
+(max-width: 600px) {
     .currentPhoto {
         width: 100vw;
         margin: 0;
@@ -550,12 +557,15 @@
     z-index: 10000;
     box-sizing: border-box;
     margin: 0 auto;
-    overflow-y: auto; /* Add scrolling capability */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    overflow-y: auto;
+    /* Add scrolling capability */
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on iOS */
 }
 
 /* Mobile adjustments */
-@media (orientation: portrait), (max-width: 600px) {
+@media (orientation: portrait),
+(max-width: 600px) {
     .mobileProductInfo {
         padding: 0.3em;
         font-size: 1em;
@@ -563,9 +573,11 @@
         box-shadow: 0 0px 0px rgba(0, 0, 0, 0.08);
         margin-top: -1px;
         -webkit-overflow-scrolling: touch;
-        touch-action: pan-y; /* Change from pan-x to pan-y for vertical scrolling */
+        touch-action: pan-y;
+        /* Change from pan-x to pan-y for vertical scrolling */
         height: 38vh;
-        overflow-y: auto; /* Enable vertical scrolling */
+        overflow-y: auto;
+        /* Enable vertical scrolling */
         /* max-height: 20vh; */
     }
 
