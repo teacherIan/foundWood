@@ -144,8 +144,7 @@
     overflow: hidden;
 }
 
-@media (max-width: 600px),
-(orientation: portrait) {
+@media (max-width: 600px), (orientation: portrait) {
     .currentPhoto {
         width: 100vw;
     }
@@ -307,7 +306,6 @@
 }
 
 @keyframes bounce {
-
     0%,
     20%,
     50%,
@@ -325,8 +323,7 @@
     }
 }
 
-@media (orientation: portrait),
-(max-width: 600px) {
+@media (orientation: portrait), (max-width: 600px) {
     .galleryContainer {
         flex-direction: column;
         justify-content: flex-start;
@@ -500,8 +497,7 @@
 }
 
 /* Mobile adjustments */
-@media (orientation: portrait),
-(max-width: 600px) {
+@media (orientation: portrait), (max-width: 600px) {
     .currentPhoto {
         width: 100vw;
         margin: 0;
@@ -537,6 +533,9 @@
         box-shadow: 0 0px 0px rgba(0, 0, 0, 0.08);
         margin-top: -1px;
         /* Slight overlap with image */
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
+        border: 1px solid red;
     }
 
     .mobileProductName {
