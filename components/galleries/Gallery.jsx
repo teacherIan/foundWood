@@ -1,7 +1,7 @@
 import "./gallery.css";
 import imgData from "./imgData";
 import { useState, useEffect, useRef, useCallback, memo } from "react";
-import { useSpring, animated } from "@react-spring/web";
+import { useSpring, animated, useTransition } from "@react-spring/web";
 
 const images = imgData;
 
@@ -216,6 +216,15 @@ export default function Gallery({
 
   const currentItem = galleryTypeArr[currentPhoto] || galleryTypeArr[0];
 
+  // Crossfade transition for master image
+  const imageTransitions = useTransition(currentItem?.img, {
+    key: currentItem?.img,
+    from: { opacity: 0, position: "absolute" },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+    config: { tension: 200, friction: 20 },
+  });
+
   return (
     <div
       className="galleryContainer"
@@ -252,19 +261,42 @@ export default function Gallery({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        style={{ position: "relative", width: "100%", height: "100%" }}
       >
         {galleryTypeArr.length > 0 && (
           <>
-            {/* Only show swipe indicator on desktop/landscape */}
-
-            <animated.img
-              style={spring}
-              className="masterImage"
-              src={currentItem?.img}
-              loading="lazy"
-              alt={currentItem?.name}
-            />
-            {/* On mobile, always show MobileInfoPanel under the master image */}
+            {/* Crossfade transition for master image */}
+            <div
+              style={{
+                position: "relative",
+                width: window.innerWidth < window.innerHeight ? "100vw" : "70svw",
+                height: window.innerWidth < window.innerHeight ? "50svh" : "50svw",
+                margin: "0 auto",
+                zIndex: 1,
+              }}
+            >
+              {imageTransitions((style, item) =>
+                item ? (
+                  <animated.img
+                    key={item}
+                    style={{
+                      ...style,
+                      width: window.innerWidth < window.innerHeight ? "100vw" : "70svw",
+                      height: window.innerWidth < window.innerHeight ? "50svh" : "50svw",
+                      objectFit: "fill",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                    }}
+                    className="masterImage"
+                    src={item}
+                    loading="lazy"
+                    alt={currentItem?.name}
+                  />
+                ) : null
+              )}
+            </div>
+            {/* Info/Text panels below the image, as originally */}
             {window.innerWidth < window.innerHeight && (
               <div className="mobileProductInfo always-visible">
                 {/* <div className="handleBar" /> */}
@@ -274,7 +306,6 @@ export default function Gallery({
                 </p>
               </div>
             )}
-            {/* On desktop, keep old behavior if needed */}
             {window.innerWidth >= window.innerHeight && showDetails && (
               <MobileInfoPanel
                 infoSpring={infoSpring}

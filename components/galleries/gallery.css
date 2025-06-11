@@ -272,14 +272,14 @@
     .mobileProductInfo {
         position: static !important;
         width: 100vw;
-        margin: 0;
-        padding: 0;
+        margin: 2vh 0 0 0; /* Add margin-top for spacing */
+        padding: 1em 0 0 0; /* Optional: add padding-top */
         font-size: 1.1em;
         border-radius: 1em 1em 0 0;
         background: transparent;
         box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
-        height: 38svh;
-        max-height: 38svh;
+        height: 28svh; /* Reduce height since image is taller */
+        max-height: 28svh;
         min-height: 0;
         transition: none;
         overflow-y: auto;
