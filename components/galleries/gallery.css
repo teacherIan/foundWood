@@ -292,7 +292,7 @@
         color: white;
         outline: var(--brown);
         font-family: var(--mainFont);
-        -webkit-text-stroke: 0.1px var(--brown);
+        -webkit-text-stroke: 0.3px var(--brown);
         -webkit-text-fill-color: #ffffff;
 
     }
