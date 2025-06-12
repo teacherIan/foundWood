@@ -290,6 +290,7 @@ export default function Gallery({
 
   const handleImageTouchMove = (e) => {
     if (window.innerWidth >= window.innerHeight || !lastTouchRef.current) return;
+    e.preventDefault(); // Prevent iOS pull-to-refresh and scroll bounce
     const touch = e.touches[0];
     const dx = touch.clientX - lastTouchRef.current.x;
     const dy = touch.clientY - lastTouchRef.current.y;
@@ -400,12 +401,13 @@ export default function Gallery({
                   window.innerWidth >= window.innerHeight
                     ? "zoom-in"
                     : "pointer",
+                touchAction: "none", // Prevents browser gestures like pull-to-refresh
               }}
               onMouseMove={handleImageMouseMove}
               onMouseEnter={handleImageMouseEnter}
               onMouseLeave={handleImageMouseLeave}
               onTouchStart={handleImageTouchStart}
-              onTouchMove={handleImageTouchMove}
+              onTouchMoveCapture={handleImageTouchMove}
               onTouchEnd={handleImageTouchEnd}
               onTouchCancel={handleImageTouchEnd}
             >
