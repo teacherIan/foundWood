@@ -9,12 +9,53 @@
 .galleryContainer {
     position: relative;
     width: 100vw;
-    padding-top: 11vh;
+    padding-top: 8vh;
+    /* Reduced from 11vh to 8vh for more image space */
     display: flex;
+    flex-direction: row;
+    /* Back to horizontal layout for desktop */
     left: 0;
     transition: 1s ease-in;
     font-size: calc(1vw + 1vh + 8px);
     background-color: #f5f5f5;
+}
+
+/* iPad (portrait and landscape) - pull gallery down a bit */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .galleryContainer {
+        padding-top: 5vh !important;
+        /* Reduced from 7vh to 5vh */
+        /* Adjust as needed */
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1400px) and (orientation: landscape) {
+
+    /* iPad landscape specific styles */
+    .galleryContainer {
+        margin-top: 5vh !important;
+        /* Reduced from 7vh to 5vh */
+        /* Adjust as needed */
+    }
+}
+
+/* Improve layout for elongated screens (like iPad Pro in landscape) */
+@media (min-width: 1024px) and (orientation: landscape) and (max-aspect-ratio: 4/3) {
+    .galleryContainer {
+        padding-top: 3vh !important;
+        /* Reduced from 5vh to 3vh */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .currentPhoto {
+        max-height: 90vh;
+        /* Increased from 85vh to 90vh */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 .galleryHeader {
@@ -93,36 +134,49 @@
 }
 
 .thumbNails {
-    padding-top: 4svh;
-    width: calc(50svw - 50px);
+    padding: 0;
+    width: 100%;
+    /* Full width of left panel */
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-auto-rows: 10svw;
-    gap: 10px;
-    border-radius: 2px;
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 columns to fit in narrow panel */
+    grid-auto-rows: 60px;
+    gap: 8px;
+    border-radius: 10px;
     background: transparent;
-    z-index: 999999;
-    border-radius: 1000px;
+    z-index: 1000002;
+    /* Higher than main image and text */
+    margin-top: 2vh;
+    /* Add top margin to avoid icon collision */
+    margin-bottom: 2vh;
+    /* Space between thumbnails and text */
 }
 
 .thumbNailPhoto {
     height: 100%;
     width: 100%;
-    border: 4px var(--brown) solid;
-    border-radius: 50px;
+    border: 2px var(--brown) solid;
+    border-radius: 50%;
+    /* Perfect circles */
     cursor: pointer;
-    transition: 0.3s ease-in-out;
-    filter: grayscale(100%);
-    opacity: 0.6;
+    transition: 0.4s ease-in-out;
+    filter: grayscale(50%);
+    opacity: 0.8;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+    /* Ensure images fill the circle properly */
 }
 
 .thumbNailPhoto.grayscale {
     filter: none;
     opacity: 1;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(119, 72, 28, 0.3);
 }
 
 .thumbNailPhoto:hover {
-    border-radius: 10px;
+    border-radius: 50%;
+    /* Keep perfect circle on hover */
 }
 
 .currentPhoto {
@@ -131,32 +185,65 @@
     transition: 1s;
     overflow: hidden;
     margin-top: 0;
+    flex: 1;
+    /* Take up remaining width (about 70vw) */
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 8vh);
+    /* Use available height minus header */
+    z-index: 100;
+    /* Lower z-index than left panel */
+}
+
+/* On iPad/tablet, make .currentPhoto take up all available svh below the menu/header */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .currentPhoto {
+        height: calc(100svh - 12svh);
+        /* 12svh for menu/header */
+        width: 100vw;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 .masterImage {
     width: 70svw;
     height: 50svw;
-    border-radius: 500px 0 0 500px;
-    border-left: 4px var(--brown) solid;
-    border-top: 4px var(--brown) solid;
-    border-bottom: 4px var(--brown) solid;
+    border-radius: 20px;
     transition: 1s;
-    z-index: 9999;
+    z-index: 99999;
     position: relative;
     margin-top: 15px;
 }
 
+/* Improved master image styling for tablets and desktops */
+@media (min-width: 768px) {
+    .masterImage {
+        border-radius: 20px;
+        /* Clean rounded corners for all sides */
+        margin-top: 0;
+        max-width: 100%;
+        max-height: 100%;
+    }
+}
+
 .galleryLeftBottom {
-    height: 45svh;
+    height: auto;
     display: flex;
     position: relative;
     color: var(--brown);
-    border-top: 4px solid var(--brown);
-    font-size: calc(0.7vw + 0.7vh + 10px);
+    font-size: calc(0.8vw + 0.8vh + 10px);
     font-family: sans-serif;
-    margin-top: 10px;
-    padding-left: 10px;
     flex-direction: column;
+    width: 100%;
+    /* Full width of left panel */
+    text-align: center;
+    /* Center text to align with thumbnails */
+    padding: 0;
+    z-index: 1000001;
+    /* Ensure text is above everything */
 }
 
 .galleryContact {
@@ -169,10 +256,12 @@
 }
 
 .furnitureName {
-    margin-top: 5px;
-    margin-bottom: -5px;
+    margin-top: 0;
+    margin-bottom: 10px;
     text-align: center;
-    font-size: calc(2vw + 2vh + 10px);
+    /* Center align with thumbnails */
+    font-size: calc(1.2vw + 1.2vh + 10px);
+    /* Responsive but not too large */
     filter: drop-shadow(1px 1px 0px black);
     -webkit-text-stroke: 2px #77481c;
     -webkit-text-fill-color: #ffffff;
@@ -191,20 +280,60 @@
 }
 
 .furnitureDescription {
-    margin-top: -10px;
-    height: 25vh;
+    margin-top: 10px;
     font-family: "Poppins";
-    width: 50svw;
-    font-size: calc(0.7vw + 0.7vh + 8px);
+    width: 100%;
+    font-size: calc(0.6vw + 0.6vh + 8px);
+    /* Slightly smaller for narrow panel */
     text-align: center;
+    /* Center align with thumbnails */
+    line-height: 1.4;
 }
 
 .galleryLeftTop {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center both thumbnails and text */
+    width: 30vw;
+    /* Compact left panel for thumbnails and text */
+    padding: 2vh 2vw;
+    height: calc(100vh - 8vh);
+    /* Use available height minus header */
+    overflow-y: auto;
+    /* Allow scrolling if needed */
+    z-index: 1000000;
+    /* Ensure left panel is above main image */
+}
+
+/* ========== TABLET OPTIMIZATIONS ========== */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .galleryLeftTop {
+        width: 35vw;
+        /* Slightly wider on tablets */
+        padding: 1.5vh 1.5vw;
+        align-items: center;
+        /* Keep centering on tablets */
+    }
+
+    .thumbNails {
+        grid-template-columns: repeat(3, 1fr);
+        /* 3 columns on tablets */
+        grid-auto-rows: 55px;
+        gap: 6px;
+    }
+
+    .galleryLeftBottom {
+        font-size: calc(0.9vw + 0.9vh + 8px);
+        text-align: center;
+        /* Keep centering on tablets */
+    }
 }
 
 /* ========== MOBILE STYLES ========== */
-@media (orientation: portrait), (max-width: 600px) {
+@media (orientation: portrait),
+(max-width: 600px) {
     .galleryContainer {
         flex-direction: column;
         justify-content: flex-start;
@@ -273,13 +402,16 @@
     .mobileProductInfo {
         position: static !important;
         width: 100vw;
-        margin: 2vh 0 0 0; /* Add margin-top for spacing */
-        padding: 1em 0 0 0; /* Optional: add padding-top */
+        margin: 2vh 0 0 0;
+        /* Add margin-top for spacing */
+        padding: 1em 0 0 0;
+        /* Optional: add padding-top */
         font-size: 1.1em;
         border-radius: 1em 1em 0 0;
         background: transparent;
         box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
-        height: 28svh; /* Reduce height since image is taller */
+        height: 28svh;
+        /* Reduce height since image is taller */
         max-height: 28svh;
         min-height: 0;
         transition: none;
@@ -311,6 +443,14 @@
     margin: 0 auto 15px auto;
 }
 
+/* Hide mobile product info on screens 768px and wider or in landscape */
+@media (min-width: 768px),
+(orientation: landscape) {
+    .mobileProductInfo.always-visible {
+        display: none !important;
+    }
+}
+
 .mobileProductPrice {
     font-size: 20px;
     font-weight: bold;
@@ -329,6 +469,7 @@
 }
 
 @keyframes bounce {
+
     0%,
     20%,
     50%,
@@ -343,5 +484,72 @@
 
     60% {
         transform: translateY(-4px);
+    }
+}
+
+@media (min-width: 768px),
+(orientation: landscape),
+(pointer: fine) {
+    .mobileProductInfo.always-visible {
+        display: none !important;
+    }
+}
+
+/* Loading indicator for smooth image transitions */
+.imageLoading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(119, 72, 28, 0.3);
+    border-top: 3px solid var(--brown);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 1000;
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Overlay mobile info panel - doesn't affect layout */
+.mobileProductInfo.overlay-panel {
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 !important;
+    z-index: 10000;
+    background: rgba(245, 245, 245, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 1em 1em 0 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Large desktop screens (1440px and above) - maximize image space */
+@media (min-width: 1440px) {
+    .galleryContainer {
+        padding-top: 6vh !important;
+        /* Even less padding for large screens */
+    }
+
+    .thumbNails {
+        width: calc(30svw - 25px);
+        /* Even more compact thumbnails on large screens */
+        grid-auto-rows: 5svw;
+        /* Smaller thumbnail rows */
+    }
+
+    .galleryLeftBottom {
+        height: 20svh;
+        /* Reduce text area height on large screens */
     }
 }

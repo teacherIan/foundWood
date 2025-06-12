@@ -1,12 +1,12 @@
-import "./App.css";
-import { useState, useCallback, useEffect, useReducer, memo } from "react";
-import found_wood from "./assets/found_wood_final_all.png";
-import Contact from "../components/contact/Contact";
-import Gallery from "../components/galleries/Gallery";
-import Types from "../components/select_gallery/Types";
-import NewCanvas from "../components/new_experience/Experience";
-import FontFaceObserver from "fontfaceobserver";
-import { useSpring, animated } from "@react-spring/web";
+import './App.css';
+import { useState, useCallback, useEffect, useReducer, memo } from 'react';
+import found_wood from './assets/found_wood_final_all.png';
+import Contact from '../components/contact/Contact';
+import Gallery from '../components/galleries/Gallery';
+import Types from '../components/select_gallery/Types';
+import NewCanvas from '../components/new_experience/Experience';
+import FontFaceObserver from 'fontfaceobserver';
+import { useSpring, animated } from '@react-spring/web';
 
 const configAnimation = {
   mass: 2,
@@ -36,10 +36,10 @@ const AnimatedMenuItem = memo(({ children, onClick, isLogo = false }) => {
       onTouchEnd={() => setPressed(false)}
       style={{
         transform: springProps.scale.to((s) => `scale(${s})`),
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: isLogo ? "auto" : "100%",
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: isLogo ? 'auto' : '100%',
       }}
     >
       {children}
@@ -51,7 +51,7 @@ const AnimatedMenuItem = memo(({ children, onClick, isLogo = false }) => {
 const initialState = {
   fontsLoaded: false,
   isAnimating: true,
-  activeGalleryTypeString: "chairs",
+  activeGalleryTypeString: 'chairs',
   activeGalleryType: 1,
   showTypes: false,
   showGallery: false,
@@ -64,17 +64,17 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
-    case "SET_FONTS_LOADED":
+    case 'SET_FONTS_LOADED':
       return { ...state, fontsLoaded: true };
-    case "TOGGLE_ANIMATION":
+    case 'TOGGLE_ANIMATION':
       return { ...state, isAnimating: !state.isAnimating };
-    case "SET_GALLERY_TYPE":
+    case 'SET_GALLERY_TYPE':
       return {
         ...state,
         activeGalleryType: action.payload.type,
         activeGalleryTypeString: action.payload.typeString,
       };
-    case "TOGGLE_TYPES":
+    case 'TOGGLE_TYPES':
       return {
         ...state,
         showTypes: !state.showTypes,
@@ -82,21 +82,21 @@ function reducer(state, action) {
         showInfographic: false,
         isAnimating: state.showTypes,
       };
-    case "TOGGLE_GALLERY":
+    case 'TOGGLE_GALLERY':
       return {
         ...state,
         showGallery: true,
         showTypes: false,
         showDetails: false,
       };
-    case "TOGGLE_CONTACT":
+    case 'TOGGLE_CONTACT':
       return {
         ...state,
         showContactPage: !state.showContactPage,
         isAnimating: false,
         showInfographic: false,
       };
-    case "RESET_VIEW":
+    case 'RESET_VIEW':
       return {
         ...state,
         isAnimating: true,
@@ -105,17 +105,17 @@ function reducer(state, action) {
         showDetails: false,
         showInfographic: false,
       };
-    case "SET_SHOW_DETAILS":
+    case 'SET_SHOW_DETAILS':
       return { ...state, showDetails: action.payload };
-    case "SET_GALLERY_TYPE_ARR":
+    case 'SET_GALLERY_TYPE_ARR':
       return { ...state, galleryTypeArr: action.payload };
-    case "SET_CURRENT_PHOTO":
+    case 'SET_CURRENT_PHOTO':
       return { ...state, currentPhoto: action.payload };
-    case "SET_SHOW_INFOGraphic":
+    case 'SET_SHOW_INFOGraphic':
       return { ...state, showInfographic: action.payload };
-    case "SET_SHOW_CONTACT":
+    case 'SET_SHOW_CONTACT':
       return { ...state, showContactPage: action.payload };
-    case "SET_ANIMATING":
+    case 'SET_ANIMATING':
       return { ...state, isAnimating: action.payload };
     default:
       return state;
@@ -128,41 +128,41 @@ function App() {
   // Font loading detection with improved error handling
   useEffect(() => {
     const fonts = [
-      new FontFaceObserver("driftWood"),
-      new FontFaceObserver("CustomFont"),
-      new FontFaceObserver("Poppins"),
-      new FontFaceObserver("Lobster Two"),
+      new FontFaceObserver('driftWood'),
+      new FontFaceObserver('CustomFont'),
+      new FontFaceObserver('Poppins'),
+      new FontFaceObserver('Lobster Two'),
     ];
 
     Promise.all(fonts.map((font) => font.load()))
       .then(() => {
-        dispatch({ type: "SET_FONTS_LOADED" });
+        dispatch({ type: 'SET_FONTS_LOADED' });
       })
       .catch((error) => {
-        console.error("Font loading error:", error);
-        dispatch({ type: "SET_FONTS_LOADED" }); // Proceed anyway
+        console.error('Font loading error:', error);
+        dispatch({ type: 'SET_FONTS_LOADED' }); // Proceed anyway
       });
   }, []);
 
   const handleGalleryTypesClickCallback = useCallback(() => {
-    dispatch({ type: "TOGGLE_TYPES" });
+    dispatch({ type: 'TOGGLE_TYPES' });
   }, []);
 
   const handleMissionButtonClickCallback = useCallback(() => {
-    dispatch({ type: "TOGGLE_ANIMATION" });
-    dispatch({ type: "RESET_VIEW" });
+    dispatch({ type: 'TOGGLE_ANIMATION' });
+    dispatch({ type: 'RESET_VIEW' });
   }, []);
 
   const handleGalleryButtonClickCallback = useCallback(() => {
-    dispatch({ type: "TOGGLE_GALLERY" });
+    dispatch({ type: 'TOGGLE_GALLERY' });
   }, []);
 
   const handleEmblemClickCallback = useCallback(() => {
-    dispatch({ type: "RESET_VIEW" });
+    dispatch({ type: 'RESET_VIEW' });
   }, []);
 
   const handleContactPageClick = useCallback(() => {
-    dispatch({ type: "TOGGLE_CONTACT" });
+    dispatch({ type: 'TOGGLE_CONTACT' });
   }, []);
 
   // Home screen logic: not showing gallery, contact, or types
@@ -170,8 +170,8 @@ function App() {
     !state.showGallery && !state.showContactPage && !state.showTypes;
 
   const iconSpring = useSpring({
-    width: isHomeScreen ? "1.7em" : "1.5em",
-    height: isHomeScreen ? "1.7em" : "1.5em",
+    width: isHomeScreen ? '1.0em' : '0.9em',
+    height: isHomeScreen ? '1.0em' : '0.9em',
     config: {
       tension: 300,
       friction: 20,
@@ -211,18 +211,18 @@ function App() {
         showGalleryString={state.activeGalleryTypeString}
         showDetails={state.showDetails}
         setShowDetails={(value) =>
-          dispatch({ type: "SET_SHOW_DETAILS", payload: value })
+          dispatch({ type: 'SET_SHOW_DETAILS', payload: value })
         }
         galleryTypeArr={state.galleryTypeArr}
         setGalleryTypeArr={(arr) =>
-          dispatch({ type: "SET_GALLERY_TYPE_ARR", payload: arr })
+          dispatch({ type: 'SET_GALLERY_TYPE_ARR', payload: arr })
         }
         currentPhoto={state.currentPhoto}
         setCurrentPhoto={(photo) =>
-          dispatch({ type: "SET_CURRENT_PHOTO", payload: photo })
+          dispatch({ type: 'SET_CURRENT_PHOTO', payload: photo })
         }
         setShowInfographic={(value) =>
-          dispatch({ type: "SET_SHOW_INFOGraphic", payload: value })
+          dispatch({ type: 'SET_SHOW_INFOGraphic', payload: value })
         }
         showInfographic={state.showInfographic}
       />
@@ -234,15 +234,15 @@ function App() {
         onTypeSelect={handleGalleryButtonClickCallback}
         setActiveGalleryType={(type, typeString) =>
           dispatch({
-            type: "SET_GALLERY_TYPE",
+            type: 'SET_GALLERY_TYPE',
             payload: { type, typeString },
           })
         }
         setActiveGalleryTypeString={(typeString, type) =>
           dispatch({
-            type: "SET_GALLERY_TYPE",
+            type: 'SET_GALLERY_TYPE',
             payload: {
-              type: typeof type === "number" ? type : state.activeGalleryType,
+              type: typeof type === 'number' ? type : state.activeGalleryType,
               typeString,
             },
           })
@@ -253,10 +253,10 @@ function App() {
         <Contact
           showContactPage={state.showContactPage}
           setShowContactPage={(value) =>
-            dispatch({ type: "SET_SHOW_CONTACT", payload: value })
+            dispatch({ type: 'SET_SHOW_CONTACT', payload: value })
           }
           setIsAnimating={(value) =>
-            dispatch({ type: "SET_ANIMATING", payload: value })
+            dispatch({ type: 'SET_ANIMATING', payload: value })
           }
           showTypes={state.showTypes}
           showGallery={state.showGallery}
@@ -268,13 +268,13 @@ function App() {
             <AnimatedMenuItem onClick={handleEmblemClickCallback} isLogo={true}>
               <div
                 style={{
-                  width: "2.5em",
-                  height: "2.5em",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  width: '1.8em', // Further reduced container size
+                  height: '1.8em',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   flexShrink: 0,
-                  paddingTop: "0.4em", // Add top padding to prevent icon from touching the top
+                  paddingTop: '0.2em', // Minimal padding
                 }}
               >
                 <animated.img
@@ -284,7 +284,7 @@ function App() {
                   loading="lazy"
                   style={{
                     ...iconSpring,
-                    objectFit: "contain"
+                    objectFit: 'contain',
                   }}
                 />
               </div>
