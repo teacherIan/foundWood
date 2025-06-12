@@ -198,10 +198,10 @@
     display: -webkit-grid;
     /* Safari prefix */
     display: grid;
-    -webkit-grid-template-columns: repeat(4, 1fr);
-    /* Safari prefix - fixed 4 columns for consistency */
-    grid-template-columns: repeat(4, 1fr);
-    /* Fixed columns to prevent container resizing */
+    -webkit-grid-template-columns: repeat(4, minmax(0, 1fr));
+    /* Safari prefix - fixed 4 columns with proper minmax */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    /* Fixed columns to prevent container resizing, minmax ensures no squashing */
     gap: 8px;
     -webkit-gap: 8px;
     /* Safari prefix */
@@ -222,6 +222,8 @@
     /* Center thumbnails */
     align-content: start;
     /* Align to top */
+    align-items: center;
+    /* Prevent vertical squashing */
     /* Draggable functionality improvements */
     scroll-behavior: smooth;
     -webkit-scroll-behavior: smooth;
@@ -272,9 +274,9 @@
 /* Permanent light brown styling for desktop thumbnails */
 @media (min-width: 768px) {
     .thumbNails {
-        box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5);
-        border-radius: 10px;
-        background: rgba(119, 72, 28, 0.05);
+        box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5) !important;
+        border-radius: 10px !important;
+        background: rgba(119, 72, 28, 0.05) !important;
         /* Enhanced visual cue for x-direction dragging */
         position: relative;
         scroll-behavior: smooth;
@@ -288,24 +290,26 @@
         max-width: 400px;
         width: 100%;
     }
+
+    /* Apply light brown background to individual thumbnails on desktop */
+    .thumbNailPhoto {
+        background: rgba(119, 72, 28, 0.05) !important;
+        border: 2px solid var(--brown) !important;
+        box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
+    }
 }
 
-/* Keyboard focus styles for desktop */
+/* Keyboard focus styles for desktop - enhance but don't override permanent styling */
 .thumbNails:focus {
     outline: none;
     /* Remove default browser outline */
-    box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5);
-    /* Stronger focus ring */
-    border-radius: 10px;
-    background: rgba(119, 72, 28, 0.05);
-    /* Subtle background highlight */
 }
 
+/* Remove conflicting focus styles that were removing the background */
 .thumbNails:focus:not(:focus-visible) {
-    box-shadow: none;
-    /* Remove focus ring for mouse interactions */
-    background: transparent;
-    /* Remove background for mouse interactions */
+    /* Keep the permanent styling intact - don't override */
+    box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5) !important;
+    background: rgba(119, 72, 28, 0.05) !important;
 }
 
 /* Visual hint for keyboard navigation */
@@ -342,10 +346,14 @@
 .thumbNailPhoto {
     aspect-ratio: 1/1;
     /* Force perfect square containers */
-    width: 65px;
-    /* Fixed size to prevent layout shifts */
-    height: 65px;
-    /* Fixed size to prevent layout shifts */
+    width: 100%;
+    /* Take full width of grid cell */
+    max-width: 80px;
+    /* Prevent thumbnails from getting too large */
+    min-width: 50px;
+    /* Ensure minimum readable size */
+    height: auto;
+    /* Let height adjust to maintain aspect ratio */
     border: 2px var(--brown) solid;
     border-radius: 50%;
     /* Perfect circles */
@@ -355,7 +363,7 @@
     opacity: 0.8;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     object-fit: cover;
-    /* Ensure images fill the circle properly */
+    /* Ensure images fill the circle properly without distortion */
     justify-self: center;
     /* Center in grid cell */
     align-self: center;
@@ -381,17 +389,18 @@
     /* Keep perfect circle on hover */
 }
 
-/* Responsive thumbnail sizing for different screen sizes - FIXED SIZES TO PREVENT LAYOUT SHIFTS */
+/* Responsive thumbnail sizing for different screen sizes - PREVENT SQUASHING */
 @media (max-width: 480px) {
     .thumbNailPhoto {
-        width: 50px;
-        /* Fixed small size for very small screens */
-        height: 50px;
+        max-width: 55px;
+        /* Smaller max size for very small screens */
+        min-width: 45px;
+        /* Maintain minimum readable size */
     }
 
     .thumbNails {
-        grid-template-columns: repeat(3, 1fr);
-        /* Fixed 3 columns for very small screens */
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        /* Fixed 3 columns with proper minmax */
         gap: 6px;
         -webkit-gap: 6px;
     }
@@ -399,40 +408,40 @@
 
 @media (min-width: 481px) and (max-width: 768px) {
     .thumbNailPhoto {
-        width: 60px;
-        /* Fixed medium size for tablets */
-        height: 60px;
+        max-width: 65px;
+        /* Medium size for tablets */
+        min-width: 50px;
     }
-    
+
     .thumbNails {
-        grid-template-columns: repeat(3, 1fr);
-        /* Fixed 3 columns for tablets */
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        /* Fixed 3 columns with proper minmax */
     }
 }
 
 @media (min-width: 769px) and (max-width: 1200px) {
     .thumbNailPhoto {
-        width: 65px;
-        /* Fixed size for small laptops */
-        height: 65px;
+        max-width: 70px;
+        /* Standard size for small laptops */
+        min-width: 55px;
     }
-    
+
     .thumbNails {
-        grid-template-columns: repeat(4, 1fr);
-        /* Fixed 4 columns for small laptops */
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        /* Fixed 4 columns with proper minmax */
     }
 }
 
 @media (min-width: 1201px) {
     .thumbNailPhoto {
-        width: 70px;
-        /* Fixed larger size for large screens */
-        height: 70px;
+        max-width: 80px;
+        /* Larger size for large screens */
+        min-width: 60px;
     }
-    
+
     .thumbNails {
-        grid-template-columns: repeat(4, 1fr);
-        /* Fixed 4 columns for large screens */
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        /* Fixed 4 columns with proper minmax */
     }
 }
 
@@ -592,9 +601,20 @@
     }
 
     .thumbNails {
-        grid-template-columns: repeat(3, 1fr);
-        /* Fixed 3 columns on tablets - consistent sizing */
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        /* Fixed 3 columns on tablets - prevent squashing */
         gap: 6px;
+        /* Ensure brown styling on tablets too */
+        box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5) !important;
+        border-radius: 10px !important;
+        background: rgba(119, 72, 28, 0.05) !important;
+    }
+
+    /* Apply light brown background to individual thumbnails on tablets */
+    .thumbNailPhoto {
+        background: rgba(119, 72, 28, 0.05) !important;
+        border: 2px solid var(--brown) !important;
+        box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
     }
 
     .galleryLeftBottom {
@@ -623,8 +643,8 @@
     }
 
     .thumbNails {
-        grid-template-columns: repeat(4, 1fr);
-        /* Fixed 4 columns for good balance - consistent sizing */
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        /* Fixed 4 columns for good balance - prevent squashing */
         gap: 10px;
     }
 
@@ -677,12 +697,23 @@
 
     .thumbNails {
         display: grid !important;
-        grid-template-columns: repeat(3, 1fr);
-        /* 3 columns for iPad Pro portrait */
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        /* 3 columns for iPad Pro portrait - prevent squashing */
         gap: 8px;
         width: 100%;
         margin-top: 2vh;
         margin-bottom: 2vh;
+        /* Ensure brown styling on iPad Pro too */
+        box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5) !important;
+        border-radius: 10px !important;
+        background: rgba(119, 72, 28, 0.05) !important;
+    }
+
+    /* Apply light brown background to individual thumbnails on iPad Pro */
+    .thumbNailPhoto {
+        background: rgba(119, 72, 28, 0.05) !important;
+        border: 2px solid var(--brown) !important;
+        box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
     }
 
     .galleryLeftBottom {
@@ -1084,8 +1115,8 @@
     }
 
     .thumbNails {
-        grid-template-columns: repeat(2, 1fr);
-        /* 2 columns in landscape mobile */
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        /* 2 columns in landscape mobile - prevent squashing */
         display: grid !important;
         /* Use grid for landscape mobile */
         gap: 8px;
@@ -1120,8 +1151,8 @@
         cursor: grab;
         max-height: 35vh;
         /* Limit height to ensure scrolling is needed */
-        grid-template-columns: repeat(3, 1fr);
-        /* More columns to force vertical overflow */
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        /* More columns to force vertical overflow - prevent squashing */
         /* Visual indication that both directions are draggable */
         border: 2px solid rgba(119, 72, 28, 0.6);
         border-radius: 8px;
@@ -1279,10 +1310,21 @@
     }
 
     .thumbNails {
-        grid-template-columns: repeat(5, 1fr);
-        /* Fixed 5 columns for large screens - consistent sizing */
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        /* Fixed 5 columns for large screens - prevent squashing */
         gap: 12px;
         /* More spacing */
+        /* Ensure brown styling on large screens too */
+        box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5) !important;
+        border-radius: 10px !important;
+        background: rgba(119, 72, 28, 0.05) !important;
+    }
+
+    /* Apply light brown background to individual thumbnails on large screens */
+    .thumbNailPhoto {
+        background: rgba(119, 72, 28, 0.05) !important;
+        border: 3px solid var(--brown) !important;
+        box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
     }
 
     .galleryLeftBottom {
@@ -1341,12 +1383,23 @@
     }
 
     .thumbNails {
-        grid-template-columns: repeat(4, 1fr);
-        /* Fixed 4 columns for ultra-wide - consistent sizing */
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        /* Fixed 4 columns for ultra-wide - prevent squashing */
         max-width: 350px;
         /* Prevent thumbnails from spreading too wide */
         margin: 0 auto;
         /* Center the thumbnail grid */
+        /* Ensure brown styling on ultra-wide screens too */
+        box-shadow: 0 0 0 4px rgba(119, 72, 28, 0.5) !important;
+        border-radius: 12px !important;
+        background: rgba(119, 72, 28, 0.05) !important;
+    }
+
+    /* Apply light brown background to individual thumbnails on ultra-wide screens */
+    .thumbNailPhoto {
+        background: rgba(119, 72, 28, 0.05) !important;
+        border: 4px solid var(--brown) !important;
+        box-shadow: 0 3px 10px rgba(119, 72, 28, 0.2) !important;
     }
 
     .furnitureName {
@@ -1404,8 +1457,8 @@
     }
 
     .thumbNails {
-        grid-template-columns: repeat(3, 1fr);
-        /* Fewer columns for better proportion */
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        /* Fewer columns for better proportion - prevent squashing */
         max-width: 400px;
         gap: 15px;
         /* Larger gaps on 4K screens */
