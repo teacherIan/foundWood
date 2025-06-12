@@ -2,13 +2,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import './variables.css';
 
-/* Local Fonts */
+/* Local Fonts with Safari fallbacks */
 @font-face {
     font-family: 'driftWood';
     src: url('../assets/fonts/DriftWood-z8W4.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
+    -webkit-font-feature-settings: normal;
+    /* Safari compatibility */
 }
 
 @font-face {
@@ -17,6 +19,8 @@
     font-weight: normal;
     font-style: normal;
     font-display: swap;
+    -webkit-font-feature-settings: normal;
+    /* Safari compatibility */
 }
 
 /* Reset & Base Styles */
@@ -26,6 +30,23 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+/* Safari iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+    html {
+        height: -webkit-fill-available;
+    }
+
+    body {
+        height: -webkit-fill-available;
+        min-height: -webkit-fill-available;
+    }
+
+    #root {
+        height: -webkit-fill-available;
+        min-height: -webkit-fill-available;
+    }
 }
 
 html,
@@ -95,9 +116,18 @@ select {
 
 /* Canvas */
 canvas {
+    width: 100vw;
+    /* Use VW instead of SVW for Safari */
     width: 100svw;
+    /* Progressive enhancement */
+    height: 100vh;
+    /* Use VH instead of SVH for Safari */
     height: 100svh;
+    /* Progressive enhancement */
     cursor: grab;
+    -webkit-transform: translateZ(0);
+    /* Force hardware acceleration on Safari */
+    transform: translateZ(0);
 }
 
 canvas:active {

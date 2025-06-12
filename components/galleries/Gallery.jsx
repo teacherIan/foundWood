@@ -28,11 +28,12 @@ const MobileInfoPanel = memo(
         bottom: 0,
         left: 0,
         right: 0,
-        maxHeight: showDetails ? '90svh' : '0%',
+        maxHeight: showDetails ? '90vh' : '0%', // Use VH for Safari compatibility
         overflowY: showDetails ? 'auto' : 'hidden',
         zIndex: 10000,
         background: 'rgba(245, 245, 245, 0.95)',
         backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)', // Safari compatibility
       }}
       ref={infoRef}
     >
@@ -493,15 +494,37 @@ export default function Gallery({
   const MOBILE_IMAGE_WIDTH = 1.3; // 130vw
   const MOBILE_IMAGE_HEIGHT = 1.3; // 130% of container height (relative to 50svh container, so 65svh)
   const MOBILE_CONTAINER_WIDTH = 1.0; // 100vw
-  const MOBILE_CONTAINER_HEIGHT = 0.5; // 50svh
+  const MOBILE_CONTAINER_HEIGHT = 0.5; // 50vh (Safari compatible)
 
-  // Utility to detect mobile devices
-  function isMobileDevice() {
+  // Utility to detect Safari browser
+  function isSafari() {
     return (
       typeof window !== 'undefined' &&
-      ('ontouchstart' in window ||
-        navigator.maxTouchPoints > 0 ||
-        navigator.userAgent.toLowerCase().includes('mobi'))
+      /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+    );
+  }
+
+  // Utility to detect iOS Safari specifically
+  function isiOSSafari() {
+    return (
+      typeof window !== 'undefined' &&
+      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+      !window.MSStream &&
+      /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+    );
+  }
+
+  // Utility to detect mobile devices with Safari-specific handling
+  function isMobileDevice() {
+    if (typeof window === 'undefined') return false;
+
+    // Safari iOS specific detection
+    if (isiOSSafari()) return true;
+
+    return (
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      navigator.userAgent.toLowerCase().includes('mobi')
     );
   }
 
@@ -564,6 +587,29 @@ export default function Gallery({
   }, [currentPhoto]);
 
   const currentItem = galleryTypeArr[currentPhoto] || galleryTypeArr[0];
+
+  // Debug logging for Safari
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Gallery component state:', {
+        showGallery,
+        galleryTypeArr: galleryTypeArr?.length || 0,
+        currentPhoto,
+        currentItem: currentItem?.name || 'none',
+        windowDimensions:
+          typeof window !== 'undefined'
+            ? {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                orientation:
+                  window.innerWidth > window.innerHeight
+                    ? 'landscape'
+                    : 'portrait',
+              }
+            : 'no window',
+      });
+    }
+  }, [showGallery, galleryTypeArr, currentPhoto, currentItem]);
 
   // Helper function to calculate container dimensions
   const calculateImageDimensions = useCallback(() => {
@@ -636,17 +682,88 @@ export default function Gallery({
     config: { tension: 200, friction: 20 },
   });
 
+  // Safari iOS debugging and compatibility
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Log browser info for debugging Safari issues
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Browser detection:', {
+        userAgent: navigator.userAgent,
+        isSafari: isSafari(),
+        isiOSSafari: isiOSSafari(),
+        isMobile: isMobileDevice(),
+        viewport: {
+          innerWidth: window.innerWidth,
+          innerHeight: window.innerHeight,
+          visualViewport: window.visualViewport
+            ? {
+                width: window.visualViewport.width,
+                height: window.visualViewport.height,
+              }
+            : 'not supported',
+        },
+      });
+    }
+
+    // Safari iOS specific viewport handling
+    if (isiOSSafari()) {
+      // Force a reflow to fix Safari iOS rendering issues
+      document.body.style.height = window.innerHeight + 'px';
+
+      // Handle viewport changes on Safari iOS
+      const handleViewportChange = () => {
+        if (window.visualViewport) {
+          document.body.style.height = window.visualViewport.height + 'px';
+        }
+      };
+
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', handleViewportChange);
+        return () => {
+          window.visualViewport.removeEventListener(
+            'resize',
+            handleViewportChange
+          );
+        };
+      }
+    }
+  }, []);
+
   return (
     <animated.div
       className="galleryContainer"
       style={{
         ...gallerySpring,
-        width: '100svw',
-        height: '100svh',
+        width: '100vw', // Use VW for Safari compatibility
+        width: '100svw', // Progressive enhancement
+        height: '100vh', // Use VH for Safari compatibility
+        height: '100svh', // Progressive enhancement
         opacity: showGallery ? 1 : 0,
         zIndex: showGallery ? 20000 : 0,
       }}
     >
+      {/* Debug info for Safari - remove in production */}
+      {process.env.NODE_ENV !== 'production' && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '10px',
+            left: '10px',
+            background: 'rgba(0,0,0,0.8)',
+            color: 'white',
+            padding: '5px',
+            fontSize: '12px',
+            zIndex: 99999,
+            borderRadius: '3px',
+          }}
+        >
+          Safari Debug: {galleryTypeArr?.length || 0} items | Current:{' '}
+          {currentPhoto} | Browser:{' '}
+          {isiOSSafari() ? 'iOS Safari' : isSafari() ? 'Safari' : 'Other'}
+        </div>
+      )}
+
       <div className="galleryLeftTop">
         <div className="thumbNails">
           {galleryTypeArr.map((image, index) => (
@@ -686,7 +803,7 @@ export default function Gallery({
                     : `${calculateImageDimensions().width}px`,
                 height:
                   window.innerWidth < window.innerHeight
-                    ? '50svh'
+                    ? '50vh' // Use VH for Safari compatibility
                     : `${calculateImageDimensions().height}px`,
                 margin: '0 auto',
                 zIndex: 1,
