@@ -63,6 +63,8 @@ export default function Gallery({
   const [isHovering, setIsHovering] = useState(false);
   const imageContainerRef = useRef(null);
   const imageRef = useRef(null);
+  const galleryLengthRef = useRef(0); // Add ref to track gallery length
+  const prevGalleryTypeRef = useRef(null); // Track previous gallery type
 
   // Track aspect ratio for dynamic container sizing (desktop)
   const [imgAspect, setImgAspect] = useState(1.4); // default aspect ratio
@@ -115,6 +117,59 @@ export default function Gallery({
     [imgAspect]
   );
 
+  // Manual touch event registration for non-passive touchmove
+  useEffect(() => {
+    const imageContainer = imageContainerRef.current;
+    if (!imageContainer || window.innerWidth >= window.innerHeight) return;
+
+    // Register touchmove as non-passive so we can preventDefault
+    const handleTouchMove = (e) => {
+      if (!isMobileDevice() || !lastTouchRef.current) return;
+
+      e.preventDefault(); // This will work now since it's non-passive
+
+      const touch = e.touches[0];
+      const dx = touch.clientX - lastTouchRef.current.x;
+      const dy = touch.clientY - lastTouchRef.current.y;
+
+      setTouchPan((prev) => {
+        // Apply some momentum damping for smoother feel
+        const dampingFactor = 0.8;
+        const newX = prev.x + dx * dampingFactor;
+        const newY = prev.y + dy * dampingFactor;
+
+        // Get better boundary constraints
+        const container = imageContainerRef.current;
+        const image = imageRef.current;
+        if (container && image) {
+          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBounds(
+            container,
+            image,
+            PAN_MARGIN
+          );
+
+          return {
+            x: Math.max(Math.min(newX, maxPanX), minPanX),
+            y: Math.max(Math.min(newY, maxPanY), minPanY),
+          };
+        }
+
+        return { x: newX, y: newY };
+      });
+
+      lastTouchRef.current = { x: touch.clientX, y: touch.clientY };
+    };
+
+    // Add non-passive touchmove listener
+    imageContainer.addEventListener('touchmove', handleTouchMove, {
+      passive: false,
+    });
+
+    return () => {
+      imageContainer.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [showGallery, currentPhoto]);
+
   // Reset aspect ratio when current photo changes
   useEffect(() => {
     // Reset to default aspect ratio when photo changes, will be updated by handleImageLoad
@@ -141,35 +196,73 @@ export default function Gallery({
     };
   }, []);
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e) => {
+  // Keyboard navigation with useCallback to ensure stable function reference
+  const handleKeyDown = useCallback(
+    (e) => {
       if (!showGallery) return; // Only handle keys when gallery is open
+
+      console.log(
+        'Key pressed:',
+        e.key,
+        'showGallery:',
+        showGallery,
+        'galleryLength:',
+        galleryLengthRef.current,
+        'currentPhoto:',
+        currentPhoto
+      );
 
       switch (e.key) {
         case 'ArrowLeft':
         case 'ArrowUp':
           e.preventDefault();
-          setCurrentPhoto((prev) =>
-            prev > 0 ? prev - 1 : galleryTypeArr.length - 1
+          const currentLength = galleryLengthRef.current;
+          if (currentLength === 0) return;
+          const newLeftIndex =
+            currentPhoto > 0 ? currentPhoto - 1 : currentLength - 1;
+          console.log(
+            'Arrow Left/Up: current =',
+            currentPhoto,
+            'length =',
+            currentLength,
+            'new =',
+            newLeftIndex
           );
+          setCurrentPhoto(newLeftIndex);
           break;
         case 'ArrowRight':
         case 'ArrowDown':
           e.preventDefault();
-          setCurrentPhoto((prev) =>
-            prev < galleryTypeArr.length - 1 ? prev + 1 : 0
+          const currentLength2 = galleryLengthRef.current;
+          if (currentLength2 === 0) return;
+          const newRightIndex =
+            currentPhoto < currentLength2 - 1 ? currentPhoto + 1 : 0;
+          console.log(
+            'Arrow Right/Down: current =',
+            currentPhoto,
+            'length =',
+            currentLength2,
+            'new =',
+            newRightIndex
           );
+          setCurrentPhoto(newRightIndex);
           break;
         case 'Escape':
           // You might want to add a close gallery function here
           break;
       }
-    };
+    },
+    [showGallery, setCurrentPhoto, currentPhoto]
+  );
 
+  useEffect(() => {
+    console.log('Setting up keyboard listener, showGallery:', showGallery);
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showGallery, galleryTypeArr.length, setCurrentPhoto]);
+    return () => {
+      console.log('Cleaning up keyboard listener');
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]); // Depend on the memoized callback
 
   // Memoized gallery type filtering
   useEffect(() => {
@@ -181,25 +274,42 @@ export default function Gallery({
     if (process.env.NODE_ENV !== 'production') {
       console.log('Filtering gallery:', {
         showGalleryString,
+        prevGalleryType: prevGalleryTypeRef.current,
         typesInImages: Array.from(new Set(images.map((img) => img.type))),
         newGalleryTypeArr,
       });
     }
 
-    // Only update if the array has actually changed
-    if (JSON.stringify(newGalleryTypeArr) !== JSON.stringify(galleryTypeArr)) {
+    // Only update if the gallery type has actually changed
+    if (prevGalleryTypeRef.current !== showGalleryString) {
+      console.log(
+        'Gallery type changed, updating array and resetting to first photo'
+      );
       setGalleryTypeArr(newGalleryTypeArr);
-      setCurrentPhoto(0); // Always reset to first image for safety
+      galleryLengthRef.current = newGalleryTypeArr.length; // Update ref
+      setCurrentPhoto(0); // Only reset when gallery type actually changes
+      prevGalleryTypeRef.current = showGalleryString; // Update ref
       // Reset aspect ratio to default when gallery type changes
       setImgAspect(1.4);
+    } else {
+      console.log('Gallery type unchanged, keeping current photo');
     }
   }, [
     galleryType,
     showGalleryString,
-    setGalleryTypeArr,
-    setCurrentPhoto,
-    galleryTypeArr,
+    // Removed setGalleryTypeArr, setCurrentPhoto, and galleryTypeArr to prevent unnecessary re-runs
   ]);
+
+  // Keep ref in sync with array length
+  useEffect(() => {
+    galleryLengthRef.current = galleryTypeArr.length;
+    console.log('Gallery length updated:', galleryTypeArr.length);
+  }, [galleryTypeArr.length]);
+
+  // Debug: log currentPhoto changes
+  useEffect(() => {
+    console.log('Current photo changed to:', currentPhoto);
+  }, [currentPhoto]);
 
   // Animate gallery visibility
   useEffect(() => {
@@ -230,10 +340,12 @@ export default function Gallery({
   const handleMasterImageClick = useCallback(() => {
     // Only show mobile-style info panel on actual mobile devices (portrait orientation + small screen)
     if (window.innerWidth < window.innerHeight && window.innerWidth < 768) {
-      setShowDetails(!showDetails);
-      setShowInfographic(!showInfographic);
+      // For mobile, just log the click - remove info panel functionality to simplify
+      console.log('Mobile image clicked');
+      // setShowDetails(!showDetails);
+      // setShowInfographic(!showInfographic);
     }
-  }, [showDetails, showInfographic, setShowDetails, setShowInfographic]);
+  }, []);
 
   const handleThumbnailClick = useCallback(
     (index) => {
@@ -418,41 +530,6 @@ export default function Gallery({
     lastTouchRef.current = { x: touch.clientX, y: touch.clientY };
   };
 
-  const handleImageTouchMove = (e) => {
-    if (!isMobileDevice() || !lastTouchRef.current) return;
-    e.preventDefault(); // Prevent iOS pull-to-refresh and scroll bounce
-    const touch = e.touches[0];
-    const dx = touch.clientX - lastTouchRef.current.x;
-    const dy = touch.clientY - lastTouchRef.current.y;
-
-    setTouchPan((prev) => {
-      // Apply some momentum damping for smoother feel
-      const dampingFactor = 0.8;
-      const newX = prev.x + dx * dampingFactor;
-      const newY = prev.y + dy * dampingFactor;
-
-      // Get better boundary constraints
-      const container = imageContainerRef.current;
-      const image = imageRef.current;
-      if (container && image) {
-        const { minPanX, maxPanX, minPanY, maxPanY } = getPanBounds(
-          container,
-          image,
-          PAN_MARGIN
-        );
-
-        return {
-          x: Math.max(Math.min(newX, maxPanX), minPanX),
-          y: Math.max(Math.min(newY, maxPanY), minPanY),
-        };
-      }
-
-      return { x: newX, y: newY };
-    });
-
-    lastTouchRef.current = { x: touch.clientX, y: touch.clientY };
-  };
-
   const handleImageTouchEnd = () => {
     lastTouchRef.current = null;
   };
@@ -490,24 +567,49 @@ export default function Gallery({
 
   // Helper function to calculate container dimensions
   const calculateImageDimensions = useCallback(() => {
-    const isTabletLandscape =
-      window.innerWidth >= 768 &&
-      window.innerWidth <= 1024 &&
-      window.innerWidth > window.innerHeight;
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const isPortrait = screenHeight > screenWidth;
 
-    // For very large screens (like 4K monitors), use even more space
-    const isLargeDesktop = window.innerWidth >= 1440;
+    // Different calculations based on screen size and orientation
+    const isSmallMobile = screenWidth <= 480;
+    const isMobileLandscape =
+      screenWidth >= 600 && screenWidth <= 768 && !isPortrait;
+    const isTablet = screenWidth >= 768 && screenWidth <= 1024;
+    const isSmallLaptop = screenWidth >= 1200 && screenWidth <= 1439;
+    const isLargeDesktop = screenWidth >= 1440 && screenWidth <= 1919;
+    const isUltraWide = screenWidth >= 1920;
 
-    const maxW = isTabletLandscape
-      ? window.innerWidth * 0.85 // Good size for tablets
-      : isLargeDesktop
-      ? window.innerWidth * 0.85 // Good size for large desktop screens
-      : window.innerWidth * 0.85; // Good size for regular desktop
-    const maxH = isTabletLandscape
-      ? window.innerHeight * 0.8 // Good height for tablets
-      : isLargeDesktop
-      ? window.innerHeight * 0.8 // Good height for large desktop screens
-      : window.innerHeight * 0.8; // Good height for regular desktop
+    let maxW, maxH;
+
+    if (isPortrait && screenWidth < 768) {
+      // Mobile portrait - handled in CSS
+      return { width: screenWidth, height: screenHeight * 0.5 };
+    } else if (isMobileLandscape) {
+      // Mobile landscape - compact layout
+      maxW = screenWidth * 0.75;
+      maxH = screenHeight * 0.9;
+    } else if (isTablet) {
+      // Tablet - balanced layout
+      maxW = screenWidth * 0.65;
+      maxH = screenHeight * 0.8;
+    } else if (isSmallLaptop) {
+      // Small laptop - good balance
+      maxW = screenWidth * 0.68;
+      maxH = screenHeight * 0.82;
+    } else if (isLargeDesktop) {
+      // Large desktop - maximize space
+      maxW = screenWidth * 0.72;
+      maxH = screenHeight * 0.85;
+    } else if (isUltraWide) {
+      // Ultra-wide - prevent too wide images
+      maxW = Math.min(screenWidth * 0.75, 1400); // Cap at reasonable width
+      maxH = screenHeight * 0.9;
+    } else {
+      // Default fallback
+      maxW = screenWidth * 0.85;
+      maxH = screenHeight * 0.8;
+    }
 
     // Ensure we have a valid aspect ratio
     const safeAspectRatio = imgAspect && imgAspect > 0 ? imgAspect : 1.4;
@@ -569,9 +671,6 @@ export default function Gallery({
       <div
         onClick={handleMasterImageClick}
         className="currentPhoto"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
         {galleryTypeArr.length > 0 && (
@@ -597,15 +696,27 @@ export default function Gallery({
                   window.innerWidth >= 768
                     ? 'zoom-in'
                     : 'pointer',
-                touchAction: 'none', // Prevents browser gestures like pull-to-refresh
+                touchAction:
+                  window.innerWidth < window.innerHeight ? 'none' : 'auto', // Prevents browser gestures like pull-to-refresh on mobile only
               }}
               onMouseMove={handleImageMouseMove}
               onMouseEnter={handleImageMouseEnter}
               onMouseLeave={handleImageMouseLeave}
-              onTouchStart={handleImageTouchStart}
-              onTouchMoveCapture={handleImageTouchMove}
-              onTouchEnd={handleImageTouchEnd}
-              onTouchCancel={handleImageTouchEnd}
+              onTouchStart={
+                window.innerWidth < window.innerHeight
+                  ? handleImageTouchStart
+                  : undefined
+              }
+              onTouchEnd={
+                window.innerWidth < window.innerHeight
+                  ? handleImageTouchEnd
+                  : undefined
+              }
+              onTouchCancel={
+                window.innerWidth < window.innerHeight
+                  ? handleImageTouchEnd
+                  : undefined
+              }
             >
               {imageTransitions((style, item) =>
                 item ? (
@@ -722,31 +833,17 @@ export default function Gallery({
                 </div>
               )}
             </div>
-
-            {/* Info/Text panels below the image, as originally */}
-            {window.innerWidth < window.innerHeight &&
-              window.innerWidth < 768 && (
-                <div className="mobileProductInfo always-visible">
-                  {/* <div className="handleBar" /> */}
-                  <h2 className="mobileProductName">{currentItem?.name}</h2>
-                  <p className="mobileProductDescription">
-                    {currentItem?.description}
-                  </p>
-                </div>
-              )}
-            {window.innerWidth < window.innerHeight &&
-              window.innerWidth < 768 &&
-              showDetails && (
-                <MobileInfoPanel
-                  infoSpring={infoSpring}
-                  infoRef={infoRef}
-                  showDetails={showDetails}
-                  currentItem={currentItem}
-                />
-              )}
           </>
         )}
       </div>
+
+      {/* Mobile info panel - moved outside currentPhoto container to prevent duplication */}
+      {window.innerWidth < window.innerHeight && window.innerWidth < 768 && (
+        <div className="mobileProductInfo always-visible">
+          <h2 className="mobileProductName">{currentItem?.name}</h2>
+          <p className="mobileProductDescription">{currentItem?.description}</p>
+        </div>
+      )}
     </animated.div>
   );
 }

@@ -170,8 +170,8 @@ function App() {
     !state.showGallery && !state.showContactPage && !state.showTypes;
 
   const iconSpring = useSpring({
-    width: isHomeScreen ? '1.0em' : '0.9em',
-    height: isHomeScreen ? '1.0em' : '0.9em',
+    width: isHomeScreen ? '1.3em' : '0.8em',
+    height: isHomeScreen ? '1.3em' : '0.8em',
     config: {
       tension: 300,
       friction: 20,
@@ -268,8 +268,8 @@ function App() {
             <AnimatedMenuItem onClick={handleEmblemClickCallback} isLogo={true}>
               <div
                 style={{
-                  width: '1.8em', // Further reduced container size
-                  height: '1.8em',
+                  width: '2.0em', // Increased to accommodate larger home icon
+                  height: '2.0em',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

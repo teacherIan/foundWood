@@ -152,7 +152,8 @@ body {
     justify-content: space-around;
     align-items: center;
     /* Center all menu items vertically */
-    font-size: clamp(2.5rem, 5vw, 5.5rem);
+    font-size: clamp(1.5rem, 3.5vw, 3rem);
+    /* Reduced maximum size */
     user-select: none;
     cursor: pointer;
     overflow: visible;
@@ -160,7 +161,8 @@ body {
 }
 
 .menu-item {
-    font-size: 5rem;
+    font-size: clamp(1.5rem, 4vw, 3.5rem);
+    /* Much more reasonable size range */
     border: 1px solid #77481c;
     box-shadow: 2px 2px 2px #77481c;
     border-radius: 2em;
@@ -174,9 +176,10 @@ body {
 }
 
 .icon {
-    width: 2.5em;
-    height: 2.5em;
-
+    width: clamp(1.5em, 3vw, 2.2em);
+    /* Responsive icon sizing */
+    height: clamp(1.5em, 3vw, 2.2em);
+    /* Responsive icon sizing */
     border-radius: 50%;
     object-fit: contain;
     /* transition: all 0.3s;  */
