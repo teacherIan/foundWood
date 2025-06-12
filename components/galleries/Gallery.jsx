@@ -6,16 +6,380 @@ import { useSpring, animated, useTransition } from '@react-spring/web';
 const images = imgData;
 
 // Memoized thumbnail component
-const Thumbnail = memo(({ image, index, currentPhoto, onClick }) => (
-  <img
-    key={index}
-    src={image.img}
-    className={`thumbNailPhoto ${index === currentPhoto ? 'grayscale' : ''}`}
-    onClick={() => onClick(index)}
-    loading="lazy"
-    alt={`Thumbnail ${index + 1}`}
-  />
-));
+const Thumbnail = memo(({ image, index, currentPhoto, onClick }) => {
+  const handleClick = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onClick(index);
+    },
+    [index, onClick]
+  );
+
+  return (
+    <img
+      key={index}
+      src={image.img}
+      className={`thumbNailPhoto ${index === currentPhoto ? 'grayscale' : ''}`}
+      onClick={handleClick}
+      loading="lazy"
+      alt={`Thumbnail ${index + 1}`}
+      draggable={false} // Prevent default image drag behavior
+      style={{ pointerEvents: 'auto' }} // Ensure clicks are captured
+    />
+  );
+});
+
+// Draggable thumbnail container component
+const DraggableThumbnails = memo(
+  ({ galleryTypeArr, currentPhoto, onThumbnailClick }) => {
+    const containerRef = useRef(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const [dragDistance, setDragDistance] = useState(0);
+    const dragThreshold = 5; // Minimum pixels to consider as dragging
+
+    // Detect if we're on a mobile device
+    const isMobile = window.innerWidth < 768 || 'ontouchstart' in window;
+
+    // Use refs to store the latest values for closures
+    const stateRef = useRef({
+      startX: 0,
+      scrollLeft: 0,
+      isMobile: isMobile,
+      dragThreshold: 5,
+    });
+
+    // Update state ref whenever state changes
+    useEffect(() => {
+      stateRef.current = {
+        startX,
+        scrollLeft,
+        isMobile,
+        dragThreshold,
+      };
+    }, [startX, scrollLeft, isMobile, dragThreshold]);
+
+    // Global mouse move handler
+    const handleGlobalMouseMove = useCallback((e) => {
+      const {
+        startX: currentStartX,
+        scrollLeft: currentScrollLeft,
+        isMobile: currentIsMobile,
+        dragThreshold: currentDragThreshold,
+      } = stateRef.current;
+
+      if (!containerRef.current || currentStartX === 0 || currentIsMobile)
+        return;
+
+      e.preventDefault();
+      const x = e.pageX - containerRef.current.offsetLeft;
+      const distance = Math.abs(x - currentStartX);
+
+      if (distance > currentDragThreshold) {
+        setIsDragging(true);
+        const walk = (x - currentStartX) * 2;
+        const newScrollLeft = currentScrollLeft - walk;
+
+        const container = containerRef.current;
+        const maxScrollLeft = Math.max(
+          0,
+          container.scrollWidth - container.clientWidth
+        );
+        const boundedScrollLeft = Math.max(
+          0,
+          Math.min(newScrollLeft, maxScrollLeft)
+        );
+        container.scrollLeft = boundedScrollLeft;
+        setDragDistance(distance);
+      }
+    }, []);
+
+    // Global mouse up handler
+    const handleGlobalMouseUp = useCallback(() => {
+      const { isMobile: currentIsMobile } = stateRef.current;
+
+      if (currentIsMobile) return;
+
+      setStartX(0);
+      if (containerRef.current) {
+        containerRef.current.style.cursor = 'grab';
+      }
+      setIsDragging(false);
+      setTimeout(() => setDragDistance(0), 50);
+
+      // Remove global event listeners
+      document.removeEventListener('mousemove', handleGlobalMouseMove);
+      document.removeEventListener('mouseup', handleGlobalMouseUp);
+    }, [handleGlobalMouseMove]);
+
+    const handleMouseDown = useCallback(
+      (e) => {
+        if (!containerRef.current || isMobile) return;
+
+        setIsDragging(false);
+        setDragDistance(0);
+        const newStartX = e.pageX - containerRef.current.offsetLeft;
+        const newScrollLeft = containerRef.current.scrollLeft;
+        setStartX(newStartX);
+        setScrollLeft(newScrollLeft);
+        containerRef.current.style.cursor = 'grabbing';
+
+        e.preventDefault();
+
+        // Add global mouse event listeners for proper drag handling
+        document.addEventListener('mousemove', handleGlobalMouseMove);
+        document.addEventListener('mouseup', handleGlobalMouseUp);
+      },
+      [isMobile, handleGlobalMouseMove, handleGlobalMouseUp]
+    );
+
+    const handleMouseMove = useCallback((e) => {
+      // This is now handled by the global event listener
+      return;
+    }, []);
+
+    const handleMouseUp = useCallback(() => {
+      // This is now handled by the global event listener
+      return;
+    }, []);
+
+    const handleMouseLeave = useCallback(() => {
+      if (isMobile) return;
+      // Clean up any ongoing drag when mouse leaves
+      if (startX !== 0) {
+        setStartX(0);
+        if (containerRef.current) {
+          containerRef.current.style.cursor = 'grab';
+        }
+        setIsDragging(false);
+        setDragDistance(0);
+
+        // Remove global event listeners
+        document.removeEventListener('mousemove', handleGlobalMouseMove);
+        document.removeEventListener('mouseup', handleGlobalMouseUp);
+      }
+    }, [isMobile, startX, handleGlobalMouseMove, handleGlobalMouseUp]);
+
+    // Touch events for mobile - use native scrolling
+    const handleTouchStart = useCallback(
+      (e) => {
+        if (!isMobile || !containerRef.current) return;
+        // For mobile, just reset any previous dragging state
+        setIsDragging(false);
+        setDragDistance(0);
+      },
+      [isMobile]
+    );
+
+    const handleTouchMove = useCallback(
+      (e) => {
+        // Let native scrolling handle touch moves on mobile
+        if (isMobile) return;
+      },
+      [isMobile]
+    );
+
+    const handleTouchEnd = useCallback(() => {
+      // Reset state on mobile
+      if (isMobile) {
+        setIsDragging(false);
+        setDragDistance(0);
+      }
+    }, [isMobile]);
+
+    const handleThumbnailClick = useCallback(
+      (index) => {
+        // On mobile or when drag distance is small, allow the click
+        if (isMobile || dragDistance <= dragThreshold) {
+          onThumbnailClick(index);
+        }
+      },
+      [dragDistance, dragThreshold, onThumbnailClick, isMobile]
+    );
+
+    // Add keyboard support for scrolling thumbnails - only when focused
+    const handleKeyDown = useCallback((e) => {
+      if (!containerRef.current) return;
+
+      // Only handle thumbnail scrolling if the thumbnails container is focused
+      // This prevents conflicts with the main gallery navigation
+      if (document.activeElement !== containerRef.current) return;
+
+      const container = containerRef.current;
+      const scrollAmount = 150; // Scroll distance in pixels
+      const maxScrollLeft = Math.max(
+        0,
+        container.scrollWidth - container.clientWidth
+      );
+
+      switch (e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          e.stopPropagation(); // Prevent the main gallery from handling this
+          const newLeftScroll = Math.max(
+            0,
+            container.scrollLeft - scrollAmount
+          );
+          container.scrollTo({
+            left: newLeftScroll,
+            behavior: 'smooth',
+          });
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          e.stopPropagation(); // Prevent the main gallery from handling this
+          const newRightScroll = Math.min(
+            maxScrollLeft,
+            container.scrollLeft + scrollAmount
+          );
+          container.scrollTo({
+            left: newRightScroll,
+            behavior: 'smooth',
+          });
+          break;
+        default:
+          break;
+      }
+    }, []);
+
+    // Add keyboard event listener when component mounts
+    useEffect(() => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      // Make container focusable and add keyboard listener
+      container.tabIndex = 0;
+      container.addEventListener('keydown', handleKeyDown);
+
+      return () => {
+        container.removeEventListener('keydown', handleKeyDown);
+      };
+    }, [handleKeyDown]);
+
+    // Cleanup global event listeners on unmount
+    useEffect(() => {
+      return () => {
+        document.removeEventListener('mousemove', handleGlobalMouseMove);
+        document.removeEventListener('mouseup', handleGlobalMouseUp);
+      };
+    }, [handleGlobalMouseMove, handleGlobalMouseUp]);
+
+    // Auto-center the active thumbnail
+    const centerActiveThumbnail = useCallback(() => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const thumbnails = container.querySelectorAll('.thumbNailPhoto');
+      const activeThumbnail = thumbnails[currentPhoto];
+
+      if (!activeThumbnail) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const thumbnailRect = activeThumbnail.getBoundingClientRect();
+
+      // Calculate the position to center the thumbnail
+      const containerCenter = containerRect.width / 2;
+      const thumbnailCenter =
+        thumbnailRect.left - containerRect.left + thumbnailRect.width / 2;
+      const scrollOffset = thumbnailCenter - containerCenter;
+
+      // Calculate the target scroll position
+      const targetScrollLeft = container.scrollLeft + scrollOffset;
+
+      // Ensure we don't scroll beyond boundaries
+      const maxScrollLeft = Math.max(
+        0,
+        container.scrollWidth - container.clientWidth
+      );
+      let boundedScrollLeft = Math.max(
+        0,
+        Math.min(targetScrollLeft, maxScrollLeft)
+      );
+
+      // Special handling for first and last thumbnails to ensure they're fully visible
+      if (currentPhoto === 0) {
+        // For the first thumbnail, always scroll to the very beginning
+        boundedScrollLeft = 0;
+      } else if (currentPhoto === thumbnails.length - 1) {
+        // For the last thumbnail, ensure it's fully visible
+        const thumbnailRight = thumbnailRect.right - containerRect.left;
+        const containerWidth = containerRect.width;
+        if (thumbnailRight > containerWidth) {
+          boundedScrollLeft = Math.min(
+            maxScrollLeft,
+            container.scrollLeft + (thumbnailRight - containerWidth) + 10
+          );
+        }
+      }
+
+      // Only scroll if we're not already in the right position
+      const threshold = 5;
+      const currentScrollDiff = Math.abs(
+        container.scrollLeft - boundedScrollLeft
+      );
+      if (currentScrollDiff > threshold) {
+        container.scrollTo({
+          left: boundedScrollLeft,
+          behavior: 'smooth',
+        });
+      }
+    }, [currentPhoto]);
+
+    // Center the thumbnail when currentPhoto changes
+    useEffect(() => {
+      // Use a slightly longer delay to ensure DOM and CSS have updated
+      const timeoutId = setTimeout(centerActiveThumbnail, 150);
+      return () => clearTimeout(timeoutId);
+    }, [currentPhoto, centerActiveThumbnail]);
+
+    // Force scroll to beginning when component mounts or gallery changes
+    useEffect(() => {
+      const container = containerRef.current;
+      if (container && galleryTypeArr.length > 0) {
+        // Force immediate scroll to position 0 without animation
+        container.scrollLeft = 0;
+        // Also ensure the container is properly positioned
+        setTimeout(() => {
+          container.scrollLeft = 0;
+        }, 100);
+      }
+    }, [galleryTypeArr]);
+
+    return (
+      <div
+        ref={containerRef}
+        className="thumbNails"
+        style={{
+          cursor: isMobile ? 'default' : 'grab',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          msUserSelect: 'none',
+          outline: 'none', // Remove default focus outline
+        }}
+        tabIndex={isMobile ? -1 : 0} // Only focusable on desktop
+        onMouseDown={isMobile ? undefined : handleMouseDown}
+        onMouseMove={isMobile ? undefined : handleMouseMove}
+        onMouseUp={isMobile ? undefined : handleMouseUp}
+        onMouseLeave={isMobile ? undefined : handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {galleryTypeArr.map((image, index) => (
+          <Thumbnail
+            key={index}
+            image={image}
+            index={index}
+            currentPhoto={currentPhoto}
+            onClick={(clickedIndex) => handleThumbnailClick(clickedIndex)}
+          />
+        ))}
+      </div>
+    );
+  }
+);
 
 // Memoized mobile info panel
 const MobileInfoPanel = memo(
@@ -735,10 +1099,8 @@ export default function Gallery({
       className="galleryContainer"
       style={{
         ...gallerySpring,
-        width: '100vw', // Use VW for Safari compatibility
-        width: '100svw', // Progressive enhancement
-        height: '100vh', // Use VH for Safari compatibility
-        height: '100svh', // Progressive enhancement
+        width: '100svw', // Modern viewport units with VW fallback in CSS
+        height: '100svh', // Modern viewport units with VH fallback in CSS
         opacity: showGallery ? 1 : 0,
         zIndex: showGallery ? 20000 : 0,
       }}
@@ -765,17 +1127,11 @@ export default function Gallery({
       )}
 
       <div className="galleryLeftTop">
-        <div className="thumbNails">
-          {galleryTypeArr.map((image, index) => (
-            <Thumbnail
-              key={index}
-              image={image}
-              index={index}
-              currentPhoto={currentPhoto}
-              onClick={handleThumbnailClick}
-            />
-          ))}
-        </div>
+        <DraggableThumbnails
+          galleryTypeArr={galleryTypeArr}
+          currentPhoto={currentPhoto}
+          onThumbnailClick={handleThumbnailClick}
+        />
         <div className="galleryLeftBottom">
           <div className="furnitureName">{currentItem?.name}</div>
           <br />
