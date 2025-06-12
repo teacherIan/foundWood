@@ -36,18 +36,29 @@ const DraggableThumbnails = memo(
     const containerRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
+    const [startY, setStartY] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
+    const [scrollTop, setScrollTop] = useState(0);
     const [dragDistance, setDragDistance] = useState(0);
     const dragThreshold = 5; // Minimum pixels to consider as dragging
 
     // Detect if we're on a mobile device
     const isMobile = window.innerWidth < 768 || 'ontouchstart' in window;
 
+    // Detect if we need vertical dragging (very small landscape screens)
+    const needsVerticalDrag =
+      window.innerWidth <= 600 &&
+      window.innerHeight <= 480 &&
+      window.innerWidth > window.innerHeight;
+
     // Use refs to store the latest values for closures
     const stateRef = useRef({
       startX: 0,
+      startY: 0,
       scrollLeft: 0,
+      scrollTop: 0,
       isMobile: isMobile,
+      needsVerticalDrag: needsVerticalDrag,
       dragThreshold: 5,
     });
 
@@ -55,34 +66,69 @@ const DraggableThumbnails = memo(
     useEffect(() => {
       stateRef.current = {
         startX,
+        startY,
         scrollLeft,
+        scrollTop,
         isMobile,
+        needsVerticalDrag,
         dragThreshold,
       };
-    }, [startX, scrollLeft, isMobile, dragThreshold]);
+    }, [
+      startX,
+      startY,
+      scrollLeft,
+      scrollTop,
+      isMobile,
+      needsVerticalDrag,
+      dragThreshold,
+    ]);
 
     // Global mouse move handler
     const handleGlobalMouseMove = useCallback((e) => {
       const {
         startX: currentStartX,
+        startY: currentStartY,
         scrollLeft: currentScrollLeft,
+        scrollTop: currentScrollTop,
         isMobile: currentIsMobile,
+        needsVerticalDrag: currentNeedsVerticalDrag,
         dragThreshold: currentDragThreshold,
       } = stateRef.current;
 
-      if (!containerRef.current || currentStartX === 0 || currentIsMobile)
+      if (
+        !containerRef.current ||
+        (currentStartX === 0 && currentStartY === 0) ||
+        currentIsMobile
+      )
         return;
 
       e.preventDefault();
       const x = e.pageX - containerRef.current.offsetLeft;
-      const distance = Math.abs(x - currentStartX);
+      const y = e.pageY - containerRef.current.offsetTop;
+      const distanceX = Math.abs(x - currentStartX);
+      const distanceY = Math.abs(y - currentStartY);
 
-      if (distance > currentDragThreshold) {
+      // For x-direction only dragging, prioritize horizontal movement
+      // Only register as dragging if horizontal movement is significant OR
+      // if we're on a very small landscape screen that allows vertical dragging
+      let totalDistance;
+      if (currentNeedsVerticalDrag) {
+        // On very small landscape screens, allow both directions
+        totalDistance = Math.max(distanceX, distanceY);
+      } else {
+        // On all other screens, prioritize x-direction dragging
+        // Only consider horizontal distance for drag threshold
+        totalDistance = distanceX;
+      }
+
+      if (totalDistance > currentDragThreshold) {
         setIsDragging(true);
-        const walk = (x - currentStartX) * 2;
-        const newScrollLeft = currentScrollLeft - walk;
 
         const container = containerRef.current;
+
+        // Always handle horizontal dragging (x-direction)
+        const walkX = (x - currentStartX) * 2;
+        const newScrollLeft = currentScrollLeft - walkX;
         const maxScrollLeft = Math.max(
           0,
           container.scrollWidth - container.clientWidth
@@ -92,7 +138,23 @@ const DraggableThumbnails = memo(
           Math.min(newScrollLeft, maxScrollLeft)
         );
         container.scrollLeft = boundedScrollLeft;
-        setDragDistance(distance);
+
+        // Handle vertical dragging (y-direction) only on very small landscape screens
+        if (currentNeedsVerticalDrag) {
+          const walkY = (y - currentStartY) * 2;
+          const newScrollTop = currentScrollTop - walkY;
+          const maxScrollTop = Math.max(
+            0,
+            container.scrollHeight - container.clientHeight
+          );
+          const boundedScrollTop = Math.max(
+            0,
+            Math.min(newScrollTop, maxScrollTop)
+          );
+          container.scrollTop = boundedScrollTop;
+        }
+
+        setDragDistance(totalDistance);
       }
     }, []);
 
@@ -103,6 +165,7 @@ const DraggableThumbnails = memo(
       if (currentIsMobile) return;
 
       setStartX(0);
+      setStartY(0);
       if (containerRef.current) {
         containerRef.current.style.cursor = 'grab';
       }
@@ -121,10 +184,20 @@ const DraggableThumbnails = memo(
         setIsDragging(false);
         setDragDistance(0);
         const newStartX = e.pageX - containerRef.current.offsetLeft;
+        const newStartY = e.pageY - containerRef.current.offsetTop;
         const newScrollLeft = containerRef.current.scrollLeft;
+        const newScrollTop = containerRef.current.scrollTop;
         setStartX(newStartX);
+        setStartY(newStartY);
         setScrollLeft(newScrollLeft);
-        containerRef.current.style.cursor = 'grabbing';
+        setScrollTop(newScrollTop);
+
+        // Set cursor to grabbing with directional hint
+        if (needsVerticalDrag) {
+          containerRef.current.style.cursor = 'grabbing'; // Both directions on very small landscape
+        } else {
+          containerRef.current.style.cursor = 'grabbing'; // Primarily x-direction
+        }
 
         e.preventDefault();
 
@@ -132,7 +205,7 @@ const DraggableThumbnails = memo(
         document.addEventListener('mousemove', handleGlobalMouseMove);
         document.addEventListener('mouseup', handleGlobalMouseUp);
       },
-      [isMobile, handleGlobalMouseMove, handleGlobalMouseUp]
+      [isMobile, needsVerticalDrag, handleGlobalMouseMove, handleGlobalMouseUp]
     );
 
     const handleMouseMove = useCallback((e) => {
@@ -148,8 +221,9 @@ const DraggableThumbnails = memo(
     const handleMouseLeave = useCallback(() => {
       if (isMobile) return;
       // Clean up any ongoing drag when mouse leaves
-      if (startX !== 0) {
+      if (startX !== 0 || startY !== 0) {
         setStartX(0);
+        setStartY(0);
         if (containerRef.current) {
           containerRef.current.style.cursor = 'grab';
         }
@@ -160,7 +234,7 @@ const DraggableThumbnails = memo(
         document.removeEventListener('mousemove', handleGlobalMouseMove);
         document.removeEventListener('mouseup', handleGlobalMouseUp);
       }
-    }, [isMobile, startX, handleGlobalMouseMove, handleGlobalMouseUp]);
+    }, [isMobile, startX, startY, handleGlobalMouseMove, handleGlobalMouseUp]);
 
     // Touch events for mobile - use native scrolling
     const handleTouchStart = useCallback(
@@ -357,6 +431,8 @@ const DraggableThumbnails = memo(
           WebkitUserSelect: 'none',
           msUserSelect: 'none',
           outline: 'none', // Remove default focus outline
+          // Enhanced dragging behavior: x-direction primary, y-direction on very small landscape only
+          touchAction: isMobile ? 'pan-x' : 'none', // Native x-scroll on mobile, custom on desktop
         }}
         tabIndex={isMobile ? -1 : 0} // Only focusable on desktop
         onMouseDown={isMobile ? undefined : handleMouseDown}
@@ -1134,7 +1210,6 @@ export default function Gallery({
         />
         <div className="galleryLeftBottom">
           <div className="furnitureName">{currentItem?.name}</div>
-          <br />
           <div className="furnitureDescription">{currentItem?.description}</div>
           <br />
           <br />

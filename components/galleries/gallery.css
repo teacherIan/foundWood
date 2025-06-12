@@ -72,6 +72,9 @@
     transition: 1s ease-in;
     font-size: calc(1vw + 1vh + 8px);
     background-color: #f5f5f5;
+    /* Improve wide-screen layout with proper gap */
+    gap: 1vw;
+    /* Add small gap between left panel and main image area */
 }
 
 /* iPad (portrait and landscape) - pull gallery down a bit */
@@ -195,10 +198,10 @@
     display: -webkit-grid;
     /* Safari prefix */
     display: grid;
-    -webkit-grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-    /* Safari prefix - responsive columns */
-    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-    /* Responsive columns that adjust to thumbnail size */
+    -webkit-grid-template-columns: repeat(4, 1fr);
+    /* Safari prefix - fixed 4 columns for consistency */
+    grid-template-columns: repeat(4, 1fr);
+    /* Fixed columns to prevent container resizing */
     gap: 8px;
     -webkit-gap: 8px;
     /* Safari prefix */
@@ -266,6 +269,27 @@
     scrollbar-color: rgba(119, 72, 28, 0.5) transparent;
 }
 
+/* Permanent light brown styling for desktop thumbnails */
+@media (min-width: 768px) {
+    .thumbNails {
+        box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5);
+        border-radius: 10px;
+        background: rgba(119, 72, 28, 0.05);
+        /* Enhanced visual cue for x-direction dragging */
+        position: relative;
+        scroll-behavior: smooth;
+        -webkit-scroll-behavior: smooth;
+        /* Emphasize horizontal scrolling */
+        overflow-x: auto;
+        overflow-y: hidden;
+        /* Hide vertical overflow on desktop - x-direction only */
+        /* Fixed width to prevent container resizing */
+        min-width: 300px;
+        max-width: 400px;
+        width: 100%;
+    }
+}
+
 /* Keyboard focus styles for desktop */
 .thumbNails:focus {
     outline: none;
@@ -318,10 +342,10 @@
 .thumbNailPhoto {
     aspect-ratio: 1/1;
     /* Force perfect square containers */
-    width: clamp(50px, 8vw, 80px);
-    /* Responsive sizing: min 50px, preferred 8vw, max 80px */
-    height: clamp(50px, 8vw, 80px);
-    /* Match width for perfect circles */
+    width: 65px;
+    /* Fixed size to prevent layout shifts */
+    height: 65px;
+    /* Fixed size to prevent layout shifts */
     border: 2px var(--brown) solid;
     border-radius: 50%;
     /* Perfect circles */
@@ -357,16 +381,17 @@
     /* Keep perfect circle on hover */
 }
 
-/* Responsive thumbnail sizing for different screen sizes */
+/* Responsive thumbnail sizing for different screen sizes - FIXED SIZES TO PREVENT LAYOUT SHIFTS */
 @media (max-width: 480px) {
     .thumbNailPhoto {
-        width: clamp(40px, 12vw, 60px);
-        height: clamp(40px, 12vw, 60px);
+        width: 50px;
+        /* Fixed small size for very small screens */
+        height: 50px;
     }
 
     .thumbNails {
-        -webkit-grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-        grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
+        /* Fixed 3 columns for very small screens */
         gap: 6px;
         -webkit-gap: 6px;
     }
@@ -374,22 +399,40 @@
 
 @media (min-width: 481px) and (max-width: 768px) {
     .thumbNailPhoto {
-        width: clamp(45px, 10vw, 70px);
-        height: clamp(45px, 10vw, 70px);
+        width: 60px;
+        /* Fixed medium size for tablets */
+        height: 60px;
+    }
+    
+    .thumbNails {
+        grid-template-columns: repeat(3, 1fr);
+        /* Fixed 3 columns for tablets */
     }
 }
 
 @media (min-width: 769px) and (max-width: 1200px) {
     .thumbNailPhoto {
-        width: clamp(55px, 8vw, 75px);
-        height: clamp(55px, 8vw, 75px);
+        width: 65px;
+        /* Fixed size for small laptops */
+        height: 65px;
+    }
+    
+    .thumbNails {
+        grid-template-columns: repeat(4, 1fr);
+        /* Fixed 4 columns for small laptops */
     }
 }
 
 @media (min-width: 1201px) {
     .thumbNailPhoto {
-        width: clamp(60px, 6vw, 85px);
-        height: clamp(60px, 6vw, 85px);
+        width: 70px;
+        /* Fixed larger size for large screens */
+        height: 70px;
+    }
+    
+    .thumbNails {
+        grid-template-columns: repeat(4, 1fr);
+        /* Fixed 4 columns for large screens */
     }
 }
 
@@ -478,7 +521,7 @@
 
 .furnitureName {
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     text-align: center;
     /* Center align with thumbnails */
     font-size: calc(1.2vw + 1.2vh + 10px);
@@ -501,7 +544,7 @@
 }
 
 .furnitureDescription {
-    margin-top: 10px;
+    margin-top: 5px;
     font-family: "Poppins";
     width: 100%;
     font-size: calc(0.6vw + 0.6vh + 8px);
@@ -526,6 +569,11 @@
     /* Allow scrolling if needed */
     z-index: 1000000;
     /* Ensure left panel is above main image */
+    /* Beautiful brown border with light brown background - applied to all screen sizes */
+    background: rgba(245, 245, 245, 0.8);
+    border: 2px solid var(--brown);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(119, 72, 28, 0.15);
 }
 
 /* ========== TABLET OPTIMIZATIONS ========== */
@@ -536,11 +584,16 @@
         padding: 1.5vh 1.5vw;
         align-items: center;
         /* Keep centering on tablets */
+        /* Maintain beautiful brown border styling on tablets */
+        background: rgba(245, 245, 245, 0.85);
+        border: 2px solid var(--brown);
+        border-radius: 15px;
+        box-shadow: 0 6px 25px rgba(119, 72, 28, 0.18);
     }
 
     .thumbNails {
         grid-template-columns: repeat(3, 1fr);
-        /* 3 columns on tablets */
+        /* Fixed 3 columns on tablets - consistent sizing */
         gap: 6px;
     }
 
@@ -562,11 +615,16 @@
         width: 32vw;
         /* Slightly wider left panel */
         padding: 2vh 1.8vw;
+        /* Enhanced brown border styling for small laptops */
+        background: rgba(245, 245, 245, 0.9);
+        border: 2px solid var(--brown);
+        border-radius: 15px;
+        box-shadow: 0 6px 30px rgba(119, 72, 28, 0.2);
     }
 
     .thumbNails {
         grid-template-columns: repeat(4, 1fr);
-        /* 4 columns for good balance */
+        /* Fixed 4 columns for good balance - consistent sizing */
         gap: 10px;
     }
 
@@ -600,7 +658,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: #f5f5f5;
+        /* Beautiful brown border styling for iPad Pro */
+        background: rgba(245, 245, 245, 0.9);
+        border: 2px solid var(--brown);
+        border-radius: 18px;
+        box-shadow: 0 8px 35px rgba(119, 72, 28, 0.22);
     }
 
     .currentPhoto {
@@ -678,6 +740,8 @@
         box-sizing: border-box;
         z-index: auto;
         background-color: #f5f5f5;
+        /* Remove gap on mobile to maximize space */
+        gap: 0;
         /* Safari iOS specific fixes */
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
@@ -693,7 +757,7 @@
         /* Full width on mobile */
         height: auto;
         /* Let content determine height */
-        padding: 0;
+        padding: 1.5vh 1em;
         order: 1;
         /* Move thumbnails to top on mobile */
         z-index: auto;
@@ -701,7 +765,15 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: #f5f5f5;
+        /* Light brown border styling for mobile portrait */
+        background: rgba(245, 245, 245, 0.95);
+        border: 1px solid var(--brown);
+        border-radius: 8px;
+        box-shadow: 0 2px 12px rgba(119, 72, 28, 0.15);
+        margin: 0.5em;
+        /* Add margin to show the border properly */
+        width: calc(100vw - 1em);
+        /* Compensate for margin */
     }
 
     .currentPhoto {
@@ -996,6 +1068,11 @@
         order: 1;
         /* Reset order for landscape */
         padding: 1vh 1vw;
+        /* Beautiful brown border styling for mobile landscape */
+        background: rgba(245, 245, 245, 0.95);
+        border: 2px solid var(--brown);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(119, 72, 28, 0.25);
     }
 
     .currentPhoto {
@@ -1030,6 +1107,61 @@
         max-height: calc(100vh - 8vh);
         width: auto;
         max-width: 100%;
+    }
+}
+
+/* ========== VERY SMALL LANDSCAPE SCREENS (≤600px width, ≤480px height, landscape) ========== */
+@media (max-width: 600px) and (max-height: 480px) and (orientation: landscape) {
+    .thumbNails {
+        /* Allow both horizontal and vertical scrolling on very small landscape screens */
+        overflow-x: auto;
+        overflow-y: auto;
+        /* Enable both x and y direction dragging via JavaScript */
+        cursor: grab;
+        max-height: 35vh;
+        /* Limit height to ensure scrolling is needed */
+        grid-template-columns: repeat(3, 1fr);
+        /* More columns to force vertical overflow */
+        /* Visual indication that both directions are draggable */
+        border: 2px solid rgba(119, 72, 28, 0.6);
+        border-radius: 8px;
+        background: rgba(119, 72, 28, 0.08);
+    }
+
+    .thumbNails:active {
+        cursor: grabbing;
+        /* Enhance visual feedback during drag */
+        background: rgba(119, 72, 28, 0.12);
+    }
+}
+
+/* Enhanced cursor behavior for x-direction only dragging on larger screens */
+@media (min-width: 768px) {
+    .thumbNails {
+        /* Clear visual indication that horizontal dragging is available */
+        cursor: grab;
+        /* Override any conflicting cursor styles */
+    }
+
+    .thumbNails:active {
+        cursor: grabbing;
+    }
+
+    /* Visual hint that dragging is primarily horizontal */
+    .thumbNails::after {
+        content: '⇄';
+        position: absolute;
+        top: -15px;
+        right: 10px;
+        color: rgba(119, 72, 28, 0.6);
+        font-size: 12px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .thumbNails:hover::after {
+        opacity: 0.8;
     }
 }
 
@@ -1120,21 +1252,35 @@
 }
 
 /* Large desktop screens (1440px and above) - maximize image space */
-@media (min-width: 1440px) {
+@media (min-width: 1440px) and (max-width: 1919px) {
     .galleryContainer {
         padding-top: 6vh !important;
         /* Even less padding for large screens */
+        gap: 1.5vw;
+        /* Add gap to prevent awkward spacing */
     }
 
     .galleryLeftTop {
         width: 28vw;
         /* Even more compact left panel for large screens */
         padding: 2vh 1.5vw;
+        /* Enhanced beautiful brown border styling for large screens */
+        background: rgba(245, 245, 245, 0.92);
+        border: 3px solid var(--brown);
+        border-radius: 15px;
+        box-shadow: 0 8px 35px rgba(119, 72, 28, 0.2);
+    }
+
+    .currentPhoto {
+        max-width: 68vw;
+        /* Slightly reduced to create better balance */
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
     }
 
     .thumbNails {
         grid-template-columns: repeat(5, 1fr);
-        /* 5 columns for large screens */
+        /* Fixed 5 columns for large screens - consistent sizing */
         gap: 12px;
         /* More spacing */
     }
@@ -1164,6 +1310,8 @@
         /* Optimize for ultra-wide screens */
         justify-content: center;
         align-items: center;
+        gap: 2vw;
+        /* Add gap between left panel and image area */
     }
 
     .galleryLeftTop {
@@ -1172,19 +1320,29 @@
         max-width: 400px;
         /* Set maximum width to prevent too wide panels */
         padding: 2vh 1.5vw;
+        /* Premium brown border styling for ultra-wide screens */
+        background: rgba(245, 245, 245, 0.95);
+        border: 3px solid var(--brown);
+        border-radius: 18px;
+        box-shadow: 0 10px 40px rgba(119, 72, 28, 0.25);
     }
 
     .currentPhoto {
         flex: 1;
-        max-width: 75vw;
-        /* Prevent image area from being too wide */
+        max-width: 70vw;
+        /* Reduced from 75vw to create better balance */
         justify-content: center;
         align-items: center;
+        /* Add subtle background to define the image area */
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 15px;
+        margin-right: 2vw;
+        /* Add margin to balance the layout */
     }
 
     .thumbNails {
         grid-template-columns: repeat(4, 1fr);
-        /* Back to 4 columns for ultra-wide */
+        /* Fixed 4 columns for ultra-wide - consistent sizing */
         max-width: 350px;
         /* Prevent thumbnails from spreading too wide */
         margin: 0 auto;
@@ -1214,6 +1372,11 @@
         margin: 0 auto;
         /* Center the entire gallery */
         padding-top: 4vh !important;
+        padding-left: 2vw;
+        padding-right: 2vw;
+        /* Add side padding for very large screens */
+        gap: 3vw;
+        /* Increase gap for 4K screens */
     }
 
     .galleryLeftTop {
@@ -1221,17 +1384,41 @@
         /* Very compact left panel */
         max-width: 480px;
         /* Maximum width for readability */
+        min-width: 350px;
+        /* Minimum width to prevent too narrow */
+        /* Luxurious brown border styling for 4K screens */
+        background: rgba(245, 245, 245, 0.98);
+        border: 4px solid var(--brown);
+        border-radius: 22px;
+        box-shadow: 0 15px 50px rgba(119, 72, 28, 0.3);
+        padding: 3vh 2vw;
     }
 
     .currentPhoto {
-        max-width: 80vw;
+        max-width: 75vw;
         /* Prevent excessive image width */
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 20px;
+        padding: 2vh;
+        /* Add padding around the image */
     }
 
     .thumbNails {
         grid-template-columns: repeat(3, 1fr);
         /* Fewer columns for better proportion */
         max-width: 400px;
+        gap: 15px;
+        /* Larger gaps on 4K screens */
+    }
+
+    .furnitureName {
+        font-size: clamp(20px, 1vw + 1vh + 18px, 32px);
+        /* Larger text for 4K */
+    }
+
+    .furnitureDescription {
+        font-size: clamp(16px, 0.7vw + 0.7vh + 14px, 24px);
+        /* Larger description for 4K */
     }
 }
 
