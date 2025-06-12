@@ -150,8 +150,8 @@ body {
 }
 .menu-item {
     font-size: 5rem;
-    border: 1px solid #1c5077;
-    box-shadow: 2px 2px 2px #1c5077;
+    border: 1px solid #77481c;
+    box-shadow: 2px 2px 2px #77481c;
     border-radius: 2em;
     padding: 0 0em;
     -webkit-text-stroke: 2px #77481c;
@@ -186,10 +186,11 @@ body {
         /* padding: 0 0.8em !important; */
         margin-top: 0.2em;
         -webkit-text-stroke: 0.7px #77481c;
-        border: 0.1px solid #1c5077;
-        filter: drop-shadow(0.5px 0.5px 0.5px #1c5077);
+        border: 0.1px solid #77481c;
+        filter: drop-shadow(0.5px 0.5px 0.5px #77481c);
     }
     .icon {
+        padding-top: 7px;
         width: 1.5em;
         height: 1.5em;
     }

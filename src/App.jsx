@@ -266,17 +266,28 @@ function App() {
           <div className="menu">
             {/* Animated icon size with React Spring */}
             <AnimatedMenuItem onClick={handleEmblemClickCallback} isLogo={true}>
-              <animated.img
-                src={found_wood}
-                className="icon"
-                alt="Found Wood Logo"
-                loading="lazy"
+              <div
                 style={{
-                  ...iconSpring,
-                  objectFit: "contain",
-                  marginTop: "0.2em", // Align with other menu items
+                  width: "2.5em",
+                  height: "2.5em",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  paddingTop: "0.4em", // Add top padding to prevent icon from touching the top
                 }}
-              />
+              >
+                <animated.img
+                  src={found_wood}
+                  className="icon"
+                  alt="Found Wood Logo"
+                  loading="lazy"
+                  style={{
+                    ...iconSpring,
+                    objectFit: "contain"
+                  }}
+                />
+              </div>
             </AnimatedMenuItem>
             <AnimatedMenuItem onClick={handleGalleryTypesClickCallback}>
               <div className="menu-item">Gallery</div>

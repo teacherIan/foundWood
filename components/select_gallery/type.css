@@ -6,14 +6,12 @@
     color: var(--brown);
     cursor: pointer;
     border-radius: 2000px;
-
 }
 
 .typeImage {
     width: 100%;
     /* height: 100%; */
     overflow: visible;
-
 }
 
 .typeHeader {
@@ -21,14 +19,12 @@
     font-size: calc(2vh + 1.5vw + 15px);
     filter: drop-shadow(1.5px 1.5px 0px black);
     color: white;
-    -webkit-text-stroke: 2px #77481C;
+    -webkit-text-stroke: 1px #77481c;
     -webkit-text-fill-color: #ffffff;
-
 }
 
 @media (orientation: landscape) {
     .typeContainer {
-
         width: 32svw;
     }
 }
