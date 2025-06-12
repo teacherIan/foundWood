@@ -180,14 +180,14 @@ body {
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 1rem;
+        font-size: 1.7rem;
         height: 4vh;
-        padding: 3px;
+        padding: 4px;
         /* padding: 0 0.8em !important; */
         margin-top: 0.2em;
         -webkit-text-stroke: 0.7px #77481c;
         border: 0.1px solid #77481c;
-        filter: drop-shadow(0.5px 0.5px 0.5px #77481c);
+        filter: drop-shadow(0.5px 0.5px 0px #77481c);
     }
     .icon {
         padding-top: 7px;

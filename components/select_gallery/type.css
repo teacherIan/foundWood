@@ -17,7 +17,7 @@
 .typeHeader {
     display: block;
     font-size: calc(2vh + 1.5vw + 15px);
-    filter: drop-shadow(1.5px 1.5px 0px black);
+    filter: drop-shadow(0.5px 0.5px 0.1px #000000dd);
     color: white;
     -webkit-text-stroke: 1px #77481c;
     -webkit-text-fill-color: #ffffff;
