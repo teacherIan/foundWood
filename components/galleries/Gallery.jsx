@@ -56,10 +56,12 @@ export default function Gallery({
   const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const imageContainerRef = useRef(null);
+  const imageRef = useRef(null);
 
   // Touch pan state for master image (mobile)
   const [touchPan, setTouchPan] = useState({ x: 0, y: 0 });
   const lastTouchRef = useRef(null);
+  const PAN_MARGIN = 60; // pixels of extra space beyond the strict edge
 
   // Memoized gallery type filtering
   useEffect(() => {
@@ -274,7 +276,12 @@ export default function Gallery({
     [startY, showDetails, infoApi, indicatorApi, setShowDetails],
   );
 
-  // Touch pan handlers for master image (mobile)
+  // Touch pan handlers for master image (mobile) with boundaries
+  const MOBILE_IMAGE_WIDTH = 1.3; // 130vw
+  const MOBILE_IMAGE_HEIGHT = 1.3; // 130% of container height (relative to 50svh container, so 65svh)
+  const MOBILE_CONTAINER_WIDTH = 1.0; // 100vw
+  const MOBILE_CONTAINER_HEIGHT = 0.5; // 50svh
+
   const handleImageTouchStart = (e) => {
     if (window.innerWidth >= window.innerHeight) return; // Only on mobile
     const touch = e.touches[0];
@@ -299,9 +306,31 @@ export default function Gallery({
     lastTouchRef.current = null;
   };
 
+
+
   // Reset pan when image changes (mobile)
   useEffect(() => {
-    setTouchPan({ x: 0, y: 0 });
+    // Center the image initially on mobile using DOM measurements
+    if (window.innerWidth < window.innerHeight) {
+      setTimeout(() => {
+        const container = imageContainerRef.current;
+        const image = imageRef.current;
+        if (container && image) {
+          const containerRect = container.getBoundingClientRect();
+          const imageRect = image.getBoundingClientRect();
+          const centerX = (containerRect.width - imageRect.width) / 2;
+          const centerY = (containerRect.height - imageRect.height) / 2;
+          // Clamp to bounds with margin
+          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBounds(container, image, PAN_MARGIN);
+          setTouchPan({
+            x: Math.max(Math.min(centerX, maxPanX), minPanX),
+            y: Math.max(Math.min(centerY, maxPanY), minPanY),
+          });
+        }
+      }, 0);
+    } else {
+      setTouchPan({ x: 0, y: 0 });
+    }
   }, [currentPhoto]);
 
   const currentItem = galleryTypeArr[currentPhoto] || galleryTypeArr[0];
@@ -384,6 +413,7 @@ export default function Gallery({
                 item ? (
                   <animated.img
                     key={item}
+                    ref={imageRef}
                     style={{
                       ...style,
                       width:
@@ -399,7 +429,15 @@ export default function Gallery({
                       top: 0,
                       left: 0,
                       ...(window.innerWidth < window.innerHeight
-                        ? { transform: `translate(${touchPan.x}px, ${touchPan.y}px) scale(1.15)` }
+                        ? {
+                            width: "130vw",
+                            height: "65svh",
+                            objectFit: "cover",
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            transform: `translate(${touchPan.x}px, ${touchPan.y}px) scale(1.15)`,
+                          }
                         : imageSpring),
                     }}
                     className="masterImage"
@@ -410,43 +448,77 @@ export default function Gallery({
                 ) : null,
               )}
 
-              {/* Magnifying glass indicator - always show, both desktop and mobile */}
-              <div
-                className="magnifyIndicator"
-                style={{
-                  position: "absolute",
-                  top: "10px",
-                  right: "10px",
-                  background: "rgba(255, 255, 255, 0.7)",
-                  borderRadius: "50%",
-                  width: "40px",
-                  height: "40px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-                  zIndex: 300000,
-                  opacity: isHovering ? 0.3 : 0.8,
-                  transition: "opacity 0.3s ease",
-                  pointerEvents: "none", // allow touches/clicks to pass through
-                }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="feather feather-search"
+              {/* Show movement indicator (four-way arrows) on mobile, magnifying glass on desktop */}
+              {window.innerWidth < window.innerHeight ? (
+                <div
+                  className="moveIndicator"
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    background: "rgba(255, 255, 255, 0.7)",
+                    borderRadius: "50%",
+                    width: "40px",
+                    height: "40px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+                    zIndex: 300000,
+                    opacity: 0.8,
+                    transition: "opacity 0.3s ease",
+                    pointerEvents: "none",
+                  }}
                 >
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-              </div>
+                  {/* Four-way arrow SVG */}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="5 9 2 12 5 15"/>
+                    <polyline points="9 5 12 2 15 5"/>
+                    <polyline points="15 19 12 22 9 19"/>
+                    <polyline points="19 9 22 12 19 15"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <line x1="12" y1="2" x2="12" y2="22"/>
+                  </svg>
+                </div>
+              ) : (
+                <div
+                  className="magnifyIndicator"
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    background: "rgba(255, 255, 255, 0.7)",
+                    borderRadius: "50%",
+                    width: "40px",
+                    height: "40px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+                    zIndex: 300000,
+                    opacity: isHovering ? 0.3 : 0.8,
+                    transition: "opacity 0.3s ease",
+                    pointerEvents: "none", // allow touches/clicks to pass through
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-search"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                </div>
+              )}
             </div>
 
             {/* Info/Text panels below the image, as originally */}
