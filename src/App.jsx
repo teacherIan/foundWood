@@ -170,8 +170,8 @@ function App() {
     !state.showGallery && !state.showContactPage && !state.showTypes;
 
   const iconSpring = useSpring({
-    width: isHomeScreen ? "2em" : "1.5em",
-    height: isHomeScreen ? "2em" : "1.5em",
+    width: isHomeScreen ? "1.7em" : "1.5em",
+    height: isHomeScreen ? "1.7em" : "1.5em",
     config: {
       tension: 300,
       friction: 20,

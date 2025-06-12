@@ -129,7 +129,7 @@ body {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 15vh;
+    height: 10vh;
     z-index: 20000;
     background: transparent;
     display: flex;
@@ -162,8 +162,8 @@ body {
     filter: drop-shadow(1px 1px 0px #1c5077);
 }
 .icon {
-    width: 2em;
-    height: 2em;
+    width: 2.5em;
+    height: 2.5em;
 
     border-radius: 50%;
     object-fit: contain;
@@ -177,10 +177,17 @@ body {
         padding: 0;
     }
     .menu-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size: 1rem;
-        height: 5vh;
-        padding: 0 0.8em !important;
+        height: 4vh;
+        padding: 3px;
+        /* padding: 0 0.8em !important; */
         margin-top: 0.2em;
+        -webkit-text-stroke: 0.7px #77481c;
+        border: 0.1px solid #1c5077;
+        filter: drop-shadow(0.5px 0.5px 0.5px #1c5077);
     }
     .icon {
         width: 1.5em;
