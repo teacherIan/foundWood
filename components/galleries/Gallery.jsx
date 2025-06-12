@@ -145,8 +145,8 @@ export default function Gallery({
 
     // Calculate the maximum translation based on the image size vs container
     // We want to be able to move the image around to see all parts
-    const maxTranslateX = 20; // percentage
-    const maxTranslateY = 20; // percentage
+    const maxTranslateX = 40; // percentage
+    const maxTranslateY = 40; // percentage
 
     // Calculate the actual translation
     const translateX = maxTranslateX * (0.5 - relativeX) * 2;
@@ -289,7 +289,8 @@ export default function Gallery({
   };
 
   const handleImageTouchMove = (e) => {
-    if (window.innerWidth >= window.innerHeight || !lastTouchRef.current) return;
+    if (window.innerWidth >= window.innerHeight || !lastTouchRef.current)
+      return;
     e.preventDefault(); // Prevent iOS pull-to-refresh and scroll bounce
     const touch = e.touches[0];
     const dx = touch.clientX - lastTouchRef.current.x;
@@ -307,8 +308,6 @@ export default function Gallery({
     lastTouchRef.current = null;
   };
 
-
-
   // Reset pan when image changes (mobile)
   useEffect(() => {
     // Center the image initially on mobile using DOM measurements
@@ -322,7 +321,11 @@ export default function Gallery({
           const centerX = (containerRect.width - imageRect.width) / 2;
           const centerY = (containerRect.height - imageRect.height) / 2;
           // Clamp to bounds with margin
-          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBounds(container, image, PAN_MARGIN);
+          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBounds(
+            container,
+            image,
+            PAN_MARGIN,
+          );
           setTouchPan({
             x: Math.max(Math.min(centerX, maxPanX), minPanX),
             y: Math.max(Math.min(centerY, maxPanY), minPanY),
@@ -473,14 +476,22 @@ export default function Gallery({
                   }}
                 >
                   {/* Four-way arrow SVG */}
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="5 9 2 12 5 15"/>
-                    <polyline points="9 5 12 2 15 5"/>
-                    <polyline points="15 19 12 22 9 19"/>
-                    <polyline points="19 9 22 12 19 15"/>
-                    <line x1="2" y1="12" x2="22" y2="12"/>
-                    <line x1="12" y1="2" x2="12" y2="22"/>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="5 9 2 12 5 15" />
+                    <polyline points="9 5 12 2 15 5" />
+                    <polyline points="15 19 12 22 9 19" />
+                    <polyline points="19 9 22 12 19 15" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <line x1="12" y1="2" x2="12" y2="22" />
                   </svg>
                 </div>
               ) : (
