@@ -78,10 +78,10 @@ function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
       const breathingEffect =
         Math.sin(idleTimeRef.current * 0.5) * 0.05 * interactionFactor;
 
-      camera.position.x = slowWave + fastWave * 0.5 + -0;
+      camera.position.x = slowWave + fastWave * 0.5 + -0.1;
       camera.position.y =
         (windowWidth < 480 ? 1.3 : 1.2) + verticalWave + breathingEffect * 0.3;
-      camera.position.z = (windowWidth < 480 ? 2.5 : 3) + breathingEffect;
+      camera.position.z = (windowWidth < 480 ? 2.7 : 3) + breathingEffect;
 
       // Subtle rotation for more dynamic feel + downward tilt to see text better
       camera.rotation.y = slowWave * 0.03;
