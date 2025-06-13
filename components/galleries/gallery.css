@@ -1278,8 +1278,8 @@
         /* Let content determine height */
         max-height: 15vh;
         /* Limit thumbnail section height */
-        padding: 0.5vh 1em;
-        /* Reduced padding for thumbnails section */
+        padding: 0 !important;
+        /* Remove ALL padding to allow true edge-to-edge thumbnails */
         order: 1;
         /* Thumbnails at the top */
         z-index: auto;
@@ -1295,7 +1295,8 @@
         /* Reduced margin */
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
+        /* Allow thumbnails to stretch to full width */
         flex-shrink: 0;
         /* Prevent thumbnails from shrinking */
     }
@@ -1413,9 +1414,11 @@
         -webkit-overflow-scrolling: touch;
         padding: 0 !important;
         /* Remove all padding to be truly edge-to-edge */
-        width: 100%;
-        /* Match mobile styles */
-        max-width: 100vw;
+        margin: 0 !important;
+        /* Remove all margins */
+        width: 100vw !important;
+        /* Force full viewport width */
+        max-width: 100vw !important;
         position: relative;
         justify-content: flex-start;
         background: transparent !important;
@@ -1424,26 +1427,21 @@
         /* Remove border radius on mobile */
         box-shadow: none !important;
         /* Remove brown border/box-shadow on mobile */
+        border: none !important;
+        /* Remove any borders */
         -webkit-overflow-scrolling: touch;
         touch-action: pan-x;
         z-index: auto;
-        position: relative;
-        margin: 0;
-        /* Reset margins */
         grid-template-columns: none;
         /* Override grid for mobile */
         align-items: center;
         /* Center thumbnails vertically */
         min-height: 60px;
         /* Reduced minimum height for more space */
-        justify-content: flex-start;
-        /* Align thumbnails to the start */
         box-sizing: border-box;
         /* Ensure padding is included in width calculation */
         order: 1;
         /* Thumbnails appear first */
-        border-bottom: 1px solid rgba(119, 72, 28, 0.2);
-        /* Subtle separator */
         margin-bottom: 0.25em;
         /* Reduced space between thumbnails and image */
         /* Safari iOS specific fixes */
@@ -1457,6 +1455,9 @@
         /* Hide scrollbar on mobile */
         -ms-overflow-style: none;
         /* Hide scrollbar for IE and Edge */
+        /* Remove any separator lines on mobile */
+        border-bottom: none !important;
+        border-top: none !important;
     }
 
     .thumbNails::-webkit-scrollbar {
@@ -1488,25 +1489,44 @@
     }
 
     .thumbNailPhoto:first-child {
-        margin-left: 0;
-        /* Remove left margin so thumbnails can touch screen edge */
+        margin-left: 5px;
+        /* Small margin from very edge for better touch target */
     }
 
     .thumbNailPhoto:last-child {
-        margin-right: 0;
-        /* Remove right margin so thumbnails can touch screen edge */
+        margin-right: 5px;
+        /* Small margin from very edge for better touch target */
     }
 
     .thumbNailPhoto.grayscale {
-        filter: none;
-        opacity: 1;
-        transform: scale(1.05);
+        filter: none !important;
+        opacity: 1 !important;
+        transform: scale(1.05) !important;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
         /* Use neutral shadow instead of brown on mobile */
         border: none !important;
         /* Ensure no border on active state for mobile */
         background: transparent !important;
         /* Ensure no brown background on active state for mobile */
+    }
+
+    /* Additional mobile overrides to kill all brown styling */
+    .thumbNailPhoto,
+    .thumbNailPhoto:hover,
+    .thumbNailPhoto:active,
+    .thumbNailPhoto:focus {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .thumbNailPhoto.grayscale,
+    .thumbNailPhoto.grayscale:hover,
+    .thumbNailPhoto.grayscale:active,
+    .thumbNailPhoto.grayscale:focus {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
     }
 }
 
