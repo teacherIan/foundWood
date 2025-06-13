@@ -74,50 +74,138 @@ body {
 
 /* ===== LOADING ===== */
 .font-loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100vw !important;
+    height: 100vh !important;
     /* Safari iOS fallback */
-    height: 100svh;
+    height: 100svh !important;
     /* Progressive enhancement for newer browsers */
-    min-height: 100vh;
-    min-height: 100svh;
-    background-color: #f5f5f5;
-    color: var(--brown);
-    font-family: sans-serif;
-    font-size: 1.2rem;
-    z-index: 9999999;
+    min-height: 100vh !important;
+    min-height: 100svh !important;
+    background-color: #f5f5f5 !important;
+    color: #77481c !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif !important;
+    font-size: 1.2rem !important;
+    z-index: 999999999 !important;
     /* Ensure it's on top of everything */
-    overflow: hidden;
+    overflow: hidden !important;
     /* Prevent any scrolling issues */
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    /* Force centering regardless of any parent flexbox */
+    place-items: center !important;
+    place-content: center !important;
+    /* Additional centering safeguards */
+    text-align: center !important;
+    /* Enhanced flexbox centering */
+    gap: 20px !important;
+    /* Ensure proper spacing between spinner and text */
+    /* Prevent any CSS overrides */
+    inset: 0 !important;
+    /* Modern shorthand for top/right/bottom/left: 0 */
+    /* Viewport-relative positioning for maximum compatibility */
+    transform: translateZ(0) !important;
+    /* Force hardware acceleration */
+    -webkit-transform: translateZ(0) !important;
+    /* Webkit prefix */
 }
 
 /* Safari iOS specific loading screen fixes */
 @supports (-webkit-touch-callout: none) {
     .font-loading-screen {
-        height: -webkit-fill-available;
-        min-height: -webkit-fill-available;
+        height: -webkit-fill-available !important;
+        min-height: -webkit-fill-available !important;
+        /* Additional iOS specific centering */
+        display: -webkit-flex !important;
+        display: flex !important;
+        -webkit-flex-direction: column !important;
+        flex-direction: column !important;
+        -webkit-justify-content: center !important;
+        justify-content: center !important;
+        -webkit-align-items: center !important;
+        align-items: center !important;
+    }
+}
+
+/* Additional centering support using CSS Grid as fallback */
+@supports (display: grid) {
+    .font-loading-screen {
+        display: grid !important;
+        place-items: center !important;
+        place-content: center !important;
+        grid-template-rows: auto auto !important;
+        gap: 20px !important;
+    }
+}
+
+/* Ultra-safe fallback for older browsers */
+@supports not (display: flex) {
+    .font-loading-screen {
+        display: table !important;
+        table-layout: fixed !important;
+    }
+
+    .font-loading-screen::before {
+        content: '' !important;
+        display: table-cell !important;
+        vertical-align: middle !important;
+        text-align: center !important;
     }
 }
 
 .loading-spinner {
-    border: 5px solid rgba(119, 72, 28, 0.2);
-    border-radius: 50%;
-    border-top: 5px solid var(--brown);
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 20px;
-    flex-shrink: 0;
+    border: 5px solid rgba(119, 72, 28, 0.2) !important;
+    border-radius: 50% !important;
+    border-top: 5px solid #77481c !important;
+    width: 50px !important;
+    height: 50px !important;
+    animation: spin-smooth 1s linear infinite !important;
+    margin: 0 !important;
+    /* Remove all margins */
+    flex-shrink: 0 !important;
     /* Prevent shrinking */
+    display: block !important;
+    /* Ensure it displays as block */
+    align-self: center !important;
+    /* Self-center in flex container */
+    justify-self: center !important;
+    /* Self-center in grid container */
+    /* Enhanced performance */
+    will-change: transform !important;
+    /* Inform browser about animation */
+    transform: translateZ(0) !important;
+    /* Force hardware acceleration */
+    -webkit-transform: translateZ(0) !important;
+    /* Webkit prefix */
+}
+
+/* Loading text styling */
+.font-loading-screen>div:last-child {
+    display: block !important;
+    text-align: center !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.5px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.2 !important;
+    /* Enhanced centering */
+    align-self: center !important;
+    justify-self: center !important;
+    width: 100% !important;
+    /* Ensure full width for text centering */
+    font-size: inherit !important;
+    /* Inherit from parent */
+    color: inherit !important;
+    /* Inherit from parent */
 }
 
 @keyframes spin {
@@ -126,6 +214,17 @@ body {
     }
 
     100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Enhanced spin animation for better performance */
+@keyframes spin-smooth {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
         transform: rotate(360deg);
     }
 }

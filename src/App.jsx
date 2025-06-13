@@ -185,8 +185,10 @@ function App() {
   if (!state.fontsLoaded) {
     return (
       <div className="font-loading-screen">
-        <div className="loading-spinner"></div>
-        <div>Loading...</div>
+        <div className="loading-spinner" aria-label="Loading spinner"></div>
+        <div role="status" aria-live="polite">
+          Loading...
+        </div>
       </div>
     );
   }
