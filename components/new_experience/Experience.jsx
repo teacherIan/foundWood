@@ -282,7 +282,7 @@ function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
           setTimeout(() => setUserInteracting(false), 100);
         }}
       >
-        {isAnimating && (
+        {(isAnimating || hasOverlay) && (
           <>
             <MemoizedText
               position={deviceConfig.titlePosition}
@@ -344,7 +344,12 @@ function debounce(func, wait) {
   };
 }
 
-export default function App({ isAnimating, showContactPage, showTypes, showGallery }) {
+export default function App({
+  isAnimating,
+  showContactPage,
+  showTypes,
+  showGallery,
+}) {
   // Adaptive performance settings based on device capability
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const isMobile = windowWidth < 480;
@@ -352,7 +357,7 @@ export default function App({ isAnimating, showContactPage, showTypes, showGalle
   const isHighDPI = window.devicePixelRatio > 1.5;
 
   // Performance settings based on device
-  const performanceConfig = useMemo(() => {    
+  const performanceConfig = useMemo(() => {
     if (isMobile) {
       return {
         dpr: [1, 1.5],
@@ -400,7 +405,7 @@ export default function App({ isAnimating, showContactPage, showTypes, showGalle
         left: 0,
         width: '100%',
         height: '100%',
-        zIndex: (showTypes || showGallery || showContactPage) ? 1 : 10,
+        zIndex: showTypes || showGallery || showContactPage ? 1 : 10,
       }}
       gl={{
         powerPreference: isMobile ? 'default' : 'high-performance',
@@ -410,16 +415,15 @@ export default function App({ isAnimating, showContactPage, showTypes, showGalle
         alpha: true,
         premultipliedAlpha: true,
         preserveDrawingBuffer: false,
-        clearColor: [0.96, 0.96, 0.96, 1],
         outputColorSpace: 'srgb',
       }}
       frameloop={performanceConfig.frameloop}
     >
-      <Scene 
-        showContactPage={showContactPage} 
+      <Scene
+        showContactPage={showContactPage}
         showTypes={showTypes}
         showGallery={showGallery}
-        isAnimating={isAnimating} 
+        isAnimating={isAnimating}
       />
     </Canvas>
   );
