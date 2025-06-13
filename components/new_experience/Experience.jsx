@@ -72,10 +72,10 @@ function Scene({ isAnimating, showContactPage }) {
       const breathingEffect =
         Math.sin(idleTimeRef.current * 0.5) * 0.05 * interactionFactor;
 
-      camera.position.x = slowWave + fastWave * 0.5;
+      camera.position.x = slowWave + fastWave * 0.5 + -0;
       camera.position.y =
         (windowWidth < 480 ? 1.3 : 1.2) + verticalWave + breathingEffect * 0.3;
-      camera.position.z = 3.2 + breathingEffect;
+      camera.position.z = (windowWidth < 480 ? 2.5 : 3) + breathingEffect;
 
       // Subtle rotation for more dynamic feel + downward tilt to see text better
       camera.rotation.y = slowWave * 0.03;
@@ -100,13 +100,13 @@ function Scene({ isAnimating, showContactPage }) {
     if (camera) {
       if (width < 480) {
         if (isPortrait) {
-          camera.position.set(-0.5, 1.6, 4.2);
-          camera.rotation.x = -0.1;
-          camera.fov = 70;
+          camera.position.set(0, 1.6, 4.2);
+          camera.rotation.x = 0;
+          camera.fov = 65;
         } else {
           camera.position.set(0, 1.2, 3.2);
-          camera.rotation.x = -0.1;
-          camera.fov = 75;
+          camera.rotation.x = 0;
+          camera.fov = 70;
         }
       } else if (width < 1300) {
         if (isPortrait) {
