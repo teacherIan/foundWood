@@ -68,6 +68,9 @@ body {
     cursor: grab;
     overflow-x: hidden;
     min-height: 100vh;
+    /* Prevent pull-to-refresh on mobile devices */
+    overscroll-behavior: none;
+    -webkit-overscroll-behavior: none;
 }
 
 #root {

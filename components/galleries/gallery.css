@@ -12,11 +12,18 @@
         height: 100vh;
         /* Fallback for SVH issues */
         min-height: -webkit-fill-available;
+        /* Prevent pull-to-refresh on iOS Safari */
+        overscroll-behavior: none;
+        -webkit-overscroll-behavior: none;
+        touch-action: pan-x pan-y;
     }
 
     .currentPhoto {
         height: calc(100vh - 8vh) !important;
         /* Override SVH */
+        /* Prevent pull-to-refresh on iOS Safari */
+        overscroll-behavior: none;
+        -webkit-overscroll-behavior: none;
     }
 
     .masterImage {
@@ -28,6 +35,9 @@
 
     .thumbNails {
         -webkit-overflow-scrolling: touch;
+        /* Prevent pull-to-refresh on iOS Safari */
+        overscroll-behavior: contain;
+        -webkit-overscroll-behavior: contain;
     }
 
     .thumbNailPhoto {
@@ -74,6 +84,10 @@
     /* Improve wide-screen layout with proper gap */
     gap: 1vw;
     /* Add small gap between left panel and main image area */
+    /* Prevent pull-to-refresh on mobile devices */
+    overscroll-behavior: none;
+    -webkit-overscroll-behavior: none;
+    touch-action: pan-x pan-y;
 }
 
 /* iPad (portrait and landscape) - pull gallery down a bit */
@@ -317,6 +331,42 @@
         background: rgba(119, 72, 28, 0.05) !important;
         border: 2px solid var(--brown) !important;
         box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
+    }
+
+    /* Desktop text outline styling for better contrast - DESKTOP ONLY */
+    .furnitureName {
+        filter: drop-shadow(1px 1px 0px black);
+        -webkit-text-stroke: 2px #77481c;
+        -webkit-text-fill-color: #ffffff;
+    }
+
+    /* Enhanced scrollbar for desktop description */
+    .furnitureDescription::-webkit-scrollbar {
+        width: 6px;
+        /* Slightly wider for better visibility on desktop */
+    }
+
+    .furnitureDescription::-webkit-scrollbar-thumb {
+        background: rgba(119, 72, 28, 0.4);
+        /* Slightly more visible */
+        border-radius: 3px;
+    }
+
+    .furnitureDescription::-webkit-scrollbar-thumb:hover {
+        background: rgba(119, 72, 28, 0.6);
+        /* More prominent on hover */
+    }
+
+    /* Final override to ensure desktop description scrolling works */
+    .productInfo.desktop-only .furnitureDescription {
+        overflow-y: auto !important;
+        flex: 1 !important;
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: rgba(119, 72, 28, 0.4) transparent !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 }
 
@@ -613,6 +663,10 @@
     .productPanel {
         order: unset !important;
         /* Reset mobile order */
+        display: flex !important;
+        flex-direction: column !important;
+        height: calc(100vh - 8vh) !important;
+        /* Ensure proper height for flex layout */
     }
 
     .currentPhoto {
@@ -621,17 +675,36 @@
     }
 
     .productInfo {
-        position: static;
+        position: static !important;
         /* Reset positioning for desktop */
-        order: unset;
+        order: unset !important;
         /* Remove mobile order */
-        width: 100%;
+        width: 100% !important;
         /* Stay within productPanel */
-        margin: 0;
-        padding: 0;
-        display: flex;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
         /* Keep flex for desktop */
-        flex-direction: column;
+        flex-direction: column !important;
+        flex: 1 !important;
+        /* Take up remaining space in productPanel */
+        min-height: 0 !important;
+        /* Critical for flex scrolling to work */
+        height: auto !important;
+        /* Let content determine height within flex constraints */
+        overflow: hidden !important;
+        /* Parent container should not scroll */
+    }
+
+    .furnitureDescription {
+        overflow-y: auto !important;
+        /* Enable scrolling for the description specifically */
+        flex: 1 !important;
+        /* Take up all remaining space */
+        min-height: 0 !important;
+        /* Critical for flex child scrolling */
+        max-height: none !important;
+        /* Remove any height restrictions */
     }
 
     /* Show desktop product info (inside productPanel) */
@@ -679,9 +752,8 @@
     text-align: center;
     font-size: calc(1.0vw + 1.0vh + 8px);
     /* Slightly reduced to save space for description */
-    filter: drop-shadow(1px 1px 0px black);
-    -webkit-text-stroke: 2px #77481c;
-    -webkit-text-fill-color: #ffffff;
+    color: var(--brown);
+    /* Default color without heavy styling */
     /* Make text non-selectable */
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -727,6 +799,9 @@
     /* Custom scrollbar styling */
     scrollbar-width: thin;
     scrollbar-color: rgba(119, 72, 28, 0.6) transparent;
+    /* Ensure scrolling works on all browsers */
+    -webkit-overflow-scrolling: touch;
+    /* Safari smooth scrolling */
 }
 
 .arrow {
@@ -832,8 +907,13 @@
     }
 
     .productInfo {
-        height: 25vh;
-        /* More space for text on large screens */
+        flex: 1;
+        /* Take up available space for scrolling */
+        min-height: 0;
+        /* Allow flex shrinking */
+        display: flex;
+        flex-direction: column;
+        /* Stack furniture name and description */
     }
 
     .furnitureName {
@@ -844,27 +924,59 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        flex-shrink: 0;
-    }
 
-    .furnitureDescription {
-        font-size: calc(0.6vw + 0.6vh + 10px);
-        /* Better readability */
-        line-height: 1.6;
-        /* More line spacing */
-        /* Make text non-selectable */
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        /* Enable scrolling when content overflows */
-        overflow-y: auto;
-        flex: 1;
-        /* Take up all remaining available space */
-        min-height: 0;
+        .furnitureDescription {
+            font-size: calc(0.6vw + 0.6vh + 10px);
+            /* Better readability */
+            line-height: 1.6;
+            /* More line spacing */
+            /* Make text non-selectable */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            /* Enable scrolling when content overflows */
+            overflow-y: auto !important;
+            /* Force scrolling with higher specificity */
+            flex: 1 !important;
+            /* Take up all remaining available space */
+            min-height: 0 !important;
+            /* Allow flex shrinking if needed - critical for scrolling */
+            max-height: none !important;
+            /* Remove any conflicting height restrictions */
+            height: auto !important;
+            /* Let content determine height */
+            scrollbar-width: thin;
+            scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
+            /* Ensure webkit scrolling works */
+            -webkit-overflow-scrolling: touch;
+            /* Safari smooth scrolling */
+            /* Force hardware acceleration for better performance */
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+
         /* Allow flex shrinking if needed */
         scrollbar-width: thin;
         scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
+    }
+
+    /* Enhanced webkit scrollbar for better visibility on large screens */
+    .furnitureDescription::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .furnitureDescription::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .furnitureDescription::-webkit-scrollbar-thumb {
+        background: rgba(119, 72, 28, 0.4);
+        border-radius: 3px;
+    }
+
+    .furnitureDescription::-webkit-scrollbar-thumb:hover {
+        background: rgba(119, 72, 28, 0.6);
     }
 }
 
@@ -1201,10 +1313,10 @@
         /* Text at the bottom */
         background: transparent;
         /* Mobile layout: thumbnails → photo → text */
-        flex-shrink: 0;
-        /* Prevent text from shrinking */
-        min-height: auto;
-        /* Allow natural content height */
+        flex: 1;
+        /* Take up all remaining space in the container */
+        min-height: 0;
+        /* Allow flex shrinking if needed */
     }
 
     /* Mobile-specific styling for furniture name */
@@ -1221,6 +1333,10 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        /* Override any desktop text-stroke styling on mobile */
+        -webkit-text-stroke: none !important;
+        -webkit-text-fill-color: var(--brown) !important;
+        filter: none !important;
     }
 
     /* Mobile-specific styling for furniture description */
@@ -1230,14 +1346,16 @@
         line-height: 1.5;
         /* Better line spacing */
         color: var(--brown);
-        max-height: 20vh;
-        /* Increased height for more text visibility */
         overflow-y: auto;
-        /* Enable scrolling if needed */
+        /* Enable scrolling only when content exceeds container */
         padding: 0 0.5em;
         /* Small horizontal padding */
         margin-top: 0.5vh;
         /* Small margin between name and description */
+        flex: 1;
+        /* Take up all remaining space in productInfo container */
+        min-height: 0;
+        /* Allow flex shrinking if needed */
         /* Make text non-selectable */
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -1293,15 +1411,19 @@
         -webkit-flex-direction: row;
         flex-direction: row;
         -webkit-overflow-scrolling: touch;
-        padding: 0.5em 0;
-        /* Reduced padding for more space */
+        padding: 0 !important;
+        /* Remove all padding to be truly edge-to-edge */
         width: 100%;
         /* Match mobile styles */
         max-width: 100vw;
         position: relative;
         justify-content: flex-start;
-        background: transparent;
-        border-radius: 0;
+        background: transparent !important;
+        /* Override any brown background */
+        border-radius: 0 !important;
+        /* Remove border radius on mobile */
+        box-shadow: none !important;
+        /* Remove brown border/box-shadow on mobile */
         -webkit-overflow-scrolling: touch;
         touch-action: pan-x;
         z-index: auto;
@@ -1350,32 +1472,41 @@
         /* Keep perfect circles on mobile */
         flex: 0 0 auto;
         /* Prevent flex shrinking */
-        border: 2px var(--brown) solid;
+        border: none !important;
+        /* Remove border on mobile for cleaner look */
+        background: transparent !important;
+        /* Override any brown background on mobile */
         cursor: pointer;
         transition: 0.4s ease-in-out;
         filter: grayscale(50%);
         opacity: 0.8;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+        /* Override any brown box-shadow */
         object-fit: cover;
         margin: 0 3px;
         /* Add small margin between thumbnails */
     }
 
     .thumbNailPhoto:first-child {
-        margin-left: 0.5em;
-        /* Reduced margin */
+        margin-left: 0;
+        /* Remove left margin so thumbnails can touch screen edge */
     }
 
     .thumbNailPhoto:last-child {
-        margin-right: 0.5em;
-        /* Reduced margin */
+        margin-right: 0;
+        /* Remove right margin so thumbnails can touch screen edge */
     }
 
     .thumbNailPhoto.grayscale {
         filter: none;
         opacity: 1;
         transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(119, 72, 28, 0.3);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+        /* Use neutral shadow instead of brown on mobile */
+        border: none !important;
+        /* Ensure no border on active state for mobile */
+        background: transparent !important;
+        /* Ensure no brown background on active state for mobile */
     }
 }
 

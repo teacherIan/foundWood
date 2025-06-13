@@ -1179,6 +1179,10 @@ export default function Gallery({
         height: '100svh', // Modern viewport units with VH fallback in CSS
         opacity: showGallery ? 1 : 0,
         zIndex: showGallery ? 20000 : 0,
+        /* Prevent pull-to-refresh on mobile devices */
+        overscrollBehavior: 'none',
+        WebkitOverscrollBehavior: 'none',
+        touchAction: 'pan-x pan-y',
       }}
     >
       {/* Debug info for Safari - remove in production */}
