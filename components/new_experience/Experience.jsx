@@ -78,10 +78,10 @@ function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
       const breathingEffect =
         Math.sin(idleTimeRef.current * 0.5) * 0.05 * interactionFactor;
 
-      camera.position.x = slowWave + fastWave * 0.5 + -0.1;
+      camera.position.x = slowWave + fastWave * 0.5;
       camera.position.y =
-        (windowWidth < 480 ? 1.3 : 1.2) + verticalWave + breathingEffect * 0.3;
-      camera.position.z = (windowWidth < 480 ? 2.7 : 3) + breathingEffect;
+        (windowWidth < 480 ? 2 : 1.2) + verticalWave + breathingEffect * 0.3;
+      camera.position.z = (windowWidth < 480 ? 2 : 3) + breathingEffect;
 
       // Subtle rotation for more dynamic feel + downward tilt to see text better
       camera.rotation.y = slowWave * 0.03;
@@ -108,11 +108,11 @@ function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
         if (isPortrait) {
           camera.position.set(0, 1.6, 4.2);
           camera.rotation.x = 0;
-          camera.fov = 65;
+          camera.fov = 100;
         } else {
           camera.position.set(0, 1.2, 3.2);
           camera.rotation.x = 0;
-          camera.fov = 70;
+          camera.fov = 100;
         }
       } else if (width < 1300) {
         if (isPortrait) {
@@ -185,19 +185,11 @@ function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
       effectsLevel;
 
     if (isMobile) {
-      if (isPortrait) {
-        // Portrait mobile: Vertical line arrangement for better visibility
-        titlePosition = [0, -0.05, 0];
-        foundPosition = [0, -0.05, 0.4];
-        woodPosition = [0, -0.05, 0.7];
-        fontSize = 0.28;
-      } else {
-        // Landscape mobile: Horizontal row arrangement
-        titlePosition = [-1.2, 0.05, 0];
-        foundPosition = [0, 0.05, 0.4];
-        woodPosition = [1.2, 0.05, 0.7];
-        fontSize = 0.22;
-      }
+      // Mobile: Use desktop-style horizontal arrangement for all orientations
+      titlePosition = [-0.8, -0.1, -0.5];
+      foundPosition = [0, -0.1, 0];
+      woodPosition = [0.9, -0.1, -0.5];
+      fontSize = isPortrait ? 0.25 : 0.22;
       effectsLevel = 'low'; // Minimal effects for mobile
       splatConfig = {
         size: 40,
@@ -205,19 +197,11 @@ function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
         position: [0, 0, -0.5],
       };
     } else if (isTablet) {
-      if (isPortrait) {
-        // Portrait tablet: Modified vertical arrangement
-        titlePosition = [0, -0.1, 0.2];
-        foundPosition = [0, -0.1, 0.6];
-        woodPosition = [0, -0.1, 1.0];
-        fontSize = 0.32;
-      } else {
-        // Landscape tablet: Spread out horizontally
-        titlePosition = [-0.8, -0.05, 0.2];
-        foundPosition = [0, -0.05, 0.8];
-        woodPosition = [0.8, -0.05, 1.2];
-        fontSize = 0.28;
-      }
+      // Tablet: Use desktop-style horizontal arrangement for all orientations
+      titlePosition = [-0.9, -0.1, -0.3];
+      foundPosition = [0, -0.1, 0.6];
+      woodPosition = [1, -0.1, -0.3];
+      fontSize = isPortrait ? 0.3 : 0.28;
       effectsLevel = 'medium'; // Moderate effects for tablets
       splatConfig = {
         size: 35,
@@ -399,13 +383,15 @@ export default function App({
       dpr={performanceConfig.dpr}
       performance={performanceConfig.performance}
       style={{
-        background: 'transparent',
+        background: showGallery ? '#f5f5f5' : 'transparent',
         position: 'absolute',
         top: 0,
         left: 0,
         width: '100%',
         height: '100%',
         zIndex: showTypes || showGallery || showContactPage ? 1 : 10,
+        opacity: showGallery ? 0 : 1,
+        transition: 'opacity 0.5s ease-in-out, background-color 0.5s ease-in-out',
       }}
       gl={{
         powerPreference: isMobile ? 'default' : 'high-performance',
@@ -416,6 +402,7 @@ export default function App({
         premultipliedAlpha: true,
         preserveDrawingBuffer: false,
         outputColorSpace: 'srgb',
+        clearColor: showGallery ? [0.96, 0.96, 0.96, 1] : [0, 0, 0, 0],
       }}
       frameloop={performanceConfig.frameloop}
     >

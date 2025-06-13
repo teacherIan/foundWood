@@ -466,6 +466,72 @@ a {
     }
 }
 
+/* iPad landscape orientation */
+@media only screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .formContainer {
+        padding: 3vh 2rem 1rem 2rem;
+        /* Reduced top padding for iPad landscape */
+        max-height: 100vh;
+        max-height: 100svh;
+        overflow-y: auto;
+        justify-content: flex-start;
+        /* Align to top instead of center */
+    }
+
+    .formHeader {
+        font-size: clamp(2rem, 4vw, 2.5rem);
+        margin-bottom: 1rem;
+        margin-top: 0;
+    }
+
+    .formHeaderText {
+        font-size: clamp(1.8rem, 3.5vw, 2.2rem);
+        line-height: 1.1;
+    }
+
+    .exit-icon {
+        font-size: 2rem;
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .form-control {
+        margin: 1rem 0 2rem;
+        width: 80vw;
+        max-width: 400px;
+    }
+
+    .form-control input {
+        height: calc(var(--spacing-unit) * 1.5);
+        padding: calc(var(--spacing-unit) * 0.3) 0;
+    }
+
+    .form-control label {
+        top: calc(var(--spacing-unit) * 0.2);
+    }
+
+    .btn {
+        margin-top: 1rem;
+        padding: 0.4em 0.8em;
+    }
+
+    .btn-text {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+    }
+
+    .facebookText {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+    }
+
+    .facebookIcon {
+        font-size: clamp(2.5rem, 4vw, 3.5rem);
+    }
+
+    :root {
+        --spacing-unit: 1.8rem;
+    }
+}
+
 @media only screen and (min-width: 601px) and (max-width: 1000px) {
     .formContainer {
         padding: 10vh 3rem 2rem 3rem;
