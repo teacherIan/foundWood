@@ -1202,20 +1202,24 @@ export default function Gallery({
         </div>
       )}
 
-      <div className="galleryLeftTop">
+      {/* Mobile Three-Section Layout: Thumbnails (order: 1) → Photo (order: 2) → Text (order: 3) */}
+
+      {/* 1. Thumbnails Section / Desktop Left Panel */}
+      <div className="productPanel">
         <DraggableThumbnails
           galleryTypeArr={galleryTypeArr}
           currentPhoto={currentPhoto}
           onThumbnailClick={handleThumbnailClick}
         />
-        <div className="galleryLeftBottom">
+
+        {/* Desktop Product Info (inside productPanel for desktop layout) */}
+        <div className="productInfo desktop-only">
           <div className="furnitureName">{currentItem?.name}</div>
           <div className="furnitureDescription">{currentItem?.description}</div>
-          <br />
-          <br />
-          <br />
         </div>
       </div>
+
+      {/* 2. Photo Section */}
       <div
         onClick={handleMasterImageClick}
         className="currentPhoto"
@@ -1234,7 +1238,7 @@ export default function Gallery({
                     : `${calculateImageDimensions().width}px`,
                 height:
                   window.innerWidth < window.innerHeight
-                    ? '50vh' // Use VH for Safari compatibility
+                    ? '40vh' // Further reduced to 40vh to match CSS for more text space
                     : `${calculateImageDimensions().height}px`,
                 margin: '0 auto',
                 zIndex: 1,
@@ -1385,13 +1389,38 @@ export default function Gallery({
         )}
       </div>
 
-      {/* Mobile info panel - moved outside currentPhoto container to prevent duplication */}
-      {window.innerWidth < window.innerHeight && window.innerWidth < 768 && (
-        <div className="mobileProductInfo always-visible">
-          <h2 className="mobileProductName">{currentItem?.name}</h2>
-          <p className="mobileProductDescription">{currentItem?.description}</p>
-        </div>
-      )}
+      {/* 3. Mobile-Only Product Info Section (separate for mobile three-section layout) */}
+      <div className="productInfo mobile-only">
+        <div className="furnitureName">{currentItem?.name}</div>
+        <div className="furnitureDescription">{currentItem?.description}</div>
+      </div>
+
+      {/* Legacy Mobile Info Panel (swipe-up overlay) - Hidden by default in three-section layout */}
+      <MobileInfoPanel
+        infoSpring={infoSpring}
+        infoRef={infoRef}
+        showDetails={false} // Always hidden for three-section layout
+        currentItem={currentItem}
+      />
+
+      {/* Swipe indicator for legacy mobile info panel - Hidden by default */}
+      <animated.div
+        className="swipeIndicator"
+        style={{
+          ...indicatorSpring,
+          position: 'fixed',
+          bottom: '10px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 20002,
+          display: 'none', // Hidden for three-section layout
+        }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div className="arrow">⬆</div>
+      </animated.div>
     </animated.div>
   );
 }

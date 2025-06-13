@@ -1,3 +1,4 @@
+/* filepath: /Users/ianmalloy/Desktop/demoProjects/foundWood/components/galleries/gallery.css */
 @import "../../src/styles/variables.css";
 
 * {
@@ -206,10 +207,10 @@
     background: transparent;
     z-index: 1000002;
     /* Higher than main image and text */
-    margin-top: 1vh;
+    margin-top: 2vh;
     /* Add top margin to avoid icon collision */
-    margin-bottom: 1vh;
-    /* Space between thumbnails and text - reduced to save space for description */
+    margin-bottom: 2vh;
+    /* Space between thumbnails and text */
     -webkit-overflow-scrolling: touch;
     /* Safari smooth scrolling */
     -webkit-transform: translateZ(0);
@@ -234,8 +235,7 @@
     scroll-snap-type: x proximity;
     -webkit-scroll-snap-type: x proximity;
     /* Desktop draggable support */
-    max-height: 25vh;
-    /* Reduced to give more space to description */
+    max-height: 40vh;
     overflow-y: auto;
     /* Enable vertical scrolling when many thumbnails */
     scrollbar-width: thin;
@@ -597,66 +597,6 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    flex: 1;
-    /* Allow this container to grow and take available space */
-    min-height: 0;
-    /* Allow shrinking if needed */
-}
-
-/* Desktop and tablet styles - keep productInfo inside productPanel and reset mobile layout */
-@media (min-width: 768px) {
-    .galleryContainer {
-        flex-direction: row !important;
-        /* Override mobile column layout */
-    }
-
-    .productPanel {
-        order: unset !important;
-        /* Reset mobile order */
-    }
-
-    .currentPhoto {
-        order: unset !important;
-        /* Reset mobile order */
-    }
-
-    .productInfo {
-        position: static;
-        /* Reset positioning for desktop */
-        order: unset;
-        /* Remove mobile order */
-        width: 100%;
-        /* Stay within productPanel */
-        margin: 0;
-        padding: 0;
-        display: flex;
-        /* Keep flex for desktop */
-        flex-direction: column;
-    }
-
-    /* Show desktop product info (inside productPanel) */
-    .productInfo.desktop-only {
-        display: flex !important;
-    }
-
-    /* Hide mobile product info (separate section) */
-    .productInfo.mobile-only {
-        display: none !important;
-    }
-}
-
-/* Mobile styles - show mobile product info, hide desktop product info */
-@media (max-width: 767px) {
-
-    /* Hide desktop product info (inside productPanel) */
-    .productInfo.desktop-only {
-        display: none !important;
-    }
-
-    /* Show mobile product info (separate section) */
-    .productInfo.mobile-only {
-        display: flex !important;
-    }
 }
 
 .galleryContact {
@@ -677,8 +617,9 @@
     margin-top: 0;
     margin-bottom: 5px;
     text-align: center;
-    font-size: calc(1.0vw + 1.0vh + 8px);
-    /* Slightly reduced to save space for description */
+    /* Center align with thumbnails */
+    font-size: calc(1.2vw + 1.2vh + 10px);
+    /* Responsive but not too large */
     filter: drop-shadow(1px 1px 0px black);
     -webkit-text-stroke: 2px #77481c;
     -webkit-text-fill-color: #ffffff;
@@ -707,12 +648,11 @@
     margin-top: 5px;
     font-family: "Poppins";
     width: 100%;
-    font-size: calc(0.5vw + 0.5vh + 7px);
-    /* Slightly smaller font for better text density */
+    font-size: calc(0.6vw + 0.6vh + 8px);
+    /* Slightly smaller for narrow panel */
     text-align: center;
     /* Center align with thumbnails */
-    line-height: 1.3;
-    /* Tighter line spacing to fit more text */
+    line-height: 1.4;
     /* Make text non-selectable */
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -720,13 +660,11 @@
     user-select: none;
     /* Enable scrolling when content overflows */
     overflow-y: auto;
-    flex: 1;
-    /* Take up all remaining available space */
-    min-height: 0;
-    /* Allow flex shrinking if needed */
+    max-height: 15vh;
+    /* Limit height to prevent taking up too much space */
     /* Custom scrollbar styling */
     scrollbar-width: thin;
-    scrollbar-color: rgba(119, 72, 28, 0.6) transparent;
+    scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
 }
 
 .arrow {
@@ -859,10 +797,7 @@
         user-select: none;
         /* Enable scrolling when content overflows */
         overflow-y: auto;
-        flex: 1;
-        /* Take up all remaining available space */
-        min-height: 0;
-        /* Allow flex shrinking if needed */
+        max-height: 18vh;
         scrollbar-width: thin;
         scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
     }
@@ -950,10 +885,7 @@
         user-select: none;
         /* Enable scrolling when content overflows */
         overflow-y: auto;
-        flex: 1;
-        /* Take up all remaining available space */
-        min-height: 0;
-        /* Allow flex shrinking if needed */
+        max-height: 20vh;
         scrollbar-width: thin;
         scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
     }
@@ -1027,10 +959,7 @@
         user-select: none;
         /* Enable scrolling when content overflows */
         overflow-y: auto;
-        flex: 1;
-        /* Take up all remaining available space */
-        min-height: 0;
-        /* Allow flex shrinking if needed */
+        max-height: 22vh;
         scrollbar-width: thin;
         scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
     }
@@ -1153,10 +1082,6 @@
         /* Fallback for Safari iOS */
         min-height: 100svh;
         /* Progressive enhancement */
-        /* Three-section layout distribution */
-        display: flex;
-        align-items: stretch;
-        /* Ensure sections stretch to full width */
     }
 
     .productPanel {
@@ -1164,12 +1089,9 @@
         /* Full width on mobile */
         height: auto;
         /* Let content determine height */
-        max-height: 15vh;
-        /* Limit thumbnail section height */
-        padding: 0.5vh 1em;
-        /* Reduced padding for thumbnails section */
+        padding: 1.5vh 1em;
         order: 1;
-        /* Thumbnails at the top */
+        /* Move thumbnails to top on mobile */
         z-index: auto;
         /* Reset z-index for mobile */
         background: transparent;
@@ -1179,87 +1101,12 @@
         /* Light brown border styling for mobile portrait */
         border-bottom: 1px solid var(--brown);
         /* Subtle separator */
-        margin-bottom: 0.25em;
-        /* Reduced margin */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex-shrink: 0;
-        /* Prevent thumbnails from shrinking */
+        margin-bottom: 0.5em;
     }
 
-    /* Separate container for product info to go at the bottom */
     .productInfo {
-        display: flex;
-        flex-direction: column;
-        width: 100vw;
-        padding: 1vh 1em 2vh 1em;
-        /* Added bottom padding for spacing */
-        margin: 0;
-        text-align: center;
-        order: 3;
-        /* Text at the bottom */
-        background: transparent;
-        /* Mobile layout: thumbnails → photo → text */
-        flex-shrink: 0;
-        /* Prevent text from shrinking */
-        min-height: auto;
-        /* Allow natural content height */
-    }
-
-    /* Mobile-specific styling for furniture name */
-    .furnitureName {
-        font-size: clamp(18px, 4.5vw, 24px);
-        /* Slightly larger for better readability */
-        margin-bottom: 0.5vh;
-        color: var(--brown);
-        font-weight: bold;
-        line-height: 1.2;
-        /* Better line spacing */
-        /* Make text non-selectable */
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-
-    /* Mobile-specific styling for furniture description */
-    .furnitureDescription {
-        font-size: clamp(14px, 3.5vw, 18px);
-        /* Slightly larger for better readability */
-        line-height: 1.5;
-        /* Better line spacing */
-        color: var(--brown);
-        max-height: 20vh;
-        /* Increased height for more text visibility */
-        overflow-y: auto;
-        /* Enable scrolling if needed */
-        padding: 0 0.5em;
-        /* Small horizontal padding */
-        margin-top: 0.5vh;
-        /* Small margin between name and description */
-        /* Make text non-selectable */
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        /* Custom scrollbar styling for mobile */
-        scrollbar-width: thin;
-        scrollbar-color: rgba(119, 72, 28, 0.4) transparent;
-    }
-
-    /* Custom scrollbar for description on webkit browsers */
-    .furnitureDescription::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    .furnitureDescription::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .furnitureDescription::-webkit-scrollbar-thumb {
-        background: rgba(119, 72, 28, 0.4);
-        border-radius: 2px;
+        display: none;
+        /* Hide product info on mobile - use thumbnails only */
     }
 
     .currentPhoto {
@@ -1267,10 +1114,8 @@
         /* Image comes after thumbnails on mobile */
         width: 100vw;
         height: auto;
-        max-height: 40vh;
-        /* Further reduced to leave more space for text */
-        min-height: 35vh;
-        /* Ensure minimum height for usability */
+        max-height: 55vh;
+        /* Progressive enhancement for modern browsers */
         text-align: center;
         box-sizing: border-box;
         z-index: auto;
@@ -1280,11 +1125,6 @@
         /* Prevent scroll issues */
         -webkit-overflow-scrolling: touch;
         /* Safari iOS smooth scrolling */
-        flex-shrink: 0;
-        /* Prevent image container from shrinking */
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
 
     .thumbNails {
@@ -1293,8 +1133,7 @@
         -webkit-flex-direction: row;
         flex-direction: row;
         -webkit-overflow-scrolling: touch;
-        padding: 0.5em 0;
-        /* Reduced padding for more space */
+        padding: 1em 0;
         width: 100%;
         /* Match mobile styles */
         max-width: 100vw;
@@ -1312,8 +1151,8 @@
         /* Override grid for mobile */
         align-items: center;
         /* Center thumbnails vertically */
-        min-height: 60px;
-        /* Reduced minimum height for more space */
+        min-height: 80px;
+        /* Ensure consistent height */
         justify-content: flex-start;
         /* Align thumbnails to the start */
         box-sizing: border-box;
@@ -1322,8 +1161,8 @@
         /* Thumbnails appear first */
         border-bottom: 1px solid rgba(119, 72, 28, 0.2);
         /* Subtle separator */
-        margin-bottom: 0.25em;
-        /* Reduced space between thumbnails and image */
+        margin-bottom: 0.5em;
+        /* Small space between thumbnails and image */
         /* Safari iOS specific fixes */
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
@@ -1343,9 +1182,8 @@
     }
 
     .thumbNailPhoto {
-        width: 50px;
-        height: 50px;
-        /* Reduced size for more space */
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         /* Keep perfect circles on mobile */
         flex: 0 0 auto;
@@ -1357,18 +1195,14 @@
         opacity: 0.8;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         object-fit: cover;
-        margin: 0 3px;
-        /* Add small margin between thumbnails */
     }
 
     .thumbNailPhoto:first-child {
-        margin-left: 0.5em;
-        /* Reduced margin */
+        margin-left: 1em;
     }
 
     .thumbNailPhoto:last-child {
-        margin-right: 0.5em;
-        /* Reduced margin */
+        margin-right: 1em;
     }
 
     .thumbNailPhoto.grayscale {
