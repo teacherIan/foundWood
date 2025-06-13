@@ -305,6 +305,7 @@ function App() {
           isAnimating={state.isAnimating}
           showContactPage={state.showContactPage}
           showTypes={state.showTypes}
+          showGallery={state.showGallery}
         />
       </div>
     </>

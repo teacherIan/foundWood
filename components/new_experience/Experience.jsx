@@ -32,7 +32,7 @@ const MemoizedText = memo(({ position, children, fontSize, delay = 0 }) => (
   </Text>
 ));
 
-function Scene({ isAnimating, showContactPage }) {
+function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
   const [targetX, setTargetX] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [userInteracting, setUserInteracting] = useState(false);
@@ -42,10 +42,16 @@ function Scene({ isAnimating, showContactPage }) {
   const idleTimeRef = useRef(0);
   const interactionTimeRef = useRef(0);
 
+  // Check if any overlay is active
+  const hasOverlay = showContactPage || showTypes || showGallery;
+
   // Enhanced camera animation with interaction awareness
   const animateCamera = useCallback(
     (state, delta) => {
+      // Keep the scene rendering but skip camera animations when overlays are active
+      // This maintains scene visibility while saving processing power on animations
       if (!isAnimating) return;
+      if (hasOverlay) return; // Skip only camera animations, not rendering
 
       idleTimeRef.current += delta;
 
@@ -84,7 +90,7 @@ function Scene({ isAnimating, showContactPage }) {
 
       camera.updateProjectionMatrix();
     },
-    [camera, isAnimating, userInteracting]
+    [camera, isAnimating, userInteracting, hasOverlay]
   );
 
   useFrame(animateCamera);
@@ -263,7 +269,7 @@ function Scene({ isAnimating, showContactPage }) {
     <>
       <PresentationControls
         makeDefault
-        enabled={!showContactPage}
+        enabled={!hasOverlay}
         global
         snap
         rotation={[0, 0, 0]}
@@ -338,7 +344,7 @@ function debounce(func, wait) {
   };
 }
 
-export default function App({ isAnimating, showContactPage, showTypes }) {
+export default function App({ isAnimating, showContactPage, showTypes, showGallery }) {
   // Adaptive performance settings based on device capability
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const isMobile = windowWidth < 480;
@@ -346,30 +352,30 @@ export default function App({ isAnimating, showContactPage, showTypes }) {
   const isHighDPI = window.devicePixelRatio > 1.5;
 
   // Performance settings based on device
-  const performanceConfig = useMemo(() => {
+  const performanceConfig = useMemo(() => {    
     if (isMobile) {
       return {
         dpr: [1, 1.5],
         performance: { min: 0.3, max: 0.8, debounce: 300 },
         antialias: false,
-        frameloop: 'always', // Always keep frame loop active for React Spring
+        frameloop: 'always',
       };
     } else if (isTablet) {
       return {
         dpr: [1, 2],
         performance: { min: 0.4, max: 0.9, debounce: 250 },
         antialias: true,
-        frameloop: 'always', // Always keep frame loop active for React Spring
+        frameloop: 'always',
       };
     } else {
       return {
         dpr: [1, 2],
         performance: { min: 0.5, max: 1, debounce: 200 },
         antialias: true,
-        frameloop: 'always', // Always keep frame loop active for React Spring
+        frameloop: 'always',
       };
     }
-  }, [isMobile, isTablet, isAnimating]);
+  }, [isMobile, isTablet]);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -394,7 +400,7 @@ export default function App({ isAnimating, showContactPage, showTypes }) {
         left: 0,
         width: '100%',
         height: '100%',
-        zIndex: showTypes ? 1 : 10,
+        zIndex: (showTypes || showGallery || showContactPage) ? 1 : 10,
       }}
       gl={{
         powerPreference: isMobile ? 'default' : 'high-performance',
@@ -409,7 +415,12 @@ export default function App({ isAnimating, showContactPage, showTypes }) {
       }}
       frameloop={performanceConfig.frameloop}
     >
-      <Scene showContactPage={showContactPage} isAnimating={isAnimating} />
+      <Scene 
+        showContactPage={showContactPage} 
+        showTypes={showTypes}
+        showGallery={showGallery}
+        isAnimating={isAnimating} 
+      />
     </Canvas>
   );
 }
