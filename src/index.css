@@ -74,16 +74,38 @@ body {
 
 /* ===== LOADING ===== */
 .font-loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     width: 100vw;
+    height: 100vh;
+    /* Safari iOS fallback */
+    height: 100svh;
+    /* Progressive enhancement for newer browsers */
+    min-height: 100vh;
+    min-height: 100svh;
     background-color: #f5f5f5;
     color: var(--brown);
     font-family: sans-serif;
     font-size: 1.2rem;
+    z-index: 9999999;
+    /* Ensure it's on top of everything */
+    overflow: hidden;
+    /* Prevent any scrolling issues */
+}
+
+/* Safari iOS specific loading screen fixes */
+@supports (-webkit-touch-callout: none) {
+    .font-loading-screen {
+        height: -webkit-fill-available;
+        min-height: -webkit-fill-available;
+    }
 }
 
 .loading-spinner {
@@ -94,6 +116,8 @@ body {
     height: 50px;
     animation: spin 1s linear infinite;
     margin-bottom: 20px;
+    flex-shrink: 0;
+    /* Prevent shrinking */
 }
 
 @keyframes spin {
