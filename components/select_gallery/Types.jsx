@@ -26,18 +26,21 @@ function useTypeSpring(showTypes, index) {
 
   useEffect(() => {
     if (showTypes && window.innerWidth < window.innerHeight) {
+      // Portrait mobile: animate from top (-100svh) to visible positions
       setSpring.start({
-        y: 110 + (index > 1 ? 52 : 5),
+        y: 100 + 10 + (index > 1 ? 52 : 5), // 100svh to counteract -100svh + positioning
         opacity: 1,
         delay: index * 100,
       });
     } else if (showTypes) {
+      // Landscape: animate from top (-100svh) to visible positions
       setSpring.start({
-        y: index % 2 === 0 ? 112 : index === 1 ? 140 : 128,
+        y: 100 + (index % 2 === 0 ? 12 : index === 1 ? 40 : 28), // 100svh + positioning
         opacity: 1,
         delay: index * 200,
       });
     } else {
+      // Hide: animate back up
       setSpring.start({
         y: -50,
         opacity: 0,
@@ -103,12 +106,11 @@ export default function Types({
           <animated.div
             key={index}
             style={{
-              marginLeft: '-10px',
               position: 'absolute',
               left:
                 window.innerWidth < window.innerHeight
-                  ? 50 * (index % 2) + 'svw'
-                  : 23 * index + 'svw',
+                  ? (index % 2) * 50 + 'svw'
+                  : index * 20 + 5 + 'svw',
               transform: spring.y.to((y) => `translateY(${y}svh)`),
               opacity: spring.opacity,
             }}

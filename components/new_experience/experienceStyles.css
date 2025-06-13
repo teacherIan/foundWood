@@ -112,7 +112,6 @@
     position: absolute;
     top: calc(10svh);
     left: 0svw;
-    transition: 1s ease-in;
     font-size: calc(1.0vw + 1.0vh + 8px);
 }
 

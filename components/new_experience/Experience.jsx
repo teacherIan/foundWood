@@ -338,7 +338,7 @@ function debounce(func, wait) {
   };
 }
 
-export default function App({ isAnimating, showContactPage }) {
+export default function App({ isAnimating, showContactPage, showTypes }) {
   // Adaptive performance settings based on device capability
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const isMobile = windowWidth < 480;
@@ -352,21 +352,21 @@ export default function App({ isAnimating, showContactPage }) {
         dpr: [1, 1.5],
         performance: { min: 0.3, max: 0.8, debounce: 300 },
         antialias: false,
-        frameloop: isAnimating ? 'always' : 'demand',
+        frameloop: 'always', // Always keep frame loop active for React Spring
       };
     } else if (isTablet) {
       return {
         dpr: [1, 2],
         performance: { min: 0.4, max: 0.9, debounce: 250 },
         antialias: true,
-        frameloop: isAnimating ? 'always' : 'demand',
+        frameloop: 'always', // Always keep frame loop active for React Spring
       };
     } else {
       return {
         dpr: [1, 2],
         performance: { min: 0.5, max: 1, debounce: 200 },
         antialias: true,
-        frameloop: isAnimating ? 'always' : 'demand',
+        frameloop: 'always', // Always keep frame loop active for React Spring
       };
     }
   }, [isMobile, isTablet, isAnimating]);
@@ -394,6 +394,7 @@ export default function App({ isAnimating, showContactPage }) {
         left: 0,
         width: '100%',
         height: '100%',
+        zIndex: showTypes ? 1 : 10,
       }}
       gl={{
         powerPreference: isMobile ? 'default' : 'high-performance',

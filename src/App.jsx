@@ -77,10 +77,10 @@ function reducer(state, action) {
     case 'TOGGLE_TYPES':
       return {
         ...state,
-        showTypes: !state.showTypes,
+        showTypes: true,
         showGallery: false,
         showInfographic: false,
-        isAnimating: state.showTypes,
+        isAnimating: false,
       };
     case 'TOGGLE_GALLERY':
       return {
@@ -93,6 +93,7 @@ function reducer(state, action) {
       return {
         ...state,
         showContactPage: !state.showContactPage,
+        showTypes: false,
         isAnimating: false,
         showInfographic: false,
       };
@@ -303,6 +304,7 @@ function App() {
         <NewCanvas
           isAnimating={state.isAnimating}
           showContactPage={state.showContactPage}
+          showTypes={state.showTypes}
         />
       </div>
     </>
