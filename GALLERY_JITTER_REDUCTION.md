@@ -1,12 +1,15 @@
 # Gallery Pan/Zoom Jitter Reduction Optimizations
 
 ## Problem
+
 The desktop image panning and zooming was experiencing jittering and micro-movements that made the interaction feel janky and unpolished.
 
 ## Root Cause
+
 The React Spring animations were too responsive with high tension values, causing the image to react immediately to every small mouse movement, creating a jittery effect.
 
 ## Solution ✅
+
 Implemented much slower, more deliberate movement settings and added throttling to reduce micro-movements.
 
 ## Changes Made
@@ -14,6 +17,7 @@ Implemented much slower, more deliberate movement settings and added throttling 
 ### 1. **Dramatically Reduced Spring Responsiveness**
 
 #### **Base Image Spring Configuration**
+
 ```javascript
 // Before: Fast, responsive settings
 tension: 200, friction: 25, mass: 0.8
@@ -23,6 +27,7 @@ tension: 20,  friction: 60, mass: 3.0
 ```
 
 #### **Mouse Move Handler (Active Panning)**
+
 ```javascript
 // Before: Immediate response
 tension: 180, friction: 28, mass: 0.7
@@ -32,6 +37,7 @@ tension: 15,  friction: 80, mass: 4.0
 ```
 
 #### **Mouse Leave (Return to Center)**
+
 ```javascript
 // Before: Fast return
 tension: 220, friction: 24, mass: 0.8
@@ -41,6 +47,7 @@ tension: 25,  friction: 70, mass: 2.5
 ```
 
 #### **Initial Hover (Scale-up)**
+
 ```javascript
 // Before: Quick scale-up
 tension: 200, friction: 25, mass: 0.8
@@ -52,6 +59,7 @@ tension: 30,  friction: 65, mass: 2.0
 ### 2. **Enhanced Mouse Movement Throttling**
 
 #### **Throttling Implementation**
+
 ```javascript
 const lastMouseMoveTime = useRef(0);
 const throttleDelay = 32; // Slower ~30fps throttling for more deliberate movement
@@ -65,6 +73,7 @@ lastMouseMoveTime.current = now;
 ```
 
 #### **Benefits of Throttling**
+
 - ✅ Eliminates excessive animation calls
 - ✅ Reduces micro-movements from slight mouse jitter
 - ✅ Ensures smooth 60fps update rate
@@ -74,11 +83,11 @@ lastMouseMoveTime.current = now;
 
 ### Spring Physics Explanation
 
-| Setting | Before | After | Effect |
-|---------|--------|-------|--------|
-| **Tension** | 40-220 | 15-30 | Ultra-slow response to input |
-| **Friction** | 24-28 | 60-80 | Maximum resistance, cinematic smoothness |
-| **Mass** | 0.7-0.8 | 2.0-4.0 | Very heavy feel, extremely deliberate motion |
+| Setting      | Before  | After   | Effect                                       |
+| ------------ | ------- | ------- | -------------------------------------------- |
+| **Tension**  | 40-220  | 15-30   | Ultra-slow response to input                 |
+| **Friction** | 24-28   | 60-80   | Maximum resistance, cinematic smoothness     |
+| **Mass**     | 0.7-0.8 | 2.0-4.0 | Very heavy feel, extremely deliberate motion |
 
 ### Animation Hierarchy (Slowest to Fastest)
 
@@ -90,12 +99,14 @@ lastMouseMoveTime.current = now;
 ## Expected Results
 
 ### Before Optimization
+
 - ❌ Jittery, reactive movements
 - ❌ Image jumping around with small mouse movements
 - ❌ Overwhelming responsiveness
 - ❌ Micro-movements causing visual noise
 
 ### After Ultra-Slow Optimization
+
 - ✅ Extremely slow, cinematic panning movements
 - ✅ Image responds very slowly and predictably
 - ✅ Complete elimination of jitter and micro-movements

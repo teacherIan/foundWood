@@ -536,9 +536,9 @@ export default function Gallery({
   const [imageSpring, imageApi] = useSpring(() => ({
     transform: 'translate(0%, 0%) scale(1)',
     config: {
-      tension: 20,  // Extremely low tension for very slow response
+      tension: 20, // Extremely low tension for very slow response
       friction: 60, // Very high friction for maximum smoothness
-      mass: 3.0,   // Heavy mass for cinematic, slow movement
+      mass: 3.0, // Heavy mass for cinematic, slow movement
     },
   }));
 
@@ -857,9 +857,9 @@ export default function Gallery({
       imageApi.start({
         transform: `translate(${translateX}%, ${translateY}%) scale(1.15)`,
         config: {
-          tension: 15,  // Extremely slow response for ultra-smooth panning
+          tension: 15, // Extremely slow response for ultra-smooth panning
           friction: 80, // Very high friction to eliminate any jitter
-          mass: 4.0,   // Maximum mass for the slowest possible movement
+          mass: 4.0, // Maximum mass for the slowest possible movement
         },
       });
     },
@@ -879,9 +879,9 @@ export default function Gallery({
     imageApi.start({
       transform: 'translate(0%, 0%) scale(1)',
       config: {
-        tension: 25,  // Very slow return to center
+        tension: 25, // Very slow return to center
         friction: 70, // High friction for smooth, controlled return
-        mass: 2.5,   // Heavy mass for deliberate return movement
+        mass: 2.5, // Heavy mass for deliberate return movement
       },
     });
   }, [imageApi]);
@@ -893,9 +893,9 @@ export default function Gallery({
       imageApi.start({
         transform: 'translate(0%, 0%) scale(1.15)',
         config: {
-          tension: 30,  // Very slow initial scale-up
+          tension: 30, // Very slow initial scale-up
           friction: 65, // High friction for smooth, controlled scaling
-          mass: 2.0,   // Heavy mass for deliberate scaling movement
+          mass: 2.0, // Heavy mass for deliberate scaling movement
         },
       });
     }
