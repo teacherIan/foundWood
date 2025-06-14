@@ -1,6 +1,7 @@
 import { useSpring, animated } from '@react-spring/web';
 import Type from './Type';
 import './types.css';
+import './type.css';
 import { useEffect } from 'react';
 import chair from '../../src/assets/noBG/double_chair_final_noBG.png';
 // import table from '../../src/assets/noBG/plantStand_new.png';
@@ -190,19 +191,24 @@ export default function Types({
           className="explanationText"
           style={{
             position: 'absolute',
-            left: window.innerWidth < window.innerHeight ? '50svw' : '50svw',
-            top: window.innerWidth < window.innerHeight ? '72svh' : '32svh',
-            transform: `translateX(-50%) ${explanationSpring.y.to(
-              (y) => `translateY(${y}svh)`
-            )}`,
+            left: '50svw',
+            top: '50svh',
+            transform: explanationSpring.y.to(
+              (y) => `translateX(-50%) translateY(-50%) translateY(${y}svh)`
+            ),
             opacity: explanationSpring.opacity,
-            width: window.innerWidth < window.innerHeight ? '75svw' : '30svw',
+            width: window.innerWidth < window.innerHeight ? '85svw' : '30svw',
             textAlign: 'center',
             zIndex: 1000,
           }}
         >
           <div className="explanationContent">
-            <h3>Custom Crafted for You</h3>
+            <div
+              className="typeHeader"
+              dangerouslySetInnerHTML={{
+                __html: 'Custom Crafted <br/> for You',
+              }}
+            />
             <p>
               Every piece at Found Wood is uniquely handcrafted from carefully
               selected wood. From maple burl coffee tables with their swirling
