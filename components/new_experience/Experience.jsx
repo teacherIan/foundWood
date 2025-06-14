@@ -292,10 +292,10 @@ function Scene({
       effectsLevel;
 
     if (isMobile) {
-      // Mobile: Use desktop-style horizontal arrangement for all orientations
-      titlePosition = [-0.8, -0.1, -0.5];
-      foundPosition = [0, -0.1, 0];
-      woodPosition = [0.9, -0.1, -0.5];
+      // Mobile: Positioned for camera at y=1.2-1.6, looking straight or slightly down
+      titlePosition = [-0.7, -0.1, -0.3];
+      foundPosition = [0, -0.1, 0.0];
+      woodPosition = [0.7, -0.1, -0.3];
       fontSize = isPortrait ? 0.25 : 0.22;
       effectsLevel = 'low'; // Minimal effects for mobile
       splatConfig = {
@@ -304,10 +304,10 @@ function Scene({
         position: [0, 0, -0.5],
       };
     } else if (isTablet) {
-      // Tablet: Use desktop-style horizontal arrangement for all orientations
-      titlePosition = [-0.9, -0.1, -0.3];
-      foundPosition = [0, -0.1, 0.6];
-      woodPosition = [1, -0.1, -0.3];
+      // Tablet: Positioned for camera at y=0.9-1.1, looking slightly down
+      titlePosition = [-0.9, -0.3, -0.3];
+      foundPosition = [0, -0.3, 0.6];
+      woodPosition = [1, -0.3, -0.3];
       fontSize = isPortrait ? 0.3 : 0.28;
       effectsLevel = 'medium'; // Moderate effects for tablets
       splatConfig = {
@@ -316,8 +316,8 @@ function Scene({
         position: [0, 0, 0],
       };
     } else {
-      // Desktop: Optimized for landscape viewing
-      titlePosition = [-1.2, -0.1, 0];
+      // Desktop: Positioned for camera at y=0.7, looking slightly down
+      titlePosition = [-1.2, -0.1, 0.0];
       foundPosition = [0, -0.1, 0.6];
       woodPosition = [1.2, -0.1, 0];
       fontSize = 0.35;
@@ -515,8 +515,8 @@ export default function App({
     <>
       <Canvas
         camera={{
-          position: [0, 0.8, 3.5],
-          fov: 60,
+          position: [0, 0.7, 3.2], // Match desktop camera position from resize handler
+          fov: 55, // Match desktop FOV
           near: 0.1,
           far: 100,
         }}
@@ -532,14 +532,15 @@ export default function App({
           zIndex: showTypes || showGallery || showContactPage ? 1 : 10,
         }}
         gl={{
-          powerPreference: isMobile ? 'default' : 'high-performance',
-          antialias: performanceConfig.antialias,
-          depth: true,
-          stencil: !isMobile,
-          alpha: true,
-          premultipliedAlpha: true,
-          preserveDrawingBuffer: false,
+          powerPreference: 'high-performance', // Use default power preference for lower CPU usage
+          antialias: false, // Disable antialiasing for better performance
+          depth: true, // Disable depth buffer if not needed
+          stencil: false, // Disable stencil buffer for all devices
+          alpha: true, // Keep alpha for transparency
+          premultipliedAlpha: false, // Disable for simpler blending
+          preserveDrawingBuffer: false, // Keep disabled for performance
           outputColorSpace: 'srgb',
+          failIfMajorPerformanceCaveat: false, // Allow fallback to software rendering if needed
         }}
         frameloop={performanceConfig.frameloop}
       >
