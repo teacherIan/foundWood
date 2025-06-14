@@ -536,9 +536,9 @@ export default function Gallery({
   const [imageSpring, imageApi] = useSpring(() => ({
     transform: 'translate(0%, 0%) scale(1)',
     config: {
-      tension: 200, // Increased tension for snappier response
-      friction: 25, // Slightly reduced friction for smoother movement
-      mass: 0.8, // Reduced mass for lighter, more responsive feel
+      tension: 20,  // Extremely low tension for very slow response
+      friction: 60, // Very high friction for maximum smoothness
+      mass: 3.0,   // Heavy mass for cinematic, slow movement
     },
   }));
 
@@ -816,6 +816,10 @@ export default function Gallery({
     [setCurrentPhoto, setShowDetails, setShowInfographic, infoApi, indicatorApi]
   );
 
+  // Add refs for throttling mouse movement
+  const lastMouseMoveTime = useRef(0);
+  const throttleDelay = 32; // Slower ~30fps throttling for more deliberate movement
+
   // Image hover/pan functionality
   const handleImageMouseMove = useCallback(
     (e) => {
@@ -825,6 +829,13 @@ export default function Gallery({
         !isHovering
       )
         return;
+
+      // Throttle mouse move events to reduce jittering
+      const now = Date.now();
+      if (now - lastMouseMoveTime.current < throttleDelay) {
+        return;
+      }
+      lastMouseMoveTime.current = now;
 
       const container = imageContainerRef.current;
       const rect = container.getBoundingClientRect();
@@ -846,13 +857,13 @@ export default function Gallery({
       imageApi.start({
         transform: `translate(${translateX}%, ${translateY}%) scale(1.15)`,
         config: {
-          tension: 180, // More responsive than before
-          friction: 28, // Balanced friction
-          mass: 0.7, // Light mass for immediate response
+          tension: 15,  // Extremely slow response for ultra-smooth panning
+          friction: 80, // Very high friction to eliminate any jitter
+          mass: 4.0,   // Maximum mass for the slowest possible movement
         },
       });
     },
-    [isHovering, imageApi]
+    [isHovering, imageApi, throttleDelay]
   );
 
   const handleImageMouseEnter = useCallback(() => {
@@ -868,9 +879,9 @@ export default function Gallery({
     imageApi.start({
       transform: 'translate(0%, 0%) scale(1)',
       config: {
-        tension: 220, // Fast return to center
-        friction: 24, // Smooth but quick
-        mass: 0.8, // Light mass
+        tension: 25,  // Very slow return to center
+        friction: 70, // High friction for smooth, controlled return
+        mass: 2.5,   // Heavy mass for deliberate return movement
       },
     });
   }, [imageApi]);
@@ -882,9 +893,9 @@ export default function Gallery({
       imageApi.start({
         transform: 'translate(0%, 0%) scale(1.15)',
         config: {
-          tension: 200, // Quick scale-up
-          friction: 25, // Smooth scaling
-          mass: 0.8, // Light mass
+          tension: 30,  // Very slow initial scale-up
+          friction: 65, // High friction for smooth, controlled scaling
+          mass: 2.0,   // Heavy mass for deliberate scaling movement
         },
       });
     }
