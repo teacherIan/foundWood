@@ -1,10 +1,10 @@
 .typesContainer {
-
     position: absolute;
     z-index: 2000;
     width: 100vw;
     height: 100svh;
-    top: -100svh;
+    top: 0;
+    /* Changed from -100svh to 0 for debugging */
     left: 0;
     /* display: flex; */
     text-align: center;

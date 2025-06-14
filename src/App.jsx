@@ -77,12 +77,33 @@ function reducer(state, action) {
     case 'TOGGLE_TYPES':
       return {
         ...state,
+        showTypes: !state.showTypes,
+        showGallery: false,
+        showInfographic: false,
+        isAnimating: false,
+      };
+    case 'SHOW_TYPES':
+      return {
+        ...state,
         showTypes: true,
         showGallery: false,
         showInfographic: false,
         isAnimating: false,
       };
+    case 'HIDE_TYPES':
+      return {
+        ...state,
+        showTypes: false,
+        isAnimating: true,
+      };
     case 'TOGGLE_GALLERY':
+      return {
+        ...state,
+        showGallery: !state.showGallery,
+        showTypes: false,
+        showDetails: false,
+      };
+    case 'SHOW_GALLERY':
       return {
         ...state,
         showGallery: true,
@@ -146,7 +167,11 @@ function App() {
   }, []);
 
   const handleGalleryTypesClickCallback = useCallback(() => {
-    dispatch({ type: 'TOGGLE_TYPES' });
+    dispatch({ type: 'SHOW_TYPES' });
+  }, []);
+
+  const handleHideTypesCallback = useCallback(() => {
+    dispatch({ type: 'HIDE_TYPES' });
   }, []);
 
   const handleMissionButtonClickCallback = useCallback(() => {
@@ -155,7 +180,7 @@ function App() {
   }, []);
 
   const handleGalleryButtonClickCallback = useCallback(() => {
-    dispatch({ type: 'TOGGLE_GALLERY' });
+    dispatch({ type: 'SHOW_GALLERY' });
   }, []);
 
   const handleEmblemClickCallback = useCallback(() => {
@@ -166,9 +191,29 @@ function App() {
     dispatch({ type: 'TOGGLE_CONTACT' });
   }, []);
 
+  const handleHideGalleryCallback = useCallback(() => {
+    dispatch({ type: 'RESET_VIEW' });
+  }, []);
+
   // Home screen logic: not showing gallery, contact, or types
   const isHomeScreen =
     !state.showGallery && !state.showContactPage && !state.showTypes;
+
+  // Debug: Simple state logging
+  useEffect(() => {
+    console.log('App state changed:', {
+      showGallery: state.showGallery,
+      showTypes: state.showTypes,
+      showContactPage: state.showContactPage,
+      activeGalleryType: state.activeGalleryType,
+      activeGalleryTypeString: state.activeGalleryTypeString,
+    });
+  }, [
+    state.showGallery,
+    state.showTypes,
+    state.showContactPage,
+    state.activeGalleryType,
+  ]);
 
   const iconSpring = useSpring({
     width: isHomeScreen ? '1.8em' : '1.2em',
@@ -228,11 +273,12 @@ function App() {
           dispatch({ type: 'SET_SHOW_INFOGraphic', payload: value })
         }
         showInfographic={state.showInfographic}
+        onClose={handleHideGalleryCallback}
       />
 
       <Types
         showTypes={state.showTypes}
-        onGalleryTypesClick={handleGalleryTypesClickCallback}
+        onGalleryTypesClick={handleHideTypesCallback}
         onMissionButtonClick={handleMissionButtonClickCallback}
         onTypeSelect={handleGalleryButtonClickCallback}
         setActiveGalleryType={(type, typeString) =>
@@ -301,6 +347,7 @@ function App() {
           </div>
         </div>
 
+        {/* Always render Experience but with conditional visibility and performance */}
         <NewCanvas
           isAnimating={state.isAnimating}
           showContactPage={state.showContactPage}

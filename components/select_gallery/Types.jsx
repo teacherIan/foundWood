@@ -20,29 +20,31 @@ const configAnimation = {
 function useTypeSpring(showTypes, index) {
   const [spring, setSpring] = useSpring(() => ({
     opacity: 0,
-    y: 0, // Changed from 'top' to 'y' for translateY
+    y: -100, // Start above screen
     config: configAnimation,
   }));
 
   useEffect(() => {
     if (showTypes && window.innerWidth < window.innerHeight) {
-      // Portrait mobile: animate from top (-100svh) to visible positions
+      // Portrait mobile: animate from above (-100svh) to visible positions
+      const targetY = 10 + (index > 1 ? 52 : 5);
       setSpring.start({
-        y: 100 + 10 + (index > 1 ? 52 : 5), // 100svh to counteract -100svh + positioning
+        y: targetY,
         opacity: 1,
         delay: index * 100,
       });
     } else if (showTypes) {
-      // Landscape: animate from top (-100svh) to visible positions
+      // Landscape: animate from above (-100svh) to visible positions
+      const targetY = index % 2 === 0 ? 12 : index === 1 ? 40 : 28;
       setSpring.start({
-        y: 100 + (index % 2 === 0 ? 12 : index === 1 ? 40 : 28), // 100svh + positioning
+        y: targetY,
         opacity: 1,
         delay: index * 200,
       });
     } else {
-      // Hide: animate back up
+      // Hide: animate back up above screen
       setSpring.start({
-        y: -50,
+        y: -100,
         opacity: 0,
         delay: index * 200,
       });
@@ -54,6 +56,8 @@ function useTypeSpring(showTypes, index) {
 
 export default function Types({
   showTypes,
+  onGalleryTypesClick,
+  onMissionButtonClick,
   onTypeSelect,
   setActiveGalleryType,
   setActiveGalleryTypeString,
@@ -65,7 +69,7 @@ export default function Types({
     structure: 'structure',
     other: 'other',
   };
-  const imgArray = [table, chair, picnicTable, house, light];
+  const imgArray = [chair, table, picnicTable, house];
   const imgHeader = [
     'Coffee Tables <br/> Plant Stands',
     'Chairs <br/> Ottomans',
@@ -95,6 +99,22 @@ export default function Types({
 
   return (
     <>
+      {showTypes && (
+        <div
+          className="typesOverlay"
+          onClick={onGalleryTypesClick}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            zIndex: 1999,
+            cursor: 'pointer',
+          }}
+        />
+      )}
       <animated.div
         style={{
           width:
@@ -102,29 +122,30 @@ export default function Types({
         }}
         className="typesContainer"
       >
-        {springs.map((spring, index) => (
-          <animated.div
-            key={index}
-            style={{
-              position: 'absolute',
-              left:
-                window.innerWidth < window.innerHeight
-                  ? (index % 2) * 50 + 'svw'
-                  : index * 20 + 5 + 'svw',
-              transform: spring.y.to((y) => `translateY(${y}svh)`),
-              opacity: spring.opacity,
-            }}
-          >
-            <Type
-              img={imgArray[index]}
-              header={imgHeader[index]}
-              onTypeSelect={onTypeSelect}
-              index={index}
-              setActiveGalleryType={setActiveGalleryType}
-              setActiveGalleryTypeString={setActiveGalleryTypeString}
-            />
-          </animated.div>
-        ))}
+        {showTypes &&
+          springs.map((spring, index) => (
+            <animated.div
+              key={index}
+              style={{
+                position: 'absolute',
+                left:
+                  window.innerWidth < window.innerHeight
+                    ? (index % 2) * 50 + 'svw'
+                    : index * 20 + 5 + 'svw',
+                transform: spring.y.to((y) => `translateY(${y}svh)`),
+                opacity: spring.opacity,
+              }}
+            >
+              <Type
+                img={imgArray[index]}
+                header={imgHeader[index]}
+                onTypeSelect={onTypeSelect}
+                index={index}
+                setActiveGalleryType={setActiveGalleryType}
+                setActiveGalleryTypeString={setActiveGalleryTypeString}
+              />
+            </animated.div>
+          ))}
       </animated.div>
     </>
   );

@@ -2,6 +2,7 @@ import './gallery.css';
 import imgData from './imgData';
 import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { useSpring, animated, useTransition } from '@react-spring/web';
+import { MdExitToApp } from 'react-icons/md';
 
 const images = imgData;
 
@@ -496,6 +497,7 @@ export default function Gallery({
   setCurrentPhoto,
   setShowInfographic,
   showInfographic,
+  onClose,
 }) {
   const [startY, setStartY] = useState(null);
   const infoRef = useRef(null);
@@ -689,7 +691,11 @@ export default function Gallery({
           setCurrentPhoto(newRightIndex);
           break;
         case 'Escape':
-          // You might want to add a close gallery function here
+          e.preventDefault();
+          console.log('Escape pressed - closing gallery');
+          if (onClose) {
+            onClose();
+          }
           break;
       }
     },
@@ -1204,6 +1210,43 @@ export default function Gallery({
           {currentPhoto} | Browser:{' '}
           {isiOSSafari() ? 'iOS Safari' : isSafari() ? 'Safari' : 'Other'}
         </div>
+      )}
+
+      {/* Exit/Close button */}
+      {onClose && (
+        <button
+          className="exitIcon"
+          onClick={onClose}
+          aria-label="Close gallery"
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            zIndex: 99999,
+            cursor: 'pointer',
+            color: 'white',
+            background: 'rgba(0, 0, 0, 0.5)',
+            border: 'none',
+            borderRadius: '50%',
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '24px',
+            transition: 'all 0.3s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.background = 'rgba(0, 0, 0, 0.8)';
+            e.target.style.transform = 'scale(1.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = 'rgba(0, 0, 0, 0.5)';
+            e.target.style.transform = 'scale(1)';
+          }}
+        >
+          <MdExitToApp />
+        </button>
       )}
 
       {/* Mobile Three-Section Layout: Thumbnails (order: 1) → Photo (order: 2) → Text (order: 3) */}

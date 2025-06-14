@@ -7,6 +7,7 @@ import {
   Preload,
 } from '@react-three/drei';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
+import { useSpring } from '@react-spring/three'; // Import useSpring, removed animated
 import './experienceStyles.css';
 import splat from '../../src/assets/new_experience/full.splat';
 import driftwood from '../../src/assets/fonts/DriftWood-z8W4.ttf';
@@ -41,17 +42,62 @@ function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
   const { camera } = useThree();
   const idleTimeRef = useRef(0);
   const interactionTimeRef = useRef(0);
+  const [manualAlphaTest, setManualAlphaTest] = useState(1);
+
+  // Removed useSpring for alphaTest
+  // const { alphaTest } = useSpring({
+  //   from: { alphaTest: 1 },
+  //   to: { alphaTest: 0.3 },
+  //   config: { duration: 2000 }, // Adjust duration as needed
+  // });
+
+  useEffect(() => {
+    const startTime = Date.now();
+    const duration = 5000; // 5 seconds
+    const startAlpha = 1;
+    const endAlpha = 0.3;
+    let animationFrameId;
+
+    const animateAlpha = () => {
+      const elapsedTime = Date.now() - startTime;
+      if (elapsedTime < duration) {
+        const currentProgress = elapsedTime / duration;
+        setManualAlphaTest(
+          startAlpha - (startAlpha - endAlpha) * currentProgress
+        );
+        animationFrameId = requestAnimationFrame(animateAlpha);
+      } else {
+        setManualAlphaTest(endAlpha);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animateAlpha);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []); // Empty dependency array to run once on mount
 
   // Check if any overlay is active
   const hasOverlay = showContactPage || showTypes || showGallery;
 
+  // Animated opacity for splat brightness/dimming effect
+  const [animatedOpacity, setAnimatedOpacity] = useState(1.0);
+
+  useEffect(() => {
+    const targetOpacity = showGallery ? 0.3 : 1.0; // Dim when gallery is active
+    console.log('Splat opacity changing:', {
+      showGallery,
+      targetOpacity,
+      currentOpacity: animatedOpacity,
+    });
+    setAnimatedOpacity(targetOpacity);
+  }, [showGallery]);
+
   // Enhanced camera animation with interaction awareness
   const animateCamera = useCallback(
     (state, delta) => {
-      // Keep the scene rendering but skip camera animations when overlays are active
-      // This maintains scene visibility while saving processing power on animations
-      if (!isAnimating) return;
-      if (hasOverlay) return; // Skip only camera animations, not rendering
+      // Skip camera movements when overlays are active, but keep frame loop running
 
       idleTimeRef.current += delta;
 
@@ -142,8 +188,8 @@ function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
 
   // Optimized animation frame
   useEffect(() => {
-    if (!isAnimating) return;
-
+    // if (!isAnimating) return;
+    //never stop the animation loop
     let startTime = null;
     let loadProgress = 0;
 
@@ -266,51 +312,54 @@ function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
           setTimeout(() => setUserInteracting(false), 100);
         }}
       >
-        {(isAnimating || hasOverlay) && (
+        {/* Render 3D content - splat stays visible for alpha animation even in gallery mode */}
+        {
           <>
-            <MemoizedText
-              position={deviceConfig.titlePosition}
-              fontSize={deviceConfig.fontSize}
-              delay={0}
-            >
-              DOUG'S
-            </MemoizedText>
-            <MemoizedText
-              position={deviceConfig.foundPosition}
-              fontSize={deviceConfig.fontSize}
-              delay={0.3}
-            >
-              Found
-            </MemoizedText>
-            <MemoizedText
-              position={deviceConfig.woodPosition}
-              fontSize={deviceConfig.fontSize}
-              delay={0.6}
-            >
-              Wood
-            </MemoizedText>
+            {/* Only show text when NOT in gallery mode */}
+            {!showGallery && (
+              <>
+                <MemoizedText
+                  position={deviceConfig.titlePosition}
+                  fontSize={deviceConfig.fontSize}
+                  delay={0}
+                >
+                  DOUG'S
+                </MemoizedText>
+                <MemoizedText
+                  position={deviceConfig.foundPosition}
+                  fontSize={deviceConfig.fontSize}
+                  delay={0.3}
+                >
+                  Found
+                </MemoizedText>
+                <MemoizedText
+                  position={deviceConfig.woodPosition}
+                  fontSize={deviceConfig.fontSize}
+                  delay={0.6}
+                >
+                  Wood
+                </MemoizedText>
+              </>
+            )}
 
-            {/* Enhanced Splat with better rendering */}
-            <mesh
+            {/* Enhanced Splat with animated opacity for dimming */}
+            <mesh // Use mesh (was animated.mesh)
               position={deviceConfig.splatConfig.position}
               scale={deviceConfig.splatConfig.scale}
             >
-              <Splat
-                alphaTest={0.4}
-                alphaHashing={true}
+              <Splat // Use Splat (was animated.Splat) and apply the manualAlphaTest
+                alphaTest={manualAlphaTest} // Use manualAlphaTest
                 chunkSize={0.01}
                 src={splat}
                 splatSize={deviceConfig.splatConfig.size}
-                // toneMapped={true}
               />
             </mesh>
           </>
-        )}
+        }
       </PresentationControls>
 
-      {/* Post-processing effects removed for better performance and simplicity */}
-      {/* Preload assets for better performance */}
-      {/* <Preload all /> */}
+      {/* Splats don't respond to lighting - keeping scene minimal and clean */}
+      {/* do not preload splat for interesting effect */}
     </>
   );
 }
@@ -334,6 +383,20 @@ export default function App({
   showTypes,
   showGallery,
 }) {
+  // Debug logging to check prop values
+  useEffect(() => {
+    console.log('Canvas props changed:', {
+      showGallery,
+      showTypes,
+      showContactPage,
+    });
+    console.log('Frame loop mode:', 'always');
+    console.log(
+      'Camera animations active:',
+      !showTypes && !showGallery && isAnimating
+    );
+  }, [showGallery, showTypes, showContactPage, isAnimating]);
+
   // Adaptive performance settings based on device capability
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const isMobile = windowWidth < 480;
@@ -373,45 +436,44 @@ export default function App({
   }, []);
 
   return (
-    <Canvas
-      camera={{
-        position: [0, 0.8, 3.5],
-        fov: 60,
-        near: 0.1,
-        far: 100,
-      }}
-      dpr={performanceConfig.dpr}
-      performance={performanceConfig.performance}
-      style={{
-        background: showGallery ? '#f5f5f5' : 'transparent',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: showTypes || showGallery || showContactPage ? 1 : 10,
-        opacity: showGallery ? 0 : 1,
-        transition: 'opacity 0.5s ease-in-out, background-color 0.5s ease-in-out',
-      }}
-      gl={{
-        powerPreference: isMobile ? 'default' : 'high-performance',
-        antialias: performanceConfig.antialias,
-        depth: true,
-        stencil: !isMobile,
-        alpha: true,
-        premultipliedAlpha: true,
-        preserveDrawingBuffer: false,
-        outputColorSpace: 'srgb',
-        clearColor: showGallery ? [0.96, 0.96, 0.96, 1] : [0, 0, 0, 0],
-      }}
-      frameloop={performanceConfig.frameloop}
-    >
-      <Scene
-        showContactPage={showContactPage}
-        showTypes={showTypes}
-        showGallery={showGallery}
-        isAnimating={isAnimating}
-      />
-    </Canvas>
+    <>
+      <Canvas
+        camera={{
+          position: [0, 0.8, 3.5],
+          fov: 60,
+          near: 0.1,
+          far: 100,
+        }}
+        dpr={performanceConfig.dpr}
+        performance={performanceConfig.performance}
+        style={{
+          background: 'transparent',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: showTypes || showGallery || showContactPage ? 1 : 10,
+        }}
+        gl={{
+          powerPreference: isMobile ? 'default' : 'high-performance',
+          antialias: performanceConfig.antialias,
+          depth: true,
+          stencil: !isMobile,
+          alpha: true,
+          premultipliedAlpha: true,
+          preserveDrawingBuffer: false,
+          outputColorSpace: 'srgb',
+        }}
+        frameloop={performanceConfig.frameloop}
+      >
+        <Scene
+          showContactPage={showContactPage}
+          showTypes={showTypes}
+          showGallery={showGallery}
+          isAnimating={isAnimating}
+        />
+      </Canvas>
+    </>
   );
 }
