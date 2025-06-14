@@ -37,13 +37,12 @@
 
 .explanationContent h3 {
     display: block;
-    font-size: calc(2vh + 1.5vw + 15px) !important;
+    font-size: calc(2vh + 1.5vw + 15px);
     margin: 0 0 15px 0;
-    color: white !important;
-    -webkit-text-stroke: 1px #77481c !important;
-    -webkit-text-fill-color: #ffffff !important;
-    filter: drop-shadow(0.5px 0.5px 0.1px #000000dd) !important;
-    font-weight: bold;
+    color: white;
+    -webkit-text-stroke: 1px #77481c;
+    -webkit-text-fill-color: #ffffff;
+    filter: drop-shadow(0.5px 0.5px 0.1px #000000dd);
     font-family: inherit;
 }
 
@@ -73,13 +72,12 @@
 
     .explanationContent h3 {
         display: block;
-        font-size: calc(2vh + 1.5vw + 15px) !important;
+        font-size: calc(2vh + 1.5vw + 15px);
         margin-bottom: 12px;
-        color: white !important;
-        -webkit-text-stroke: 1px #77481c !important;
-        -webkit-text-fill-color: #ffffff !important;
-        filter: drop-shadow(0.5px 0.5px 0.1px #000000dd) !important;
-        font-weight: bold;
+        color: white;
+        -webkit-text-stroke: 1px #77481c;
+        -webkit-text-fill-color: #ffffff;
+        filter: drop-shadow(0.5px 0.5px 0.1px #000000dd);
         font-family: inherit;
     }
 
@@ -93,12 +91,11 @@
     @media (min-width: 1200px) {
         .explanationContent h3 {
             display: block;
-            font-size: calc(2vh + 1.5vw + 15px) !important;
-            color: white !important;
-            -webkit-text-stroke: 1px #77481c !important;
-            -webkit-text-fill-color: #ffffff !important;
-            filter: drop-shadow(0.5px 0.5px 0.1px #000000dd) !important;
-            font-weight: bold;
+            font-size: calc(2vh + 1.5vw + 15px);
+            color: white;
+            -webkit-text-stroke: 1px #77481c;
+            -webkit-text-fill-color: #ffffff;
+            filter: drop-shadow(0.5px 0.5px 0.1px #000000dd);
             font-family: inherit;
         }
 
@@ -121,13 +118,12 @@
 
     .explanationContent h3 {
         display: block;
-        font-size: calc(2vh + 1.5vw + 15px) !important;
+        font-size: calc(2vh + 1.5vw + 15px);
         margin-bottom: 14px;
-        color: white !important;
-        -webkit-text-stroke: 1px #77481c !important;
-        -webkit-text-fill-color: #ffffff !important;
-        filter: drop-shadow(0.5px 0.5px 0.1px #000000dd) !important;
-        font-weight: bold;
+        color: white;
+        -webkit-text-stroke: 1px #77481c;
+        -webkit-text-fill-color: #ffffff;
+        filter: drop-shadow(0.5px 0.5px 0.1px #000000dd);
         font-family: inherit;
     }
 

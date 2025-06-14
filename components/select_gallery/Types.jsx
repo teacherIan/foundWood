@@ -55,25 +55,26 @@ function useTypeSpring(showTypes, index) {
         delay: 200 + index * 120,
       });
     } else if (showTypes) {
-      // Landscape: Maximize space usage with content-aware positioning
+      // Desktop: Clean Asymmetric Layout
+      // Elegant positioning that creates visual interest without chaos
       let targetY, targetX;
 
       if (index === 0) {
-        // Coffee Tables - longer text, place with ample space
-        targetY = 6;
-        targetX = 8; // Top left corner
+        // Coffee Tables - Top left with space for 2-line text
+        targetY = 10;
+        targetX = 8;
       } else if (index === 1) {
-        // Chairs - medium text, wide image
-        targetY = 8;
-        targetX = 72; // Top right corner
+        // Chairs - Top right with adequate spacing
+        targetY = 10;
+        targetX = 70;
       } else if (index === 2) {
-        // Tables - short text, compact
-        targetY = 62;
-        targetX = 6; // Bottom left corner
+        // Tables - Bottom left, compact placement
+        targetY = 60;
+        targetX = 8;
       } else {
-        // Structures - short text, tall image (house) - move higher to prevent cutoff
-        targetY = 52;
-        targetX = 74; // Bottom right corner, moved higher
+        // Structures - Bottom right, raised to prevent tall image cutoff
+        targetY = 48;
+        targetX = 70;
       }
 
       setSpring.start({
@@ -189,13 +190,13 @@ export default function Types({
           className="explanationText"
           style={{
             position: 'absolute',
-            left: '50svw',
-            top: window.innerWidth < window.innerHeight ? '72svh' : '33svh',
+            left: window.innerWidth < window.innerHeight ? '50svw' : '50svw',
+            top: window.innerWidth < window.innerHeight ? '72svh' : '32svh',
             transform: `translateX(-50%) ${explanationSpring.y.to(
               (y) => `translateY(${y}svh)`
             )}`,
             opacity: explanationSpring.opacity,
-            width: window.innerWidth < window.innerHeight ? '75svw' : '26svw',
+            width: window.innerWidth < window.innerHeight ? '75svw' : '30svw',
             textAlign: 'center',
             zIndex: 1000,
           }}

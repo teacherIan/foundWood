@@ -24,28 +24,29 @@
 /* Size variations based on content */
 @media (orientation: landscape) {
     .typeContainer {
-        width: 22svw;
-        min-width: 250px;
-        max-width: 400px;
+        width: 20svw;
+        min-width: 200px;
+        max-width: 300px;
     }
 
     /* Larger sizes for desktop screens */
     @media (min-width: 1200px) {
         .typeContainer {
-            width: 25svw;
-            min-width: 300px;
-            max-width: 450px;
+            width: 22svw;
+            min-width: 250px;
+            max-width: 350px;
         }
     }
 
     @media (min-width: 1600px) {
         .typeContainer {
-            width: 28svw;
-            min-width: 350px;
-            max-width: 500px;
+            width: 24svw;
+            min-width: 280px;
+            max-width: 400px;
         }
     }
 }
+
 
 @media (orientation: portrait) {
     .typeContainer {

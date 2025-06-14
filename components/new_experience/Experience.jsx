@@ -89,13 +89,17 @@ const SplatWithErrorHandling = memo(
 );
 
 // Simple and reliable loading detector with error handling
-function ProgressChecker({ onSplatLoaded }) {
+// Now waits for images to be loaded before signaling splat loaded
+function ProgressChecker({ onSplatLoaded, imagesLoaded }) {
   const hasCalledRef = useRef(false);
 
   useEffect(() => {
-    if (!hasCalledRef.current && onSplatLoaded) {
+    // Only call splat loaded callback after images are loaded
+    if (!hasCalledRef.current && onSplatLoaded && imagesLoaded) {
       hasCalledRef.current = true;
-      console.log('✅ ProgressChecker: Calling splat loaded callback');
+      console.log(
+        '✅ ProgressChecker: Images loaded, now calling splat loaded callback'
+      );
       // Use a small delay to ensure Canvas is stable
       const timer = setTimeout(() => {
         try {
@@ -106,8 +110,12 @@ function ProgressChecker({ onSplatLoaded }) {
       }, 800); // 800ms - reasonable delay for splat loading
 
       return () => clearTimeout(timer);
+    } else if (!imagesLoaded) {
+      console.log(
+        '⏳ ProgressChecker: Waiting for images to load before signaling splat loaded'
+      );
     }
-  }, [onSplatLoaded]);
+  }, [onSplatLoaded, imagesLoaded]);
 
   return null; // No visual elements to prevent context issues
 }
@@ -118,6 +126,7 @@ function Scene({
   showTypes,
   showGallery,
   onSplatLoaded,
+  imagesLoaded,
 }) {
   const [targetX, setTargetX] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -505,7 +514,10 @@ function Scene({
       {/* Splats don't respond to lighting - keeping scene minimal and clean */}
       {/* Preload splat for loading screen integration */}
       <Preload all />
-      <ProgressChecker onSplatLoaded={onSplatLoaded} />
+      <ProgressChecker
+        onSplatLoaded={onSplatLoaded}
+        imagesLoaded={imagesLoaded}
+      />
     </>
   );
 }
@@ -529,6 +541,7 @@ export default function App({
   showTypes,
   showGallery,
   onSplatLoaded,
+  imagesLoaded,
 }) {
   // Debug logging to check prop values
   useEffect(() => {
@@ -536,10 +549,18 @@ export default function App({
       showGallery,
       showTypes,
       showContactPage,
+      imagesLoaded,
       onSplatLoaded: !!onSplatLoaded,
       onSplatLoadedType: typeof onSplatLoaded,
     });
-  }, [showGallery, showTypes, showContactPage, isAnimating, onSplatLoaded]);
+  }, [
+    showGallery,
+    showTypes,
+    showContactPage,
+    isAnimating,
+    onSplatLoaded,
+    imagesLoaded,
+  ]);
 
   // Adaptive performance settings based on device capability
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -633,6 +654,7 @@ export default function App({
           showGallery={showGallery}
           isAnimating={isAnimating}
           onSplatLoaded={onSplatLoaded}
+          imagesLoaded={imagesLoaded}
         />
       </Canvas>
     </>

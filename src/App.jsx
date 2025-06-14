@@ -207,6 +207,7 @@ function App() {
       console.log(
         '🎯 Startup image preloading completed, marking images as loaded'
       );
+      console.log('📷 STEP 2 COMPLETE: All gallery images preloaded');
       dispatch({ type: 'SET_IMAGES_LOADED' });
     }
   }, [
@@ -218,6 +219,7 @@ function App() {
   ]);
 
   // Mark initial load as complete when all assets are loaded
+  // Loading order: Fonts → Images → Splat (triggered after images) → Initial Load Complete
   useEffect(() => {
     if (
       !state.initialLoadComplete &&
@@ -227,6 +229,9 @@ function App() {
     ) {
       console.log(
         '🎉 All initial assets loaded! Marking initial load as complete.'
+      );
+      console.log(
+        '📋 Final loading order achieved: Fonts ✅ → Images ✅ → Splat ✅ → Complete ✅'
       );
       dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
     }
@@ -277,6 +282,7 @@ function App() {
     Promise.all(fonts.map((font) => font.load()))
       .then(() => {
         console.log('✅ All fonts loaded successfully');
+        console.log('🎨 STEP 1 COMPLETE: Fonts loaded');
         dispatch({ type: 'SET_FONTS_LOADED' });
       })
       .catch((error) => {
@@ -288,6 +294,7 @@ function App() {
 
   const handleSplatLoadedCallback = useCallback(() => {
     console.log('🎯 Splat loaded callback triggered in App.jsx');
+    console.log('🎬 STEP 3 COMPLETE: Splat (3D scene) loaded after images');
     console.log('Current state before splat loaded:', {
       fontsLoaded: state.fontsLoaded,
       splatLoaded: state.splatLoaded,
@@ -505,6 +512,7 @@ function App() {
             showTypes={state.showTypes}
             showGallery={state.showGallery}
             onSplatLoaded={handleSplatLoadedCallback}
+            imagesLoaded={state.imagesLoaded}
           />
         </div>
       </div>
@@ -515,8 +523,8 @@ function App() {
           <div className="loading-spinner" aria-label="Loading spinner"></div>
           <div role="status" aria-live="polite">
             Loading{!state.fontsLoaded ? ' fonts' : ''}
-            {!state.splatLoaded ? ' assets' : ''}
-            {!state.imagesLoaded ? ' images' : ''}...
+            {!state.imagesLoaded && state.fontsLoaded ? ' images' : ''}
+            {!state.splatLoaded && state.imagesLoaded ? ' 3D scene' : ''}...
             {!state.imagesLoaded && preloadingState.progress.total > 0 && (
               <>
                 <br />
@@ -529,13 +537,14 @@ function App() {
             )}
             <br />
             <small>
-              Fonts: {state.fontsLoaded ? '✅' : '❌'} | Splat:{' '}
-              {state.splatLoaded ? '✅' : '❌'} | Images:{' '}
+              Step 1 - Fonts: {state.fontsLoaded ? '✅' : '❌'} | Step 2 -
+              Images:{' '}
               {state.imagesLoaded
                 ? '✅'
                 : !state.imagesLoaded && preloadingState.progress.total > 0
                 ? `${Math.round(preloadingState.progress.percentage)}%`
-                : '❌'}
+                : '❌'}{' '}
+              | Step 3 - 3D Scene: {state.splatLoaded ? '✅' : '❌'}
             </small>
           </div>
         </div>
