@@ -535,7 +535,11 @@ export default function Gallery({
 
   const [imageSpring, imageApi] = useSpring(() => ({
     transform: 'translate(0%, 0%) scale(1)',
-    config: { tension: 170, friction: 26 },
+    config: {
+      tension: 200, // Increased tension for snappier response
+      friction: 25, // Slightly reduced friction for smoother movement
+      mass: 0.8, // Reduced mass for lighter, more responsive feel
+    },
   }));
 
   // Update aspect ratio when image loads
@@ -841,7 +845,11 @@ export default function Gallery({
       // Use React Spring API directly for smooth, deliberate panning
       imageApi.start({
         transform: `translate(${translateX}%, ${translateY}%) scale(1.15)`,
-        config: { tension: 120, friction: 30 }, // Slower, more deliberate movement
+        config: {
+          tension: 180, // More responsive than before
+          friction: 28, // Balanced friction
+          mass: 0.7, // Light mass for immediate response
+        },
       });
     },
     [isHovering, imageApi]
@@ -859,7 +867,11 @@ export default function Gallery({
     // Use React Spring API directly for smooth return to center
     imageApi.start({
       transform: 'translate(0%, 0%) scale(1)',
-      config: { tension: 170, friction: 26 }, // Slightly faster return animation
+      config: {
+        tension: 220, // Fast return to center
+        friction: 24, // Smooth but quick
+        mass: 0.8, // Light mass
+      },
     });
   }, [imageApi]);
 
@@ -869,7 +881,11 @@ export default function Gallery({
       // Start with initial scale-up, position will be handled by mouse move
       imageApi.start({
         transform: 'translate(0%, 0%) scale(1.15)',
-        config: { tension: 170, friction: 26 },
+        config: {
+          tension: 200, // Quick scale-up
+          friction: 25, // Smooth scaling
+          mass: 0.8, // Light mass
+        },
       });
     }
     // Mouse leave handler already takes care of the exit animation

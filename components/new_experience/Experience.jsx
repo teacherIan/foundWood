@@ -153,7 +153,12 @@ function Scene({
   // Enhanced camera animation with interaction awareness
   const animateCamera = useCallback(
     (state, delta) => {
-      // Skip camera movements when overlays are active, but keep frame loop running
+      // Skip camera movements when gallery is active but keep minimal frame updates
+      if (showGallery) {
+        // Minimal camera update to keep scene responsive without expensive animations
+        camera.updateProjectionMatrix();
+        return;
+      }
 
       idleTimeRef.current += delta;
 
@@ -192,7 +197,7 @@ function Scene({
 
       camera.updateProjectionMatrix();
     },
-    [camera, isAnimating, userInteracting, hasOverlay]
+    [camera, isAnimating, userInteracting, hasOverlay, showGallery]
   );
 
   useFrame(animateCamera);
@@ -459,31 +464,46 @@ export default function App({
   const isTablet = windowWidth >= 480 && windowWidth < 1300;
   const isHighDPI = window.devicePixelRatio > 1.5;
 
-  // Performance settings based on device
+  // Performance settings based on device and gallery state
   const performanceConfig = useMemo(() => {
+    // Reduce performance when gallery is active to free up resources for smooth panning
+    const isGalleryActive = showGallery;
+
     if (isMobile) {
       return {
         dpr: [1, 1.5],
-        performance: { min: 0.3, max: 0.8, debounce: 300 },
+        performance: {
+          min: 0.3,
+          max: isGalleryActive ? 0.4 : 0.8,
+          debounce: 300,
+        },
         antialias: false,
-        frameloop: 'always',
+        frameloop: 'always', // Keep render loop active for React Spring
       };
     } else if (isTablet) {
       return {
         dpr: [1, 2],
-        performance: { min: 0.4, max: 0.9, debounce: 250 },
+        performance: {
+          min: 0.4,
+          max: isGalleryActive ? 0.5 : 0.9,
+          debounce: 250,
+        },
         antialias: true,
-        frameloop: 'always',
+        frameloop: 'always', // Keep render loop active for React Spring
       };
     } else {
       return {
         dpr: [1, 2],
-        performance: { min: 0.5, max: 1, debounce: 200 },
+        performance: {
+          min: 0.5,
+          max: isGalleryActive ? 0.6 : 1,
+          debounce: 200,
+        },
         antialias: true,
-        frameloop: 'always',
+        frameloop: 'always', // Keep render loop active for React Spring
       };
     }
-  }, [isMobile, isTablet]);
+  }, [isMobile, isTablet, showGallery]);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
