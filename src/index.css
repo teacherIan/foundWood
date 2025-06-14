@@ -190,18 +190,21 @@ body {
 
 /* Loading text styling */
 .font-loading-screen>div:last-child {
-    display: block !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
     text-align: center !important;
     font-weight: 500 !important;
     letter-spacing: 0.5px !important;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 0 20px !important;
     line-height: 1.2 !important;
+    width: 100% !important;
+    max-width: 500px !important;
     /* Enhanced centering */
     align-self: center !important;
     justify-self: center !important;
-    width: 100% !important;
-    /* Ensure full width for text centering */
     font-size: inherit !important;
     /* Inherit from parent */
     color: inherit !important;

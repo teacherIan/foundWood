@@ -7,7 +7,7 @@ import {
   Preload,
 } from '@react-three/drei';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
-import { useSpring } from '@react-spring/three'; // Import useSpring, removed animated
+import { useSpring, animated } from '@react-spring/three'; // Import useSpring and animated
 import './experienceStyles.css';
 import splat from '../../src/assets/new_experience/full.splat';
 import splatFallback from '../../src/assets/new_experience/my_splat.splat';
@@ -15,7 +15,61 @@ import driftwood from '../../src/assets/fonts/DriftWood-z8W4.ttf';
 
 // Removed post-processing effects for better performance and simplified visuals
 
-// Simple Text component with basic material that doesn't require lighting
+// Animated Text component with upward animation support
+const AnimatedText = memo(
+  ({
+    position,
+    children,
+    fontSize,
+    delay = 0,
+    initialLoadComplete,
+    alphaAnimationComplete,
+    deviceConfig,
+  }) => {
+    // Calculate grass level based on device type - text should start from below the grass
+    const grassLevel = deviceConfig.isMobile
+      ? -1.5
+      : deviceConfig.isTablet
+      ? -1.2
+      : -1.0;
+    const startPosition = [position[0], grassLevel, position[2]];
+
+    // Text animation should start only after both loading is complete AND alpha animation is done
+    const shouldAnimateText = initialLoadComplete && alphaAnimationComplete;
+
+    const { animatedPosition } = useSpring({
+      animatedPosition: shouldAnimateText ? position : startPosition,
+      config: {
+        mass: 3,
+        tension: 180,
+        friction: 35,
+        precision: 0.001,
+      },
+      delay: shouldAnimateText ? delay * 1000 : 0, // Convert delay to milliseconds
+    });
+
+    return (
+      <animated.group position={animatedPosition}>
+        <Text
+          color="#ffffff"
+          anchorX="center"
+          anchorY="middle"
+          font={driftwood}
+          fontSize={fontSize}
+          letterSpacing={0.03}
+          textAlign="center"
+          maxWidth={200}
+          lineHeight={1.2}
+        >
+          <meshBasicMaterial color="#ffffff" />
+          {children}
+        </Text>
+      </animated.group>
+    );
+  }
+);
+
+// Simple Text component with basic material that doesn't require lighting (keeping for fallback)
 const MemoizedText = memo(({ position, children, fontSize, delay = 0 }) => (
   <Text
     position={position}
@@ -127,6 +181,7 @@ function Scene({
   showGallery,
   onSplatLoaded,
   imagesLoaded,
+  initialLoadComplete,
 }) {
   const [targetX, setTargetX] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -139,6 +194,7 @@ function Scene({
   const alphaAnimationRequestRef = useRef(null); // Ref to store animation frame request
   const isInitialMountRef = useRef(true); // Ref to track initial mount
   const [sceneError, setSceneError] = useState(null);
+  const [alphaAnimationComplete, setAlphaAnimationComplete] = useState(false); // Track alpha animation completion
 
   // Error boundary for scene rendering
   useEffect(() => {
@@ -177,6 +233,17 @@ function Scene({
     let duration;
 
     if (isInitialMountRef.current) {
+      // Don't start initial animation until loading is complete
+      if (!initialLoadComplete) {
+        console.log(
+          '⏳ Waiting for loading to complete before starting initial animation'
+        );
+        return;
+      }
+
+      console.log(
+        '🎬 Starting initial splat fade-in animation (loading complete)'
+      );
       targetAlpha = 0.3;
       duration = 5000; // 5 seconds for initial animation
       isInitialMountRef.current = false; // Mark initial animation as handled
@@ -209,6 +276,13 @@ function Scene({
         alphaAnimationRequestRef.current = requestAnimationFrame(animateAlpha);
       } else {
         alphaAnimationRequestRef.current = null; // Clear ref when animation completes
+        // Mark alpha animation as complete for initial animation only
+        if (isInitialMountRef.current === false && !alphaAnimationComplete) {
+          console.log(
+            '✨ Alpha animation completed, text animation can now start'
+          );
+          setAlphaAnimationComplete(true);
+        }
       }
     };
 
@@ -221,7 +295,7 @@ function Scene({
         alphaAnimationRequestRef.current = null;
       }
     };
-  }, [hasOverlay]); // Re-run this effect when any overlay state changes
+  }, [hasOverlay, initialLoadComplete]); // Re-run this effect when overlay state OR loading state changes
 
   // Animated opacity for splat brightness/dimming effect
   const [animatedOpacity, setAnimatedOpacity] = useState(1.0);
@@ -471,27 +545,36 @@ function Scene({
               {/* Only show text when NO overlays are active */}
               {!hasOverlay && (
                 <>
-                  <MemoizedText
+                  <AnimatedText
                     position={deviceConfig.titlePosition}
                     fontSize={deviceConfig.fontSize}
-                    delay={0}
+                    delay={0.2}
+                    initialLoadComplete={initialLoadComplete}
+                    alphaAnimationComplete={alphaAnimationComplete}
+                    deviceConfig={deviceConfig}
                   >
                     DOUG'S
-                  </MemoizedText>
-                  <MemoizedText
+                  </AnimatedText>
+                  <AnimatedText
                     position={deviceConfig.foundPosition}
                     fontSize={deviceConfig.fontSize}
-                    delay={0.3}
+                    delay={0.5}
+                    initialLoadComplete={initialLoadComplete}
+                    alphaAnimationComplete={alphaAnimationComplete}
+                    deviceConfig={deviceConfig}
                   >
                     Found
-                  </MemoizedText>
-                  <MemoizedText
+                  </AnimatedText>
+                  <AnimatedText
                     position={deviceConfig.woodPosition}
                     fontSize={deviceConfig.fontSize}
-                    delay={0.6}
+                    delay={0.8}
+                    initialLoadComplete={initialLoadComplete}
+                    alphaAnimationComplete={alphaAnimationComplete}
+                    deviceConfig={deviceConfig}
                   >
                     Wood
-                  </MemoizedText>
+                  </AnimatedText>
                 </>
               )}
 
@@ -542,6 +625,7 @@ export default function App({
   showGallery,
   onSplatLoaded,
   imagesLoaded,
+  initialLoadComplete,
 }) {
   // Debug logging to check prop values
   useEffect(() => {
@@ -550,6 +634,7 @@ export default function App({
       showTypes,
       showContactPage,
       imagesLoaded,
+      initialLoadComplete,
       onSplatLoaded: !!onSplatLoaded,
       onSplatLoadedType: typeof onSplatLoaded,
     });
@@ -560,6 +645,7 @@ export default function App({
     isAnimating,
     onSplatLoaded,
     imagesLoaded,
+    initialLoadComplete,
   ]);
 
   // Adaptive performance settings based on device capability
@@ -655,6 +741,7 @@ export default function App({
           isAnimating={isAnimating}
           onSplatLoaded={onSplatLoaded}
           imagesLoaded={imagesLoaded}
+          initialLoadComplete={initialLoadComplete}
         />
       </Canvas>
     </>

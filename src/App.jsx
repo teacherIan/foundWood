@@ -48,6 +48,24 @@ const AnimatedMenuItem = memo(({ children, onClick, isLogo = false }) => {
   );
 });
 
+// Collection of inspirational sayings for the loading screen
+const loadingSayings = [
+  'Good things come to those who wait',
+  'Crafting something beautiful takes time',
+  "Nature doesn't hurry, yet everything is accomplished",
+  'The best wood comes from the oldest trees',
+  'Patience is the companion of wisdom',
+  'Every masterpiece begins with a single cut',
+  'Quality is never an accident',
+  'Great things are done by a series of small things',
+  'The forest teaches us to grow slowly and strong',
+  'Handcrafted with love and time',
+  'Each piece of wood tells its own story',
+  'True craftsmanship cannot be rushed',
+  'From fallen trees, beautiful furniture rises',
+  "The grain reveals nature's hidden patterns",
+];
+
 // State reducer for better state management
 const initialState = {
   fontsLoaded: false,
@@ -173,6 +191,10 @@ function reducer(state, action) {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  // State for rotating inspirational sayings during loading
+  const [currentSayingIndex, setCurrentSayingIndex] = useState(0);
+  const [sayingOpacity, setSayingOpacity] = useState(1);
 
   // Initialize image preloader to start loading images at startup
   const {
@@ -364,7 +386,7 @@ function App() {
       clamp: false, // Prevents animation from stopping abruptly
       velocity: 0.01, // Ensures smooth animation in both directions
     },
-    immediate: false,
+    immediate: !state.initialLoadComplete, // Only animate after loading is complete
   });
 
   // Loading screen should ONLY appear during initial website startup
@@ -385,6 +407,26 @@ function App() {
     shouldShowLoading: shouldShowLoading,
   });
   console.log('🎯 Final loading decision:', shouldShowLoading);
+
+  // Rotate inspirational sayings during loading
+  useEffect(() => {
+    if (!shouldShowLoading) return; // Only rotate during loading
+
+    const interval = setInterval(() => {
+      // Fade out current saying
+      setSayingOpacity(0);
+
+      // After fade out, change saying and fade in
+      setTimeout(() => {
+        setCurrentSayingIndex(
+          (prevIndex) => (prevIndex + 1) % loadingSayings.length
+        );
+        setSayingOpacity(1);
+      }, 300); // Half second for fade transition
+    }, 3500); // Change saying every 3.5 seconds (including transition time)
+
+    return () => clearInterval(interval);
+  }, [shouldShowLoading]);
 
   return (
     <>
@@ -513,6 +555,7 @@ function App() {
             showGallery={state.showGallery}
             onSplatLoaded={handleSplatLoadedCallback}
             imagesLoaded={state.imagesLoaded}
+            initialLoadComplete={state.initialLoadComplete}
           />
         </div>
       </div>
@@ -521,31 +564,61 @@ function App() {
       {shouldShowLoading && (
         <div className="font-loading-screen">
           <div className="loading-spinner" aria-label="Loading spinner"></div>
-          <div role="status" aria-live="polite">
-            Loading{!state.fontsLoaded ? ' fonts' : ''}
-            {!state.imagesLoaded && state.fontsLoaded ? ' images' : ''}
-            {!state.splatLoaded && state.imagesLoaded ? ' 3D scene' : ''}...
+          <div
+            role="status"
+            aria-live="polite"
+            style={{
+              textAlign: 'center',
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+              Loading{!state.fontsLoaded ? ' fonts' : ''}
+              {!state.imagesLoaded && state.fontsLoaded ? ' images' : ''}
+              {!state.splatLoaded && state.imagesLoaded ? ' 3D scene' : ''}...
+            </div>
             {!state.imagesLoaded && preloadingState.progress.total > 0 && (
-              <>
-                <br />
+              <div style={{ textAlign: 'center', marginBottom: '10px' }}>
                 <span>
                   {preloadingState.progress.loaded} of{' '}
                   {preloadingState.progress.total} images (
                   {Math.round(preloadingState.progress.percentage)}%)
                 </span>
-              </>
+              </div>
             )}
-            <br />
-            <small>
-              Step 1 - Fonts: {state.fontsLoaded ? '✅' : '❌'} | Step 2 -
-              Images:{' '}
-              {state.imagesLoaded
-                ? '✅'
-                : !state.imagesLoaded && preloadingState.progress.total > 0
-                ? `${Math.round(preloadingState.progress.percentage)}%`
-                : '❌'}{' '}
-              | Step 3 - 3D Scene: {state.splatLoaded ? '✅' : '❌'}
-            </small>
+            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+              <small>
+                Step 1 - Fonts: {state.fontsLoaded ? '✅' : '❌'} | Step 2 -
+                Images:{' '}
+                {state.imagesLoaded
+                  ? '✅'
+                  : !state.imagesLoaded && preloadingState.progress.total > 0
+                  ? `${Math.round(preloadingState.progress.percentage)}%`
+                  : '❌'}{' '}
+                | Step 3 - 3D Scene: {state.splatLoaded ? '✅' : '❌'}
+              </small>
+            </div>
+            <div
+              style={{
+                fontStyle: 'italic',
+                fontSize: '1.1rem',
+                color: '#8b5a2b',
+                maxWidth: '350px',
+                textAlign: 'center',
+                lineHeight: '1.4',
+                fontWeight: '500',
+                opacity: sayingOpacity,
+                transition: 'opacity 0.3s ease-in-out',
+                margin: '0 auto',
+                padding: '0 20px',
+              }}
+            >
+              "{loadingSayings[currentSayingIndex]}"
+            </div>
           </div>
         </div>
       )}
