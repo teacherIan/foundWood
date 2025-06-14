@@ -10,6 +10,7 @@ import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { useSpring } from '@react-spring/three'; // Import useSpring, removed animated
 import './experienceStyles.css';
 import splat from '../../src/assets/new_experience/full.splat';
+import splatFallback from '../../src/assets/new_experience/my_splat.splat';
 import driftwood from '../../src/assets/fonts/DriftWood-z8W4.ttf';
 
 // Removed post-processing effects for better performance and simplified visuals
@@ -33,7 +34,61 @@ const MemoizedText = memo(({ position, children, fontSize, delay = 0 }) => (
   </Text>
 ));
 
-// Simple and reliable loading detector
+// Enhanced Splat component with error handling and fallback
+const SplatWithErrorHandling = memo(
+  ({ alphaTest, chunkSize, splatSize, ...props }) => {
+    const [splatSource, setSplatSource] = useState(splat);
+    const [hasError, setHasError] = useState(false);
+
+    useEffect(() => {
+      console.log('🎯 SplatWithErrorHandling: Attempting to load splat file');
+    }, []);
+
+    const handleError = useCallback(
+      (error) => {
+        console.error('❌ Splat loading error:', error);
+        if (splatSource === splat && !hasError) {
+          console.log('🔄 Trying fallback splat file...');
+          setSplatSource(splatFallback);
+          setHasError(false);
+        } else {
+          console.error('❌ Both splat files failed to load');
+          setHasError(true);
+        }
+      },
+      [splatSource, hasError]
+    );
+
+    if (hasError) {
+      console.log('⚠️ Splat failed to load, rendering placeholder');
+      return (
+        <mesh>
+          <boxGeometry args={[2, 2, 2]} />
+          <meshBasicMaterial color="#77481c" transparent opacity={0.3} />
+        </mesh>
+      );
+    }
+
+    try {
+      return (
+        <Splat
+          alphaTest={alphaTest}
+          chunkSize={chunkSize}
+          src={splatSource}
+          splatSize={splatSize}
+          onError={handleError}
+          {...props}
+        />
+      );
+    } catch (error) {
+      console.error('❌ Splat render error:', error);
+      handleError(error);
+      return null;
+    }
+  }
+);
+
+// Simple and reliable loading detector with error handling
 function ProgressChecker({ onSplatLoaded }) {
   const hasCalledRef = useRef(false);
 
@@ -43,7 +98,11 @@ function ProgressChecker({ onSplatLoaded }) {
       console.log('✅ ProgressChecker: Calling splat loaded callback');
       // Use a small delay to ensure Canvas is stable
       const timer = setTimeout(() => {
-        onSplatLoaded();
+        try {
+          onSplatLoaded();
+        } catch (error) {
+          console.error('❌ Error in splat loaded callback:', error);
+        }
       }, 800); // 800ms - reasonable delay for splat loading
 
       return () => clearTimeout(timer);
@@ -70,10 +129,28 @@ function Scene({
   const [manualAlphaTest, setManualAlphaTest] = useState(1);
   const alphaAnimationRequestRef = useRef(null); // Ref to store animation frame request
   const isInitialMountRef = useRef(true); // Ref to track initial mount
+  const [sceneError, setSceneError] = useState(null);
 
-  // Scene component mounted - simple notification
+  // Error boundary for scene rendering
+  useEffect(() => {
+    const handleError = (event) => {
+      console.error('❌ Scene error caught:', event.error);
+      setSceneError(event.error);
+    };
+
+    window.addEventListener('error', handleError);
+    return () => window.removeEventListener('error', handleError);
+  }, []);
+
+  // Scene component mounted - simple notification with debugging
   useEffect(() => {
     console.log('🚀 Scene component mounted and ready');
+    console.log('🎯 Splat file info:', {
+      primarySplat: splat,
+      fallbackSplat: splatFallback,
+      splatType: typeof splat,
+      fallbackType: typeof splatFallback,
+    });
   }, []);
 
   // Check if any overlay is active - must be defined before useEffect
@@ -358,66 +435,72 @@ function Scene({
 
   return (
     <>
-      <PresentationControls
-        makeDefault
-        enabled={!hasOverlay}
-        global
-        snap
-        rotation={[0, 0, 0]}
-        polar={[-Math.PI / 3, Math.PI / 3]}
-        azimuth={[-Math.PI / 3, Math.PI / 3]}
-        config={presentationConfig}
-        onStart={() => setUserInteracting(true)}
-        onEnd={() => {
-          // Reset after a delay to allow for smooth transition
-          setTimeout(() => setUserInteracting(false), 100);
-        }}
-      >
-        {/* Render 3D content - splat stays visible for alpha animation even in gallery mode */}
-        {
-          <>
-            {/* Only show text when NO overlays are active */}
-            {!hasOverlay && (
-              <>
-                <MemoizedText
-                  position={deviceConfig.titlePosition}
-                  fontSize={deviceConfig.fontSize}
-                  delay={0}
-                >
-                  DOUG'S
-                </MemoizedText>
-                <MemoizedText
-                  position={deviceConfig.foundPosition}
-                  fontSize={deviceConfig.fontSize}
-                  delay={0.3}
-                >
-                  Found
-                </MemoizedText>
-                <MemoizedText
-                  position={deviceConfig.woodPosition}
-                  fontSize={deviceConfig.fontSize}
-                  delay={0.6}
-                >
-                  Wood
-                </MemoizedText>
-              </>
-            )}
+      {sceneError ? (
+        <mesh position={[0, 0, 0]}>
+          <boxGeometry args={[4, 2, 0.1]} />
+          <meshBasicMaterial color="#ff6b6b" transparent opacity={0.8} />
+        </mesh>
+      ) : (
+        <PresentationControls
+          makeDefault
+          enabled={!hasOverlay}
+          global
+          snap
+          rotation={[0, 0, 0]}
+          polar={[-Math.PI / 3, Math.PI / 3]}
+          azimuth={[-Math.PI / 3, Math.PI / 3]}
+          config={presentationConfig}
+          onStart={() => setUserInteracting(true)}
+          onEnd={() => {
+            // Reset after a delay to allow for smooth transition
+            setTimeout(() => setUserInteracting(false), 100);
+          }}
+        >
+          {/* Render 3D content - splat stays visible for alpha animation even in gallery mode */}
+          {
+            <>
+              {/* Only show text when NO overlays are active */}
+              {!hasOverlay && (
+                <>
+                  <MemoizedText
+                    position={deviceConfig.titlePosition}
+                    fontSize={deviceConfig.fontSize}
+                    delay={0}
+                  >
+                    DOUG'S
+                  </MemoizedText>
+                  <MemoizedText
+                    position={deviceConfig.foundPosition}
+                    fontSize={deviceConfig.fontSize}
+                    delay={0.3}
+                  >
+                    Found
+                  </MemoizedText>
+                  <MemoizedText
+                    position={deviceConfig.woodPosition}
+                    fontSize={deviceConfig.fontSize}
+                    delay={0.6}
+                  >
+                    Wood
+                  </MemoizedText>
+                </>
+              )}
 
-            {/* Enhanced Splat with animated opacity for dimming */}
-            <mesh // Use mesh (was animated.mesh)
-              position={deviceConfig.splatConfig.position}
-              scale={deviceConfig.splatConfig.scale}
-            >
-              <Splat // Use Splat (was animated.Splat) and apply the manualAlphaTest
-                alphaTest={manualAlphaTest} // Use manualAlphaTest
-                chunkSize={0.01}
-                src={splat}
-                splatSize={deviceConfig.splatConfig.size}
-              />
-            </mesh>
-          </>
-        }
-      </PresentationControls>
+              {/* Enhanced Splat with animated opacity for dimming */}
+              <mesh // Use mesh (was animated.mesh)
+                position={deviceConfig.splatConfig.position}
+                scale={deviceConfig.splatConfig.scale}
+              >
+                <SplatWithErrorHandling // Use SplatWithErrorHandling instead of Splat
+                  alphaTest={manualAlphaTest} // Use manualAlphaTest
+                  chunkSize={0.01}
+                  splatSize={deviceConfig.splatConfig.size}
+                />
+              </mesh>
+            </>
+          }
+        </PresentationControls>
+      )}
 
       {/* Splats don't respond to lighting - keeping scene minimal and clean */}
       {/* Preload splat for loading screen integration */}

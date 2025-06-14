@@ -2,11 +2,14 @@ import './gallery.css';
 import imgData from './imgData';
 import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { useSpring, animated, useTransition } from '@react-spring/web';
+import { useImagePreloader } from './useImagePreloader';
 
 const images = imgData;
 
-// Memoized thumbnail component
-const Thumbnail = memo(({ image, index, currentPhoto, onClick }) => {
+// Memoized thumbnail component with preloading support
+const Thumbnail = memo(({ image, index, currentPhoto, onClick, isLoaded }) => {
+  const [thumbnailLoaded, setThumbnailLoaded] = useState(false);
+
   const handleClick = useCallback(
     (e) => {
       e.preventDefault();
@@ -16,23 +19,60 @@ const Thumbnail = memo(({ image, index, currentPhoto, onClick }) => {
     [index, onClick]
   );
 
+  const handleLoad = useCallback(() => {
+    setThumbnailLoaded(true);
+  }, []);
+
   return (
-    <img
-      key={index}
-      src={image.img}
-      className={`thumbNailPhoto ${index === currentPhoto ? 'grayscale' : ''}`}
-      onClick={handleClick}
-      loading="lazy"
-      alt={`Thumbnail ${index + 1}`}
-      draggable={false} // Prevent default image drag behavior
-      style={{ pointerEvents: 'auto' }} // Ensure clicks are captured
-    />
+    <div
+      style={{
+        position: 'relative',
+        display: 'inline-block',
+        width: '60px',
+        height: '60px',
+      }}
+    >
+      <img
+        key={index}
+        src={image.img}
+        className={`thumbNailPhoto ${
+          index === currentPhoto ? 'grayscale' : ''
+        }`}
+        onClick={handleClick}
+        loading={isLoaded ? 'eager' : 'lazy'} // Use eager loading for preloaded images
+        alt={`Thumbnail ${index + 1}`}
+        draggable={false} // Prevent default image drag behavior
+        style={{
+          pointerEvents: 'auto',
+          opacity: thumbnailLoaded ? 1 : 0.7,
+          transition: 'opacity 0.3s ease',
+        }} // Ensure clicks are captured
+        onLoad={handleLoad}
+      />
+      {!thumbnailLoaded && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '16px',
+            height: '16px',
+            border: '2px solid rgba(119, 72, 28, 0.3)',
+            borderTop: '2px solid var(--brown)',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            zIndex: 1,
+          }}
+        />
+      )}
+    </div>
   );
 });
 
 // Draggable thumbnail container component
 const DraggableThumbnails = memo(
-  ({ galleryTypeArr, currentPhoto, onThumbnailClick }) => {
+  ({ galleryTypeArr, currentPhoto, onThumbnailClick, isImageLoaded }) => {
     const containerRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
@@ -450,6 +490,7 @@ const DraggableThumbnails = memo(
             index={index}
             currentPhoto={currentPhoto}
             onClick={(clickedIndex) => handleThumbnailClick(clickedIndex)}
+            isLoaded={isImageLoaded(image.img)}
           />
         ))}
       </div>
@@ -518,6 +559,15 @@ export default function Gallery({
   const lastTouchRef = useRef(null);
   const PAN_MARGIN = 60; // pixels of extra space beyond the strict edge
 
+  // Initialize image preloader
+  const {
+    preloadingState,
+    isImageLoaded,
+    isGalleryTypeLoaded,
+    preloadGalleryType,
+    isPreloading,
+  } = useImagePreloader(showGalleryString, showGallery);
+
   // Spring animations - must be declared before any callbacks that use them
   const [gallerySpring, galleryApi] = useSpring(() => ({
     opacity: 1,
@@ -554,12 +604,13 @@ export default function Gallery({
           naturalHeight: img.naturalHeight,
           aspectRatio,
           currentAspect: imgAspect,
+          preloaded: isImageLoaded(img.src) ? '✅' : '❌',
         });
       }
       setImgAspect(aspectRatio);
       setImageLoading(false); // Image finished loading
     },
-    [imgAspect]
+    [imgAspect, isImageLoaded]
   );
 
   // Manual touch event registration for non-passive touchmove
@@ -1263,6 +1314,7 @@ export default function Gallery({
           galleryTypeArr={galleryTypeArr}
           currentPhoto={currentPhoto}
           onThumbnailClick={handleThumbnailClick}
+          isImageLoaded={isImageLoaded}
         />
 
         {/* Desktop Product Info (inside productPanel for desktop layout) */}
