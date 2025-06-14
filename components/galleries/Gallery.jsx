@@ -502,7 +502,6 @@ export default function Gallery({
   const [startY, setStartY] = useState(null);
   const infoRef = useRef(null);
   const swipeThreshold = 50;
-  const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const imageContainerRef = useRef(null);
   const imageRef = useRef(null);
@@ -623,8 +622,12 @@ export default function Gallery({
     const handleResize = () => {
       // Force a re-render on resize to update container dimensions
       // This is especially important for orientation changes
-      setImagePosition({ x: 0, y: 0 });
       setIsHovering(false);
+      // Reset image transform using React Spring API
+      imageApi.start({
+        transform: 'translate(0%, 0%) scale(1)',
+        config: { tension: 170, friction: 26 },
+      });
       if (window.innerWidth < window.innerHeight) {
         setTouchPan({ x: 0, y: 0 });
       }
@@ -810,28 +813,39 @@ export default function Gallery({
   );
 
   // Image hover/pan functionality
-  const handleImageMouseMove = useCallback((e) => {
-    if (!imageContainerRef.current || window.innerWidth < window.innerHeight)
-      return;
+  const handleImageMouseMove = useCallback(
+    (e) => {
+      if (
+        !imageContainerRef.current ||
+        window.innerWidth < window.innerHeight ||
+        !isHovering
+      )
+        return;
 
-    const container = imageContainerRef.current;
-    const rect = container.getBoundingClientRect();
+      const container = imageContainerRef.current;
+      const rect = container.getBoundingClientRect();
 
-    // Calculate relative position (0 to 1)
-    const relativeX = (e.clientX - rect.left) / rect.width;
-    const relativeY = (e.clientY - rect.top) / rect.height;
+      // Calculate relative position (0 to 1)
+      const relativeX = (e.clientX - rect.left) / rect.width;
+      const relativeY = (e.clientY - rect.top) / rect.height;
 
-    // Calculate the maximum translation based on the image size vs container
-    // We want to be able to move the image around to see all parts
-    const maxTranslateX = 40; // percentage
-    const maxTranslateY = 40; // percentage
+      // Calculate the maximum translation based on the image size vs container
+      // We want to be able to move the image around to see all parts
+      const maxTranslateX = 40; // percentage
+      const maxTranslateY = 40; // percentage
 
-    // Calculate the actual translation
-    const translateX = maxTranslateX * (0.5 - relativeX) * 2;
-    const translateY = maxTranslateY * (0.5 - relativeY) * 2;
+      // Calculate the actual translation
+      const translateX = maxTranslateX * (0.5 - relativeX) * 2;
+      const translateY = maxTranslateY * (0.5 - relativeY) * 2;
 
-    setImagePosition({ x: translateX, y: translateY });
-  }, []);
+      // Use React Spring API directly for smooth, deliberate panning
+      imageApi.start({
+        transform: `translate(${translateX}%, ${translateY}%) scale(1.15)`,
+        config: { tension: 120, friction: 30 }, // Slower, more deliberate movement
+      });
+    },
+    [isHovering, imageApi]
+  );
 
   const handleImageMouseEnter = useCallback(() => {
     // Only enable hover effects on desktop (not on mobile devices)
@@ -842,21 +856,24 @@ export default function Gallery({
 
   const handleImageMouseLeave = useCallback(() => {
     setIsHovering(false);
-    setImagePosition({ x: 0, y: 0 });
-  }, []);
+    // Use React Spring API directly for smooth return to center
+    imageApi.start({
+      transform: 'translate(0%, 0%) scale(1)',
+      config: { tension: 170, friction: 26 }, // Slightly faster return animation
+    });
+  }, [imageApi]);
 
-  // Update the image position when hovering
+  // Handle initial hover state change
   useEffect(() => {
     if (isHovering) {
+      // Start with initial scale-up, position will be handled by mouse move
       imageApi.start({
-        transform: `translate(${imagePosition.x}%, ${imagePosition.y}%) scale(1.15)`,
-      });
-    } else {
-      imageApi.start({
-        transform: 'translate(0%, 0%) scale(1)',
+        transform: 'translate(0%, 0%) scale(1.15)',
+        config: { tension: 170, friction: 26 },
       });
     }
-  }, [imagePosition, isHovering, imageApi]);
+    // Mouse leave handler already takes care of the exit animation
+  }, [isHovering, imageApi]);
 
   // Touch handlers for info panel swipe (vertical)
   const handleTouchStart = useCallback((e) => {

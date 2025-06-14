@@ -31,7 +31,7 @@ function useTypeSpring(showTypes, index) {
       setSpring.start({
         y: targetY,
         opacity: 1,
-        delay: index * 100,
+        delay: 200 + index * 120, // 200ms base delay + staggered timing (optimized)
       });
     } else if (showTypes) {
       // Landscape: animate from above (-100svh) to visible positions
@@ -39,14 +39,14 @@ function useTypeSpring(showTypes, index) {
       setSpring.start({
         y: targetY,
         opacity: 1,
-        delay: index * 200,
+        delay: 200 + index * 120, // 200ms base delay + staggered timing (optimized)
       });
     } else {
       // Hide: animate back up above screen
       setSpring.start({
         y: -100,
         opacity: 0,
-        delay: index * 200,
+        delay: index * 80, // Faster exit, no base delay
       });
     }
   }, [showTypes]);

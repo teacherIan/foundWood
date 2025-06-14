@@ -76,6 +76,9 @@ function Scene({
     console.log('🚀 Scene component mounted and ready');
   }, []);
 
+  // Check if any overlay is active - must be defined before useEffect
+  const hasOverlay = showContactPage || showTypes || showGallery;
+
   // useEffect for manualAlphaTest animation
   useEffect(() => {
     // Always cancel the previous animation frame if one is pending
@@ -92,12 +95,13 @@ function Scene({
       duration = 5000; // 5 seconds for initial animation
       isInitialMountRef.current = false; // Mark initial animation as handled
     } else {
-      if (showTypes) {
-        targetAlpha = 1.0; // Animate to 1.0 when types page is shown
-        duration = 3000; // 3 seconds
+      // Check if ANY overlay is active (contact, types, or gallery)
+      if (hasOverlay) {
+        targetAlpha = 1.0; // Animate to 1.0 when any overlay is shown
+        duration = 600; // 600ms - coordinated timing for all overlays
       } else {
-        targetAlpha = 0.3; // Animate back to 0.3 when types page is hidden
-        duration = 3000; // 3 seconds
+        targetAlpha = 0.3; // Animate back to 0.3 when all overlays are hidden
+        duration = 400; // 400ms - quick return to normal
       }
     }
 
@@ -131,10 +135,7 @@ function Scene({
         alphaAnimationRequestRef.current = null;
       }
     };
-  }, [showTypes]); // Re-run this effect when showTypes changes
-
-  // Check if any overlay is active
-  const hasOverlay = showContactPage || showTypes || showGallery;
+  }, [hasOverlay]); // Re-run this effect when any overlay state changes
 
   // Animated opacity for splat brightness/dimming effect
   const [animatedOpacity, setAnimatedOpacity] = useState(1.0);
@@ -370,8 +371,8 @@ function Scene({
         {/* Render 3D content - splat stays visible for alpha animation even in gallery mode */}
         {
           <>
-            {/* Only show text when NOT in gallery mode */}
-            {!showGallery && (
+            {/* Only show text when NO overlays are active */}
+            {!hasOverlay && (
               <>
                 <MemoizedText
                   position={deviceConfig.titlePosition}
