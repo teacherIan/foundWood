@@ -43,40 +43,65 @@ function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
   const idleTimeRef = useRef(0);
   const interactionTimeRef = useRef(0);
   const [manualAlphaTest, setManualAlphaTest] = useState(1);
+  const alphaAnimationRequestRef = useRef(null); // Ref to store animation frame request
+  const isInitialMountRef = useRef(true); // Ref to track initial mount
 
-  // Removed useSpring for alphaTest
-  // const { alphaTest } = useSpring({
-  //   from: { alphaTest: 1 },
-  //   to: { alphaTest: 0.3 },
-  //   config: { duration: 2000 }, // Adjust duration as needed
-  // });
-
+  // useEffect for manualAlphaTest animation
   useEffect(() => {
+    // Always cancel the previous animation frame if one is pending
+    if (alphaAnimationRequestRef.current) {
+      cancelAnimationFrame(alphaAnimationRequestRef.current);
+    }
+
+    const startAlpha = manualAlphaTest; // Current alpha value from state
+    let targetAlpha;
+    let duration;
+
+    if (isInitialMountRef.current) {
+      targetAlpha = 0.3;
+      duration = 5000; // 5 seconds for initial animation
+      isInitialMountRef.current = false; // Mark initial animation as handled
+    } else {
+      if (showTypes) {
+        targetAlpha = 1.0; // Animate to 1.0 when types page is shown
+        duration = 3000; // 3 seconds
+      } else {
+        targetAlpha = 0.3; // Animate back to 0.3 when types page is hidden
+        duration = 3000; // 3 seconds
+      }
+    }
+
+    // If already at the target, no need to animate
+    if (startAlpha === targetAlpha) {
+      alphaAnimationRequestRef.current = null; // Ensure ref is cleared if no animation
+      return;
+    }
+
     const startTime = Date.now();
-    const duration = 5000; // 5 seconds
-    const startAlpha = 1;
-    const endAlpha = 0.3;
-    let animationFrameId;
 
     const animateAlpha = () => {
       const elapsedTime = Date.now() - startTime;
+      const progress = Math.min(elapsedTime / duration, 1); // Ensure progress doesn't exceed 1
+
+      setManualAlphaTest(startAlpha + (targetAlpha - startAlpha) * progress);
+
       if (elapsedTime < duration) {
-        const currentProgress = elapsedTime / duration;
-        setManualAlphaTest(
-          startAlpha - (startAlpha - endAlpha) * currentProgress
-        );
-        animationFrameId = requestAnimationFrame(animateAlpha);
+        alphaAnimationRequestRef.current = requestAnimationFrame(animateAlpha);
       } else {
-        setManualAlphaTest(endAlpha);
+        alphaAnimationRequestRef.current = null; // Clear ref when animation completes
       }
     };
 
-    animationFrameId = requestAnimationFrame(animateAlpha);
+    alphaAnimationRequestRef.current = requestAnimationFrame(animateAlpha);
 
+    // Cleanup function to cancel animation if component unmounts or effect re-runs
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      if (alphaAnimationRequestRef.current) {
+        cancelAnimationFrame(alphaAnimationRequestRef.current);
+        alphaAnimationRequestRef.current = null;
+      }
     };
-  }, []); // Empty dependency array to run once on mount
+  }, [showTypes]); // Re-run this effect when showTypes changes
 
   // Check if any overlay is active
   const hasOverlay = showContactPage || showTypes || showGallery;
