@@ -29,114 +29,138 @@ export const useImagePreloader = (activeGalleryType, showGallery) => {
   }, []);
 
   // Create image preloader with promise support
-  const preloadImage = useCallback((src) => {
-    return new Promise((resolve, reject) => {
-      // Skip if already loaded or failed
-      if (preloadingState.loaded.has(src) || preloadingState.failed.has(src)) {
-        resolve(src);
-        return;
-      }
+  const preloadImage = useCallback(
+    (src) => {
+      return new Promise((resolve, reject) => {
+        // Skip if already loaded or failed
+        if (
+          preloadingState.loaded.has(src) ||
+          preloadingState.failed.has(src)
+        ) {
+          resolve(src);
+          return;
+        }
 
-      // Mark as loading
-      setPreloadingState(prev => ({
-        ...prev,
-        loading: new Set([...prev.loading, src])
-      }));
-
-      const img = new Image();
-      
-      img.onload = () => {
-        setPreloadingState(prev => ({
+        // Mark as loading
+        setPreloadingState((prev) => ({
           ...prev,
-          loaded: new Set([...prev.loaded, src]),
-          loading: new Set([...prev.loading].filter(url => url !== src)),
-          progress: {
-            ...prev.progress,
-            loaded: prev.progress.loaded + 1,
-            percentage: Math.round(((prev.progress.loaded + 1) / prev.progress.total) * 100)
-          }
+          loading: new Set([...prev.loading, src]),
         }));
-        resolve(src);
-      };
 
-      img.onerror = () => {
-        setPreloadingState(prev => ({
-          ...prev,
-          failed: new Set([...prev.failed, src]),
-          loading: new Set([...prev.loading].filter(url => url !== src))
-        }));
-        reject(new Error(`Failed to load image: ${src}`));
-      };
+        const img = new Image();
 
-      img.src = src;
-    });
-  }, [preloadingState.loaded, preloadingState.failed]);
+        img.onload = () => {
+          setPreloadingState((prev) => ({
+            ...prev,
+            loaded: new Set([...prev.loaded, src]),
+            loading: new Set([...prev.loading].filter((url) => url !== src)),
+            progress: {
+              ...prev.progress,
+              loaded: prev.progress.loaded + 1,
+              percentage: Math.round(
+                ((prev.progress.loaded + 1) / prev.progress.total) * 100
+              ),
+            },
+          }));
+          resolve(src);
+        };
+
+        img.onerror = () => {
+          setPreloadingState((prev) => ({
+            ...prev,
+            failed: new Set([...prev.failed, src]),
+            loading: new Set([...prev.loading].filter((url) => url !== src)),
+          }));
+          reject(new Error(`Failed to load image: ${src}`));
+        };
+
+        img.src = src;
+      });
+    },
+    [preloadingState.loaded, preloadingState.failed]
+  );
 
   // Batch preload images with concurrency control
-  const batchPreloadImages = useCallback(async (imageSrcs, maxConcurrent = 3) => {
-    if (imageSrcs.length === 0) return;
+  const batchPreloadImages = useCallback(
+    async (imageSrcs, maxConcurrent = 3) => {
+      if (imageSrcs.length === 0) return;
 
-    console.log(`🖼️ Preloading batch of ${imageSrcs.length} images (max ${maxConcurrent} concurrent)`);
+      console.log(
+        `🖼️ Preloading batch of ${imageSrcs.length} images (max ${maxConcurrent} concurrent)`
+      );
 
-    // Update total count
-    setPreloadingState(prev => ({
-      ...prev,
-      progress: {
-        ...prev.progress,
-        total: Math.max(prev.progress.total, imageSrcs.length)
-      }
-    }));
+      // Update total count
+      setPreloadingState((prev) => ({
+        ...prev,
+        progress: {
+          ...prev.progress,
+          total: Math.max(prev.progress.total, imageSrcs.length),
+        },
+      }));
 
-    // Process images in batches to avoid overwhelming the browser
-    for (let i = 0; i < imageSrcs.length; i += maxConcurrent) {
-      const batch = imageSrcs.slice(i, i + maxConcurrent);
-      
-      // Check if we should abort
-      if (abortControllerRef.current?.signal.aborted) {
-        console.log('🛑 Preloading aborted');
-        break;
-      }
+      // Process images in batches to avoid overwhelming the browser
+      for (let i = 0; i < imageSrcs.length; i += maxConcurrent) {
+        const batch = imageSrcs.slice(i, i + maxConcurrent);
 
-      try {
-        await Promise.allSettled(batch.map(preloadImage));
-        
-        // Small delay between batches to prevent blocking
-        if (i + maxConcurrent < imageSrcs.length) {
-          await new Promise(resolve => setTimeout(resolve, 100));
+        // Check if we should abort
+        if (abortControllerRef.current?.signal.aborted) {
+          console.log('🛑 Preloading aborted');
+          break;
         }
-      } catch (error) {
-        console.warn('Batch preloading error:', error);
+
+        try {
+          await Promise.allSettled(batch.map(preloadImage));
+
+          // Small delay between batches to prevent blocking
+          if (i + maxConcurrent < imageSrcs.length) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+          }
+        } catch (error) {
+          console.warn('Batch preloading error:', error);
+        }
       }
-    }
-  }, [preloadImage]);
+    },
+    [preloadImage]
+  );
 
   // Check if a specific image is loaded
-  const isImageLoaded = useCallback((src) => {
-    return preloadingState.loaded.has(src);
-  }, [preloadingState.loaded]);
+  const isImageLoaded = useCallback(
+    (src) => {
+      return preloadingState.loaded.has(src);
+    },
+    [preloadingState.loaded]
+  );
 
   // Check if a gallery type is fully loaded
-  const isGalleryTypeLoaded = useCallback((galleryType) => {
-    const images = getImagesByType(galleryType);
-    return images.every(item => preloadingState.loaded.has(item.img));
-  }, [getImagesByType, preloadingState.loaded]);
+  const isGalleryTypeLoaded = useCallback(
+    (galleryType) => {
+      const images = getImagesByType(galleryType);
+      return images.every((item) => preloadingState.loaded.has(item.img));
+    },
+    [getImagesByType, preloadingState.loaded]
+  );
 
   // Preload images for a specific gallery type
-  const preloadGalleryType = useCallback(async (galleryType) => {
-    if (isPreloadingRef.current) return;
-    
-    const images = getImagesByType(galleryType);
-    const imageSrcs = images.map(item => item.img);
-    
-    isPreloadingRef.current = true;
-    
-    try {
-      console.log(`🎯 Fast-track preloading: ${galleryType} (${imageSrcs.length} images)`);
-      await batchPreloadImages(imageSrcs, 4); // Higher concurrency for priority loading
-    } finally {
-      isPreloadingRef.current = false;
-    }
-  }, [getImagesByType, batchPreloadImages]);
+  const preloadGalleryType = useCallback(
+    async (galleryType) => {
+      if (isPreloadingRef.current) return;
+
+      const images = getImagesByType(galleryType);
+      const imageSrcs = images.map((item) => item.img);
+
+      isPreloadingRef.current = true;
+
+      try {
+        console.log(
+          `🎯 Fast-track preloading: ${galleryType} (${imageSrcs.length} images)`
+        );
+        await batchPreloadImages(imageSrcs, 4); // Higher concurrency for priority loading
+      } finally {
+        isPreloadingRef.current = false;
+      }
+    },
+    [getImagesByType, batchPreloadImages]
+  );
 
   // Cancel preloading
   const cancelPreloading = useCallback(() => {
@@ -160,14 +184,15 @@ export const useImagePreloader = (activeGalleryType, showGallery) => {
 
     const backgroundPreload = async () => {
       // Get all unique gallery types
-      const allTypes = [...new Set(imgData.map(item => item.type))];
-      const otherTypes = allTypes.filter(type => type !== activeGalleryType);
+      const allTypes = [...new Set(imgData.map((item) => item.type))];
+      const otherTypes = allTypes.filter((type) => type !== activeGalleryType);
 
       // Preload other types in background with lower priority
       for (const type of otherTypes) {
         if (!isGalleryTypeLoaded(type)) {
-          await new Promise(resolve => setTimeout(resolve, 500)); // Delay between types
-          if (showGallery) { // Check if still needed
+          await new Promise((resolve) => setTimeout(resolve, 500)); // Delay between types
+          if (showGallery) {
+            // Check if still needed
             await preloadGalleryType(type);
           }
         }
