@@ -6,9 +6,14 @@ import imgData from './imgData';
  * Hook for preloading gallery images with priority-based loading
  * @param {string} activeGalleryType - Currently active gallery type
  * @param {boolean} showGallery - Whether gallery is currently shown
+ * @param {boolean} preloadOnStartup - Whether to preload all images at startup
  * @returns {object} preloading state and controls
  */
-export const useImagePreloader = (activeGalleryType, showGallery) => {
+export const useImagePreloader = (
+  activeGalleryType,
+  showGallery,
+  preloadOnStartup = false
+) => {
   const [preloadingState, setPreloadingState] = useState({
     loaded: new Set(),
     loading: new Set(),
@@ -20,6 +25,7 @@ export const useImagePreloader = (activeGalleryType, showGallery) => {
     },
   });
 
+  const [isPreloading, setIsPreloading] = useState(false);
   const isPreloadingRef = useRef(false);
   const abortControllerRef = useRef(null);
 
@@ -143,44 +149,134 @@ export const useImagePreloader = (activeGalleryType, showGallery) => {
   // Preload images for a specific gallery type
   const preloadGalleryType = useCallback(
     async (galleryType) => {
-      if (isPreloadingRef.current) return;
+      console.log(
+        '🎯 preloadGalleryType called for:',
+        galleryType,
+        'currently preloading:',
+        isPreloadingRef.current
+      );
+
+      if (isPreloadingRef.current) {
+        console.log('⏸️ Already preloading, skipping...');
+        return;
+      }
 
       const images = getImagesByType(galleryType);
       const imageSrcs = images.map((item) => item.img);
 
+      console.log(
+        '📷 Found images to preload:',
+        imageSrcs.length,
+        'for type:',
+        galleryType
+      );
+
       isPreloadingRef.current = true;
+      setIsPreloading(true);
 
       try {
         console.log(
           `🎯 Fast-track preloading: ${galleryType} (${imageSrcs.length} images)`
         );
         await batchPreloadImages(imageSrcs, 4); // Higher concurrency for priority loading
+        console.log('✅ Completed preloading for:', galleryType);
+      } catch (error) {
+        console.error('❌ Error during preloading:', error);
       } finally {
         isPreloadingRef.current = false;
+        setIsPreloading(false);
+        console.log('🏁 Preloading finished for:', galleryType);
       }
     },
     [getImagesByType, batchPreloadImages]
   );
+
+  // Preload all gallery types at startup
+  const preloadAllGalleryTypes = useCallback(async () => {
+    console.log('🚀 Starting preload of ALL gallery types at startup');
+
+    if (isPreloadingRef.current) {
+      console.log('⏸️ Already preloading, skipping startup preload...');
+      return;
+    }
+
+    // Get all unique gallery types
+    const allTypes = [...new Set(imgData.map((item) => item.type))];
+    console.log('📚 Found gallery types to preload:', allTypes);
+
+    isPreloadingRef.current = true;
+    setIsPreloading(true);
+
+    // Calculate total images across all types
+    const allImages = imgData.map((item) => item.img);
+    const uniqueImages = [...new Set(allImages)];
+
+    console.log(
+      `🎯 Startup preloading: ${uniqueImages.length} unique images across ${allTypes.length} gallery types`
+    );
+
+    // Update total count
+    setPreloadingState((prev) => ({
+      ...prev,
+      progress: {
+        ...prev.progress,
+        total: uniqueImages.length,
+      },
+    }));
+
+    try {
+      // Preload all images with moderate concurrency to avoid overwhelming
+      await batchPreloadImages(uniqueImages, 3);
+      console.log('✅ Completed startup preloading of all gallery types');
+    } catch (error) {
+      console.error('❌ Error during startup preloading:', error);
+    } finally {
+      isPreloadingRef.current = false;
+      setIsPreloading(false);
+      console.log('🏁 Startup preloading finished');
+    }
+  }, [batchPreloadImages]);
 
   // Cancel preloading
   const cancelPreloading = useCallback(() => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       isPreloadingRef.current = false;
+      setIsPreloading(false);
       console.log('🛑 Gallery preloading cancelled');
     }
   }, []);
 
-  // Auto-preload current gallery type when it changes
+  // Auto-preload based on startup flag or gallery interaction
   useEffect(() => {
-    if (showGallery && activeGalleryType) {
+    console.log('🎯 useImagePreloader effect triggered:', {
+      preloadOnStartup,
+      showGallery,
+      activeGalleryType,
+      isCurrentlyPreloading: isPreloadingRef.current,
+    });
+
+    if (preloadOnStartup) {
+      console.log('🚀 Triggering startup preloading of all gallery types');
+      preloadAllGalleryTypes();
+    } else if (showGallery && activeGalleryType) {
+      console.log(
+        '✅ Starting gallery image preloading for:',
+        activeGalleryType
+      );
       preloadGalleryType(activeGalleryType);
     }
-  }, [activeGalleryType, showGallery, preloadGalleryType]);
+  }, [
+    preloadOnStartup,
+    activeGalleryType,
+    showGallery,
+    preloadGalleryType,
+    preloadAllGalleryTypes,
+  ]);
 
-  // Background preload other gallery types
+  // Background preload other gallery types (only when in gallery mode, not startup)
   useEffect(() => {
-    if (!showGallery || !activeGalleryType) return;
+    if (preloadOnStartup || !showGallery || !activeGalleryType) return;
 
     const backgroundPreload = async () => {
       // Get all unique gallery types
@@ -202,7 +298,13 @@ export const useImagePreloader = (activeGalleryType, showGallery) => {
     // Start background preloading after a delay
     const timeoutId = setTimeout(backgroundPreload, 2000);
     return () => clearTimeout(timeoutId);
-  }, [activeGalleryType, showGallery, preloadGalleryType, isGalleryTypeLoaded]);
+  }, [
+    preloadOnStartup,
+    activeGalleryType,
+    showGallery,
+    preloadGalleryType,
+    isGalleryTypeLoaded,
+  ]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -216,7 +318,8 @@ export const useImagePreloader = (activeGalleryType, showGallery) => {
     isImageLoaded,
     isGalleryTypeLoaded,
     preloadGalleryType,
+    preloadAllGalleryTypes,
     cancelPreloading,
-    isPreloading: isPreloadingRef.current,
+    isPreloading,
   };
 };

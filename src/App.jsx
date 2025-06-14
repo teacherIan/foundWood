@@ -7,6 +7,7 @@ import Types from '../components/select_gallery/Types';
 import NewCanvas from '../components/new_experience/Experience';
 import FontFaceObserver from 'fontfaceobserver';
 import { useSpring, animated } from '@react-spring/web';
+import { useImagePreloader } from '../components/galleries/useImagePreloader';
 
 const configAnimation = {
   mass: 2,
@@ -51,6 +52,8 @@ const AnimatedMenuItem = memo(({ children, onClick, isLogo = false }) => {
 const initialState = {
   fontsLoaded: false,
   splatLoaded: false,
+  imagesLoaded: false, // Track if initial image preloading is complete
+  initialLoadComplete: false, // Track if the entire initial load sequence is done
   isAnimating: true,
   activeGalleryTypeString: 'chairs',
   activeGalleryType: 1,
@@ -82,6 +85,14 @@ function reducer(state, action) {
         splatLoaded: newState.splatLoaded,
       });
       return newState;
+    case 'SET_IMAGES_LOADED':
+      console.log('✅ Setting images as loaded');
+      return { ...state, imagesLoaded: true };
+    case 'SET_INITIAL_LOAD_COMPLETE':
+      console.log(
+        '✅ Setting initial load as complete - no more loading screens!'
+      );
+      return { ...state, initialLoadComplete: true };
     case 'TOGGLE_ANIMATION':
       return { ...state, isAnimating: !state.isAnimating };
     case 'SET_GALLERY_TYPE':
@@ -162,6 +173,69 @@ function reducer(state, action) {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  // Initialize image preloader to start loading images at startup
+  const {
+    preloadingState,
+    isImageLoaded,
+    isGalleryTypeLoaded,
+    preloadGalleryType,
+    preloadAllGalleryTypes,
+    cancelPreloading,
+    isPreloading,
+  } = useImagePreloader(state.activeGalleryTypeString, state.showGallery, true); // Enable startup preloading
+
+  // Debug: Log preloader state changes and mark images as loaded when startup preloading completes
+  useEffect(() => {
+    console.log('🔬 Preloader state changed:', {
+      isPreloading,
+      progressTotal: preloadingState.progress.total,
+      progressLoaded: preloadingState.progress.loaded,
+      progressPercentage: preloadingState.progress.percentage,
+      showGallery: state.showGallery,
+      activeGalleryType: state.activeGalleryTypeString,
+      imagesLoaded: state.imagesLoaded,
+    });
+
+    // Mark images as loaded when startup preloading is complete
+    if (
+      !state.imagesLoaded &&
+      !isPreloading &&
+      preloadingState.progress.total > 0 &&
+      preloadingState.progress.loaded >= preloadingState.progress.total
+    ) {
+      console.log(
+        '🎯 Startup image preloading completed, marking images as loaded'
+      );
+      dispatch({ type: 'SET_IMAGES_LOADED' });
+    }
+  }, [
+    isPreloading,
+    preloadingState.progress,
+    state.showGallery,
+    state.activeGalleryTypeString,
+    state.imagesLoaded,
+  ]);
+
+  // Mark initial load as complete when all assets are loaded
+  useEffect(() => {
+    if (
+      !state.initialLoadComplete &&
+      state.fontsLoaded &&
+      state.splatLoaded &&
+      state.imagesLoaded
+    ) {
+      console.log(
+        '🎉 All initial assets loaded! Marking initial load as complete.'
+      );
+      dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
+    }
+  }, [
+    state.fontsLoaded,
+    state.splatLoaded,
+    state.imagesLoaded,
+    state.initialLoadComplete,
+  ]);
 
   // Immediate state logging on component mount
   console.log('🚀 App component mounted with initial state:', {
@@ -286,14 +360,23 @@ function App() {
     immediate: false,
   });
 
-  // If fonts or splat haven't loaded yet, show loading indicator
+  // Loading screen should ONLY appear during initial website startup
+  // After initial load is complete, never show loading screen again
+  const shouldShowLoading = !state.initialLoadComplete;
+
   console.log('🔍 Loading check:', {
     fontsLoaded: state.fontsLoaded,
     splatLoaded: state.splatLoaded,
-    shouldShowLoading: !state.fontsLoaded || !state.splatLoaded,
+    imagesLoaded: state.imagesLoaded,
+    initialLoadComplete: state.initialLoadComplete,
+    showGallery: state.showGallery,
+    isPreloading: isPreloading,
+    progressTotal: preloadingState.progress.total,
+    progressLoaded: preloadingState.progress.loaded,
+    progressComplete:
+      preloadingState.progress.loaded >= preloadingState.progress.total,
+    shouldShowLoading: shouldShowLoading,
   });
-
-  const shouldShowLoading = !state.fontsLoaded || !state.splatLoaded;
   console.log('🎯 Final loading decision:', shouldShowLoading);
 
   return (
@@ -432,11 +515,27 @@ function App() {
           <div className="loading-spinner" aria-label="Loading spinner"></div>
           <div role="status" aria-live="polite">
             Loading{!state.fontsLoaded ? ' fonts' : ''}
-            {!state.splatLoaded ? ' assets' : ''}...
+            {!state.splatLoaded ? ' assets' : ''}
+            {!state.imagesLoaded ? ' images' : ''}...
+            {!state.imagesLoaded && preloadingState.progress.total > 0 && (
+              <>
+                <br />
+                <span>
+                  {preloadingState.progress.loaded} of{' '}
+                  {preloadingState.progress.total} images (
+                  {Math.round(preloadingState.progress.percentage)}%)
+                </span>
+              </>
+            )}
             <br />
             <small>
               Fonts: {state.fontsLoaded ? '✅' : '❌'} | Splat:{' '}
-              {state.splatLoaded ? '✅' : '❌'}
+              {state.splatLoaded ? '✅' : '❌'} | Images:{' '}
+              {state.imagesLoaded
+                ? '✅'
+                : !state.imagesLoaded && preloadingState.progress.total > 0
+                ? `${Math.round(preloadingState.progress.percentage)}%`
+                : '❌'}
             </small>
           </div>
         </div>

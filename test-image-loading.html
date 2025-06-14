@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Loading Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            border: 5px solid rgba(119, 72, 28, 0.2);
+            border-radius: 50%;
+            border-top: 5px solid #77481c;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .test-buttons {
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #77481c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #5a3315;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .progress-bar {
+            width: 300px;
+            height: 20px;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #77481c;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🧪 Image Loading Test</h1>
+
+    <div class="test-buttons">
+        <button onclick="testImageLoading()">Test Image Loading</button>
+        <button onclick="clearTest()">Clear Test</button>
+    </div>
+
+    <div id="status">
+        <p>Status: Ready to test</p>
+        <p>Fonts: ✅ | Splat: ✅ | Images: ❌</p>
+    </div>
+
+    <div id="loading-screen" class="loading-screen hidden">
+        <div class="loading-spinner"></div>
+        <div>
+            <p id="loading-text">Loading images...</p>
+            <p id="progress-text">0 of 10 images (0%)</p>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <small>Fonts: ✅ | Splat: ✅ | Images: <span id="image-status">0%</span></small>
+        </div>
+    </div>
+
+    <script>
+        let isLoading = false;
+        let progress = { loaded: 0, total: 10, percentage: 0 };
+
+        function updateProgress(loaded, total) {
+            progress.loaded = loaded;
+            progress.total = total;
+            progress.percentage = Math.round((loaded / total) * 100);
+
+            document.getElementById('progress-text').textContent =
+                `${loaded} of ${total} images (${progress.percentage}%)`;
+
+            document.getElementById('progress-fill').style.width = `${progress.percentage}%`;
+            document.getElementById('image-status').textContent = `${progress.percentage}%`;
+
+            if (loaded >= total) {
+                setTimeout(() => {
+                    hideLoadingScreen();
+                }, 500);
+            }
+        }
+
+        function showLoadingScreen() {
+            document.getElementById('loading-screen').classList.remove('hidden');
+            document.getElementById('status').innerHTML =
+                '<p>Status: Loading images...</p><p>Fonts: ✅ | Splat: ✅ | Images: Loading...</p>';
+        }
+
+        function hideLoadingScreen() {
+            document.getElementById('loading-screen').classList.add('hidden');
+            document.getElementById('status').innerHTML =
+                '<p>Status: All loaded!</p><p>Fonts: ✅ | Splat: ✅ | Images: ✅</p>';
+        }
+
+        function simulateImageLoading() {
+            return new Promise((resolve) => {
+                let loaded = 0;
+                const total = 10;
+
+                updateProgress(loaded, total);
+                showLoadingScreen();
+
+                const loadNext = () => {
+                    if (loaded < total) {
+                        loaded++;
+                        updateProgress(loaded, total);
+                        console.log(`📷 Loaded image ${loaded}/${total}`);
+                        setTimeout(loadNext, 300 + Math.random() * 200); // Random delay between 300-500ms
+                    } else {
+                        console.log('✅ All images loaded!');
+                        resolve();
+                    }
+                };
+
+                loadNext();
+            });
+        }
+
+        async function testImageLoading() {
+            if (isLoading) return;
+
+            isLoading = true;
+            console.log('🧪 Starting image loading test...');
+
+            try {
+                await simulateImageLoading();
+                console.log('✅ Image loading test completed!');
+            } catch (error) {
+                console.error('❌ Image loading test failed:', error);
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        function clearTest() {
+            hideLoadingScreen();
+            progress = { loaded: 0, total: 10, percentage: 0 };
+            updateProgress(0, 10);
+            document.getElementById('status').innerHTML =
+                '<p>Status: Ready to test</p><p>Fonts: ✅ | Splat: ✅ | Images: ❌</p>';
+            isLoading = false;
+        }
+
+        console.log('🔧 Image loading test page ready!');
+        console.log('Click "Test Image Loading" to simulate the loading screen with image progress.');
+    </script>
+</body>
+
+</html>
