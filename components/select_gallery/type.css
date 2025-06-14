@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     width: 30svw;
-    /* height: 45svh; */
     color: var(--brown);
     cursor: pointer;
     border-radius: 2000px;
@@ -10,7 +9,6 @@
 
 .typeImage {
     width: 100%;
-    /* height: 100%; */
     overflow: visible;
 }
 
@@ -23,14 +21,45 @@
     -webkit-text-fill-color: #ffffff;
 }
 
+/* Size variations based on content */
 @media (orientation: landscape) {
     .typeContainer {
-        width: 32svw;
+        width: 22svw;
+        min-width: 250px;
+        max-width: 400px;
+    }
+
+    /* Larger sizes for desktop screens */
+    @media (min-width: 1200px) {
+        .typeContainer {
+            width: 25svw;
+            min-width: 300px;
+            max-width: 450px;
+        }
+    }
+
+    @media (min-width: 1600px) {
+        .typeContainer {
+            width: 28svw;
+            min-width: 350px;
+            max-width: 500px;
+        }
     }
 }
 
 @media (orientation: portrait) {
     .typeContainer {
-        width: 55svw;
+        width: 35svw;
+        min-width: 180px;
+        max-width: 280px;
+    }
+
+    /* Larger sizes for tablet portrait */
+    @media (min-width: 768px) {
+        .typeContainer {
+            width: 30svw;
+            min-width: 220px;
+            max-width: 320px;
+        }
     }
 }

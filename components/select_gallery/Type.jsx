@@ -13,10 +13,6 @@ export default function Type({
 }) {
   const [active, setActive] = useState(false);
 
-  const typeContainerStyle = {
-    width: window.innerWidth > window.innerHeight ? 54 + 'svw' : 30 + 'svw',
-  };
-
   const configAnimation = {
     mass: 1,
     tension: 100,
@@ -71,7 +67,6 @@ export default function Type({
       });
     }
   }, [active, api]);
-
   return (
     <animated.div
       onClick={() => handleClick()}
@@ -79,16 +74,15 @@ export default function Type({
       onMouseLeave={() => setActive(false)}
       className="typeContainer"
       style={{
-        typeContainerStyle,
         ...springs,
       }}
     >
-           {' '}
+      {' '}
       <div
         className="typeHeader"
         dangerouslySetInnerHTML={{ __html: header }}
       />
-            <img className="typeImage" src={img} />
+      <img className="typeImage" src={img} />
     </animated.div>
   );
 }
