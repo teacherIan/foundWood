@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Loading Flow</title>
+</head>
+
+<body>
+    <h1>Loading Test</h1>
+    <p>This file is for testing the loading flow. Open the browser console and navigate to
+        <code>http://localhost:5173</code> to see the loading progress logs.</p>
+
+    <script>
+        console.log('Test script loaded - ready to test loading flow');
+
+        // Script to help debug loading issues
+        window.debugLoading = {
+            logState: () => {
+                console.log('Current app state check...');
+            },
+            simulateLoad: () => {
+                console.log('Simulating successful load...');
+            }
+        };
+    </script>
+</body>
+
+</html>

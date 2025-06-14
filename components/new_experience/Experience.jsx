@@ -33,11 +33,36 @@ const MemoizedText = memo(({ position, children, fontSize, delay = 0 }) => (
   </Text>
 ));
 
-function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
+// Simple and reliable loading detector
+function ProgressChecker({ onSplatLoaded }) {
+  const hasCalledRef = useRef(false);
+
+  useEffect(() => {
+    if (!hasCalledRef.current && onSplatLoaded) {
+      hasCalledRef.current = true;
+      console.log('✅ ProgressChecker: Calling splat loaded callback');
+      // Use a small delay to ensure Canvas is stable
+      const timer = setTimeout(() => {
+        onSplatLoaded();
+      }, 800); // 800ms - reasonable delay for splat loading
+
+      return () => clearTimeout(timer);
+    }
+  }, [onSplatLoaded]);
+
+  return null; // No visual elements to prevent context issues
+}
+
+function Scene({
+  isAnimating,
+  showContactPage,
+  showTypes,
+  showGallery,
+  onSplatLoaded,
+}) {
   const [targetX, setTargetX] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [userInteracting, setUserInteracting] = useState(false);
-  const { progress } = useProgress();
   const animationRef = useRef();
   const { camera } = useThree();
   const idleTimeRef = useRef(0);
@@ -45,6 +70,11 @@ function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
   const [manualAlphaTest, setManualAlphaTest] = useState(1);
   const alphaAnimationRequestRef = useRef(null); // Ref to store animation frame request
   const isInitialMountRef = useRef(true); // Ref to track initial mount
+
+  // Scene component mounted - simple notification
+  useEffect(() => {
+    console.log('🚀 Scene component mounted and ready');
+  }, []);
 
   // useEffect for manualAlphaTest animation
   useEffect(() => {
@@ -384,7 +414,9 @@ function Scene({ isAnimating, showContactPage, showTypes, showGallery }) {
       </PresentationControls>
 
       {/* Splats don't respond to lighting - keeping scene minimal and clean */}
-      {/* do not preload splat for interesting effect */}
+      {/* Preload splat for loading screen integration */}
+      <Preload all />
+      <ProgressChecker onSplatLoaded={onSplatLoaded} />
     </>
   );
 }
@@ -407,20 +439,18 @@ export default function App({
   showContactPage,
   showTypes,
   showGallery,
+  onSplatLoaded,
 }) {
   // Debug logging to check prop values
   useEffect(() => {
-    console.log('Canvas props changed:', {
+    console.log('🎬 Canvas component mounted and props received:', {
       showGallery,
       showTypes,
       showContactPage,
+      onSplatLoaded: !!onSplatLoaded,
+      onSplatLoadedType: typeof onSplatLoaded,
     });
-    console.log('Frame loop mode:', 'always');
-    console.log(
-      'Camera animations active:',
-      !showTypes && !showGallery && isAnimating
-    );
-  }, [showGallery, showTypes, showContactPage, isAnimating]);
+  }, [showGallery, showTypes, showContactPage, isAnimating, onSplatLoaded]);
 
   // Adaptive performance settings based on device capability
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -497,6 +527,7 @@ export default function App({
           showTypes={showTypes}
           showGallery={showGallery}
           isAnimating={isAnimating}
+          onSplatLoaded={onSplatLoaded}
         />
       </Canvas>
     </>

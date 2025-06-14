@@ -50,6 +50,7 @@ const AnimatedMenuItem = memo(({ children, onClick, isLogo = false }) => {
 // State reducer for better state management
 const initialState = {
   fontsLoaded: false,
+  splatLoaded: false,
   isAnimating: true,
   activeGalleryTypeString: 'chairs',
   activeGalleryType: 1,
@@ -63,9 +64,24 @@ const initialState = {
 };
 
 function reducer(state, action) {
+  console.log('🔄 Reducer called with action:', action.type, action);
+  console.log('🔄 Current state before action:', {
+    fontsLoaded: state.fontsLoaded,
+    splatLoaded: state.splatLoaded,
+  });
+
   switch (action.type) {
     case 'SET_FONTS_LOADED':
+      console.log('✅ Setting fonts as loaded');
       return { ...state, fontsLoaded: true };
+    case 'SET_SPLAT_LOADED':
+      console.log('✅ Setting splat as loaded');
+      const newState = { ...state, splatLoaded: true };
+      console.log('✅ New state after splat loaded:', {
+        fontsLoaded: newState.fontsLoaded,
+        splatLoaded: newState.splatLoaded,
+      });
+      return newState;
     case 'TOGGLE_ANIMATION':
       return { ...state, isAnimating: !state.isAnimating };
     case 'SET_GALLERY_TYPE':
@@ -147,6 +163,13 @@ function reducer(state, action) {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // Immediate state logging on component mount
+  console.log('🚀 App component mounted with initial state:', {
+    fontsLoaded: state.fontsLoaded,
+    splatLoaded: state.splatLoaded,
+    shouldShowLoading: !state.fontsLoaded || !state.splatLoaded,
+  });
+
   // Font loading detection with improved error handling
   useEffect(() => {
     const fonts = [
@@ -158,13 +181,45 @@ function App() {
 
     Promise.all(fonts.map((font) => font.load()))
       .then(() => {
+        console.log('✅ All fonts loaded successfully');
         dispatch({ type: 'SET_FONTS_LOADED' });
       })
       .catch((error) => {
         console.error('Font loading error:', error);
+        console.log('⚠️ Proceeding without all fonts loaded');
         dispatch({ type: 'SET_FONTS_LOADED' }); // Proceed anyway
       });
   }, []);
+
+  // Font loading detection with improved error handling
+  useEffect(() => {
+    const fonts = [
+      new FontFaceObserver('driftWood'),
+      new FontFaceObserver('CustomFont'),
+      new FontFaceObserver('Poppins'),
+      new FontFaceObserver('Lobster Two'),
+    ];
+
+    Promise.all(fonts.map((font) => font.load()))
+      .then(() => {
+        console.log('✅ All fonts loaded successfully');
+        dispatch({ type: 'SET_FONTS_LOADED' });
+      })
+      .catch((error) => {
+        console.error('Font loading error:', error);
+        console.log('⚠️ Proceeding without all fonts loaded');
+        dispatch({ type: 'SET_FONTS_LOADED' }); // Proceed anyway
+      });
+  }, []);
+
+  const handleSplatLoadedCallback = useCallback(() => {
+    console.log('🎯 Splat loaded callback triggered in App.jsx');
+    console.log('Current state before splat loaded:', {
+      fontsLoaded: state.fontsLoaded,
+      splatLoaded: state.splatLoaded,
+    });
+    dispatch({ type: 'SET_SPLAT_LOADED' });
+  }, []); // Remove dependencies to prevent recreation
 
   const handleGalleryTypesClickCallback = useCallback(() => {
     dispatch({ type: 'SHOW_TYPES' });
@@ -201,18 +256,22 @@ function App() {
 
   // Debug: Simple state logging
   useEffect(() => {
-    console.log('App state changed:', {
+    console.log('🏠 App state changed:', {
       showGallery: state.showGallery,
       showTypes: state.showTypes,
       showContactPage: state.showContactPage,
       activeGalleryType: state.activeGalleryType,
       activeGalleryTypeString: state.activeGalleryTypeString,
+      fontsLoaded: state.fontsLoaded,
+      splatLoaded: state.splatLoaded,
     });
   }, [
     state.showGallery,
     state.showTypes,
     state.showContactPage,
     state.activeGalleryType,
+    state.fontsLoaded,
+    state.splatLoaded,
   ]);
 
   const iconSpring = useSpring({
@@ -227,134 +286,161 @@ function App() {
     immediate: false,
   });
 
-  // If fonts haven't loaded yet, show loading indicator
-  if (!state.fontsLoaded) {
-    return (
-      <div className="font-loading-screen">
-        <div className="loading-spinner" aria-label="Loading spinner"></div>
-        <div role="status" aria-live="polite">
-          Loading...
-        </div>
-      </div>
-    );
-  }
+  // If fonts or splat haven't loaded yet, show loading indicator
+  console.log('🔍 Loading check:', {
+    fontsLoaded: state.fontsLoaded,
+    splatLoaded: state.splatLoaded,
+    shouldShowLoading: !state.fontsLoaded || !state.splatLoaded,
+  });
+
+  const shouldShowLoading = !state.fontsLoaded || !state.splatLoaded;
+  console.log('🎯 Final loading decision:', shouldShowLoading);
 
   return (
     <>
-      {window.innerWidth < 1000 || !state.isAnimating ? null : (
-        <div className="new_app_header">
-          <div className="new_app_info" />
-        </div>
-      )}
+      {/* Always render the main app - use opacity and pointer-events instead of display:none */}
+      <div
+        style={{
+          opacity: shouldShowLoading ? 0 : 1,
+          pointerEvents: shouldShowLoading ? 'none' : 'auto',
+          transition: 'opacity 0.3s ease-in-out',
+        }}
+      >
+        {window.innerWidth < 1000 || !state.isAnimating ? null : (
+          <div className="new_app_header">
+            <div className="new_app_info" />
+          </div>
+        )}
 
-      {window.innerWidth < 1000 && state.isAnimating ? (
-        <div className="new_app_small_header">
-          <div />
-        </div>
-      ) : null}
+        {window.innerWidth < 1000 && state.isAnimating ? (
+          <div className="new_app_small_header">
+            <div />
+          </div>
+        ) : null}
 
-      <Gallery
-        galleryType={state.activeGalleryType}
-        showGallery={state.showGallery}
-        showGalleryString={state.activeGalleryTypeString}
-        showDetails={state.showDetails}
-        setShowDetails={(value) =>
-          dispatch({ type: 'SET_SHOW_DETAILS', payload: value })
-        }
-        galleryTypeArr={state.galleryTypeArr}
-        setGalleryTypeArr={(arr) =>
-          dispatch({ type: 'SET_GALLERY_TYPE_ARR', payload: arr })
-        }
-        currentPhoto={state.currentPhoto}
-        setCurrentPhoto={(photo) =>
-          dispatch({ type: 'SET_CURRENT_PHOTO', payload: photo })
-        }
-        setShowInfographic={(value) =>
-          dispatch({ type: 'SET_SHOW_INFOGraphic', payload: value })
-        }
-        showInfographic={state.showInfographic}
-        onClose={handleHideGalleryCallback}
-      />
-
-      <Types
-        showTypes={state.showTypes}
-        onGalleryTypesClick={handleHideTypesCallback}
-        onMissionButtonClick={handleMissionButtonClickCallback}
-        onTypeSelect={handleGalleryButtonClickCallback}
-        setActiveGalleryType={(type, typeString) =>
-          dispatch({
-            type: 'SET_GALLERY_TYPE',
-            payload: { type, typeString },
-          })
-        }
-        setActiveGalleryTypeString={(typeString, type) =>
-          dispatch({
-            type: 'SET_GALLERY_TYPE',
-            payload: {
-              type: typeof type === 'number' ? type : state.activeGalleryType,
-              typeString,
-            },
-          })
-        }
-      />
-
-      <div className="appContainer">
-        <Contact
-          showContactPage={state.showContactPage}
-          setShowContactPage={(value) =>
-            dispatch({ type: 'SET_SHOW_CONTACT', payload: value })
-          }
-          setIsAnimating={(value) =>
-            dispatch({ type: 'SET_ANIMATING', payload: value })
-          }
-          showTypes={state.showTypes}
+        <Gallery
+          galleryType={state.activeGalleryType}
           showGallery={state.showGallery}
+          showGalleryString={state.activeGalleryTypeString}
+          showDetails={state.showDetails}
+          setShowDetails={(value) =>
+            dispatch({ type: 'SET_SHOW_DETAILS', payload: value })
+          }
+          galleryTypeArr={state.galleryTypeArr}
+          setGalleryTypeArr={(arr) =>
+            dispatch({ type: 'SET_GALLERY_TYPE_ARR', payload: arr })
+          }
+          currentPhoto={state.currentPhoto}
+          setCurrentPhoto={(photo) =>
+            dispatch({ type: 'SET_CURRENT_PHOTO', payload: photo })
+          }
+          setShowInfographic={(value) =>
+            dispatch({ type: 'SET_SHOW_INFOGraphic', payload: value })
+          }
+          showInfographic={state.showInfographic}
+          onClose={handleHideGalleryCallback}
         />
 
-        <div className="header">
-          <div className="menu">
-            {/* Animated icon size with React Spring */}
-            <AnimatedMenuItem onClick={handleEmblemClickCallback} isLogo={true}>
-              <div
-                style={{
-                  width: '2.5em', // Increased to accommodate larger home icon (1.8em)
-                  height: '2.5em',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  paddingTop: '0.2em', // Minimal padding
-                }}
+        <Types
+          showTypes={state.showTypes}
+          onGalleryTypesClick={handleHideTypesCallback}
+          onMissionButtonClick={handleMissionButtonClickCallback}
+          onTypeSelect={handleGalleryButtonClickCallback}
+          setActiveGalleryType={(type, typeString) =>
+            dispatch({
+              type: 'SET_GALLERY_TYPE',
+              payload: { type, typeString },
+            })
+          }
+          setActiveGalleryTypeString={(typeString, type) =>
+            dispatch({
+              type: 'SET_GALLERY_TYPE',
+              payload: {
+                type: typeof type === 'number' ? type : state.activeGalleryType,
+                typeString,
+              },
+            })
+          }
+        />
+
+        <div className="appContainer">
+          <Contact
+            showContactPage={state.showContactPage}
+            setShowContactPage={(value) =>
+              dispatch({ type: 'SET_SHOW_CONTACT', payload: value })
+            }
+            setIsAnimating={(value) =>
+              dispatch({ type: 'SET_ANIMATING', payload: value })
+            }
+            showTypes={state.showTypes}
+            showGallery={state.showGallery}
+          />
+
+          <div className="header">
+            <div className="menu">
+              {/* Animated icon size with React Spring */}
+              <AnimatedMenuItem
+                onClick={handleEmblemClickCallback}
+                isLogo={true}
               >
-                <animated.img
-                  src={found_wood}
-                  className="icon"
-                  alt="Found Wood Logo"
-                  loading="lazy"
+                <div
                   style={{
-                    ...iconSpring,
-                    objectFit: 'contain',
+                    width: '2.5em', // Increased to accommodate larger home icon (1.8em)
+                    height: '2.5em',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    paddingTop: '0.2em', // Minimal padding
                   }}
-                />
-              </div>
-            </AnimatedMenuItem>
-            <AnimatedMenuItem onClick={handleGalleryTypesClickCallback}>
-              <div className="menu-item">Gallery</div>
-            </AnimatedMenuItem>
-            <AnimatedMenuItem onClick={handleContactPageClick}>
-              <div className="menu-item">Contact</div>
-            </AnimatedMenuItem>
+                >
+                  <animated.img
+                    src={found_wood}
+                    className="icon"
+                    alt="Found Wood Logo"
+                    loading="lazy"
+                    style={{
+                      ...iconSpring,
+                      objectFit: 'contain',
+                    }}
+                  />
+                </div>
+              </AnimatedMenuItem>
+              <AnimatedMenuItem onClick={handleGalleryTypesClickCallback}>
+                <div className="menu-item">Gallery</div>
+              </AnimatedMenuItem>
+              <AnimatedMenuItem onClick={handleContactPageClick}>
+                <div className="menu-item">Contact</div>
+              </AnimatedMenuItem>
+            </div>
+          </div>
+
+          {/* Always render Experience - Canvas should remain stable */}
+          <NewCanvas
+            isAnimating={state.isAnimating}
+            showContactPage={state.showContactPage}
+            showTypes={state.showTypes}
+            showGallery={state.showGallery}
+            onSplatLoaded={handleSplatLoadedCallback}
+          />
+        </div>
+      </div>
+
+      {/* Show loading screen overlay when needed */}
+      {shouldShowLoading && (
+        <div className="font-loading-screen">
+          <div className="loading-spinner" aria-label="Loading spinner"></div>
+          <div role="status" aria-live="polite">
+            Loading{!state.fontsLoaded ? ' fonts' : ''}
+            {!state.splatLoaded ? ' assets' : ''}...
+            <br />
+            <small>
+              Fonts: {state.fontsLoaded ? '✅' : '❌'} | Splat:{' '}
+              {state.splatLoaded ? '✅' : '❌'}
+            </small>
           </div>
         </div>
-
-        {/* Always render Experience but with conditional visibility and performance */}
-        <NewCanvas
-          isAnimating={state.isAnimating}
-          showContactPage={state.showContactPage}
-          showTypes={state.showTypes}
-          showGallery={state.showGallery}
-        />
-      </div>
+      )}
     </>
   );
 }
