@@ -1,0 +1,334 @@
+/* BORDER-BASED EXIT BUTTON OPTIONS FOR GLASSMORPHISM CONTACT FORM */
+
+/* ========================================
+   OPTION A: TOP BORDER BAR WITH CLOSE BUTTON
+   ======================================== */
+.exit-border-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(135deg, 
+        rgba(119, 72, 28, 0.1) 0%, 
+        rgba(139, 90, 43, 0.08) 50%,
+        rgba(119, 72, 28, 0.1) 100%);
+    border-radius: 20px 20px 0 0;
+    border-bottom: 1px solid rgba(119, 72, 28, 0.15);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+
+.exit-border-top:hover {
+    background: linear-gradient(135deg, 
+        rgba(119, 72, 28, 0.15) 0%, 
+        rgba(139, 90, 43, 0.12) 50%,
+        rgba(119, 72, 28, 0.15) 100%);
+    border-bottom-color: rgba(119, 72, 28, 0.25);
+}
+
+.exit-border-top-text {
+    font-size: 14px;
+    color: #77481c;
+    font-weight: 500;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.exit-border-top:hover .exit-border-top-text {
+    opacity: 1;
+}
+
+.exit-border-top-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(119, 72, 28, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #77481c;
+    font-size: 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.exit-border-top:hover .exit-border-top-icon {
+    background: rgba(119, 72, 28, 0.9);
+    color: white;
+    transform: rotate(90deg) scale(1.05);
+    border-color: rgba(119, 72, 28, 0.4);
+}
+
+/* ========================================
+   OPTION B: BOTTOM BORDER BAR WITH CLOSE BUTTON
+   ======================================== */
+.exit-border-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(135deg, 
+        rgba(119, 72, 28, 0.1) 0%, 
+        rgba(139, 90, 43, 0.08) 50%,
+        rgba(119, 72, 28, 0.1) 100%);
+    border-radius: 0 0 20px 20px;
+    border-top: 1px solid rgba(119, 72, 28, 0.15);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+
+.exit-border-bottom:hover {
+    background: linear-gradient(135deg, 
+        rgba(119, 72, 28, 0.15) 0%, 
+        rgba(139, 90, 43, 0.12) 50%,
+        rgba(119, 72, 28, 0.15) 100%);
+    border-top-color: rgba(119, 72, 28, 0.25);
+}
+
+.exit-border-bottom-text {
+    font-size: 14px;
+    color: #77481c;
+    font-weight: 500;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.exit-border-bottom:hover .exit-border-bottom-text {
+    opacity: 1;
+}
+
+.exit-border-bottom-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(119, 72, 28, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #77481c;
+    font-size: 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.exit-border-bottom:hover .exit-border-bottom-icon {
+    background: rgba(119, 72, 28, 0.9);
+    color: white;
+    transform: rotate(90deg) scale(1.05);
+    border-color: rgba(119, 72, 28, 0.4);
+}
+
+/* ========================================
+   OPTION C: MINIMAL TOP BORDER STRIP
+   ======================================== */
+.exit-border-minimal-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(90deg, 
+        transparent 0%,
+        rgba(119, 72, 28, 0.1) 20%,
+        rgba(119, 72, 28, 0.15) 50%,
+        rgba(119, 72, 28, 0.1) 80%,
+        transparent 100%);
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+
+.exit-border-minimal-top:hover {
+    background: linear-gradient(90deg, 
+        transparent 0%,
+        rgba(119, 72, 28, 0.15) 10%,
+        rgba(119, 72, 28, 0.25) 50%,
+        rgba(119, 72, 28, 0.15) 90%,
+        transparent 100%);
+}
+
+.exit-border-minimal-top::before {
+    content: 'Tap to close';
+    font-size: 12px;
+    color: #77481c;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.exit-border-minimal-top:hover::before {
+    opacity: 0.8;
+}
+
+/* ========================================
+   OPTION D: SIDE BORDER STRIP (LEFT OR RIGHT)
+   ======================================== */
+.exit-border-side-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 50px;
+    background: linear-gradient(180deg, 
+        transparent 0%,
+        rgba(119, 72, 28, 0.1) 20%,
+        rgba(119, 72, 28, 0.15) 50%,
+        rgba(119, 72, 28, 0.1) 80%,
+        transparent 100%);
+    border-radius: 0 20px 20px 0;
+    border-left: 1px solid rgba(119, 72, 28, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+
+.exit-border-side-right:hover {
+    background: linear-gradient(180deg, 
+        transparent 0%,
+        rgba(119, 72, 28, 0.15) 10%,
+        rgba(119, 72, 28, 0.25) 50%,
+        rgba(119, 72, 28, 0.15) 90%,
+        transparent 100%);
+    border-left-color: rgba(119, 72, 28, 0.25);
+    width: 60px;
+}
+
+.exit-border-side-icon {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(119, 72, 28, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #77481c;
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.exit-border-side-right:hover .exit-border-side-icon {
+    background: rgba(119, 72, 28, 0.9);
+    color: white;
+    transform: rotate(90deg) scale(1.1);
+}
+
+/* ========================================
+   FORM CONTAINER ADJUSTMENTS FOR BORDER OPTIONS
+   ======================================== */
+.formContainer-with-top-border {
+    padding-top: 80px; /* Space for top border */
+}
+
+.formContainer-with-bottom-border {
+    padding-bottom: 80px; /* Space for bottom border */
+}
+
+.formContainer-with-side-border {
+    padding-right: 70px; /* Space for side border */
+}
+
+.formContainer-with-minimal-top {
+    padding-top: 60px; /* Space for minimal top border */
+}
+
+/* ========================================
+   MOBILE RESPONSIVENESS
+   ======================================== */
+@media (max-width: 600px) {
+    .exit-border-top,
+    .exit-border-bottom {
+        height: 50px;
+        padding: 0 20px;
+    }
+    
+    .exit-border-top-text,
+    .exit-border-bottom-text {
+        font-size: 12px;
+    }
+    
+    .exit-border-top-icon,
+    .exit-border-bottom-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+    
+    .exit-border-minimal-top {
+        height: 35px;
+    }
+    
+    .exit-border-side-right {
+        width: 40px;
+    }
+    
+    .exit-border-side-right:hover {
+        width: 45px;
+    }
+    
+    .formContainer-with-top-border {
+        padding-top: 70px;
+    }
+    
+    .formContainer-with-bottom-border {
+        padding-bottom: 70px;
+    }
+    
+    .formContainer-with-side-border {
+        padding-right: 60px;
+    }
+    
+    .formContainer-with-minimal-top {
+        padding-top: 55px;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+.exit-border-top:focus,
+.exit-border-bottom:focus,
+.exit-border-minimal-top:focus,
+.exit-border-side-right:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 2px rgba(119, 72, 28, 0.4);
+}
+
+/* Screen reader text */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

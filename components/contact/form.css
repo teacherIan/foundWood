@@ -36,7 +36,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 40px;
+    padding: 80px 40px 40px 40px; /* Added top padding for border bar */
     max-width: 500px;
     width: 100%;
     max-height: 85vh;
@@ -46,6 +46,7 @@
     /* Transform origin for smooth animations */
     transform-origin: center;
     will-change: transform;
+    position: relative; /* For absolute positioning of border bar */
 }
 
 .formHeader {
@@ -296,68 +297,89 @@ a:hover {
     filter: drop-shadow(3px 3px 10px black);
 } */
 
-.exit-icon {
-    /* Option 1: Floating Unblurred Button */
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    border: none;
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
+/* Top Border Exit Bar - Option A */
+.exit-border-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(135deg, 
+        rgba(119, 72, 28, 0.1) 0%, 
+        rgba(139, 90, 43, 0.08) 50%,
+        rgba(119, 72, 28, 0.1) 100%);
+    border-radius: 20px 20px 0 0;
+    border-bottom: 1px solid rgba(119, 72, 28, 0.15);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+
+.exit-border-top:hover {
+    background: linear-gradient(135deg, 
+        rgba(119, 72, 28, 0.15) 0%, 
+        rgba(139, 90, 43, 0.12) 50%,
+        rgba(119, 72, 28, 0.15) 100%);
+    border-bottom-color: rgba(119, 72, 28, 0.25);
+}
+
+.exit-border-top:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 2px rgba(119, 72, 28, 0.4);
+}
+
+.exit-border-top-text {
+    font-size: 14px;
+    color: #77481c;
+    font-weight: 500;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.exit-border-top:hover .exit-border-top-text {
+    opacity: 1;
+}
+
+.exit-border-top-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(119, 72, 28, 0.2);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #77481c;
+    font-size: 16px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    color: white;
-    font-size: 24px;
-    z-index: 40000;
-    /* Above the contact container */
-    box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.3),
-        0 0 0 0 rgba(119, 72, 28, 0.4);
-    /* No backdrop filter - remains sharp and clear */
-    transform: rotate(0deg);
 }
 
-.exit-icon:hover {
+.exit-border-top:hover .exit-border-top-icon {
     background: rgba(119, 72, 28, 0.9);
-    border-color: #fff;
-    transform: scale(1.1) rotate(90deg);
-    box-shadow:
-        0 12px 35px rgba(0, 0, 0, 0.4),
-        0 0 0 4px rgba(119, 72, 28, 0.2);
-}
-
-.exit-icon:active {
-    transform: scale(0.95) rotate(90deg);
-    background: rgba(119, 72, 28, 1);
-}
-
-.exit-icon:focus {
-    outline: none;
-    box-shadow:
-        0 0 0 3px rgba(119, 72, 28, 0.3),
-        0 8px 25px rgba(0, 0, 0, 0.3);
+    color: white;
+    transform: rotate(90deg) scale(1.05);
+    border-color: rgba(119, 72, 28, 0.4);
 }
 
 /* Better touch experience for mobile */
 @media (hover: none) and (pointer: coarse) {
-    .exit-icon {
-        /* Larger touch target for mobile */
-        min-width: 44px;
+    .exit-border-top {
+        /* Enhanced touch feedback */
         min-height: 44px;
-        background: rgba(0, 0, 0, 0.4);
-        /* More visible on mobile */
     }
 
-    .exit-icon:active {
-        background-color: var(--lightGreen);
-        transform: scale(0.9) rotate(0deg);
-        /* More pronounced feedback on touch */
+    .exit-border-top:active {
+        background: linear-gradient(135deg, 
+            rgba(119, 72, 28, 0.2) 0%, 
+            rgba(139, 90, 43, 0.15) 50%,
+            rgba(119, 72, 28, 0.2) 100%);
+        transform: scale(0.98);
     }
 }
 
@@ -366,18 +388,25 @@ a:hover {
         width: 95%;
         max-width: 450px;
         margin: 0 auto;
-        padding: 30px 25px;
+        padding: 70px 25px 30px 25px; /* Adjusted for border bar */
         max-height: 90vh;
         border-radius: 16px;
     }
 
-    .exit-icon {
-        top: 15px;
-        right: 15px;
-        width: 44px;
-        height: 44px;
-        font-size: 20px;
-        border-width: 2px;
+    .exit-border-top {
+        height: 50px;
+        padding: 0 20px;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .exit-border-top-text {
+        font-size: 12px;
+    }
+
+    .exit-border-top-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
     }
 
     .formHeader {
@@ -427,9 +456,25 @@ a:hover {
     .formContainer {
         width: 100%;
         max-width: 380px;
-        padding: 25px 20px;
+        padding: 60px 20px 25px 20px; /* Adjusted for smaller border bar */
         max-height: 85vh;
         border-radius: 12px;
+    }
+
+    .exit-border-top {
+        height: 45px;
+        padding: 0 15px;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .exit-border-top-text {
+        font-size: 11px;
+    }
+
+    .exit-border-top-icon {
+        width: 26px;
+        height: 26px;
+        font-size: 13px;
     }
 
     .formHeader {
@@ -442,16 +487,6 @@ a:hover {
     .formHeaderText {
         font-size: clamp(1.3rem, 5vw, 1.6rem);
         margin-bottom: 0;
-    }
-
-    .exit-icon {
-        position: fixed;
-        top: 12px;
-        right: 12px;
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-        border-width: 2px;
     }
 
     .form-control {
@@ -511,8 +546,23 @@ a:hover {
 
     .formContainer {
         max-width: 420px;
-        padding: 20px;
+        padding: 50px 20px 20px 20px; /* Adjusted for smaller border bar */
         max-height: 80vh;
+    }
+
+    .exit-border-top {
+        height: 40px;
+        padding: 0 15px;
+    }
+
+    .exit-border-top-text {
+        font-size: 10px;
+    }
+
+    .exit-border-top-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
     }
 
     .formHeader {
@@ -526,30 +576,34 @@ a:hover {
     .form-control {
         margin: 0.8rem 0 1.2rem;
     }
-
-    .exit-icon {
-        width: 28px;
-        height: 28px;
-        font-size: 14px;
-    }
 }
 
 /* iPad and larger tablets */
 @media only screen and (min-width: 601px) and (max-width: 1000px) {
     .formContainer {
         max-width: 480px;
-        padding: 35px 30px;
+        padding: 75px 30px 35px 30px; /* Adjusted for border bar */
         border-radius: 18px;
+    }
+
+    .exit-border-top {
+        height: 55px;
+        padding: 0 22px;
+        border-radius: 18px 18px 0 0;
+    }
+
+    .exit-border-top-text {
+        font-size: 13px;
+    }
+
+    .exit-border-top-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 15px;
     }
 
     .formHeaderText {
         font-size: clamp(1.8rem, 3vw, 2rem);
-    }
-
-    .exit-icon {
-        width: 38px;
-        height: 38px;
-        font-size: 19px;
     }
 }
 
@@ -557,17 +611,26 @@ a:hover {
 @media only screen and (min-width: 1001px) {
     .formContainer {
         max-width: 520px;
-        padding: 45px 40px;
+        padding: 85px 40px 45px 40px; /* Adjusted for border bar */
+    }
+
+    .exit-border-top {
+        height: 60px;
+        padding: 0 25px;
+    }
+
+    .exit-border-top-text {
+        font-size: 14px;
+    }
+
+    .exit-border-top-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
     }
 
     .formHeaderText {
         font-size: 2.2rem;
-    }
-
-    .exit-icon {
-        width: 42px;
-        height: 42px;
-        font-size: 21px;
     }
 
     .form-control input,

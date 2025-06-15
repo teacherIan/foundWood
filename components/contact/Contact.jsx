@@ -1,7 +1,7 @@
 import { useSpring, animated } from '@react-spring/web';
 import { useEffect, useRef, useState } from 'react';
 import { FaFacebook } from 'react-icons/fa';
-import { MdExitToApp } from 'react-icons/md';
+import { MdClose } from 'react-icons/md';
 import emailjs from '@emailjs/browser';
 import './form.css';
 import bg_image_long from '../../src/assets/poly-snapshot_long.JPG';
@@ -243,16 +243,29 @@ export default function Contact({
       }}
     >
       <div className="formContainer">
+        {/* Top Border Exit Bar */}
+        <div 
+          className="exit-border-top" 
+          onClick={handleExitClick}
+          aria-label="Close contact form (ESC)"
+          title="Tap anywhere here to close the contact form"
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleExitClick();
+            }
+          }}
+        >
+          <span className="exit-border-top-text">Tap anywhere here to close</span>
+          <div className="exit-border-top-icon">
+            <MdClose />
+          </div>
+        </div>
+
         <div className="formHeader">
           <span className="formHeaderText">We'd Love to Hear From You!</span>
-          <button
-            className="exit-icon"
-            onClick={handleExitClick}
-            aria-label="Close contact form (ESC)"
-            title="Close contact form"
-          >
-            <MdExitToApp />
-          </button>
         </div>
         <form autoComplete="off" onSubmit={handleSubmit}>
           <div className="form-control">
