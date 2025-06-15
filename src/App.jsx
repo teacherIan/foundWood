@@ -52,7 +52,7 @@ const AnimatedMenuItem = memo(({ children, onClick, isLogo = false }) => {
   );
 });
 
-// Collection of inspirational sayings for the loading screen
+// Collection of warm, welcoming messages for the loading screen
 const loadingSayings = [
   'Like trees, the finest furniture grows with time',
   'Crafting something beautiful takes time',
@@ -68,6 +68,11 @@ const loadingSayings = [
   'True craftsmanship cannot be rushed',
   'From fallen trees, beautiful furniture rises',
   "The grain reveals nature's hidden patterns",
+  'Welcome to a world where wood comes alive',
+  'Discovering beauty in every knot and grain',
+  'Where sustainability meets artistry',
+  "Creating tomorrow from yesterday's trees",
+  'Every piece has found its purpose',
 ];
 
 // State reducer for better state management
@@ -833,28 +838,40 @@ function App() {
               justifyContent: 'center',
             }}
           >
-            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '30px' }}>
               <h2
                 style={{
-                  margin: '0 0 15px 0',
-                  fontSize: '1.4rem',
+                  margin: '0 0 10px 0',
+                  fontSize: '1.6rem',
                   fontWeight: '600',
                   color: '#77481c',
                   fontFamily:
                     '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                 }}
               >
-                Welcome to the Doug's Found Wood Experience
+                Welcome to Doug's Found Wood
               </h2>
               <div
                 style={{
-                  fontSize: '1rem',
+                  fontSize: '1.1rem',
                   color: '#8b5a2b',
                   fontFamily:
                     '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  marginBottom: '8px',
                 }}
               >
-                Loading 3D scene...
+                Preparing your handcrafted journey...
+              </div>
+              <div
+                style={{
+                  fontSize: '0.9rem',
+                  color: '#a67c52',
+                  fontFamily:
+                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  fontStyle: 'italic',
+                }}
+              >
+                Each piece tells a story
               </div>
             </div>
             <div
@@ -862,46 +879,33 @@ function App() {
               aria-label="Loading spinner"
               style={{
                 // Ensure animation works even if CSS fails to load properly
-                animation: 'spin-smooth 1s linear infinite',
-                WebkitAnimation: 'spin-smooth 1s linear infinite',
-                marginBottom: '20px',
-              }}
-              ref={(el) => {
-                // Debug the spinner element when it's created
-                if (el) {
-                  console.log('🔍 Loading spinner element created');
-                  setTimeout(() => {
-                    const computedStyle = window.getComputedStyle(el);
-                    console.log('🎨 Spinner computed styles:', {
-                      animation: computedStyle.getPropertyValue('animation'),
-                      transform: computedStyle.getPropertyValue('transform'),
-                      display: computedStyle.getPropertyValue('display'),
-                      visibility: computedStyle.getPropertyValue('visibility'),
-                    });
-                  }, 100);
-                }
+                animation: 'spin-smooth 1.2s ease-in-out infinite',
+                WebkitAnimation: 'spin-smooth 1.2s ease-in-out infinite',
+                marginBottom: '30px',
               }}
             ></div>
-            {/* REMOVED: Image loading progress since preloading is disabled */}
-            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-              <small
+            {/* Removed technical debug info - replaced with customer-friendly message */}
+            <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+              <div
                 style={{
+                  fontSize: '0.95rem',
+                  color: '#9d7856',
                   fontFamily:
                     '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  fontWeight: '500',
                 }}
               >
-                3D Scene: {state.splatLoaded ? '✅' : '❌'} | Fonts: Loading in
-                background | Images: Load on-demand ⚡
-              </small>
+                🪵 Crafting your experience with care 🪵
+              </div>
             </div>
             <div
               style={{
                 fontStyle: 'italic',
-                fontSize: '1.1rem',
+                fontSize: '1.2rem',
                 color: '#8b5a2b',
-                maxWidth: '350px',
+                maxWidth: '380px',
                 textAlign: 'center',
-                lineHeight: '1.4',
+                lineHeight: '1.5',
                 fontWeight: '500',
                 opacity: sayingOpacity,
                 transition: 'opacity 0.3s ease-in-out',
@@ -909,9 +913,10 @@ function App() {
                 padding: '0 20px',
                 fontFamily:
                   '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                letterSpacing: '0.3px',
               }}
             >
-              "{loadingSayings[currentSayingIndex]}"
+              {loadingSayings[currentSayingIndex]}
             </div>
           </div>
         </div>
