@@ -28,25 +28,30 @@ function useTypeSpring(showTypes, index) {
 
   useEffect(() => {
     if (showTypes && window.innerWidth < window.innerHeight) {
-      // Portrait mobile: Strategic asymmetric layout accounting for text length
+      // Portrait mobile: Strategic asymmetric layout optimized for content length and visual balance
+      // This layout accounts for varying text lengths and creates visual interest while ensuring readability
       let targetY, targetX;
 
       if (index === 0) {
-        // Coffee Tables - 2 lines, needs more space
-        targetY = 8;
-        targetX = 20; // Top left with space
+        // Coffee Tables <br/> Plant Stands - Longest text (2 lines), positioned top-right with more space
+        // Moved to 55% right to balance against the explanation text on the left
+        targetY = 10;
+        targetX = 55; // Top right with adequate breathing room
       } else if (index === 1) {
-        // Chairs - 2 lines, medium width
+        // Chairs <br/> Ottomans - Medium text (2 lines), positioned top-left for asymmetric balance
+        // Placed at left edge to create dynamic contrast with Coffee Tables
         targetY = 12;
-        targetX = 65; // Top right, slightly lower
+        targetX = 0; // Far left, slightly lower than Coffee Tables for hierarchy
       } else if (index === 2) {
-        // Tables - 1 line, compact
-        targetY = 48;
-        targetX = 15; // Lower left
+        // Tables - Shortest text (1 line), positioned lower-left
+        // Compact placement since single-line text requires less visual weight
+        targetY = 40;
+        targetX = 0; // Left aligned with Chairs for vertical consistency
       } else {
-        // Structures - 1 line, compact
-        targetY = 45;
-        targetX = 70; // Lower right, slightly higher
+        // Structures - Short text (1 line), positioned lower-right
+        // Balances the Tables button and creates visual symmetry with Coffee Tables above
+        targetY = 50;
+        targetX = 55; // Right aligned with Coffee Tables, slightly lower for hierarchy
       }
 
       setSpring.start({
@@ -107,8 +112,11 @@ function useExplanationTextSpring(showTypes) {
 
   useEffect(() => {
     if (showTypes) {
-      // Position text strategically based on orientation
-      const targetY = window.innerWidth < window.innerHeight ? 0 : 0; // Center vertically in available space
+      // Mobile: Strategic positioning to work around asymmetric button layout
+      // On mobile, buttons are positioned asymmetrically with varying text lengths,
+      // so explanation text is moved to the left side (1svw) to avoid overlap
+      // and create a cohesive composition with the 4-button layout
+      const targetY = window.innerWidth < window.innerHeight ? 35 : 0; // Mobile: lower position, Desktop: centered
       setSpring.start({
         y: targetY,
         opacity: 1,
@@ -141,7 +149,7 @@ export default function Types({
     structure: 'structure',
     other: 'other',
   };
-  const imgArray = [chair, table, picnicTable, house];
+  const imgArray = [table, chair, picnicTable, house]; // Fixed order: table for Coffee Tables, chair for Chairs
   const imgHeader = [
     'Coffee Tables <br/> Plant Stands',
     'Chairs <br/> Ottomans',
@@ -187,17 +195,20 @@ export default function Types({
         ))}
 
         {/* Explanatory Text */}
+        {/* Mobile Layout: Positioned at left edge (1svw) to complement asymmetric button arrangement
+             Desktop Layout: Remains centered for clean, balanced presentation
+             The mobile positioning creates visual flow from explanation → type buttons */}
         <animated.div
           className="explanationText"
           style={{
             position: 'absolute',
-            left: '50svw',
-            top: '50svh',
+            left: '1svw', // Mobile: left-aligned to work with button layout, Desktop: overridden by CSS
+            top: '45svh',
             transform: explanationSpring.y.to(
-              (y) => `translateX(-50%) translateY(-50%) translateY(${y}svh)`
+              (y) => `translateX(0%) translateY(-50%) translateY(${y}svh)`
             ),
             opacity: explanationSpring.opacity,
-            width: window.innerWidth < window.innerHeight ? '85svw' : '30svw',
+            width: window.innerWidth < window.innerHeight ? '50svw' : '30svw', // Mobile: wider for readability
             textAlign: 'center',
             zIndex: 1000,
           }}
