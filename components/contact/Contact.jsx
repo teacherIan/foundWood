@@ -6,7 +6,8 @@ import emailjs from '@emailjs/browser';
 import './form.css';
 import bg_image_long from '../../src/assets/poly-snapshot_long.JPG';
 import bg_image_cell_3 from '../../src/assets/poly-snapshot_3.JPG';
-import { isIOSSafari } from '../new_experience/WebGLCleanup.js';
+// TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
+// import { isIOSSafari } from '../new_experience/WebGLCleanup.js';
 
 export default function Contact({
   showContactPage,
@@ -47,11 +48,11 @@ export default function Contact({
   }, [showContactPage, api]);
 
   function handleExitClick() {
-    // iOS Safari specific - trigger cleanup before closing contact page
-    if (isIOSSafari() && window.globalWebGLCleanup) {
-      console.log('📱 iOS Safari: Triggering cleanup from Contact exit button');
-      window.globalWebGLCleanup.cleanup();
-    }
+    // TEMPORARILY DISABLED: iOS Safari specific cleanup to rely on R3F's built-in memory management
+    // if (isIOSSafari() && window.globalWebGLCleanup) {
+    //   console.log('📱 iOS Safari: Triggering cleanup from Contact exit button');
+    //   window.globalWebGLCleanup.cleanup();
+    // }
 
     setShowContactPage(false);
     // If we were in gallery view before, keep it that way

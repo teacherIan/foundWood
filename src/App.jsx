@@ -7,9 +7,11 @@ import Types from '../components/select_gallery/Types';
 import NewCanvas from '../components/new_experience/Experience';
 import FontFaceObserver from 'fontfaceobserver';
 import { useSpring, animated } from '@react-spring/web';
-import { useImagePreloader } from '../components/galleries/useImagePreloader';
-import { useWebGLCleanup } from '../components/new_experience/useWebGLCleanup.js';
-import { logMemoryUsage } from '../components/new_experience/WebGLCleanup.js';
+// TEMPORARILY DISABLED: Image preloading to reduce memory pressure
+// import { useImagePreloader } from '../components/galleries/useImagePreloader';
+// TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
+// import { useWebGLCleanup } from '../components/new_experience/useWebGLCleanup.js';
+// import { logMemoryUsage } from '../components/new_experience/WebGLCleanup.js';
 
 const configAnimation = {
   mass: 2,
@@ -199,6 +201,8 @@ function App() {
   const [sayingOpacity, setSayingOpacity] = useState(1);
 
   // Initialize image preloader to start loading images at startup
+  // TEMPORARILY DISABLED: Image preloading to reduce memory pressure
+  /*
   const {
     preloadingState,
     isImageLoaded,
@@ -208,13 +212,29 @@ function App() {
     cancelPreloading,
     isPreloading,
   } = useImagePreloader(state.activeGalleryTypeString, state.showGallery, true); // Enable startup preloading
+  */
 
+  // Mock preloading state to replace disabled functionality
+  const preloadingState = {
+    progress: { total: 0, loaded: 0, percentage: 100 },
+    loaded: new Set(),
+    loading: new Set(),
+    failed: new Set(),
+  };
+  const isImageLoaded = () => false;
+  const isGalleryTypeLoaded = () => false;
+  const preloadGalleryType = () => {};
+  const preloadAllGalleryTypes = () => {};
+  const cancelPreloading = () => {};
+  const isPreloading = false;
+
+  // TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
   // Initialize WebGL cleanup for iOS Safari
-  const {
-    cleanupManager,
-    isIOSSafari: isIOSSafariBrowser,
-    triggerCleanup,
-  } = useWebGLCleanup();
+  // const {
+  //   cleanupManager,
+  //   isIOSSafari: isIOSSafariBrowser,
+  //   triggerCleanup,
+  // } = useWebGLCleanup();
 
   // Debug: Log preloader state changes and mark images as loaded when startup preloading completes
   useEffect(() => {
@@ -500,8 +520,8 @@ function App() {
         window.gc();
       }
 
-      // Log memory usage for debugging
-      logMemoryUsage();
+      // TEMPORARILY DISABLED: Log memory usage for debugging
+      // logMemoryUsage();
     };
 
     // WebGL context restored handler
@@ -534,10 +554,11 @@ function App() {
     // Memory pressure warning handler
     const handleMemoryWarning = () => {
       console.warn('⚠️ Memory pressure detected on iOS Safari');
-      if (cleanupManager) {
-        cleanupManager.cleanup();
-      }
-      logMemoryUsage();
+      // TEMPORARILY DISABLED: Custom cleanup to rely on R3F's built-in memory management
+      // if (cleanupManager) {
+      //   cleanupManager.cleanup();
+      // }
+      // logMemoryUsage();
     };
 
     // Add event listeners
@@ -585,14 +606,16 @@ function App() {
           window.gc();
         }
 
-        logMemoryUsage();
+        // TEMPORARILY DISABLED: Log memory usage for debugging
+        // logMemoryUsage();
       }, 1000);
 
       return () => clearTimeout(optimizationTimer);
     }
-  }, [isIOSSafariBrowser, state.showContactPage, cleanupManager]);
+  }, [state.showContactPage]); // TEMPORARILY DISABLED: Removed isIOSSafariBrowser, cleanupManager dependencies
 
-  // Memory monitoring for iOS Safari
+  // TEMPORARILY DISABLED: Memory monitoring for iOS Safari to rely on R3F's built-in memory management
+  /*
   useEffect(() => {
     if (!isIOSSafariBrowser || !state.initialLoadComplete) return;
 
@@ -619,6 +642,7 @@ function App() {
 
     return () => clearInterval(memoryCheckInterval);
   }, [isIOSSafariBrowser, state.initialLoadComplete, cleanupManager]);
+  */
 
   // Enhanced state logging
   useEffect(() => {
