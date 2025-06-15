@@ -62,7 +62,7 @@ body,
     width: 100%;
     margin: 0;
     padding: 0;
-    background-color: #ffffff !important;
+    background-color: #f5f5f5 !important;
     /* Force white background */
     font-family: var(--font-primary);
     -webkit-font-smoothing: antialiased;

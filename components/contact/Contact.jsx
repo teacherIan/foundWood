@@ -240,6 +240,7 @@ export default function Contact({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        pointerEvents: showContactPage ? 'auto' : 'none',
       }}
     >
       <div className="formContainer">
