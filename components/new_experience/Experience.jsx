@@ -19,6 +19,21 @@ import * as THREE from 'three'; // Import Three.js for Color
 import './experienceStyles.css';
 import splat from '../../src/assets/new_experience/full.splat';
 import splatFallback from '../../src/assets/new_experience/my_splat.splat';
+
+/**
+ * PRODUCTION SAFETY NOTE:
+ *
+ * This Experience component includes sophisticated splat reload functionality that is designed
+ * to be production-safe. The reload mechanism:
+ *
+ * ✅ ONLY reloads during initial loading phase (when loading screen is visible)
+ * ✅ NEVER reloads after users reach the interactive experience
+ * ✅ Can be completely disabled via window.DISABLE_SPLAT_RELOAD = true
+ * ✅ Provides comprehensive error logging for debugging
+ *
+ * This ensures users never see unexpected page reloads during normal usage while still
+ * providing automatic recovery from critical loading failures.
+ */
 import driftwood from '../../src/assets/fonts/DriftWood-z8W4.ttf';
 
 // Utility function to detect splat parsing errors
@@ -63,7 +78,8 @@ const isSplatParsingError = (errorMessage, context = {}) => {
 const initiateSplatReload = (errorDetails, initialLoadComplete = false) => {
   if (window.splatReloadInProgress) return;
 
-  // CRITICAL FIX: Never reload page if we've made it past the initial loading screen
+  // PRODUCTION SAFETY: Never reload page if we've made it past the initial loading screen
+  // This ensures users never see reload messages once they're using the app
   if (initialLoadComplete) {
     console.warn(
       '🚫 Splat error detected after initial load complete - NOT reloading page to maintain user experience'
@@ -73,10 +89,32 @@ const initiateSplatReload = (errorDetails, initialLoadComplete = false) => {
       timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent,
       url: window.location.href,
+      note: 'PRODUCTION SAFE: No page reload attempted after initial load complete',
     });
     // Just log the error but don't reload - user experience is more important
     return;
   }
+
+  // ADDITIONAL SAFETY: Check for explicit reload disable (useful for production environments)
+  if (window.DISABLE_SPLAT_RELOAD === true) {
+    console.warn(
+      '🚫 Splat reload disabled by DISABLE_SPLAT_RELOAD flag - logging error only'
+    );
+    console.log('📝 Error logged for debugging:', {
+      ...errorDetails,
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      url: window.location.href,
+      note: 'RELOAD DISABLED: DISABLE_SPLAT_RELOAD flag set to true',
+    });
+    return;
+  }
+
+  // DEVELOPMENT/INITIAL LOAD ONLY: Only allow reload during critical loading phase
+  // This ensures smooth initial loading experience while protecting ongoing user sessions
+  console.warn(
+    '⚠️ INITIAL LOAD PHASE: Splat error during loading - reload allowed for recovery'
+  );
 
   window.splatReloadInProgress = true;
 
@@ -439,30 +477,87 @@ const SplatWithErrorHandling = memo(
   }
 );
 
-// Simple and reliable loading detector
-// UPDATED: No longer waits for images since preloading is disabled
-function ProgressChecker({ onSplatLoaded, imagesLoaded }) {
+// Enhanced loading detector that coordinates with the main alpha animation
+// CRITICAL FIX: Ensure splat loaded callback gets called and fix loading state
+function ProgressChecker({
+  onSplatLoaded,
+  imagesLoaded,
+  initialLoadComplete,
+  onSceneStart,
+}) {
   const hasCalledRef = useRef(false);
+  const sceneReadyTimerRef = useRef(null);
 
   useEffect(() => {
-    // UPDATED: Call splat loaded callback after reasonable delay since we disabled image preloading
-    if (!hasCalledRef.current && onSplatLoaded) {
-      hasCalledRef.current = true;
-      console.log(
-        '✅ ProgressChecker: Calling splat loaded callback (image preloading disabled)'
-      );
-      // Use a small delay to ensure Canvas is stable
-      const timer = setTimeout(() => {
-        try {
-          onSplatLoaded();
-        } catch (error) {
-          console.error('❌ Error in splat loaded callback:', error);
-        }
-      }, 800); // 800ms - reasonable delay for splat loading
+    console.log('🔍 ProgressChecker mounted with props:', {
+      hasCalledRef: hasCalledRef.current,
+      onSplatLoaded: !!onSplatLoaded,
+      onSplatLoadedType: typeof onSplatLoaded,
+      initialLoadComplete,
+      onSceneStart: !!onSceneStart,
+    });
 
-      return () => clearTimeout(timer);
+    if (!onSplatLoaded) {
+      console.error(
+        '❌ CRITICAL: ProgressChecker onSplatLoaded callback is missing!'
+      );
+      return;
     }
-  }, [onSplatLoaded]); // UPDATED: Removed imagesLoaded dependency
+
+    if (hasCalledRef.current) {
+      console.log('⚡ ProgressChecker: Callback already called, skipping');
+      return;
+    }
+
+    // Mark as called immediately to prevent multiple calls
+    hasCalledRef.current = true;
+    console.log('🎬 ProgressChecker: Starting sequence...');
+
+    // Clear any existing timer
+    if (sceneReadyTimerRef.current) {
+      clearTimeout(sceneReadyTimerRef.current);
+      sceneReadyTimerRef.current = null;
+    }
+
+    // Signal that the scene has started (triggers alpha animation)
+    if (onSceneStart) {
+      console.log(
+        '📡 ProgressChecker: Calling onSceneStart to trigger alpha animation'
+      );
+      try {
+        onSceneStart();
+      } catch (error) {
+        console.error('❌ Error calling onSceneStart:', error);
+      }
+    }
+
+    // Call onSplatLoaded after a short delay to ensure canvas is ready
+    console.log(
+      '⏰ ProgressChecker: Setting timer to call onSplatLoaded in 800ms'
+    );
+    sceneReadyTimerRef.current = setTimeout(() => {
+      try {
+        console.log(
+          '✅ ProgressChecker: Timer fired - calling onSplatLoaded NOW!'
+        );
+        onSplatLoaded();
+        console.log(
+          '✅ ProgressChecker: onSplatLoaded callback completed successfully'
+        );
+      } catch (error) {
+        console.error('❌ CRITICAL ERROR calling onSplatLoaded:', error);
+      }
+    }, 800); // Reduced to 800ms for faster loading
+
+    // Cleanup function
+    return () => {
+      if (sceneReadyTimerRef.current) {
+        console.log('🧹 ProgressChecker: Cleaning up timer');
+        clearTimeout(sceneReadyTimerRef.current);
+        sceneReadyTimerRef.current = null;
+      }
+    };
+  }, []); // Empty dependency array - only run once on mount
 
   return null; // No visual elements to prevent context issues
 }
@@ -483,11 +578,12 @@ function Scene({
   const { camera, scene, gl } = useThree();
   const idleTimeRef = useRef(0);
   const interactionTimeRef = useRef(0);
-  const [manualAlphaTest, setManualAlphaTest] = useState(1);
+  const [manualAlphaTest, setManualAlphaTest] = useState(1.0); // Start with full opacity so splat is immediately visible
   const alphaAnimationRequestRef = useRef(null); // Ref to store animation frame request
   const isInitialMountRef = useRef(true); // Ref to track initial mount
   const [sceneError, setSceneError] = useState(null);
   const [alphaAnimationComplete, setAlphaAnimationComplete] = useState(false); // Track alpha animation completion
+  const [sceneStarted, setSceneStarted] = useState(false); // NEW: Track when scene actually starts
 
   // TEMPORARILY DISABLED: WebGL cleanup manager for iOS Safari
   // const cleanupManagerRef = useRef(new WebGLCleanupManager());
@@ -625,7 +721,8 @@ function Scene({
   // Check if any overlay is active - must be defined before useEffect
   const hasOverlay = showContactPage || showTypes || showGallery;
 
-  // useEffect for manualAlphaTest animation
+  // useEffect for manualAlphaTest animation - THE MOST IMPORTANT ANIMATION
+  // REQUIREMENT: When splat is loaded and visible, animate alphaTest from 1.0 to 0.3
   useEffect(() => {
     // Always cancel the previous animation frame if one is pending
     if (alphaAnimationRequestRef.current) {
@@ -637,22 +734,51 @@ function Scene({
     let duration;
 
     if (isInitialMountRef.current) {
-      // Don't start initial animation until loading is complete
-      if (!initialLoadComplete) {
+      // CRITICAL FIX: When loading completes and canvas becomes visible, start alpha animation immediately
+      if (initialLoadComplete) {
         console.log(
-          '⏳ Waiting for loading to complete before starting initial animation'
+          '🎬 LOADING COMPLETE - Canvas now visible, starting 5-second alpha animation from 1.0 → 0.3'
+        );
+
+        const startTime = Date.now();
+        const animationDuration = 5000; // 5-second animation from 1.0 to 0.3 as requested
+
+        const animateAlpha = () => {
+          const elapsedTime = Date.now() - startTime;
+          const progress = Math.min(elapsedTime / animationDuration, 1);
+          const currentAlpha = 1.0 + (0.3 - 1.0) * progress; // Interpolate from 1.0 to 0.3
+
+          setManualAlphaTest(currentAlpha);
+
+          if (progress < 1) {
+            alphaAnimationRequestRef.current =
+              requestAnimationFrame(animateAlpha);
+          } else {
+            alphaAnimationRequestRef.current = null;
+            console.log(
+              '✅ 5-second alpha animation completed: splat now at alphaTest = 0.3'
+            );
+            setAlphaAnimationComplete(true);
+          }
+        };
+
+        // Start animation immediately without any delay
+        alphaAnimationRequestRef.current = requestAnimationFrame(animateAlpha);
+        isInitialMountRef.current = false;
+        return;
+      } else {
+        // Loading not complete yet - wait
+        console.log(
+          '⏳ Waiting for loading to complete before starting alpha animation'
         );
         return;
       }
-
-      console.log(
-        '🎬 Starting initial splat fade-in animation (loading complete)'
-      );
-      targetAlpha = 0.3;
-      duration = 5000; // 5 seconds for initial animation
-      isInitialMountRef.current = false; // Mark initial animation as handled
     } else {
+      // After initial animation, handle overlay changes
       // Check if ANY overlay is active (contact, types, or gallery)
+      let targetAlpha;
+      let duration;
+
       if (hasOverlay) {
         console.log(
           `🎭 Overlay detected - animating alpha to 1.0 (showContactPage: ${showContactPage}, showTypes: ${showTypes}, showGallery: ${showGallery})`
@@ -664,45 +790,31 @@ function Scene({
         targetAlpha = 0.3; // Animate back to 0.3 when all overlays are hidden
         duration = 400; // 400ms - quick return to normal
       }
-    }
 
-    // If already at the target, no need to animate
-    if (startAlpha === targetAlpha) {
-      alphaAnimationRequestRef.current = null; // Ensure ref is cleared if no animation
-      return;
-    }
-
-    const startTime = Date.now();
-
-    const animateAlpha = () => {
-      const elapsedTime = Date.now() - startTime;
-      const progress = Math.min(elapsedTime / duration, 1); // Ensure progress doesn't exceed 1
-
-      setManualAlphaTest(startAlpha + (targetAlpha - startAlpha) * progress);
-
-      if (elapsedTime < duration) {
-        alphaAnimationRequestRef.current = requestAnimationFrame(animateAlpha);
-        // TEMPORARILY DISABLED: Cleanup manager registration
-        // cleanupManagerRef.current.registerAnimationFrame(
-        //   alphaAnimationRequestRef.current
-        // );
-      } else {
-        alphaAnimationRequestRef.current = null; // Clear ref when animation completes
-        // Mark alpha animation as complete for initial animation only
-        if (isInitialMountRef.current === false && !alphaAnimationComplete) {
-          console.log(
-            '✨ Alpha animation completed, text animation can now start'
-          );
-          setAlphaAnimationComplete(true);
-        }
+      // If already at the target, no need to animate
+      if (startAlpha === targetAlpha) {
+        alphaAnimationRequestRef.current = null; // Ensure ref is cleared if no animation
+        return;
       }
-    };
 
-    alphaAnimationRequestRef.current = requestAnimationFrame(animateAlpha);
-    // TEMPORARILY DISABLED: Cleanup manager registration
-    // cleanupManagerRef.current.registerAnimationFrame(
-    //   alphaAnimationRequestRef.current
-    // );
+      const startTime = Date.now();
+
+      const animateAlpha = () => {
+        const elapsedTime = Date.now() - startTime;
+        const progress = Math.min(elapsedTime / duration, 1); // Ensure progress doesn't exceed 1
+
+        setManualAlphaTest(startAlpha + (targetAlpha - startAlpha) * progress);
+
+        if (progress < 1) {
+          alphaAnimationRequestRef.current =
+            requestAnimationFrame(animateAlpha);
+        } else {
+          alphaAnimationRequestRef.current = null; // Clear ref when animation completes
+        }
+      };
+
+      alphaAnimationRequestRef.current = requestAnimationFrame(animateAlpha);
+    }
 
     // Cleanup function to cancel animation if component unmounts or effect re-runs
     return () => {
@@ -717,6 +829,7 @@ function Scene({
     showTypes,
     showGallery,
     initialLoadComplete,
+    sceneStarted, // Added sceneStarted dependency
   ]); // Explicitly include all overlay states
 
   // Enhanced camera animation with interaction awareness
@@ -1027,6 +1140,8 @@ function Scene({
       <ProgressChecker
         onSplatLoaded={onSplatLoaded}
         imagesLoaded={imagesLoaded}
+        initialLoadComplete={initialLoadComplete}
+        onSceneStart={() => setSceneStarted(true)} // NEW: Signal when scene starts
       />
     </>
   );

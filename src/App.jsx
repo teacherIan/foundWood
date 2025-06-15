@@ -6,7 +6,13 @@ import Gallery from '../components/galleries/Gallery';
 import Types from '../components/select_gallery/Types';
 import NewCanvas from '../components/new_experience/Experience';
 import FontFaceObserver from 'fontfaceobserver';
-import { useSpring, animated } from '@react-spring/web';
+import {
+  useSpring,
+  animated,
+  useSpringValue,
+  useChain,
+  useSpringRef,
+} from '@react-spring/web';
 // TEMPORARILY DISABLED: Image preloading to reduce memory pressure
 // import { useImagePreloader } from '../components/galleries/useImagePreloader';
 // TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
@@ -45,6 +51,236 @@ const AnimatedMenuItem = memo(({ children, onClick, isLogo = false }) => {
         alignItems: 'center',
         justifyContent: 'center',
         height: isLogo ? 'auto' : '100%',
+      }}
+    >
+      {children}
+    </animated.div>
+  );
+});
+
+// Simplified loading text components - reduced resource usage
+const AnimatedLoadingContainer = memo(({ children, shouldShow }) => {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      style={{
+        textAlign: 'center',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: shouldShow ? 1 : 0,
+        transition: 'opacity 0.3s ease-in-out',
+      }}
+    >
+      {children}
+    </div>
+  );
+});
+
+const AnimatedLoadingSpinner = memo(() => {
+  const spinnerSpring = useSpring({
+    from: {
+      opacity: 0,
+      transform: 'scale(0)',
+    },
+    to: {
+      opacity: 1,
+      transform: 'scale(1)',
+    },
+    config: { mass: 1, tension: 120, friction: 12 },
+    delay: 800,
+  });
+
+  return (
+    <animated.div
+      className="loading-spinner"
+      aria-label="Loading spinner"
+      style={{
+        ...spinnerSpring,
+        // Ensure animation works even if CSS fails to load properly
+        animation: 'spin-smooth 1.2s ease-in-out infinite',
+        WebkitAnimation: 'spin-smooth 1.2s ease-in-out infinite',
+        marginBottom: '30px',
+      }}
+    />
+  );
+});
+
+const AnimatedLoadingTitle = memo(({ children, delay = 0 }) => {
+  const titleSpring = useSpring({
+    from: {
+      opacity: 0,
+      transform: 'translateY(30px) scale(0.8)',
+      filter: 'blur(8px)',
+    },
+    to: {
+      opacity: 1,
+      transform: 'translateY(0px) scale(1)',
+      filter: 'blur(0px)',
+    },
+    config: { mass: 1, tension: 120, friction: 14 },
+    delay,
+  });
+
+  return (
+    <animated.h2
+      style={{
+        ...titleSpring,
+        margin: '0 0 10px 0',
+        fontSize: '1.6rem',
+        fontWeight: '600',
+        color: '#77481c',
+        fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+      }}
+    >
+      {children}
+    </animated.h2>
+  );
+});
+
+const AnimatedLoadingSubtitle = memo(({ children, delay = 0 }) => {
+  const subtitleSpring = useSpring({
+    from: {
+      opacity: 0,
+      transform: 'translateY(20px) rotateX(90deg)',
+    },
+    to: {
+      opacity: 1,
+      transform: 'translateY(0px) rotateX(0deg)',
+    },
+    config: { mass: 1, tension: 180, friction: 20 },
+    delay,
+  });
+
+  return (
+    <animated.div
+      style={{
+        ...subtitleSpring,
+        fontSize: '1.1rem',
+        color: '#8b5a2b',
+        fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+        marginBottom: '8px',
+        perspective: '1000px',
+      }}
+    >
+      {children}
+    </animated.div>
+  );
+});
+
+const AnimatedLoadingTagline = memo(({ children, delay = 0 }) => {
+  const taglineSpring = useSpring({
+    from: {
+      opacity: 0,
+      transform: 'translateX(-50px) rotateY(45deg)',
+    },
+    to: {
+      opacity: 1,
+      transform: 'translateX(0px) rotateY(0deg)',
+    },
+    config: { mass: 1, tension: 160, friction: 18 },
+    delay,
+  });
+
+  return (
+    <animated.div
+      style={{
+        ...taglineSpring,
+        fontSize: '0.9rem',
+        color: '#a67c52',
+        fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+        fontStyle: 'italic',
+        perspective: '1000px',
+      }}
+    >
+      {children}
+    </animated.div>
+  );
+});
+
+const AnimatedLoadingStatus = memo(({ children, delay = 0 }) => {
+  const statusSpring = useSpring({
+    from: {
+      opacity: 0,
+      transform: 'scale(0.3) rotate(-10deg)',
+    },
+    to: {
+      opacity: 1,
+      transform: 'scale(1) rotate(0deg)',
+    },
+    config: { mass: 1.2, tension: 200, friction: 25 },
+    delay,
+  });
+
+  return (
+    <animated.div
+      style={{
+        ...statusSpring,
+        fontSize: '0.95rem',
+        color: '#9d7856',
+        fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+        fontWeight: '500',
+      }}
+    >
+      {children}
+    </animated.div>
+  );
+});
+
+const AnimatedLoadingSaying = memo(({ children, opacity, delay = 0 }) => {
+  const [hasAppeared, setHasAppeared] = useState(false);
+
+  const sayingSpring = useSpring({
+    from: {
+      opacity: 0,
+      transform: 'translateY(30px) scale(0.9)',
+      filter: 'blur(4px)',
+    },
+    to: {
+      opacity: hasAppeared ? opacity : 1,
+      transform: hasAppeared
+        ? 'translateY(0px) scale(1)'
+        : 'translateY(0px) scale(1)',
+      filter: hasAppeared ? 'blur(0px)' : 'blur(0px)',
+    },
+    config: { mass: 1, tension: 140, friction: 18 },
+    delay: hasAppeared ? 0 : delay,
+    onRest: () => setHasAppeared(true),
+  });
+
+  // When children change (new saying), create a subtle bounce effect
+  const bounceSpring = useSpring({
+    from: { transform: 'scale(1)' },
+    to: async (next) => {
+      if (hasAppeared) {
+        await next({ transform: 'scale(1.05)' });
+        await next({ transform: 'scale(1)' });
+      }
+    },
+    config: { mass: 0.8, tension: 300, friction: 20 },
+  });
+
+  return (
+    <animated.div
+      style={{
+        ...sayingSpring,
+        transform: hasAppeared
+          ? bounceSpring.transform
+          : sayingSpring.transform,
+        fontStyle: 'italic',
+        fontSize: '1.2rem',
+        color: '#8b5a2b',
+        maxWidth: '380px',
+        textAlign: 'center',
+        lineHeight: '1.5',
+        fontWeight: '500',
+        margin: '0 auto',
+        padding: '0 20px',
+        fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+        letterSpacing: '0.3px',
       }}
     >
       {children}
@@ -826,18 +1062,7 @@ function App() {
       {/* Show loading screen overlay when needed */}
       {shouldShowLoading && (
         <div className="font-loading-screen">
-          <div
-            role="status"
-            aria-live="polite"
-            style={{
-              textAlign: 'center',
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <AnimatedLoadingContainer shouldShow={shouldShowLoading}>
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
               <h2
                 style={{
@@ -845,8 +1070,9 @@ function App() {
                   fontSize: '1.6rem',
                   fontWeight: '600',
                   color: '#77481c',
-                  fontFamily:
-                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  opacity: 0,
+                  animation: 'fadeInUp 0.8s ease-out 0.2s forwards',
                 }}
               >
                 Welcome to Doug's Found Wood
@@ -855,9 +1081,10 @@ function App() {
                 style={{
                   fontSize: '1.1rem',
                   color: '#8b5a2b',
-                  fontFamily:
-                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                   marginBottom: '8px',
+                  opacity: 0,
+                  animation: 'fadeInUp 0.8s ease-out 0.4s forwards',
                 }}
               >
                 Preparing your handcrafted journey...
@@ -866,9 +1093,10 @@ function App() {
                 style={{
                   fontSize: '0.9rem',
                   color: '#a67c52',
-                  fontFamily:
-                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                   fontStyle: 'italic',
+                  opacity: 0,
+                  animation: 'fadeInUp 0.8s ease-out 0.6s forwards',
                 }}
               >
                 Each piece tells a story
@@ -878,47 +1106,33 @@ function App() {
               className="loading-spinner"
               aria-label="Loading spinner"
               style={{
-                // Ensure animation works even if CSS fails to load properly
                 animation: 'spin-smooth 1.2s ease-in-out infinite',
                 WebkitAnimation: 'spin-smooth 1.2s ease-in-out infinite',
                 marginBottom: '30px',
+                opacity: 0,
+                animationDelay: '0.8s',
+                animationFillMode: 'forwards',
               }}
-            ></div>
+            />
             {/* Removed technical debug info - replaced with customer-friendly message */}
             <div style={{ textAlign: 'center', marginBottom: '25px' }}>
               <div
                 style={{
                   fontSize: '0.95rem',
                   color: '#9d7856',
-                  fontFamily:
-                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                   fontWeight: '500',
+                  opacity: 0,
+                  animation: 'fadeInUp 0.8s ease-out 1.0s forwards',
                 }}
               >
                 🪵 Crafting your experience with care 🪵
               </div>
             </div>
-            <div
-              style={{
-                fontStyle: 'italic',
-                fontSize: '1.2rem',
-                color: '#8b5a2b',
-                maxWidth: '380px',
-                textAlign: 'center',
-                lineHeight: '1.5',
-                fontWeight: '500',
-                opacity: sayingOpacity,
-                transition: 'opacity 0.3s ease-in-out',
-                margin: '0 auto',
-                padding: '0 20px',
-                fontFamily:
-                  '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                letterSpacing: '0.3px',
-              }}
-            >
+            <AnimatedLoadingSaying opacity={sayingOpacity} delay={2000}>
               {loadingSayings[currentSayingIndex]}
-            </div>
-          </div>
+            </AnimatedLoadingSaying>
+          </AnimatedLoadingContainer>
         </div>
       )}
     </>
