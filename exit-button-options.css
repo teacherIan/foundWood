@@ -1,0 +1,281 @@
+/* EXIT BUTTON PLACEMENT OPTIONS FOR GLASSMORPHISM CONTACT FORM */
+
+/* ========================================
+   OPTION 1: FLOATING UNBLURRED BUTTON (Enhanced Version of Your Idea)
+   ======================================== */
+.exit-btn-option1 {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+    font-size: 24px;
+    z-index: 40000;
+    /* Above the contact container */
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.3),
+        0 0 0 0 rgba(119, 72, 28, 0.4);
+    /* No backdrop filter - remains sharp and clear */
+}
+
+.exit-btn-option1:hover {
+    background: rgba(119, 72, 28, 0.9);
+    border-color: #fff;
+    transform: scale(1.1) rotate(90deg);
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.4),
+        0 0 0 4px rgba(119, 72, 28, 0.2);
+}
+
+.exit-btn-option1:active {
+    transform: scale(0.95) rotate(90deg);
+}
+
+/* ========================================
+   OPTION 2: TOP-RIGHT CORNER INSIDE CARD
+   ======================================== */
+.exit-btn-option2 {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: rgba(119, 72, 28, 0.1);
+    border: 1px solid rgba(119, 72, 28, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #77481c;
+    font-size: 18px;
+    z-index: 100;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.exit-btn-option2:hover {
+    background: rgba(119, 72, 28, 0.2);
+    border-color: #77481c;
+    transform: rotate(90deg) scale(1.05);
+    box-shadow: 0 4px 12px rgba(119, 72, 28, 0.2);
+}
+
+/* ========================================
+   OPTION 3: HEADER INTEGRATION
+   ======================================== */
+.formHeader-with-close {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 30px;
+    width: 100%;
+    position: relative;
+}
+
+.formHeaderText-with-close {
+    flex: 1;
+    font-size: clamp(1.6rem, 4vw, 2rem);
+    font-weight: 600;
+    color: #77481c;
+    line-height: 1.2;
+    text-align: left;
+    margin: 0;
+}
+
+.exit-btn-option3 {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #77481c;
+    font-size: 20px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.exit-btn-option3:hover {
+    background: rgba(119, 72, 28, 0.1);
+    transform: rotate(90deg);
+    color: #5a3617;
+}
+
+/* ========================================
+   OPTION 4: FLOATING ACTION BUTTON (FAB)
+   ======================================== */
+.exit-btn-option4 {
+    position: absolute;
+    top: -25px;
+    right: -25px;
+    width: 56px;
+    height: 56px;
+    border: none;
+    background: linear-gradient(135deg, #77481c, #8b5a2b);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+    font-size: 24px;
+    z-index: 100;
+    box-shadow:
+        0 8px 25px rgba(119, 72, 28, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.15);
+    border: 3px solid rgba(255, 255, 255, 0.9);
+}
+
+.exit-btn-option4:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow:
+        0 12px 35px rgba(119, 72, 28, 0.4),
+        0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.exit-btn-option4:active {
+    transform: scale(0.95) rotate(90deg);
+}
+
+/* ========================================
+   OPTION 5: ESC KEY HINT + SUBTLE ICON
+   ======================================== */
+.exit-hint-container {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(119, 72, 28, 0.05);
+    border: 1px solid rgba(119, 72, 28, 0.15);
+    border-radius: 20px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.exit-hint-text {
+    font-size: 12px;
+    color: #77481c;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.exit-btn-option5 {
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #77481c;
+    font-size: 14px;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.exit-hint-container:hover {
+    background: rgba(119, 72, 28, 0.1);
+    border-color: rgba(119, 72, 28, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(119, 72, 28, 0.15);
+}
+
+.exit-hint-container:hover .exit-btn-option5 {
+    transform: rotate(90deg);
+    color: #5a3617;
+}
+
+/* ========================================
+   MOBILE RESPONSIVENESS FOR ALL OPTIONS
+   ======================================== */
+@media (max-width: 600px) {
+    .exit-btn-option1 {
+        top: 15px;
+        right: 15px;
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+
+    .exit-btn-option2 {
+        top: 12px;
+        right: 12px;
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    .exit-btn-option4 {
+        top: -20px;
+        right: -20px;
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+    }
+
+    .exit-hint-container {
+        top: 12px;
+        right: 12px;
+        padding: 4px 8px;
+    }
+
+    .exit-hint-text {
+        font-size: 10px;
+    }
+
+    .formHeaderText-with-close {
+        font-size: clamp(1.3rem, 5vw, 1.6rem);
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY IMPROVEMENTS
+   ======================================== */
+.exit-btn-option1:focus,
+.exit-btn-option2:focus,
+.exit-btn-option3:focus,
+.exit-btn-option4:focus,
+.exit-hint-container:focus {
+    outline: none;
+    box-shadow:
+        0 0 0 3px rgba(119, 72, 28, 0.3),
+        0 4px 12px rgba(119, 72, 28, 0.2);
+}
+
+/* Screen reader text */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

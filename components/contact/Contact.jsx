@@ -30,22 +30,55 @@ export default function Contact({
   const configAnimation = { mass: 3, tension: 40, friction: 20 };
 
   const [springs, api] = useSpring(() => ({
-    from: { transform: 'translateX(100%)', opacity: 0 },
+    from: {
+      opacity: 0,
+      transform: 'scale(0.8) translateY(30px)',
+      backdropFilter: 'blur(0px)',
+    },
     config: configAnimation,
   }));
 
   useEffect(() => {
     if (showContactPage) {
       api.start({
-        from: { transform: 'translateX(100%)', opacity: 0 },
-        to: { transform: 'translateX(0%)', opacity: 1 },
+        from: {
+          opacity: 0,
+          transform: 'scale(0.8) translateY(30px)',
+          backdropFilter: 'blur(0px)',
+        },
+        to: {
+          opacity: 1,
+          transform: 'scale(1) translateY(0px)',
+          backdropFilter: 'blur(10px)',
+        },
       });
     } else {
       api.start({
-        to: { transform: 'translateX(100%)', opacity: 0 },
+        to: {
+          opacity: 0,
+          transform: 'scale(0.8) translateY(30px)',
+          backdropFilter: 'blur(0px)',
+        },
       });
     }
   }, [showContactPage, api]);
+
+  // Add ESC key support for closing the contact form
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape' && showContactPage) {
+        handleExitClick();
+      }
+    };
+
+    if (showContactPage) {
+      document.addEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [showContactPage]);
 
   function handleExitClick() {
     // TEMPORARILY DISABLED: iOS Safari specific cleanup to rely on R3F's built-in memory management
@@ -201,11 +234,12 @@ export default function Contact({
       className="contactContainer"
       style={{
         ...springs,
-        // REMOVED: Background image to allow 3D scene to show through
-        // backgroundImage:
-        //   window.innerWidth > window.innerHeight
-        //     ? `url(${bg_image_long})`
-        //     : `url(${bg_image_cell_3})`,
+        // Glassmorphism background that shows 3D scene
+        background: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: springs.backdropFilter,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       <div className="formContainer">
@@ -214,7 +248,8 @@ export default function Contact({
           <button
             className="exit-icon"
             onClick={handleExitClick}
-            aria-label="Close form"
+            aria-label="Close contact form (ESC)"
+            title="Close contact form"
           >
             <MdExitToApp />
           </button>
@@ -227,9 +262,10 @@ export default function Contact({
               ref={nameInputRef}
               type="text"
               required
+              placeholder=" "
             />
             <label ref={nameLabelRef}>
-              {nameLabel.length > 1 ? nameLabel : 'Name:'}
+              {nameLabel.length > 1 ? nameLabel : 'Name'}
             </label>
           </div>
 
@@ -240,22 +276,24 @@ export default function Contact({
               ref={emailInputRef}
               type="email"
               required
+              placeholder=" "
             />
             <label ref={emailLabelRef}>
-              {emailLabel.length > 1 ? emailLabel : 'Email:'}
+              {emailLabel.length > 1 ? emailLabel : 'Email'}
             </label>
           </div>
 
           <div className="form-control">
-            <input
+            <textarea
               autoComplete="off"
               name="message"
               ref={messageInputRef}
-              type="text"
               required
+              placeholder=" "
+              rows="4"
             />
             <label ref={messageLabelRef}>
-              {messageLabel.length > 1 ? messageLabel : 'Message:'}
+              {messageLabel.length > 1 ? messageLabel : 'Message'}
             </label>
           </div>
 

@@ -1,42 +1,51 @@
-:root {
-    --spacing-unit: 3rem;
-}
+/* Modern Contact Form Styles - Glassmorphism Design */
 
 .contactContainer {
     z-index: 30000;
-    background-repeat: no-repeat;
-    background-size: 0;
-    background-size: 100svw 100svh;
     position: fixed;
     top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    will-change: transform, opacity;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    will-change: transform, opacity, backdrop-filter;
     padding: 20px;
-    /* Allow 3D scene to show through with semi-transparent background */
-    background-color: rgba(0, 0, 0, 0.7);
-    /* Semi-transparent overlay */
-    /* Optimizes for animations */
+    /* Glassmorphism effect that shows 3D scene through blur */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    /* Center the form container */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .formContainer {
+    /* Modern glassmorphism card */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.15),
+        0 0 100px rgba(119, 72, 28, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+    /* Card layout */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    min-height: 100svh;
-    padding: 12vh 2rem 2rem 2rem;
-    /* Add top padding for menu height */
-    max-width: 700px;
+    justify-content: flex-start;
+    padding: 40px;
+    max-width: 500px;
     width: 100%;
-    margin: 0 auto;
-    box-sizing: border-box;
-    /* Ensure content fits on large screens */
-    max-height: 100vh;
-    max-height: 100svh;
+    max-height: 85vh;
     overflow-y: auto;
+    box-sizing: border-box;
+
+    /* Transform origin for smooth animations */
+    transform-origin: center;
+    will-change: transform;
 }
 
 .formHeader {
@@ -44,166 +53,211 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 2rem;
-    filter: drop-shadow(2px 2px 0px black);
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-    color: white;
-    -webkit-text-stroke: 1px #77481c;
-    -webkit-text-fill-color: #ffffff;
-    position: relative;
-    text-align: left;
-    padding-right: 0.5rem;
+    margin-bottom: 30px;
     width: 100%;
-    flex-wrap: wrap;
+    text-align: center;
+    position: relative;
 }
 
 .formHeaderText {
     flex: 1;
-    min-width: 0;
+    font-size: clamp(1.8rem, 4vw, 2.2rem);
+    font-weight: 600;
+    color: #77481c;
     line-height: 1.2;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
+    text-align: center;
+    margin: 0;
 }
 
 .btn {
     cursor: pointer;
     display: inline-block;
     width: 100%;
-    background: white;
-    padding: 0.3em 0.8em;
+    background: linear-gradient(135deg, #77481c, #8b5a2b);
+    padding: 15px 20px;
     font-family: inherit;
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    border: 0;
-    border-radius: 1.2em;
-    color: var(--brown);
-    transition: 1s;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     margin-top: 1.5rem;
-    border: 2px solid var(--brown);
-    filter: drop-shadow(2px 2px 0px black);
-    -webkit-text-stroke: 3px #77481C;
-    -webkit-text-fill-color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow:
+        0 4px 12px rgba(119, 72, 28, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
 }
 
 .btn-text {
-    font-size: clamp(2rem, 2.5vw, 3rem);
-    color: var(--brown);
-    -webkit-text-stroke: 2px #77481c;
-    -webkit-text-fill-color: #ffffff;
-    filter: drop-shadow(1px 1px 0px black);
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    position: relative;
+    z-index: 1;
 }
 
 .btn:focus {
-    outline: 0;
+    outline: none;
+    box-shadow:
+        0 0 0 3px rgba(119, 72, 28, 0.3),
+        0 6px 20px rgba(119, 72, 28, 0.4);
 }
 
 .btn:hover {
-    background-color: var(--lightGreen);
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 25px rgba(119, 72, 28, 0.4),
+        0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn:active {
-    transform: scale(0.98);
+    transform: translateY(0);
+    box-shadow:
+        0 2px 8px rgba(119, 72, 28, 0.3),
+        0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.text {
-    margin-top: calc(var(--spacing-unit) * 10);
-}
+/* Focus and interaction states */
 
 .form-control {
     position: relative;
-    margin: 1.5rem 0 3rem;
-    width: 40svw;
-    filter: drop-shadow(1px 1px 0px black);
+    margin: 1.5rem 0 2rem;
+    width: 100%;
+    filter: drop-shadow(1px 1px 0px rgba(0, 0, 0, 0.1));
 }
 
-.form-control input {
-    user-select: none;
-    background-color: transparent;
-    border: 0;
-    border-bottom: 2px #fff solid;
-    display: block;
+.form-control input,
+.form-control textarea {
     width: 100%;
-    padding: calc(var(--spacing-unit) * 0.5) 0;
-    font-size: var(--spacing-unit);
-    color: white;
-    position: relative;
-    z-index: 100;
-    transition: 1s;
-    -webkit-text-stroke: 1px #77481c;
-    -webkit-text-fill-color: #ffffff;
-    filter: drop-shadow(1px 1px 0px black);
-    height: calc(var(--spacing-unit) * 2);
+    padding: 15px 20px;
+    border: 2px solid rgba(119, 72, 28, 0.2);
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 50px;
+}
+
+.form-control textarea {
+    min-height: 100px;
+    line-height: 1.5;
 }
 
 .form-control input:focus,
-.form-control input:valid {
-    outline: 0;
-    border-bottom-color: var(--lightGreen);
+.form-control input:not(:placeholder-shown),
+.form-control textarea:focus,
+.form-control textarea:not(:placeholder-shown) {
+    border-color: #77481c;
+    box-shadow:
+        0 0 0 3px rgba(119, 72, 28, 0.1),
+        0 4px 12px rgba(119, 72, 28, 0.15);
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 1);
 }
 
 .form-control label {
     position: absolute;
-    top: calc(var(--spacing-unit) * 0.3);
-    left: 0;
+    top: 15px;
+    left: 20px;
+    color: #77481c;
+    font-size: 16px;
+    font-weight: 500;
     pointer-events: none;
-    transform: translateY(0);
-    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    filter: drop-shadow(1px 1px 0px black);
-    -webkit-text-stroke: 1px #77481c;
-    -webkit-text-fill-color: #ffffff;
-    font-size: var(--spacing-unit);
-    line-height: calc(var(--spacing-unit) * 2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0 8px;
+    border-radius: 4px;
+    transform-origin: left center;
 }
 
 .form-control input:focus+label,
-.form-control input:valid+label {
-    transform: translateY(calc(var(--spacing-unit) * -0.5));
+.form-control input:not(:placeholder-shown)+label,
+.form-control textarea:focus+label,
+.form-control textarea:not(:placeholder-shown)+label {
+    top: -8px;
+    font-size: 12px;
+    color: #77481c;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .form-control label span {
     display: inline-block;
-    font-size: var(--spacing-unit);
-    min-width: 0.5rem;
-    color: white;
-    line-height: calc(var(--spacing-unit) * 2);
+    font-size: inherit;
+    color: inherit;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .form-control input:focus+label span,
-.form-control input:valid+label span {
-    transform: translateY(calc(var(--spacing-unit) * -1.01));
+.form-control input:not(:placeholder-shown)+label span,
+.form-control textarea:focus+label span,
+.form-control textarea:not(:placeholder-shown)+label span {
+    transform: translateY(0);
     transition: transform 0.3s cubic-bezier(0.68, -1.5, 0.265, 2);
 }
 
 .facebookIcon {
     margin-top: 1rem;
-    font-size: clamp(3rem, 5vw, 6rem);
-    color: white;
-    transition: 1s;
-    stroke: #77481c;
-    fill: #ffffff;
-    stroke-width: 15px;
-    filter: drop-shadow(1px 1px 0px black);
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    color: #77481c;
+    transition: all 0.3s ease;
     z-index: 1000;
-    overflow: visible;
 }
 
 .facebookText {
-    font-size: clamp(2.5rem, 5vw, 5rem);
-    color: white;
-    -webkit-text-stroke: 2px #77481c;
-    -webkit-text-fill-color: #ffffff;
-    filter: drop-shadow(1px 1px 0px black);
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    color: #77481c;
+    font-weight: 500;
     text-decoration: none !important;
     text-align: center;
 }
 
 a {
     text-decoration: none;
-    /* Remove underline from all links */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(119, 72, 28, 0.05);
+}
+
+a:hover {
+    background: rgba(119, 72, 28, 0.1);
+    transform: translateY(-2px);
 }
 
 .facebookIcon:hover {
-    fill: var(--lightGreen);
+    color: #1877f2;
+    transform: scale(1.1);
     cursor: pointer;
 }
 
@@ -243,37 +297,51 @@ a {
 } */
 
 .exit-icon {
-    /* position: static; */
-    transform: rotate(180deg);
-    font-size: clamp(2rem, 4vw, 3rem);
-    color: white;
-    background: rgba(0, 0, 0, 0.2);
-    border: 3px solid white;
+    /* Option 1: Floating Unblurred Button */
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.9);
     border-radius: 50%;
-    width: clamp(3rem, 5vw, 4rem);
-    height: clamp(3rem, 5vw, 4rem);
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    -webkit-text-stroke: 1px #77481c;
-    -webkit-text-fill-color: #ffffff;
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
-    z-index: 100000;
-    margin-left: auto;
-    flex-shrink: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+    font-size: 24px;
+    z-index: 40000;
+    /* Above the contact container */
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.3),
+        0 0 0 0 rgba(119, 72, 28, 0.4);
+    /* No backdrop filter - remains sharp and clear */
+    transform: rotate(0deg);
 }
 
 .exit-icon:hover {
-    background-color: var(--lightGreen);
-    transform: rotate(0deg);
-    border-color: var(--lightGreen);
+    background: rgba(119, 72, 28, 0.9);
+    border-color: #fff;
+    transform: scale(1.1) rotate(90deg);
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.4),
+        0 0 0 4px rgba(119, 72, 28, 0.2);
 }
 
 .exit-icon:active {
-    transform: scale(0.95) rotate(0deg);
-    background-color: var(--lightGreen);
+    transform: scale(0.95) rotate(90deg);
+    background: rgba(119, 72, 28, 1);
+}
+
+.exit-icon:focus {
+    outline: none;
+    box-shadow:
+        0 0 0 3px rgba(119, 72, 28, 0.3),
+        0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 /* Better touch experience for mobile */
@@ -294,363 +362,230 @@ a {
 }
 
 @media only screen and (max-width: 1000px) {
-    .form-control {
-        width: 90vw;
-        max-width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
     .formContainer {
-        width: 98vw;
-        max-width: 100%;
+        width: 95%;
+        max-width: 450px;
         margin: 0 auto;
-        padding: 8vh 1rem 1rem 1rem;
-        /* Adjust for smaller header on mobile */
-        min-height: 100vh;
-        min-height: 100svh;
-        max-height: 100vh;
-        max-height: 100svh;
-        overflow-y: auto;
+        padding: 30px 25px;
+        max-height: 90vh;
+        border-radius: 16px;
     }
 
     .exit-icon {
-        font-size: 2rem;
-        width: 3rem;
-        height: 3rem;
-        padding: 0.25rem;
-        margin-left: auto;
+        top: 15px;
+        right: 15px;
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+        border-width: 2px;
     }
 
-    :root {
-        --spacing-unit: 1.5rem;
+    .formHeader {
+        margin-bottom: 25px;
+    }
+
+    .formHeaderText {
+        font-size: clamp(1.5rem, 4vw, 1.8rem);
+    }
+
+    .form-control {
+        margin: 1.2rem 0 1.8rem;
+    }
+
+    .form-control input,
+    .form-control textarea {
+        padding: 12px 16px;
+        font-size: 15px;
+        border-radius: 10px;
+    }
+
+    .form-control label {
+        top: 12px;
+        left: 16px;
+        font-size: 15px;
+    }
+
+    .form-control input:focus+label,
+    .form-control input:not(:placeholder-shown)+label,
+    .form-control textarea:focus+label,
+    .form-control textarea:not(:placeholder-shown)+label {
+        font-size: 11px;
+    }
+
+    .btn {
+        padding: 12px 16px;
+        font-size: 15px;
+        border-radius: 10px;
     }
 }
 
 @media only screen and (max-width: 600px) {
-    .formHeader {
-        font-size: clamp(1.8rem, 5vw, 2.5rem);
-        margin-bottom: 1rem;
-        padding-top: 0.5rem;
-        margin-top: 0;
-        gap: 0.5rem;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-    }
-
-    .formHeaderText {
-        flex: 1;
-        text-align: center;
-        margin-bottom: 0;
-        line-height: 1.1;
-        padding-right: 0.5rem;
-    }
-
-    .exit-icon {
-        position: static;
-        transform: rotate(180deg);
-        font-size: 1.8rem;
-        color: white;
-        background: rgba(0, 0, 0, 0.3);
-        border: 2px solid white;
-        border-radius: 50%;
-        width: 3rem;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        -webkit-text-stroke: 1px #77481c;
-        -webkit-text-fill-color: #ffffff;
-        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
-        flex-shrink: 0;
-        margin-left: auto;
-    }
-
-    .exit-icon:hover,
-    .exit-icon:active {
-        background-color: var(--lightGreen);
-        transform: rotate(0deg) scale(0.95);
-        border-color: var(--lightGreen);
-    }
-
-    .btn {
-        padding: 0.3em 0.7em;
-        border-radius: 1em;
-    }
-
-    .btn-text {
-        font-size: clamp(1.2rem, 4vw, 1.5rem);
-    }
-
-    .facebookText {
-        font-size: clamp(1.2rem, 4vw, 1.5rem);
-    }
-
-    .form-control label,
-    .form-control label span,
-    .form-control input {
-        font-size: 1.2rem;
-        line-height: 2rem;
+    .contactContainer {
+        padding: 15px;
     }
 
     .formContainer {
-        padding: 8vh 0.5rem 0.5rem 0.5rem;
-        /* Account for mobile header height */
-        min-height: 100vh;
-        min-height: 100svh;
-        max-height: 100vh;
-        max-height: 100svh;
-        overflow-y: auto;
+        width: 100%;
+        max-width: 380px;
+        padding: 25px 20px;
+        max-height: 85vh;
+        border-radius: 12px;
     }
-}
 
-/* Extra small mobile devices (iPhone SE, etc.) */
-@media only screen and (max-width: 375px) {
     .formHeader {
-        font-size: clamp(1.5rem, 6vw, 2rem);
-        margin-bottom: 0.8rem;
-        gap: 0.3rem;
+        margin-bottom: 20px;
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
     }
 
     .formHeaderText {
-        font-size: clamp(1.3rem, 5vw, 1.8rem);
-        line-height: 1.1;
+        font-size: clamp(1.3rem, 5vw, 1.6rem);
+        margin-bottom: 0;
     }
 
     .exit-icon {
-        font-size: 1.5rem;
-        width: 2.8rem;
-        height: 2.8rem;
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
         border-width: 2px;
     }
 
     .form-control {
-        margin: 1rem 0 2rem;
+        margin: 1rem 0 1.5rem;
     }
 
-    .formContainer {
-        padding: 7vh 0.3rem 0.3rem 0.3rem;
-    }
-}
-
-/* Mobile landscape orientation */
-@media only screen and (max-width: 850px) and (orientation: landscape) and (max-height: 500px) {
-    .formHeader {
-        font-size: clamp(1.2rem, 4vw, 1.8rem);
-        margin-bottom: 0.5rem;
-    }
-
-    .formHeaderText {
-        font-size: clamp(1rem, 3.5vw, 1.5rem);
-    }
-
-    .exit-icon {
-        font-size: 1.3rem;
-        width: 2.5rem;
-        height: 2.5rem;
-    }
-
-    .formContainer {
-        padding: 4vh 1rem 1rem 1rem;
-        /* Reduced top padding for landscape */
-    }
-
-    .form-control {
-        margin: 0.8rem 0 1.5rem;
-        /* Tighter spacing in landscape */
-    }
-
-    :root {
-        --spacing-unit: 1.2rem;
-    }
-}
-
-/* iPad landscape orientation */
-@media only screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-    .formContainer {
-        padding: 3vh 2rem 1rem 2rem;
-        /* Reduced top padding for iPad landscape */
-        max-height: 100vh;
-        max-height: 100svh;
-        overflow-y: auto;
-        justify-content: flex-start;
-        /* Align to top instead of center */
-    }
-
-    .formHeader {
-        font-size: clamp(2rem, 4vw, 2.5rem);
-        margin-bottom: 1rem;
-        margin-top: 0;
-    }
-
-    .formHeaderText {
-        font-size: clamp(1.8rem, 3.5vw, 2.2rem);
-        line-height: 1.1;
-    }
-
-    .exit-icon {
-        font-size: 2rem;
-        width: 3rem;
-        height: 3rem;
-    }
-
-    .form-control {
-        margin: 1rem 0 2rem;
-        width: 80vw;
-        max-width: 400px;
-    }
-
-    .form-control input {
-        height: calc(var(--spacing-unit) * 1.5);
-        padding: calc(var(--spacing-unit) * 0.3) 0;
+    .form-control input,
+    .form-control textarea {
+        padding: 10px 14px;
+        font-size: 14px;
+        border-radius: 8px;
     }
 
     .form-control label {
-        top: calc(var(--spacing-unit) * 0.2);
+        top: 10px;
+        left: 14px;
+        font-size: 14px;
+    }
+
+    .form-control input:focus+label,
+    .form-control input:not(:placeholder-shown)+label,
+    .form-control textarea:focus+label,
+    .form-control textarea:not(:placeholder-shown)+label {
+        font-size: 10px;
     }
 
     .btn {
+        padding: 10px 14px;
+        font-size: 14px;
+        border-radius: 8px;
         margin-top: 1rem;
-        padding: 0.4em 0.8em;
     }
 
     .btn-text {
-        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-size: 14px;
     }
 
     .facebookText {
-        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-size: 0.9rem;
     }
 
     .facebookIcon {
-        font-size: clamp(2.5rem, 4vw, 3.5rem);
+        font-size: 1.5rem;
     }
 
-    :root {
-        --spacing-unit: 1.8rem;
+    a {
+        margin-top: 15px;
+        padding: 8px;
     }
 }
 
+/* Mobile landscape and tablet optimizations */
+@media only screen and (max-width: 850px) and (orientation: landscape) and (max-height: 500px) {
+    .contactContainer {
+        padding: 10px;
+    }
+
+    .formContainer {
+        max-width: 420px;
+        padding: 20px;
+        max-height: 80vh;
+    }
+
+    .formHeader {
+        margin-bottom: 15px;
+    }
+
+    .formHeaderText {
+        font-size: clamp(1.2rem, 3vw, 1.4rem);
+    }
+
+    .form-control {
+        margin: 0.8rem 0 1.2rem;
+    }
+
+    .exit-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+}
+
+/* iPad and larger tablets */
 @media only screen and (min-width: 601px) and (max-width: 1000px) {
     .formContainer {
-        padding: 10vh 3rem 2rem 3rem;
-        /* Better spacing for tablets */
-        max-width: 500px;
-        max-height: 100vh;
-        max-height: 100svh;
-        overflow-y: auto;
+        max-width: 480px;
+        padding: 35px 30px;
+        border-radius: 18px;
     }
 
-    .formHeader {
-        font-size: clamp(3rem, 5vw, 3.5rem);
-        margin-bottom: 1.5rem;
-    }
-
-    .form-control {
-        width: 70vw;
-        max-width: 400px;
+    .formHeaderText {
+        font-size: clamp(1.8rem, 3vw, 2rem);
     }
 
     .exit-icon {
-        font-size: 2.5rem;
-        width: 3.5rem;
-        height: 3.5rem;
+        width: 38px;
+        height: 38px;
+        font-size: 19px;
     }
 }
 
-/* Desktop styles for large screens */
+/* Desktop and large screens */
 @media only screen and (min-width: 1001px) {
-    .form-control {
-        width: 50vw;
-        max-width: 500px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
     .formContainer {
-        width: 90vw;
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 8vh 2rem 2rem 2rem;
-        /* Better spacing for desktop */
-        min-height: 100vh;
-        min-height: 100svh;
-        max-height: 100vh;
-        max-height: 100svh;
-        overflow-y: auto;
+        max-width: 520px;
+        padding: 45px 40px;
     }
 
-    .formHeader {
-        font-size: clamp(3rem, 4vw, 4rem);
-        margin-bottom: 2rem;
+    .formHeaderText {
+        font-size: 2.2rem;
     }
 
     .exit-icon {
-        font-size: 2.5rem;
-        width: 3.5rem;
-        height: 3.5rem;
-        padding: 0.25rem;
-        margin-left: auto;
+        width: 42px;
+        height: 42px;
+        font-size: 21px;
     }
 
-    :root {
-        --spacing-unit: 2.5rem;
-    }
-}
-
-/* Ultra-wide desktop screens */
-@media only screen and (min-width: 1920px) {
-    .formContainer {
-        max-width: 800px;
-        padding: 6vh 3rem 3rem 3rem;
+    .form-control input,
+    .form-control textarea {
+        padding: 16px 22px;
+        font-size: 17px;
     }
 
-    .form-control {
-        width: 40vw;
-        max-width: 600px;
-    }
-
-    .formHeader {
-        font-size: clamp(3.5rem, 3vw, 4.5rem);
-        margin-bottom: 2.5rem;
-    }
-
-    :root {
-        --spacing-unit: 3rem;
-    }
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        /* transform: scale(1); */
-    }
-
-    50% {
-        /* transform: scale(1.1); */
-    }
-}
-
-@media only screen and (max-width: 768px) {
-    .exit-icon {
-        top: 15px;
-        right: 15px;
-        font-size: calc(var(--base-size) * 1);
-        width: calc(var(--base-size) * 3.5);
-        height: calc(var(--base-size) * 3.5);
-    }
-
-    .formHeader {
-        margin-top: calc(var(--spacing-unit) * 0);
-        padding-top: calc(var(--spacing-unit) * 0);
+    .form-control label {
+        font-size: 17px;
+        top: 16px;
+        left: 22px;
     }
 
     .btn {
-        margin-top: 0;
+        padding: 16px 22px;
+        font-size: 17px;
     }
 }
+
+/* Remove old unused animations and root variables */
