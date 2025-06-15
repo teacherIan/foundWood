@@ -145,16 +145,11 @@ export class WebGLCleanupManager {
         console.warn('Failed to dispose resource:', error);
       }
     });
-    this.disposables.clear();
-
-    // Force WebGL context loss (iOS Safari specific)
+    this.disposables.clear(); // Force WebGL context loss (iOS Safari specific)
     this.contexts.forEach((context) => {
       try {
-        if (context && context.getExtension) {
-          const loseContext = context.getExtension('WEBGL_lose_context');
-          if (loseContext) {
-            loseContext.loseContext();
-          }
+        if (context) {
+          safeForceContextLoss(context);
         }
       } catch (error) {
         console.warn('Failed to lose WebGL context:', error);
@@ -215,10 +210,7 @@ export const cleanupThreeJSScene = (scene, renderer, camera) => {
         renderer.domElement.getContext('experimental-webgl');
 
       if (gl) {
-        const loseContext = gl.getExtension('WEBGL_lose_context');
-        if (loseContext) {
-          loseContext.loseContext();
-        }
+        safeForceContextLoss(gl);
       }
     }
 
@@ -271,6 +263,61 @@ export const isIOSSafari = () => {
   const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
 
   return isIOS && isSafari;
+};
+
+/**
+ * Check if WEBGL_lose_context extension is supported
+ */
+export const isWebGLLoseContextSupported = () => {
+  if (typeof window === 'undefined') return false;
+
+  try {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('webgl2');
+    if (!gl) return false;
+
+    const supported = !!gl.getExtension('WEBGL_lose_context');
+    // Clean up test canvas
+    canvas.width = 0;
+    canvas.height = 0;
+
+    return supported;
+  } catch (error) {
+    console.warn('Error checking WEBGL_lose_context support:', error);
+    return false;
+  }
+};
+
+/**
+ * Safely force WebGL context loss with fallback
+ */
+export const safeForceContextLoss = (gl) => {
+  if (!gl) return false;
+
+  try {
+    const loseContext = gl.getExtension('WEBGL_lose_context');
+    if (loseContext) {
+      loseContext.loseContext();
+      return true;
+    } else {
+      console.warn(
+        '⚠️ WEBGL_lose_context extension not supported - using alternative cleanup'
+      );
+      // Alternative: resize canvas to force cleanup
+      if (gl.canvas) {
+        const originalWidth = gl.canvas.width;
+        const originalHeight = gl.canvas.height;
+        gl.canvas.width = 0;
+        gl.canvas.height = 0;
+        gl.canvas.width = originalWidth;
+        gl.canvas.height = originalHeight;
+      }
+      return false;
+    }
+  } catch (error) {
+    console.warn('Failed to force WebGL context loss:', error);
+    return false;
+  }
 };
 
 /**

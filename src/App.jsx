@@ -52,14 +52,14 @@ const AnimatedMenuItem = memo(({ children, onClick, isLogo = false }) => {
 
 // Collection of inspirational sayings for the loading screen
 const loadingSayings = [
-  'Good things come to those who wait',
+  'Like trees, the finest furniture grows with time',
   'Crafting something beautiful takes time',
   "Nature doesn't hurry, yet everything is accomplished",
   'The best wood comes from the oldest trees',
-  'Patience is the companion of wisdom',
+  'In every branch lies a future masterpiece',
   'Every masterpiece begins with a single cut',
-  'Quality is never an accident',
-  'Great things are done by a series of small things',
+  'Wood remembers the seasons in its rings',
+  'From forest floor to fine furniture',
   'The forest teaches us to grow slowly and strong',
   'Handcrafted with love and time',
   'Each piece of wood tells its own story',
@@ -765,16 +765,18 @@ function App() {
             </div>
           </div>
 
-          {/* Always render Experience - Canvas should remain stable */}
-          <NewCanvas
-            isAnimating={state.isAnimating}
-            showContactPage={state.showContactPage}
-            showTypes={state.showTypes}
-            showGallery={state.showGallery}
-            onSplatLoaded={handleSplatLoadedCallback}
-            imagesLoaded={state.imagesLoaded}
-            initialLoadComplete={state.initialLoadComplete}
-          />
+          {/* Only render Experience when not on Contact page to ensure proper unmounting */}
+          {!state.showContactPage && (
+            <NewCanvas
+              isAnimating={state.isAnimating}
+              showContactPage={state.showContactPage}
+              showTypes={state.showTypes}
+              showGallery={state.showGallery}
+              onSplatLoaded={handleSplatLoadedCallback}
+              imagesLoaded={state.imagesLoaded}
+              initialLoadComplete={state.initialLoadComplete}
+            />
+          )}
         </div>
       </div>
 

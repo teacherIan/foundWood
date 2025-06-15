@@ -18,6 +18,8 @@ import {
   logMemoryUsage,
   isIOSSafari,
   getIOSSafariConfig,
+  isWebGLLoseContextSupported,
+  safeForceContextLoss,
 } from './WebGLCleanup.js';
 
 // Removed post-processing effects for better performance and simplified visuals
@@ -350,19 +352,6 @@ function Scene({
     };
   }, [hasOverlay, initialLoadComplete]); // Re-run this effect when overlay state OR loading state changes
 
-  // Animated opacity for splat brightness/dimming effect
-  const [animatedOpacity, setAnimatedOpacity] = useState(1.0);
-
-  useEffect(() => {
-    const targetOpacity = showGallery ? 0.3 : 1.0; // Dim when gallery is active
-    console.log('Splat opacity changing:', {
-      showGallery,
-      targetOpacity,
-      currentOpacity: animatedOpacity,
-    });
-    setAnimatedOpacity(targetOpacity);
-  }, [showGallery]);
-
   // Enhanced camera animation with interaction awareness
   const animateCamera = useCallback(
     (state, delta) => {
@@ -644,13 +633,13 @@ function Scene({
                 </>
               )}
 
-              {/* Enhanced Splat with animated opacity for dimming */}
-              <mesh // Use mesh (was animated.mesh)
+              {/* Splat component with alphaTest animation */}
+              <mesh
                 position={deviceConfig.splatConfig.position}
                 scale={deviceConfig.splatConfig.scale}
               >
-                <SplatWithErrorHandling // Use SplatWithErrorHandling instead of Splat
-                  alphaTest={manualAlphaTest} // Use manualAlphaTest
+                <SplatWithErrorHandling
+                  alphaTest={manualAlphaTest}
                   chunkSize={0.01}
                   splatSize={deviceConfig.splatConfig.size}
                 />
@@ -693,6 +682,29 @@ export default function App({
   imagesLoaded,
   initialLoadComplete,
 }) {
+  // Protect against WebGL context loss extension errors globally
+  useEffect(() => {
+    // Override THREE.js WebGLRenderer forceContextLoss if it doesn't check for extension support
+    const originalError = console.error;
+    console.error = function (...args) {
+      const message = args[0];
+      if (
+        typeof message === 'string' &&
+        message.includes('WEBGL_lose_context extension not supported')
+      ) {
+        console.warn(
+          '⚠️ WEBGL_lose_context extension not supported - this is expected on some devices'
+        );
+        return;
+      }
+      return originalError.apply(console, args);
+    };
+
+    return () => {
+      console.error = originalError;
+    };
+  }, []);
+
   // Debug logging to check prop values
   useEffect(() => {
     console.log('🎬 Canvas component mounted and props received:', {
@@ -840,7 +852,7 @@ export default function App({
           antialias: performanceConfig.iosConfig?.antialias || false, // iOS Safari optimized
           depth: performanceConfig.iosConfig?.depth ?? true, // iOS Safari optimized
           stencil: performanceConfig.iosConfig?.stencil || false, // Disable stencil buffer for all devices
-          alpha: performanceConfig.iosConfig?.alpha ?? true, // Keep alpha for transparency
+          alpha: performanceConfig.iosConfig?.alpha ?? false, // do not use transparency
           premultipliedAlpha:
             performanceConfig.iosConfig?.premultipliedAlpha || false, // Disable for simpler blending
           preserveDrawingBuffer:
@@ -855,7 +867,7 @@ export default function App({
               antialias: false,
               depth: false,
               stencil: false,
-              alpha: true,
+              alpha: false,
               premultipliedAlpha: false,
               preserveDrawingBuffer: false,
             },
@@ -866,6 +878,18 @@ export default function App({
           // Store references globally for cleanup
           window.cleanupManager = new WebGLCleanupManager();
           window.cleanupManager.registerContext(gl.getContext());
+
+          // Protect against WEBGL_lose_context extension not supported error
+          const originalForceContextLoss = gl.forceContextLoss;
+          if (originalForceContextLoss) {
+            gl.forceContextLoss = function () {
+              try {
+                return safeForceContextLoss(gl.getContext());
+              } catch (error) {
+                console.warn('⚠️ Failed to force context loss safely:', error);
+              }
+            };
+          }
 
           // iOS Safari specific setup
           if (isIOSSafari()) {
