@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,7 +29,7 @@
         .demo-header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .demo-header p {
@@ -78,7 +79,7 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            box-shadow: 
+            box-shadow:
                 0 20px 40px rgba(0, 0, 0, 0.15),
                 0 0 100px rgba(119, 72, 28, 0.1),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -128,7 +129,8 @@
             margin-top: -1px;
         }
 
-        .pros, .cons {
+        .pros,
+        .cons {
             margin-bottom: 10px;
         }
 
@@ -144,7 +146,8 @@
             margin-bottom: 5px;
         }
 
-        .pros ul, .cons ul {
+        .pros ul,
+        .cons ul {
             font-size: 0.8rem;
             margin-left: 15px;
             line-height: 1.4;
@@ -177,7 +180,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
+            background:
                 radial-gradient(circle at 30% 40%, rgba(139, 90, 43, 0.3) 0%, transparent 50%),
                 radial-gradient(circle at 70% 60%, rgba(119, 72, 28, 0.2) 0%, transparent 50%),
                 linear-gradient(45deg, rgba(101, 67, 33, 0.1) 0%, rgba(139, 90, 43, 0.1) 100%);
@@ -202,6 +205,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="demo-header">
         <h1>Border-Based Exit Button Options</h1>
@@ -219,7 +223,7 @@
                         <span class="exit-border-top-text">Tap anywhere here to close</span>
                         <div class="exit-border-top-icon">✕</div>
                     </div>
-                    
+
                     <div class="mock-header">
                         <div class="mock-title">Contact Us</div>
                     </div>
@@ -260,12 +264,13 @@
                     <input type="text" class="mock-input" placeholder="Name" readonly>
                     <input type="email" class="mock-input" placeholder="Email" readonly>
                     <button class="mock-button">Send Message</button>
-                    
+
                     <!-- Bottom Border Exit -->
                     <div class="exit-border-bottom" onclick="showAlert('Bottom border clicked!')">
                         <div class="exit-border-bottom-text">
                             <span>Close form</span>
-                            <kbd style="font-size: 10px; padding: 2px 4px; background: rgba(119,72,28,0.2); border-radius: 3px;">ESC</kbd>
+                            <kbd
+                                style="font-size: 10px; padding: 2px 4px; background: rgba(119,72,28,0.2); border-radius: 3px;">ESC</kbd>
                         </div>
                         <div class="exit-border-bottom-icon">✕</div>
                     </div>
@@ -298,7 +303,7 @@
                 <div class="mock-form-card formContainer-with-minimal-top">
                     <!-- Minimal Top Border -->
                     <div class="exit-border-minimal-top" onclick="showAlert('Minimal top strip clicked!')"></div>
-                    
+
                     <div class="mock-header">
                         <div class="mock-title">Contact Us</div>
                     </div>
@@ -337,7 +342,7 @@
                     <div class="exit-border-side-right" onclick="showAlert('Side border clicked!')">
                         <div class="exit-border-side-icon">✕</div>
                     </div>
-                    
+
                     <div class="mock-header">
                         <div class="mock-title">Contact Us</div>
                     </div>
@@ -378,7 +383,7 @@
         }
 
         // Add ESC key support for demo
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 showAlert('ESC key pressed! This would close the contact form.');
             }
@@ -386,15 +391,16 @@
 
         // Add hover effects to demo cards
         document.querySelectorAll('.option-demo').forEach(demo => {
-            demo.addEventListener('mouseenter', function() {
+            demo.addEventListener('mouseenter', function () {
                 this.style.transform = 'translateY(-5px)';
                 this.style.transition = 'transform 0.3s ease';
             });
-            
-            demo.addEventListener('mouseleave', function() {
+
+            demo.addEventListener('mouseleave', function () {
                 this.style.transform = 'translateY(0)';
             });
         });
     </script>
 </body>
+
 </html>

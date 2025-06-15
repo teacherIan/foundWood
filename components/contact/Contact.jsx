@@ -244,8 +244,8 @@ export default function Contact({
     >
       <div className="formContainer">
         {/* Top Border Exit Bar */}
-        <div 
-          className="exit-border-top" 
+        <div
+          className="exit-border-top"
           onClick={handleExitClick}
           aria-label="Close contact form (ESC)"
           title="Tap anywhere here to close the contact form"
@@ -258,7 +258,7 @@ export default function Contact({
             }
           }}
         >
-          <span className="exit-border-top-text">Tap anywhere here to close</span>
+          <span className="exit-border-top-text">Exit</span>
           <div className="exit-border-top-icon">
             <MdClose />
           </div>

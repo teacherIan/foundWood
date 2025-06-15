@@ -35,22 +35,22 @@ function useTypeSpring(showTypes, index) {
       if (index === 0) {
         // Coffee Tables <br/> Plant Stands - Longest text (2 lines), positioned top-right with more space
         // Moved to 55% right to balance against the explanation text on the left
-        targetY = 10;
+        targetY = 20;
         targetX = 55; // Top right with adequate breathing room
       } else if (index === 1) {
         // Chairs <br/> Ottomans - Medium text (2 lines), positioned top-left for asymmetric balance
         // Placed at left edge to create dynamic contrast with Coffee Tables
-        targetY = 12;
+        targetY = 15;
         targetX = 0; // Far left, slightly lower than Coffee Tables for hierarchy
       } else if (index === 2) {
         // Tables - Shortest text (1 line), positioned lower-left
         // Compact placement since single-line text requires less visual weight
-        targetY = 40;
+        targetY = 42;
         targetX = 0; // Left aligned with Chairs for vertical consistency
       } else {
         // Structures - Short text (1 line), positioned lower-right
         // Balances the Tables button and creates visual symmetry with Coffee Tables above
-        targetY = 50;
+        targetY = 55;
         targetX = 55; // Right aligned with Coffee Tables, slightly lower for hierarchy
       }
 
@@ -67,7 +67,7 @@ function useTypeSpring(showTypes, index) {
 
       if (index === 0) {
         // Coffee Tables - Top left with space for 2-line text
-        targetY = 10;
+        targetY = 15;
         targetX = 8;
       } else if (index === 1) {
         // Chairs - Top right with adequate spacing
@@ -195,20 +195,19 @@ export default function Types({
         ))}
 
         {/* Explanatory Text */}
-        {/* Mobile Layout: Positioned at left edge (1svw) to complement asymmetric button arrangement
-             Desktop Layout: Remains centered for clean, balanced presentation
-             The mobile positioning creates visual flow from explanation → type buttons */}
+        {/* Mobile Layout: Centered for balanced presentation
+             Desktop Layout: Perfectly centered both horizontally and vertically */}
         <animated.div
           className="explanationText"
           style={{
             position: 'absolute',
-            left: '1svw', // Mobile: left-aligned to work with button layout, Desktop: overridden by CSS
-            top: '45svh',
+            left: window.innerWidth < window.innerHeight ? '25%' : '50%',
+            top: window.innerWidth < window.innerHeight ? '45svh' : '50svh', // Mobile: lower position, Desktop: perfect center
             transform: explanationSpring.y.to(
-              (y) => `translateX(0%) translateY(-50%) translateY(${y}svh)`
+              (y) => `translateX(-50%) translateY(-50%) translateY(${y}svh)` // Always center horizontally and vertically
             ),
             opacity: explanationSpring.opacity,
-            width: window.innerWidth < window.innerHeight ? '50svw' : '30svw', // Mobile: wider for readability
+            width: window.innerWidth < window.innerHeight ? '50svw' : '35svw', // Mobile: wider for readability
             textAlign: 'center',
             zIndex: 1000,
           }}
