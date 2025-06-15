@@ -12,6 +12,8 @@ import './experienceStyles.css';
 import splat from '../../src/assets/new_experience/full.splat';
 import splatFallback from '../../src/assets/new_experience/my_splat.splat';
 import driftwood from '../../src/assets/fonts/DriftWood-z8W4.ttf';
+// TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
+/*
 import {
   WebGLCleanupManager,
   cleanupThreeJSScene,
@@ -21,6 +23,33 @@ import {
   isWebGLLoseContextSupported,
   safeForceContextLoss,
 } from './WebGLCleanup.js';
+*/
+
+// Mock functions to replace disabled WebGL cleanup
+const WebGLCleanupManager = class {
+  constructor() {}
+  registerContext() {}
+  registerTimer() {}
+  registerAnimationFrame() {}
+  registerEventListener() {}
+  cleanup() {}
+};
+const cleanupThreeJSScene = () => {};
+const logMemoryUsage = () => {};
+const isIOSSafari = () => false;
+const getIOSSafariConfig = () => ({
+  pixelRatio: 1,
+  antialias: false,
+  powerPreference: 'default',
+  depth: true,
+  stencil: false,
+  alpha: false,
+  premultipliedAlpha: false,
+  preserveDrawingBuffer: false,
+  failIfMajorPerformanceCaveat: false,
+});
+const isWebGLLoseContextSupported = () => false;
+const safeForceContextLoss = () => {};
 
 // Removed post-processing effects for better performance and simplified visuals
 
@@ -152,16 +181,16 @@ const SplatWithErrorHandling = memo(
 );
 
 // Simple and reliable loading detector with error handling
-// Now waits for images to be loaded before signaling splat loaded
+// UPDATED: No longer waits for images since preloading is disabled
 function ProgressChecker({ onSplatLoaded, imagesLoaded }) {
   const hasCalledRef = useRef(false);
 
   useEffect(() => {
-    // Only call splat loaded callback after images are loaded
-    if (!hasCalledRef.current && onSplatLoaded && imagesLoaded) {
+    // UPDATED: Call splat loaded callback immediately since we disabled image preloading
+    if (!hasCalledRef.current && onSplatLoaded) {
       hasCalledRef.current = true;
       console.log(
-        '✅ ProgressChecker: Images loaded, now calling splat loaded callback'
+        '✅ ProgressChecker: Calling splat loaded callback (image preloading disabled)'
       );
       // Use a small delay to ensure Canvas is stable
       const timer = setTimeout(() => {
@@ -173,12 +202,8 @@ function ProgressChecker({ onSplatLoaded, imagesLoaded }) {
       }, 800); // 800ms - reasonable delay for splat loading
 
       return () => clearTimeout(timer);
-    } else if (!imagesLoaded) {
-      console.log(
-        '⏳ ProgressChecker: Waiting for images to load before signaling splat loaded'
-      );
     }
-  }, [onSplatLoaded, imagesLoaded]);
+  }, [onSplatLoaded]); // UPDATED: Removed imagesLoaded dependency
 
   return null; // No visual elements to prevent context issues
 }
@@ -205,8 +230,8 @@ function Scene({
   const [sceneError, setSceneError] = useState(null);
   const [alphaAnimationComplete, setAlphaAnimationComplete] = useState(false); // Track alpha animation completion
 
-  // WebGL cleanup manager for iOS Safari
-  const cleanupManagerRef = useRef(new WebGLCleanupManager());
+  // TEMPORARILY DISABLED: WebGL cleanup manager for iOS Safari
+  // const cleanupManagerRef = useRef(new WebGLCleanupManager());
 
   // Error boundary for scene rendering
   useEffect(() => {
@@ -217,9 +242,7 @@ function Scene({
 
     window.addEventListener('error', handleError);
     return () => window.removeEventListener('error', handleError);
-  }, []);
-
-  // Scene component mounted - setup cleanup and debugging
+  }, []); // Scene component mounted - setup cleanup and debugging
   useEffect(() => {
     console.log('🚀 Scene component mounted and ready');
     console.log('🎯 Splat file info:', {
@@ -229,21 +252,24 @@ function Scene({
       fallbackType: typeof splatFallback,
     });
 
-    // Register WebGL context for cleanup
-    if (gl) {
-      cleanupManagerRef.current.registerContext(gl.getContext());
-    }
+    // TEMPORARILY DISABLED: WebGL cleanup to rely on R3F's built-in memory management
+    /*
+      // Register WebGL context for cleanup
+      if (gl) {
+        cleanupManagerRef.current.registerContext(gl.getContext());
+      }
 
-    // Log memory usage on iOS Safari
-    if (isIOSSafari()) {
-      logMemoryUsage();
-      const memoryTimer = setInterval(logMemoryUsage, 10000); // Every 10 seconds
-      cleanupManagerRef.current.registerTimer(memoryTimer);
-    }
+      // Log memory usage on iOS Safari
+      if (isIOSSafari()) {
+        logMemoryUsage();
+        const memoryTimer = setInterval(logMemoryUsage, 10000); // Every 10 seconds
+        cleanupManagerRef.current.registerTimer(memoryTimer);
+      }
+      */
 
     // Cleanup on unmount
     return () => {
-      console.log('🧹 Scene unmounting, cleaning up WebGL resources...');
+      console.log('🧹 Scene unmounting, cleaning up resources...');
 
       // Cancel any pending animations
       if (alphaAnimationRequestRef.current) {
@@ -253,13 +279,16 @@ function Scene({
         cancelAnimationFrame(animationRef.current);
       }
 
-      // Comprehensive cleanup for iOS Safari
-      cleanupManagerRef.current.cleanup();
+      // TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
+      /*
+        // Comprehensive cleanup for iOS Safari
+        cleanupManagerRef.current.cleanup();
 
-      // Clean up THREE.js scene
-      if (scene && gl) {
-        cleanupThreeJSScene(scene, gl, camera);
-      }
+        // Clean up THREE.js scene
+        if (scene && gl) {
+          cleanupThreeJSScene(scene, gl, camera);
+        }
+        */
 
       console.log('✅ Scene cleanup completed');
     };
@@ -321,10 +350,10 @@ function Scene({
 
       if (elapsedTime < duration) {
         alphaAnimationRequestRef.current = requestAnimationFrame(animateAlpha);
-        // Register with cleanup manager
-        cleanupManagerRef.current.registerAnimationFrame(
-          alphaAnimationRequestRef.current
-        );
+        // TEMPORARILY DISABLED: Cleanup manager registration
+        // cleanupManagerRef.current.registerAnimationFrame(
+        //   alphaAnimationRequestRef.current
+        // );
       } else {
         alphaAnimationRequestRef.current = null; // Clear ref when animation completes
         // Mark alpha animation as complete for initial animation only
@@ -338,10 +367,10 @@ function Scene({
     };
 
     alphaAnimationRequestRef.current = requestAnimationFrame(animateAlpha);
-    // Register with cleanup manager
-    cleanupManagerRef.current.registerAnimationFrame(
-      alphaAnimationRequestRef.current
-    );
+    // TEMPORARILY DISABLED: Cleanup manager registration
+    // cleanupManagerRef.current.registerAnimationFrame(
+    //   alphaAnimationRequestRef.current
+    // );
 
     // Cleanup function to cancel animation if component unmounts or effect re-runs
     return () => {
@@ -448,11 +477,12 @@ function Scene({
     window.addEventListener('resize', debouncedResize);
 
     // Register event listener for cleanup
-    cleanupManagerRef.current.registerEventListener(
-      window,
-      'resize',
-      debouncedResize
-    );
+    // TEMPORARILY DISABLED: Cleanup manager registration
+    // cleanupManagerRef.current.registerEventListener(
+    //   window,
+    //   'resize',
+    //   debouncedResize
+    // );
 
     return () => window.removeEventListener('resize', debouncedResize);
   }, [handleResize]);
@@ -472,14 +502,14 @@ function Scene({
 
       if (loadProgress < 1 && isAnimating) {
         animationRef.current = requestAnimationFrame(animate);
-        // Register with cleanup manager
-        cleanupManagerRef.current.registerAnimationFrame(animationRef.current);
+        // TEMPORARILY DISABLED: Cleanup manager registration
+        // cleanupManagerRef.current.registerAnimationFrame(animationRef.current);
       }
     };
 
     animationRef.current = requestAnimationFrame(animate);
-    // Register with cleanup manager
-    cleanupManagerRef.current.registerAnimationFrame(animationRef.current);
+    // TEMPORARILY DISABLED: Cleanup manager registration
+    // cleanupManagerRef.current.registerAnimationFrame(animationRef.current);
 
     return () => {
       if (animationRef.current) {
@@ -802,18 +832,18 @@ export default function App({
   useEffect(() => {
     const handleBeforeUnload = () => {
       console.log('🚪 Page unloading, triggering cleanup...');
-      // Trigger cleanup before page unload (iOS Safari navigation)
-      if (window.cleanupManager) {
-        window.cleanupManager.cleanup();
-      }
+      // TEMPORARILY DISABLED: Custom cleanup to rely on R3F's built-in memory management
+      // if (window.cleanupManager) {
+      //   window.cleanupManager.cleanup();
+      // }
     };
 
     const handlePageHide = () => {
       console.log('👋 Page hiding, triggering cleanup...');
-      // iOS Safari specific - page hide event
-      if (window.cleanupManager) {
-        window.cleanupManager.cleanup();
-      }
+      // TEMPORARILY DISABLED: Custom cleanup to rely on R3F's built-in memory management
+      // if (window.cleanupManager) {
+      //   window.cleanupManager.cleanup();
+      // }
     };
 
     // iOS Safari often doesn't fire beforeunload, use pagehide instead
@@ -848,7 +878,7 @@ export default function App({
         }}
         gl={{
           powerPreference:
-            performanceConfig.iosConfig?.powerPreference || 'default', // iOS Safari optimized
+            performanceConfig.iosConfig?.powerPreference || 'high-performance', // iOS Safari optimized
           antialias: performanceConfig.iosConfig?.antialias || false, // iOS Safari optimized
           depth: performanceConfig.iosConfig?.depth ?? true, // iOS Safari optimized
           stencil: performanceConfig.iosConfig?.stencil || false, // Disable stencil buffer for all devices
@@ -875,6 +905,8 @@ export default function App({
         }}
         frameloop={performanceConfig.frameloop}
         onCreated={({ gl, scene, camera }) => {
+          // TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
+          /*
           // Store references globally for cleanup
           window.cleanupManager = new WebGLCleanupManager();
           window.cleanupManager.registerContext(gl.getContext());
@@ -903,6 +935,7 @@ export default function App({
 
             window.cleanupManager.registerTimer(memoryInterval);
           }
+          */
         }}
       >
         <Scene

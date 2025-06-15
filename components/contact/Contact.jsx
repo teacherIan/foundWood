@@ -82,13 +82,13 @@ export default function Contact({
         message,
       });
 
-      // iOS Safari specific - trigger cleanup after successful form submission
-      if (isIOSSafari() && window.globalWebGLCleanup) {
-        console.log(
-          '📱 iOS Safari: Triggering cleanup after Contact form submission'
-        );
-        window.globalWebGLCleanup.cleanup();
-      }
+      // TEMPORARILY DISABLED: iOS Safari specific cleanup to rely on R3F's built-in memory management
+      // if (isIOSSafari() && window.globalWebGLCleanup) {
+      //   console.log(
+      //     '📱 iOS Safari: Triggering cleanup after Contact form submission'
+      //   );
+      //   window.globalWebGLCleanup.cleanup();
+      // }
 
       setShowContactPage(false);
       alert('Email sent successfully!');
@@ -201,10 +201,11 @@ export default function Contact({
       className="contactContainer"
       style={{
         ...springs,
-        backgroundImage:
-          window.innerWidth > window.innerHeight
-            ? `url(${bg_image_long})`
-            : `url(${bg_image_cell_3})`,
+        // REMOVED: Background image to allow 3D scene to show through
+        // backgroundImage:
+        //   window.innerWidth > window.innerHeight
+        //     ? `url(${bg_image_long})`
+        //     : `url(${bg_image_cell_3})`,
       }}
     >
       <div className="formContainer">

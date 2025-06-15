@@ -74,7 +74,7 @@ const loadingSayings = [
 const initialState = {
   fontsLoaded: false,
   splatLoaded: false,
-  imagesLoaded: false, // Track if initial image preloading is complete
+  imagesLoaded: true, // UPDATED: Set to true since we disabled image preloading
   initialLoadComplete: false, // Track if the entire initial load sequence is done
   isAnimating: true,
   activeGalleryTypeString: 'chairs',
@@ -236,6 +236,13 @@ function App() {
   //   triggerCleanup,
   // } = useWebGLCleanup();
 
+  // Mock implementations to replace disabled functionality
+  const isIOSSafariBrowser = false;
+  const cleanupManager = null;
+  const triggerCleanup = () => {};
+
+  // UPDATED: Image preloading monitoring disabled since we're not preloading images
+  /*
   // Debug: Log preloader state changes and mark images as loaded when startup preloading completes
   useEffect(() => {
     console.log('🔬 Preloader state changed:', {
@@ -268,28 +275,30 @@ function App() {
     state.activeGalleryTypeString,
     state.imagesLoaded,
   ]);
+  */
 
   // Mark initial load as complete when all assets are loaded
-  // Loading order: Fonts → Images → Splat (triggered after images) → Initial Load Complete
+  // UPDATED: No longer wait for images since preloading is disabled
+  // Loading order: Fonts → Splat → Initial Load Complete
   useEffect(() => {
     if (
       !state.initialLoadComplete &&
       state.fontsLoaded &&
-      state.splatLoaded &&
-      state.imagesLoaded
+      state.splatLoaded
+      // REMOVED: && state.imagesLoaded (no longer preloading images)
     ) {
       console.log(
         '🎉 All initial assets loaded! Marking initial load as complete.'
       );
       console.log(
-        '📋 Final loading order achieved: Fonts ✅ → Images ✅ → Splat ✅ → Complete ✅'
+        '📋 Updated loading order: Fonts ✅ → Splat ✅ → Complete ✅ (images load on-demand)'
       );
       dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
     }
   }, [
     state.fontsLoaded,
     state.splatLoaded,
-    state.imagesLoaded,
+    // REMOVED: state.imagesLoaded,
     state.initialLoadComplete,
   ]);
 
@@ -332,14 +341,14 @@ function App() {
   }, []); // Remove dependencies to prevent recreation
 
   const handleGalleryTypesClickCallback = useCallback(() => {
-    // iOS Safari specific - trigger cleanup before gallery types navigation
-    if (isIOSSafariBrowser && !state.showTypes) {
-      console.log('📱 iOS Safari: Triggering cleanup before Gallery Types');
-      triggerCleanup();
-    }
+    // TEMPORARILY DISABLED: iOS Safari specific cleanup
+    // if (isIOSSafariBrowser && !state.showTypes) {
+    //   console.log('📱 iOS Safari: Triggering cleanup before Gallery Types');
+    //   triggerCleanup();
+    // }
 
     dispatch({ type: 'SHOW_TYPES' });
-  }, [isIOSSafariBrowser, triggerCleanup, state.showTypes]);
+  }, []); // TEMPORARILY DISABLED: Removed isIOSSafariBrowser, triggerCleanup dependencies
 
   const handleHideTypesCallback = useCallback(() => {
     dispatch({ type: 'HIDE_TYPES' });
@@ -355,43 +364,37 @@ function App() {
   }, []);
 
   const handleEmblemClickCallback = useCallback(() => {
-    // iOS Safari specific - trigger cleanup when returning to home
-    if (
-      isIOSSafariBrowser &&
-      (state.showContactPage || state.showGallery || state.showTypes)
-    ) {
-      console.log('📱 iOS Safari: Triggering cleanup before home navigation');
-      triggerCleanup();
-    }
+    // TEMPORARILY DISABLED: iOS Safari specific cleanup
+    // if (
+    //   isIOSSafariBrowser &&
+    //   (state.showContactPage || state.showGallery || state.showTypes)
+    // ) {
+    //   console.log('📱 iOS Safari: Triggering cleanup before home navigation');
+    //   triggerCleanup();
+    // }
 
     dispatch({ type: 'RESET_VIEW' });
-  }, [
-    isIOSSafariBrowser,
-    triggerCleanup,
-    state.showContactPage,
-    state.showGallery,
-    state.showTypes,
-  ]);
+  }, []); // TEMPORARILY DISABLED: Removed isIOSSafariBrowser, triggerCleanup dependencies
 
   const handleContactPageClick = useCallback(() => {
-    // iOS Safari specific - trigger cleanup before navigation
-    if (isIOSSafariBrowser && !state.showContactPage) {
-      console.log('📱 iOS Safari: Triggering cleanup before Contact page');
-      triggerCleanup();
-    }
+    // TEMPORARILY DISABLED: iOS Safari specific cleanup
+    // if (isIOSSafariBrowser && !state.showContactPage) {
+    //   console.log('📱 iOS Safari: Triggering cleanup before Contact page');
+    //   triggerCleanup();
+    // }
 
     dispatch({ type: 'TOGGLE_CONTACT' });
-  }, [isIOSSafariBrowser, triggerCleanup, state.showContactPage]);
+  }, []); // TEMPORARILY DISABLED: Removed isIOSSafariBrowser, triggerCleanup dependencies
 
   const handleHideGalleryCallback = useCallback(() => {
-    // iOS Safari specific - trigger cleanup when closing gallery
-    if (isIOSSafariBrowser && state.showGallery) {
-      console.log('📱 iOS Safari: Triggering cleanup when closing gallery');
-      triggerCleanup();
-    }
+    // TEMPORARILY DISABLED: iOS Safari specific cleanup
+    // if (isIOSSafariBrowser && state.showGallery) {
+    //   console.log('📱 iOS Safari: Triggering cleanup when closing gallery');
+    //   triggerCleanup();
+    // }
 
     dispatch({ type: 'RESET_VIEW' });
-  }, [isIOSSafariBrowser, triggerCleanup, state.showGallery]);
+  }, []); // TEMPORARILY DISABLED: Removed isIOSSafariBrowser, triggerCleanup dependencies
 
   // Home screen logic: not showing gallery, contact, or types
   const isHomeScreen =
@@ -417,7 +420,8 @@ function App() {
     state.splatLoaded,
   ]);
 
-  // iOS Safari specific - additional cleanup monitoring for Contact page
+  // TEMPORARILY DISABLED: iOS Safari specific cleanup monitoring
+  /*
   useEffect(() => {
     if (isIOSSafariBrowser) {
       // When leaving Contact page, trigger additional cleanup
@@ -447,6 +451,7 @@ function App() {
     state.initialLoadComplete,
     triggerCleanup,
   ]);
+  */
 
   const iconSpring = useSpring({
     width: isHomeScreen ? '1.8em' : '1.2em',
@@ -499,7 +504,8 @@ function App() {
     return () => clearInterval(interval);
   }, [shouldShowLoading]);
 
-  // iOS Safari specific - global error handling and WebGL context monitoring
+  // TEMPORARILY DISABLED: iOS Safari specific global error handling
+  /*
   useEffect(() => {
     if (!isIOSSafariBrowser) return;
 
@@ -586,8 +592,10 @@ function App() {
       }
     };
   }, [isIOSSafariBrowser, cleanupManager]);
+  */
 
-  // iOS Safari specific - Enhanced contact page navigation cleanup
+  // TEMPORARILY DISABLED: iOS Safari specific contact page optimization
+  /*
   useEffect(() => {
     if (isIOSSafariBrowser && state.showContactPage) {
       console.log(
@@ -613,6 +621,7 @@ function App() {
       return () => clearTimeout(optimizationTimer);
     }
   }, [state.showContactPage]); // TEMPORARILY DISABLED: Removed isIOSSafariBrowser, cleanupManager dependencies
+  */
 
   // TEMPORARILY DISABLED: Memory monitoring for iOS Safari to rely on R3F's built-in memory management
   /*
@@ -789,8 +798,14 @@ function App() {
             </div>
           </div>
 
-          {/* Only render Experience when not on Contact page to ensure proper unmounting */}
-          {!state.showContactPage && (
+          {/* Always render Experience and keep it partially visible behind Contact page */}
+          <div
+            style={{
+              opacity: state.showContactPage ? 0.3 : 1, // Keep scene visible but dimmed
+              pointerEvents: state.showContactPage ? 'none' : 'auto',
+              transition: 'opacity 0.3s ease-in-out',
+            }}
+          >
             <NewCanvas
               isAnimating={state.isAnimating}
               showContactPage={state.showContactPage}
@@ -800,7 +815,7 @@ function App() {
               imagesLoaded={state.imagesLoaded}
               initialLoadComplete={state.initialLoadComplete}
             />
-          )}
+          </div>
         </div>
       </div>
 
@@ -822,28 +837,14 @@ function App() {
           >
             <div style={{ textAlign: 'center', marginBottom: '10px' }}>
               Loading{!state.fontsLoaded ? ' fonts' : ''}
-              {!state.imagesLoaded && state.fontsLoaded ? ' images' : ''}
-              {!state.splatLoaded && state.imagesLoaded ? ' 3D scene' : ''}...
+              {!state.splatLoaded && state.fontsLoaded ? ' 3D scene' : ''}...
             </div>
-            {!state.imagesLoaded && preloadingState.progress.total > 0 && (
-              <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-                <span>
-                  {preloadingState.progress.loaded} of{' '}
-                  {preloadingState.progress.total} images (
-                  {Math.round(preloadingState.progress.percentage)}%)
-                </span>
-              </div>
-            )}
+            {/* REMOVED: Image loading progress since preloading is disabled */}
             <div style={{ textAlign: 'center', marginBottom: '20px' }}>
               <small>
-                Step 1 - Fonts: {state.fontsLoaded ? '✅' : '❌'} | Step 2 -
-                Images:{' '}
-                {state.imagesLoaded
-                  ? '✅'
-                  : !state.imagesLoaded && preloadingState.progress.total > 0
-                  ? `${Math.round(preloadingState.progress.percentage)}%`
-                  : '❌'}{' '}
-                | Step 3 - 3D Scene: {state.splatLoaded ? '✅' : '❌'}
+                Step 1 - Fonts: {state.fontsLoaded ? '✅' : '❌'} | Step 2 - 3D
+                Scene: {state.splatLoaded ? '✅' : '❌'} | Images: Load
+                on-demand ⚡
               </small>
             </div>
             <div
