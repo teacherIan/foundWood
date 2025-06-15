@@ -12,6 +12,13 @@ import './experienceStyles.css';
 import splat from '../../src/assets/new_experience/full.splat';
 import splatFallback from '../../src/assets/new_experience/my_splat.splat';
 import driftwood from '../../src/assets/fonts/DriftWood-z8W4.ttf';
+import {
+  WebGLCleanupManager,
+  cleanupThreeJSScene,
+  logMemoryUsage,
+  isIOSSafari,
+  getIOSSafariConfig,
+} from './WebGLCleanup.js';
 
 // Removed post-processing effects for better performance and simplified visuals
 
@@ -187,7 +194,7 @@ function Scene({
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [userInteracting, setUserInteracting] = useState(false);
   const animationRef = useRef();
-  const { camera } = useThree();
+  const { camera, scene, gl } = useThree();
   const idleTimeRef = useRef(0);
   const interactionTimeRef = useRef(0);
   const [manualAlphaTest, setManualAlphaTest] = useState(1);
@@ -195,6 +202,9 @@ function Scene({
   const isInitialMountRef = useRef(true); // Ref to track initial mount
   const [sceneError, setSceneError] = useState(null);
   const [alphaAnimationComplete, setAlphaAnimationComplete] = useState(false); // Track alpha animation completion
+
+  // WebGL cleanup manager for iOS Safari
+  const cleanupManagerRef = useRef(new WebGLCleanupManager());
 
   // Error boundary for scene rendering
   useEffect(() => {
@@ -207,7 +217,7 @@ function Scene({
     return () => window.removeEventListener('error', handleError);
   }, []);
 
-  // Scene component mounted - simple notification with debugging
+  // Scene component mounted - setup cleanup and debugging
   useEffect(() => {
     console.log('🚀 Scene component mounted and ready');
     console.log('🎯 Splat file info:', {
@@ -216,6 +226,41 @@ function Scene({
       splatType: typeof splat,
       fallbackType: typeof splatFallback,
     });
+
+    // Register WebGL context for cleanup
+    if (gl) {
+      cleanupManagerRef.current.registerContext(gl.getContext());
+    }
+
+    // Log memory usage on iOS Safari
+    if (isIOSSafari()) {
+      logMemoryUsage();
+      const memoryTimer = setInterval(logMemoryUsage, 10000); // Every 10 seconds
+      cleanupManagerRef.current.registerTimer(memoryTimer);
+    }
+
+    // Cleanup on unmount
+    return () => {
+      console.log('🧹 Scene unmounting, cleaning up WebGL resources...');
+
+      // Cancel any pending animations
+      if (alphaAnimationRequestRef.current) {
+        cancelAnimationFrame(alphaAnimationRequestRef.current);
+      }
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+
+      // Comprehensive cleanup for iOS Safari
+      cleanupManagerRef.current.cleanup();
+
+      // Clean up THREE.js scene
+      if (scene && gl) {
+        cleanupThreeJSScene(scene, gl, camera);
+      }
+
+      console.log('✅ Scene cleanup completed');
+    };
   }, []);
 
   // Check if any overlay is active - must be defined before useEffect
@@ -274,6 +319,10 @@ function Scene({
 
       if (elapsedTime < duration) {
         alphaAnimationRequestRef.current = requestAnimationFrame(animateAlpha);
+        // Register with cleanup manager
+        cleanupManagerRef.current.registerAnimationFrame(
+          alphaAnimationRequestRef.current
+        );
       } else {
         alphaAnimationRequestRef.current = null; // Clear ref when animation completes
         // Mark alpha animation as complete for initial animation only
@@ -287,6 +336,10 @@ function Scene({
     };
 
     alphaAnimationRequestRef.current = requestAnimationFrame(animateAlpha);
+    // Register with cleanup manager
+    cleanupManagerRef.current.registerAnimationFrame(
+      alphaAnimationRequestRef.current
+    );
 
     // Cleanup function to cancel animation if component unmounts or effect re-runs
     return () => {
@@ -404,6 +457,14 @@ function Scene({
     handleResize();
     const debouncedResize = debounce(handleResize, 250);
     window.addEventListener('resize', debouncedResize);
+
+    // Register event listener for cleanup
+    cleanupManagerRef.current.registerEventListener(
+      window,
+      'resize',
+      debouncedResize
+    );
+
     return () => window.removeEventListener('resize', debouncedResize);
   }, [handleResize]);
 
@@ -422,10 +483,15 @@ function Scene({
 
       if (loadProgress < 1 && isAnimating) {
         animationRef.current = requestAnimationFrame(animate);
+        // Register with cleanup manager
+        cleanupManagerRef.current.registerAnimationFrame(animationRef.current);
       }
     };
 
     animationRef.current = requestAnimationFrame(animate);
+    // Register with cleanup manager
+    cleanupManagerRef.current.registerAnimationFrame(animationRef.current);
+
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
@@ -658,6 +724,25 @@ export default function App({
   const performanceConfig = useMemo(() => {
     // Reduce performance when gallery is active to free up resources for smooth panning
     const isGalleryActive = showGallery;
+    const isIOSSafariBrowser = isIOSSafari();
+
+    // Use iOS Safari specific config if detected
+    if (isIOSSafariBrowser) {
+      const iosConfig = getIOSSafariConfig();
+      console.log('📱 iOS Safari detected, using optimized config');
+
+      return {
+        dpr: [1, Math.min(1.5, iosConfig.pixelRatio)],
+        performance: {
+          min: 0.2,
+          max: isGalleryActive ? 0.3 : 0.6, // Very conservative for iOS
+          debounce: 500, // Longer debounce for iOS
+        },
+        antialias: iosConfig.antialias,
+        frameloop: 'always', // Keep render loop active for React Spring
+        iosConfig, // Include iOS specific WebGL settings
+      };
+    }
 
     if (isMobile) {
       return {
@@ -701,6 +786,34 @@ export default function App({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Global cleanup effect for page navigation
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      console.log('🚪 Page unloading, triggering cleanup...');
+      // Trigger cleanup before page unload (iOS Safari navigation)
+      if (window.cleanupManager) {
+        window.cleanupManager.cleanup();
+      }
+    };
+
+    const handlePageHide = () => {
+      console.log('👋 Page hiding, triggering cleanup...');
+      // iOS Safari specific - page hide event
+      if (window.cleanupManager) {
+        window.cleanupManager.cleanup();
+      }
+    };
+
+    // iOS Safari often doesn't fire beforeunload, use pagehide instead
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('pagehide', handlePageHide);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('pagehide', handlePageHide);
+    };
+  }, []);
+
   return (
     <>
       <Canvas
@@ -722,17 +835,51 @@ export default function App({
           zIndex: showTypes || showGallery || showContactPage ? 1 : 10,
         }}
         gl={{
-          powerPreference: 'high-performance', // Use default power preference for lower CPU usage
-          antialias: false, // Disable antialiasing for better performance
-          depth: true, // Disable depth buffer if not needed
-          stencil: false, // Disable stencil buffer for all devices
-          alpha: true, // Keep alpha for transparency
-          premultipliedAlpha: false, // Disable for simpler blending
-          preserveDrawingBuffer: false, // Keep disabled for performance
+          powerPreference:
+            performanceConfig.iosConfig?.powerPreference || 'default', // iOS Safari optimized
+          antialias: performanceConfig.iosConfig?.antialias || false, // iOS Safari optimized
+          depth: performanceConfig.iosConfig?.depth ?? true, // iOS Safari optimized
+          stencil: performanceConfig.iosConfig?.stencil || false, // Disable stencil buffer for all devices
+          alpha: performanceConfig.iosConfig?.alpha ?? true, // Keep alpha for transparency
+          premultipliedAlpha:
+            performanceConfig.iosConfig?.premultipliedAlpha || false, // Disable for simpler blending
+          preserveDrawingBuffer:
+            performanceConfig.iosConfig?.preserveDrawingBuffer || false, // Critical for iOS Safari memory management
           outputColorSpace: 'srgb',
-          failIfMajorPerformanceCaveat: false, // Allow fallback to software rendering if needed
+          failIfMajorPerformanceCaveat:
+            performanceConfig.iosConfig?.failIfMajorPerformanceCaveat ?? false, // Allow fallback to software rendering if needed
+          // iOS Safari specific optimizations
+          ...(isIOSSafari() && {
+            contextAttributes: {
+              powerPreference: 'default',
+              antialias: false,
+              depth: false,
+              stencil: false,
+              alpha: true,
+              premultipliedAlpha: false,
+              preserveDrawingBuffer: false,
+            },
+          }),
         }}
         frameloop={performanceConfig.frameloop}
+        onCreated={({ gl, scene, camera }) => {
+          // Store references globally for cleanup
+          window.cleanupManager = new WebGLCleanupManager();
+          window.cleanupManager.registerContext(gl.getContext());
+
+          // iOS Safari specific setup
+          if (isIOSSafari()) {
+            console.log('📱 iOS Safari Canvas created with optimized settings');
+            logMemoryUsage();
+
+            // Set up memory monitoring
+            const memoryInterval = setInterval(() => {
+              logMemoryUsage();
+            }, 15000); // Every 15 seconds
+
+            window.cleanupManager.registerTimer(memoryInterval);
+          }
+        }}
       >
         <Scene
           showContactPage={showContactPage}

@@ -8,6 +8,8 @@ import NewCanvas from '../components/new_experience/Experience';
 import FontFaceObserver from 'fontfaceobserver';
 import { useSpring, animated } from '@react-spring/web';
 import { useImagePreloader } from '../components/galleries/useImagePreloader';
+import { useWebGLCleanup } from '../components/new_experience/useWebGLCleanup.js';
+import { logMemoryUsage } from '../components/new_experience/WebGLCleanup.js';
 
 const configAnimation = {
   mass: 2,
@@ -207,6 +209,13 @@ function App() {
     isPreloading,
   } = useImagePreloader(state.activeGalleryTypeString, state.showGallery, true); // Enable startup preloading
 
+  // Initialize WebGL cleanup for iOS Safari
+  const {
+    cleanupManager,
+    isIOSSafari: isIOSSafariBrowser,
+    triggerCleanup,
+  } = useWebGLCleanup();
+
   // Debug: Log preloader state changes and mark images as loaded when startup preloading completes
   useEffect(() => {
     console.log('🔬 Preloader state changed:', {
@@ -292,28 +301,6 @@ function App() {
       });
   }, []);
 
-  // Font loading detection with improved error handling
-  useEffect(() => {
-    const fonts = [
-      new FontFaceObserver('driftWood'),
-      new FontFaceObserver('CustomFont'),
-      new FontFaceObserver('Poppins'),
-      new FontFaceObserver('Lobster Two'),
-    ];
-
-    Promise.all(fonts.map((font) => font.load()))
-      .then(() => {
-        console.log('✅ All fonts loaded successfully');
-        console.log('🎨 STEP 1 COMPLETE: Fonts loaded');
-        dispatch({ type: 'SET_FONTS_LOADED' });
-      })
-      .catch((error) => {
-        console.error('Font loading error:', error);
-        console.log('⚠️ Proceeding without all fonts loaded');
-        dispatch({ type: 'SET_FONTS_LOADED' }); // Proceed anyway
-      });
-  }, []);
-
   const handleSplatLoadedCallback = useCallback(() => {
     console.log('🎯 Splat loaded callback triggered in App.jsx');
     console.log('🎬 STEP 3 COMPLETE: Splat (3D scene) loaded after images');
@@ -325,8 +312,14 @@ function App() {
   }, []); // Remove dependencies to prevent recreation
 
   const handleGalleryTypesClickCallback = useCallback(() => {
+    // iOS Safari specific - trigger cleanup before gallery types navigation
+    if (isIOSSafariBrowser && !state.showTypes) {
+      console.log('📱 iOS Safari: Triggering cleanup before Gallery Types');
+      triggerCleanup();
+    }
+
     dispatch({ type: 'SHOW_TYPES' });
-  }, []);
+  }, [isIOSSafariBrowser, triggerCleanup, state.showTypes]);
 
   const handleHideTypesCallback = useCallback(() => {
     dispatch({ type: 'HIDE_TYPES' });
@@ -342,16 +335,43 @@ function App() {
   }, []);
 
   const handleEmblemClickCallback = useCallback(() => {
+    // iOS Safari specific - trigger cleanup when returning to home
+    if (
+      isIOSSafariBrowser &&
+      (state.showContactPage || state.showGallery || state.showTypes)
+    ) {
+      console.log('📱 iOS Safari: Triggering cleanup before home navigation');
+      triggerCleanup();
+    }
+
     dispatch({ type: 'RESET_VIEW' });
-  }, []);
+  }, [
+    isIOSSafariBrowser,
+    triggerCleanup,
+    state.showContactPage,
+    state.showGallery,
+    state.showTypes,
+  ]);
 
   const handleContactPageClick = useCallback(() => {
+    // iOS Safari specific - trigger cleanup before navigation
+    if (isIOSSafariBrowser && !state.showContactPage) {
+      console.log('📱 iOS Safari: Triggering cleanup before Contact page');
+      triggerCleanup();
+    }
+
     dispatch({ type: 'TOGGLE_CONTACT' });
-  }, []);
+  }, [isIOSSafariBrowser, triggerCleanup, state.showContactPage]);
 
   const handleHideGalleryCallback = useCallback(() => {
+    // iOS Safari specific - trigger cleanup when closing gallery
+    if (isIOSSafariBrowser && state.showGallery) {
+      console.log('📱 iOS Safari: Triggering cleanup when closing gallery');
+      triggerCleanup();
+    }
+
     dispatch({ type: 'RESET_VIEW' });
-  }, []);
+  }, [isIOSSafariBrowser, triggerCleanup, state.showGallery]);
 
   // Home screen logic: not showing gallery, contact, or types
   const isHomeScreen =
@@ -375,6 +395,37 @@ function App() {
     state.activeGalleryType,
     state.fontsLoaded,
     state.splatLoaded,
+  ]);
+
+  // iOS Safari specific - additional cleanup monitoring for Contact page
+  useEffect(() => {
+    if (isIOSSafariBrowser) {
+      // When leaving Contact page, trigger additional cleanup
+      if (!state.showContactPage && state.initialLoadComplete) {
+        console.log(
+          '📱 iOS Safari: Contact page closed, performing additional cleanup'
+        );
+        setTimeout(() => {
+          triggerCleanup();
+        }, 200);
+      }
+
+      // When leaving gallery, trigger additional cleanup
+      if (!state.showGallery && state.initialLoadComplete) {
+        console.log(
+          '📱 iOS Safari: Gallery closed, performing additional cleanup'
+        );
+        setTimeout(() => {
+          triggerCleanup();
+        }, 200);
+      }
+    }
+  }, [
+    isIOSSafariBrowser,
+    state.showContactPage,
+    state.showGallery,
+    state.initialLoadComplete,
+    triggerCleanup,
   ]);
 
   const iconSpring = useSpring({
@@ -427,6 +478,173 @@ function App() {
 
     return () => clearInterval(interval);
   }, [shouldShowLoading]);
+
+  // iOS Safari specific - global error handling and WebGL context monitoring
+  useEffect(() => {
+    if (!isIOSSafariBrowser) return;
+
+    console.log('📱 Setting up iOS Safari specific error handlers');
+
+    // WebGL context lost handler
+    const handleWebGLContextLost = (event) => {
+      console.error('❌ WebGL context lost detected on iOS Safari');
+      event.preventDefault();
+
+      // Trigger immediate cleanup
+      if (cleanupManager) {
+        cleanupManager.cleanup();
+      }
+
+      // Attempt to force garbage collection if available
+      if (window.gc) {
+        window.gc();
+      }
+
+      // Log memory usage for debugging
+      logMemoryUsage();
+    };
+
+    // WebGL context restored handler
+    const handleWebGLContextRestored = (event) => {
+      console.log('✅ WebGL context restored on iOS Safari');
+      // Could potentially reinitialize if needed
+    };
+
+    // Global error handler for iOS Safari
+    const handleGlobalError = (event) => {
+      const error = event.error || event.reason;
+      if (
+        error &&
+        (error.message?.includes('WebGL') ||
+          error.message?.includes('memory') ||
+          error.message?.includes('texture') ||
+          error.message?.includes('buffer'))
+      ) {
+        console.error('❌ iOS Safari WebGL error detected:', error);
+
+        // Trigger cleanup on WebGL-related errors
+        if (cleanupManager) {
+          setTimeout(() => {
+            cleanupManager.cleanup();
+          }, 100);
+        }
+      }
+    };
+
+    // Memory pressure warning handler
+    const handleMemoryWarning = () => {
+      console.warn('⚠️ Memory pressure detected on iOS Safari');
+      if (cleanupManager) {
+        cleanupManager.cleanup();
+      }
+      logMemoryUsage();
+    };
+
+    // Add event listeners
+    window.addEventListener('webglcontextlost', handleWebGLContextLost);
+    window.addEventListener('webglcontextrestored', handleWebGLContextRestored);
+    window.addEventListener('error', handleGlobalError);
+    window.addEventListener('unhandledrejection', handleGlobalError);
+
+    // iOS specific memory warning (if available)
+    if ('onmemorywarning' in window) {
+      window.addEventListener('memorywarning', handleMemoryWarning);
+    }
+
+    return () => {
+      window.removeEventListener('webglcontextlost', handleWebGLContextLost);
+      window.removeEventListener(
+        'webglcontextrestored',
+        handleWebGLContextRestored
+      );
+      window.removeEventListener('error', handleGlobalError);
+      window.removeEventListener('unhandledrejection', handleGlobalError);
+
+      if ('onmemorywarning' in window) {
+        window.removeEventListener('memorywarning', handleMemoryWarning);
+      }
+    };
+  }, [isIOSSafariBrowser, cleanupManager]);
+
+  // iOS Safari specific - Enhanced contact page navigation cleanup
+  useEffect(() => {
+    if (isIOSSafariBrowser && state.showContactPage) {
+      console.log(
+        '📱 iOS Safari: Contact page opened, performing memory optimization'
+      );
+
+      // Slight delay to ensure Contact page animation starts
+      const optimizationTimer = setTimeout(() => {
+        // Reduce WebGL operations while Contact page is open
+        if (cleanupManager) {
+          cleanupManager.pauseAnimations();
+        }
+
+        // Force garbage collection if available
+        if (window.gc) {
+          window.gc();
+        }
+
+        logMemoryUsage();
+      }, 1000);
+
+      return () => clearTimeout(optimizationTimer);
+    }
+  }, [isIOSSafariBrowser, state.showContactPage, cleanupManager]);
+
+  // Memory monitoring for iOS Safari
+  useEffect(() => {
+    if (!isIOSSafariBrowser || !state.initialLoadComplete) return;
+
+    const memoryCheckInterval = setInterval(() => {
+      logMemoryUsage();
+
+      // Check if we need emergency cleanup
+      if (window.performance && window.performance.memory) {
+        const memory = window.performance.memory;
+        const usedMemoryPercent =
+          (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
+
+        if (usedMemoryPercent > 80) {
+          console.warn(
+            '⚠️ High memory usage detected:',
+            usedMemoryPercent.toFixed(1) + '%'
+          );
+          if (cleanupManager) {
+            cleanupManager.cleanup();
+          }
+        }
+      }
+    }, 15000); // Check every 15 seconds
+
+    return () => clearInterval(memoryCheckInterval);
+  }, [isIOSSafariBrowser, state.initialLoadComplete, cleanupManager]);
+
+  // Enhanced state logging
+  useEffect(() => {
+    console.log('🔄 App state updated:', {
+      showGallery: state.showGallery,
+      showTypes: state.showTypes,
+      showContactPage: state.showContactPage,
+      activeGalleryType: state.activeGalleryType,
+      activeGalleryTypeString: state.activeGalleryTypeString,
+      fontsLoaded: state.fontsLoaded,
+      splatLoaded: state.splatLoaded,
+      imagesLoaded: state.imagesLoaded,
+      initialLoadComplete: state.initialLoadComplete,
+      isAnimating: state.isAnimating,
+    });
+  }, [
+    state.showGallery,
+    state.showTypes,
+    state.showContactPage,
+    state.activeGalleryType,
+    state.fontsLoaded,
+    state.splatLoaded,
+    state.imagesLoaded,
+    state.initialLoadComplete,
+    state.isAnimating,
+  ]);
 
   return (
     <>
