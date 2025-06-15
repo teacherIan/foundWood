@@ -8,13 +8,7 @@
     --icon-size: calc(var(--base-size) * 3);
     --brown: #8b4513;
     --light_brown: #d2b48c;
-
     --lightGreen: #d2b48c;
-}
-
-@viewport {
-    width: device-width;
-    zoom: 1;
 }
 
 * {
@@ -31,7 +25,10 @@ html {
     overflow-x: hidden;
     /* Prevent pull-to-refresh on iOS Safari */
     overscroll-behavior-y: contain;
-    position: fixed;
+    /* REMOVED: position: fixed that was causing layout issues */
+    background: #ffffff !important;
+    /* Force white background */
+    height: 100%;
 }
 
 body {
@@ -41,24 +38,28 @@ body {
     /* FIXED: Removed position: fixed and overflow: hidden that caused black background */
     width: 100%;
     height: 100%;
-    background: transparent;
-    /* Ensure transparent background */
+    background: #ffffff !important;
+    /* White background with !important to override any conflicts */
+    background-color: #ffffff !important;
+    /* Double declaration for safety */
 }
 
-.app-container {
+.app-container,
+.appContainer {
     position: relative;
+    background: #ffffff !important;
+    /* Force white background */
+    background-color: #ffffff !important;
+    /* Double declaration */
+    min-height: 100vh;
+    width: 100%;
 }
 
 canvas {
-    position: absolute !important;
-    width: 100svw;
-    height: 100svh;
-    cursor: grab;
-    z-index: 0;
-
-    /* mask-image:   */
-    /* linear-gradient(to bottom, transparent 0%, #fff 30%, #fff 100%); */
-    /* radial-gradient(ellipse 70% 50% at center, white 60%, transparent 100%) */
+    /* Let React Three Fiber Canvas component handle positioning */
+    cursor: grab !important;
+    z-index: 0 !important;
+    /* Remove conflicting positioning - let inline styles take precedence */
 }
 
 canvas:active {

@@ -36,16 +36,22 @@
 @supports (-webkit-touch-callout: none) {
     html {
         height: -webkit-fill-available;
+        background: #ffffff !important;
+        /* Ensure Safari has white background */
     }
 
     body {
         height: -webkit-fill-available;
         min-height: -webkit-fill-available;
+        background: #ffffff !important;
+        /* Ensure Safari body has white background */
     }
 
     #root {
         height: -webkit-fill-available;
         min-height: -webkit-fill-available;
+        background: #ffffff !important;
+        /* Ensure Safari root has white background */
     }
 }
 
@@ -56,21 +62,21 @@ body,
     width: 100%;
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    background-color: #ffffff !important;
+    /* Force white background */
     font-family: var(--font-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow: hidden;
 }
 
 body {
     touch-action: none;
     cursor: grab;
-    overflow-x: hidden;
     min-height: 100vh;
     /* Prevent pull-to-refresh on mobile devices */
     overscroll-behavior: none;
     -webkit-overscroll-behavior: none;
+    /* REMOVED: overflow: hidden that conflicts with App.css */
 }
 
 #root {
@@ -119,18 +125,11 @@ select {
 
 /* Canvas */
 canvas {
-    width: 100vw;
-    /* Use VW instead of SVW for Safari */
-    width: 100svw;
-    /* Progressive enhancement */
-    height: 100vh;
-    /* Use VH instead of SVH for Safari */
-    height: 100svh;
-    /* Progressive enhancement */
     cursor: grab;
     -webkit-transform: translateZ(0);
     /* Force hardware acceleration on Safari */
     transform: translateZ(0);
+    /* Let App.css handle positioning and sizing to avoid conflicts */
 }
 
 canvas:active {
@@ -139,7 +138,5 @@ canvas:active {
 
 /* Responsive */
 @media (max-width: 1000px) {
-    canvas {
-        mask-image: linear-gradient(to top, white 50%, transparent 95%);
-    }
+    /* Removed mask-image gradient to achieve consistent whiteish background */
 }

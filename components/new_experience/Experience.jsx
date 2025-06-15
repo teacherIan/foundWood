@@ -8,6 +8,7 @@ import {
 } from '@react-three/drei';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three'; // Import useSpring and animated
+import * as THREE from 'three'; // Import Three.js for Color
 import './experienceStyles.css';
 import splat from '../../src/assets/new_experience/full.splat';
 import splatFallback from '../../src/assets/new_experience/my_splat.splat';
@@ -233,6 +234,13 @@ function Scene({
   // TEMPORARILY DISABLED: WebGL cleanup manager for iOS Safari
   // const cleanupManagerRef = useRef(new WebGLCleanupManager());
 
+  // Set scene background to white to ensure consistent background
+  useEffect(() => {
+    if (scene) {
+      scene.background = new THREE.Color('#ffffff');
+    }
+  }, [scene]);
+
   // Error boundary for scene rendering
   useEffect(() => {
     const handleError = (event) => {
@@ -326,9 +334,13 @@ function Scene({
     } else {
       // Check if ANY overlay is active (contact, types, or gallery)
       if (hasOverlay) {
+        console.log(
+          `🎭 Overlay detected - animating alpha to 1.0 (showContactPage: ${showContactPage}, showTypes: ${showTypes}, showGallery: ${showGallery})`
+        );
         targetAlpha = 1.0; // Animate to 1.0 when any overlay is shown
         duration = 600; // 600ms - coordinated timing for all overlays
       } else {
+        console.log('🎭 No overlay - animating alpha back to 0.3');
         targetAlpha = 0.3; // Animate back to 0.3 when all overlays are hidden
         duration = 400; // 400ms - quick return to normal
       }
@@ -379,7 +391,13 @@ function Scene({
         alphaAnimationRequestRef.current = null;
       }
     };
-  }, [hasOverlay, initialLoadComplete]); // Re-run this effect when overlay state OR loading state changes
+  }, [
+    hasOverlay,
+    showContactPage,
+    showTypes,
+    showGallery,
+    initialLoadComplete,
+  ]); // Explicitly include all overlay states
 
   // Enhanced camera animation with interaction awareness
   const animateCamera = useCallback(
@@ -868,12 +886,12 @@ export default function App({
         dpr={performanceConfig.dpr}
         performance={performanceConfig.performance}
         style={{
-          background: 'transparent',
-          position: 'absolute',
+          background: '#ffffff', // Pure white background for Canvas
+          position: 'fixed', // Fixed to viewport to prevent container issues
           top: 0,
           left: 0,
-          width: '100%',
-          height: '100%',
+          width: '100vw', // Use standard viewport units
+          height: '100vh',
           zIndex: showTypes || showGallery || showContactPage ? 1 : 10,
         }}
         gl={{

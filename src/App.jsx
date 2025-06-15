@@ -683,6 +683,7 @@ function App() {
     <>
       {/* Always render the main app - use opacity and pointer-events instead of display:none */}
       <div
+        className="app-container"
         style={{
           opacity: shouldShowLoading ? 0 : 1,
           pointerEvents: shouldShowLoading ? 'none' : 'auto',
