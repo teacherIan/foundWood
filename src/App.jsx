@@ -13,6 +13,116 @@ import {
   useChain,
   useSpringRef,
 } from '@react-spring/web';
+
+// Splat Pre-validation System - Prevents Canvas mounting until splat is verified
+import splat from './assets/new_experience/full.splat';
+import splatFallback from './assets/new_experience/my_splat.splat';
+
+// Splat validation utility
+const validateSplatFile = async (splatUrl) => {
+  try {
+    console.log('🔍 Validating splat file:', splatUrl);
+
+    const response = await fetch(splatUrl);
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch splat: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+
+    // Basic validation - check if file has reasonable size and headers
+    if (arrayBuffer.byteLength < 1000) {
+      throw new Error('Splat file too small - likely corrupted');
+    }
+
+    // Check for common splat file patterns (basic validation)
+    const uint8Array = new Uint8Array(arrayBuffer);
+    const hasValidHeader = uint8Array.length > 100; // Basic size check
+
+    if (!hasValidHeader) {
+      throw new Error('Invalid splat file format detected');
+    }
+
+    console.log('✅ Splat file validation passed:', {
+      url: splatUrl,
+      size: arrayBuffer.byteLength,
+      isValid: true,
+    });
+
+    return { isValid: true, url: splatUrl, size: arrayBuffer.byteLength };
+  } catch (error) {
+    console.error('❌ Splat validation failed:', error);
+    return { isValid: false, error: error.message, url: splatUrl };
+  }
+};
+
+// Pre-load and validate splat files before Canvas mounting
+const useSplatPreloader = () => {
+  const [splatValidation, setSplatValidation] = useState({
+    isValidating: true,
+    validSplatUrl: null,
+    error: null,
+    attemptedUrls: [],
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const validateSplats = async () => {
+      console.log('🚀 Starting splat pre-validation...');
+
+      // Try primary splat first
+      const primaryResult = await validateSplatFile(splat);
+      if (cancelled) return;
+
+      if (primaryResult.isValid) {
+        setSplatValidation({
+          isValidating: false,
+          validSplatUrl: splat,
+          error: null,
+          attemptedUrls: [splat],
+        });
+        return;
+      }
+
+      console.log('⚠️ Primary splat failed, trying fallback...');
+
+      // Try fallback splat
+      const fallbackResult = await validateSplatFile(splatFallback);
+      if (cancelled) return;
+
+      if (fallbackResult.isValid) {
+        setSplatValidation({
+          isValidating: false,
+          validSplatUrl: splatFallback,
+          error: null,
+          attemptedUrls: [splat, splatFallback],
+        });
+        return;
+      }
+
+      // Both failed
+      console.error('🚨 Both splat files failed validation!');
+      setSplatValidation({
+        isValidating: false,
+        validSplatUrl: null,
+        error: 'Unable to load any splat file. Please refresh the page.',
+        attemptedUrls: [splat, splatFallback],
+      });
+    };
+
+    validateSplats();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return splatValidation;
+};
+
 // TEMPORARILY DISABLED: Image preloading to reduce memory pressure
 // import { useImagePreloader } from '../components/galleries/useImagePreloader';
 // TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
@@ -437,6 +547,10 @@ function reducer(state, action) {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // **CRITICAL**: Pre-validate splat files before Canvas mounting
+  // This prevents users from seeing error screens or reload messages
+  const splatValidation = useSplatPreloader();
+
   // State for rotating inspirational sayings during loading
   // Start with a random saying each time the page loads
   const [currentSayingIndex, setCurrentSayingIndex] = useState(() =>
@@ -521,22 +635,23 @@ function App() {
   ]);
   */
 
-  // Mark initial load as complete when splat is loaded
-  // UPDATED: Only wait for splat loading - fonts load in background
-  // Loading order: Splat → Initial Load Complete (fonts load separately)
-  // Add minimum loading time to ensure spinner is visible
+  // Mark initial load as complete when splat is loaded AND validated
+  // UPDATED: Wait for both splat loading AND validation completion
+  // Loading order: Splat Validation ✅ → Splat Loaded ✅ → Initial Load Complete ✅
   useEffect(() => {
     if (
       !state.initialLoadComplete &&
-      state.splatLoaded
+      state.splatLoaded &&
+      !splatValidation.isValidating &&
+      !splatValidation.error
       // REMOVED: state.fontsLoaded - fonts load in background
       // REMOVED: state.imagesLoaded - images load on-demand
     ) {
       console.log(
-        '🎉 Splat loaded! Adding minimum display time for loading screen...'
+        '🎉 Splat validated and loaded! Adding minimum display time for loading screen...'
       );
       console.log(
-        '📋 Simplified loading order: Splat ✅ → Complete ✅ (fonts and images load separately)'
+        '📋 Complete loading order: Splat Validation ✅ → Splat Loaded ✅ → Complete ✅'
       );
 
       // Add a minimum 1-second delay to ensure loading screen is visible
@@ -548,7 +663,12 @@ function App() {
         dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
       }, 1000); // Reduced from 2s to 1s since we only wait for splat
     }
-  }, [state.splatLoaded, state.initialLoadComplete]);
+  }, [
+    state.splatLoaded,
+    state.initialLoadComplete,
+    splatValidation.isValidating,
+    splatValidation.error,
+  ]);
 
   // Immediate state logging on component mount
   console.log('🚀 App component mounted with initial state:', {
@@ -714,11 +834,15 @@ function App() {
 
   // Loading screen should ONLY appear during initial website startup
   // After initial load is complete, never show loading screen again
-  const shouldShowLoading = !state.initialLoadComplete;
+  // Also show loading during splat validation
+  const shouldShowLoading =
+    !state.initialLoadComplete || splatValidation.isValidating;
 
   console.log('🔍 Loading check:', {
     splatLoaded: state.splatLoaded,
     initialLoadComplete: state.initialLoadComplete,
+    splatValidating: splatValidation.isValidating,
+    splatError: splatValidation.error,
     shouldShowLoading: shouldShowLoading,
   });
   console.log('🎯 Final loading decision:', shouldShowLoading);
@@ -1038,7 +1162,7 @@ function App() {
             </div>
           </div>
 
-          {/* Always render Experience and keep it partially visible behind Contact page */}
+          {/* Conditional Canvas rendering - only mount when splat is validated */}
           <div
             style={{
               opacity: state.showContactPage ? 0.3 : 1, // Keep scene visible but dimmed
@@ -1046,15 +1170,92 @@ function App() {
               transition: 'opacity 0.3s ease-in-out',
             }}
           >
-            <NewCanvas
-              isAnimating={state.isAnimating}
-              showContactPage={state.showContactPage}
-              showTypes={state.showTypes}
-              showGallery={state.showGallery}
-              onSplatLoaded={handleSplatLoadedCallback}
-              imagesLoaded={state.imagesLoaded}
-              initialLoadComplete={state.initialLoadComplete}
-            />
+            {splatValidation.isValidating ? (
+              // Still validating splat files - show nothing (loading screen will cover this)
+              <div
+                style={{
+                  width: '100vw',
+                  height: '100vh',
+                  background: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.1rem',
+                  color: '#77481c',
+                  fontFamily:
+                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                }}
+              >
+                Validating 3D scene files...
+              </div>
+            ) : splatValidation.error ? (
+              // Splat validation failed - show friendly error message
+              <div
+                style={{
+                  width: '100vw',
+                  height: '100vh',
+                  background: '#ffffff',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '20px',
+                  textAlign: 'center',
+                }}
+              >
+                <h2
+                  style={{
+                    color: '#77481c',
+                    marginBottom: '20px',
+                    fontFamily:
+                      '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  }}
+                >
+                  3D Scene Temporarily Unavailable
+                </h2>
+                <p
+                  style={{
+                    color: '#8b5a2b',
+                    marginBottom: '30px',
+                    maxWidth: '400px',
+                    lineHeight: '1.5',
+                    fontFamily:
+                      '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  }}
+                >
+                  We're having trouble loading the 3D scene files. Please
+                  refresh the page to try again.
+                </p>
+                <button
+                  onClick={() => window.location.reload()}
+                  style={{
+                    padding: '12px 24px',
+                    backgroundColor: '#77481c',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '1rem',
+                    fontFamily:
+                      '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  }}
+                >
+                  Refresh Page
+                </button>
+              </div>
+            ) : (
+              // Splat validation successful - mount Canvas with validated splat
+              <NewCanvas
+                isAnimating={state.isAnimating}
+                showContactPage={state.showContactPage}
+                showTypes={state.showTypes}
+                showGallery={state.showGallery}
+                onSplatLoaded={handleSplatLoadedCallback}
+                imagesLoaded={state.imagesLoaded}
+                initialLoadComplete={state.initialLoadComplete}
+                validatedSplatUrl={splatValidation.validSplatUrl}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -1070,7 +1271,8 @@ function App() {
                   fontSize: '1.6rem',
                   fontWeight: '600',
                   color: '#77481c',
-                  fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  fontFamily:
+                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                   opacity: 0,
                   animation: 'fadeInUp 0.8s ease-out 0.2s forwards',
                 }}
@@ -1081,7 +1283,8 @@ function App() {
                 style={{
                   fontSize: '1.1rem',
                   color: '#8b5a2b',
-                  fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  fontFamily:
+                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                   marginBottom: '8px',
                   opacity: 0,
                   animation: 'fadeInUp 0.8s ease-out 0.4s forwards',
@@ -1093,7 +1296,8 @@ function App() {
                 style={{
                   fontSize: '0.9rem',
                   color: '#a67c52',
-                  fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  fontFamily:
+                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                   fontStyle: 'italic',
                   opacity: 0,
                   animation: 'fadeInUp 0.8s ease-out 0.6s forwards',
@@ -1114,19 +1318,22 @@ function App() {
                 animationFillMode: 'forwards',
               }}
             />
-            {/* Removed technical debug info - replaced with customer-friendly message */}
+            {/* Dynamic loading status based on validation state */}
             <div style={{ textAlign: 'center', marginBottom: '25px' }}>
               <div
                 style={{
                   fontSize: '0.95rem',
                   color: '#9d7856',
-                  fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                  fontFamily:
+                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                   fontWeight: '500',
                   opacity: 0,
                   animation: 'fadeInUp 0.8s ease-out 1.0s forwards',
                 }}
               >
-                🪵 Crafting your experience with care 🪵
+                {splatValidation.isValidating
+                  ? '🔍 Preparing 3D scene files...'
+                  : '🪵 Crafting your experience with care 🪵'}
               </div>
             </div>
             <AnimatedLoadingSaying opacity={sayingOpacity} delay={2000}>

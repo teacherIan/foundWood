@@ -371,7 +371,7 @@ const MemoizedText = memo(({ position, children, fontSize, delay = 0 }) => (
   </Text>
 ));
 
-// Enhanced Splat component with error handling and fallback
+// Simplified Splat component that uses pre-validated splat URL
 const SplatWithErrorHandling = memo(
   ({
     alphaTest,
@@ -379,21 +379,16 @@ const SplatWithErrorHandling = memo(
     splatSize,
     onSplatLoaded,
     initialLoadComplete,
+    validatedSplatUrl, // NEW: Use pre-validated splat URL
     ...props
   }) => {
-    const [splatSource, setSplatSource] = useState(splat);
-    const [hasError, setHasError] = useState(false);
+    // Use the pre-validated splat URL instead of trying multiple sources
+    const splatSource = validatedSplatUrl || splat;
 
-    // SIMPLIFIED: Remove the 30-second timeout entirely
-    // The loading screen will be dismissed by ProgressChecker after 800ms
-    // Error handling is covered by React Error Boundary and onError callback
-    // Only show detailed logging during initial load to avoid console spam after start screen
-    if (!initialLoadComplete) {
-      console.log(
-        '🎯 SplatWithErrorHandling: Attempting to load splat file',
-        splatSource
-      );
-    }
+    console.log(
+      '🎯 SplatWithErrorHandling: Using pre-validated splat file:',
+      splatSource
+    );
 
     const handleLoad = useCallback(() => {
       console.log('✅ Splat onLoad callback fired successfully');
@@ -401,61 +396,15 @@ const SplatWithErrorHandling = memo(
 
     const handleError = useCallback(
       (error) => {
-        console.error('❌ Splat loading error:', error);
-
-        // Check if this is a "Failed to parse file" error that requires page reload
-        const errorMessage = error?.message || error?.toString() || '';
-        const isParseFileError = isSplatParsingError(errorMessage, {
-          stack: error?.stack,
-          splatSource: splatSource,
-        });
-
-        if (isParseFileError) {
-          if (!initialLoadComplete) {
-            console.error(
-              '🚨 Critical splat parsing error detected during loading - initiating page reload'
-            );
-          } else {
-            console.warn(
-              '🚫 Splat parsing error detected after initial load - logging only (no reload for better UX)'
-            );
-          }
-
-          initiateSplatReload(
-            {
-              source: 'SplatWithErrorHandling',
-              message: errorMessage,
-              error: error,
-              splatSource: splatSource,
-            },
-            initialLoadComplete
-          );
-
-          return; // Don't proceed with normal error handling
-        }
-
-        // Normal error handling (non-critical errors)
-        if (splatSource === splat && !hasError) {
-          console.log('🔄 Trying fallback splat file...');
-          setSplatSource(splatFallback);
-          setHasError(false);
-        } else {
-          console.error('❌ Both splat files failed to load');
-          setHasError(true);
-        }
+        console.error(
+          '❌ Unexpected splat loading error after validation:',
+          error
+        );
+        // Since we pre-validated, this should be very rare
+        // Just log the error - no complex fallback needed
       },
-      [splatSource, hasError, initialLoadComplete]
+      [splatSource, initialLoadComplete]
     );
-
-    if (hasError) {
-      console.log('⚠️ Splat failed to load, rendering placeholder');
-      return (
-        <mesh>
-          <boxGeometry args={[2, 2, 2]} />
-          <meshBasicMaterial color="#77481c" transparent opacity={0.3} />
-        </mesh>
-      );
-    }
 
     try {
       return (
@@ -472,7 +421,12 @@ const SplatWithErrorHandling = memo(
     } catch (error) {
       console.error('❌ Splat render error:', error);
       handleError(error);
-      return null;
+      return (
+        <mesh>
+          <boxGeometry args={[2, 2, 2]} />
+          <meshBasicMaterial color="#77481c" transparent opacity={0.3} />
+        </mesh>
+      );
     }
   }
 );
@@ -570,6 +524,7 @@ function Scene({
   onSplatLoaded,
   imagesLoaded,
   initialLoadComplete,
+  validatedSplatUrl, // NEW: Pre-validated splat URL
 }) {
   const [targetX, setTargetX] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -1126,6 +1081,7 @@ function Scene({
                     splatSize={deviceConfig.splatConfig.size}
                     onSplatLoaded={onSplatLoaded}
                     initialLoadComplete={initialLoadComplete}
+                    validatedSplatUrl={validatedSplatUrl}
                   />
                 </SplatErrorBoundary>
               </mesh>
@@ -1168,6 +1124,7 @@ export default function App({
   onSplatLoaded,
   imagesLoaded,
   initialLoadComplete,
+  validatedSplatUrl, // NEW: Pre-validated splat URL from parent
 }) {
   // Protect against WebGL context loss extension errors globally
   useEffect(() => {
@@ -1403,6 +1360,7 @@ export default function App({
           onSplatLoaded={onSplatLoaded}
           imagesLoaded={imagesLoaded}
           initialLoadComplete={initialLoadComplete}
+          validatedSplatUrl={validatedSplatUrl}
         />
       </Canvas>
     </>
