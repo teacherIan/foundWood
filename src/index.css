@@ -92,7 +92,7 @@ body {
     min-height: 100svh !important;
     background-color: #f5f5f5 !important;
     color: #77481c !important;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif !important;
+    font-family: "CustomFont", "Poppins", "Lobster Two", sans-serif !important;
     font-size: 1.2rem !important;
     z-index: 999999999 !important;
     /* Ensure it's on top of everything */

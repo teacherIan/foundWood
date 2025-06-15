@@ -819,30 +819,6 @@ function App() {
       {shouldShowLoading && (
         <div className="font-loading-screen">
           <div
-            className="loading-spinner"
-            aria-label="Loading spinner"
-            style={{
-              // Ensure animation works even if CSS fails to load properly
-              animation: 'spin-smooth 1s linear infinite',
-              WebkitAnimation: 'spin-smooth 1s linear infinite',
-            }}
-            ref={(el) => {
-              // Debug the spinner element when it's created
-              if (el) {
-                console.log('🔍 Loading spinner element created');
-                setTimeout(() => {
-                  const computedStyle = window.getComputedStyle(el);
-                  console.log('🎨 Spinner computed styles:', {
-                    animation: computedStyle.getPropertyValue('animation'),
-                    transform: computedStyle.getPropertyValue('transform'),
-                    display: computedStyle.getPropertyValue('display'),
-                    visibility: computedStyle.getPropertyValue('visibility'),
-                  });
-                }, 100);
-              }
-            }}
-          ></div>
-          <div
             role="status"
             aria-live="polite"
             style={{
@@ -854,12 +830,63 @@ function App() {
               justifyContent: 'center',
             }}
           >
-            <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-              Loading 3D scene...
+            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+              <h2
+                style={{
+                  margin: '0 0 15px 0',
+                  fontSize: '1.4rem',
+                  fontWeight: '600',
+                  color: '#77481c',
+                  fontFamily:
+                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                }}
+              >
+                Welcome to the Doug's Found Wood Experience
+              </h2>
+              <div
+                style={{
+                  fontSize: '1rem',
+                  color: '#8b5a2b',
+                  fontFamily:
+                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                }}
+              >
+                Loading 3D scene...
+              </div>
             </div>
+            <div
+              className="loading-spinner"
+              aria-label="Loading spinner"
+              style={{
+                // Ensure animation works even if CSS fails to load properly
+                animation: 'spin-smooth 1s linear infinite',
+                WebkitAnimation: 'spin-smooth 1s linear infinite',
+                marginBottom: '20px',
+              }}
+              ref={(el) => {
+                // Debug the spinner element when it's created
+                if (el) {
+                  console.log('🔍 Loading spinner element created');
+                  setTimeout(() => {
+                    const computedStyle = window.getComputedStyle(el);
+                    console.log('🎨 Spinner computed styles:', {
+                      animation: computedStyle.getPropertyValue('animation'),
+                      transform: computedStyle.getPropertyValue('transform'),
+                      display: computedStyle.getPropertyValue('display'),
+                      visibility: computedStyle.getPropertyValue('visibility'),
+                    });
+                  }, 100);
+                }
+              }}
+            ></div>
             {/* REMOVED: Image loading progress since preloading is disabled */}
             <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-              <small>
+              <small
+                style={{
+                  fontFamily:
+                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                }}
+              >
                 3D Scene: {state.splatLoaded ? '✅' : '❌'} | Fonts: Loading in
                 background | Images: Load on-demand ⚡
               </small>
@@ -877,6 +904,8 @@ function App() {
                 transition: 'opacity 0.3s ease-in-out',
                 margin: '0 auto',
                 padding: '0 20px',
+                fontFamily:
+                  '"CustomFont", "Poppins", "Lobster Two", sans-serif',
               }}
             >
               "{loadingSayings[currentSayingIndex]}"

@@ -60,12 +60,29 @@ const isSplatParsingError = (errorMessage, context = {}) => {
         message.includes('format')))
   );
 };
-const initiateSplatReload = (errorDetails) => {
+const initiateSplatReload = (errorDetails, initialLoadComplete = false) => {
   if (window.splatReloadInProgress) return;
+
+  // CRITICAL FIX: Never reload page if we've made it past the initial loading screen
+  if (initialLoadComplete) {
+    console.warn(
+      '🚫 Splat error detected after initial load complete - NOT reloading page to maintain user experience'
+    );
+    console.log('📝 Error logged for debugging:', {
+      ...errorDetails,
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      url: window.location.href,
+    });
+    // Just log the error but don't reload - user experience is more important
+    return;
+  }
 
   window.splatReloadInProgress = true;
 
-  console.error('🚨 Critical splat parsing error - initiating reload');
+  console.error(
+    '🚨 Critical splat parsing error during initial load - initiating reload'
+  );
   console.log('📄 Error details:', {
     ...errorDetails,
     timestamp: new Date().toISOString(),
@@ -87,7 +104,7 @@ const initiateSplatReload = (errorDetails) => {
   });
 
   // Send error to console for production debugging
-  console.group('🚨 SPLAT RELOAD TRIGGER');
+  console.group('🚨 SPLAT RELOAD TRIGGER (LOADING SCENE ONLY)');
   console.error('Error Source:', errorDetails.source);
   console.error('Error Message:', errorDetails.message);
   console.error('Full Error:', errorDetails);
@@ -149,7 +166,9 @@ const initiateSplatReload = (errorDetails) => {
 
   // Reload after a brief delay
   setTimeout(() => {
-    console.log('🔄 Reloading page due to splat parsing failure...');
+    console.log(
+      '🔄 Reloading page due to splat parsing failure during initial load...'
+    );
     window.location.reload();
   }, 2000);
 };
@@ -174,12 +193,15 @@ class SplatErrorBoundary extends React.Component {
     });
 
     if (isParseFileError) {
-      initiateSplatReload({
-        source: 'React Error Boundary',
-        message: errorMessage,
-        stack: error?.stack,
-        componentStack: errorInfo?.componentStack,
-      });
+      initiateSplatReload(
+        {
+          source: 'React Error Boundary',
+          message: errorMessage,
+          stack: error?.stack,
+          componentStack: errorInfo?.componentStack,
+        },
+        this.props.initialLoadComplete
+      );
     }
   }
 
@@ -313,17 +335,27 @@ const MemoizedText = memo(({ position, children, fontSize, delay = 0 }) => (
 
 // Enhanced Splat component with error handling and fallback
 const SplatWithErrorHandling = memo(
-  ({ alphaTest, chunkSize, splatSize, onSplatLoaded, ...props }) => {
+  ({
+    alphaTest,
+    chunkSize,
+    splatSize,
+    onSplatLoaded,
+    initialLoadComplete,
+    ...props
+  }) => {
     const [splatSource, setSplatSource] = useState(splat);
     const [hasError, setHasError] = useState(false);
 
     // SIMPLIFIED: Remove the 30-second timeout entirely
     // The loading screen will be dismissed by ProgressChecker after 800ms
     // Error handling is covered by React Error Boundary and onError callback
-    console.log(
-      '🎯 SplatWithErrorHandling: Attempting to load splat file',
-      splatSource
-    );
+    // Only show detailed logging during initial load to avoid console spam after start screen
+    if (!initialLoadComplete) {
+      console.log(
+        '🎯 SplatWithErrorHandling: Attempting to load splat file',
+        splatSource
+      );
+    }
 
     const handleLoad = useCallback(() => {
       console.log('✅ Splat onLoad callback fired successfully');
@@ -341,15 +373,25 @@ const SplatWithErrorHandling = memo(
         });
 
         if (isParseFileError) {
-          console.error(
-            '🚨 Critical splat parsing error detected - initiating page reload'
+          if (!initialLoadComplete) {
+            console.error(
+              '🚨 Critical splat parsing error detected during loading - initiating page reload'
+            );
+          } else {
+            console.warn(
+              '🚫 Splat parsing error detected after initial load - logging only (no reload for better UX)'
+            );
+          }
+
+          initiateSplatReload(
+            {
+              source: 'SplatWithErrorHandling',
+              message: errorMessage,
+              error: error,
+              splatSource: splatSource,
+            },
+            initialLoadComplete
           );
-          initiateSplatReload({
-            source: 'SplatWithErrorHandling',
-            message: errorMessage,
-            error: error,
-            splatSource: splatSource,
-          });
 
           return; // Don't proceed with normal error handling
         }
@@ -364,7 +406,7 @@ const SplatWithErrorHandling = memo(
           setHasError(true);
         }
       },
-      [splatSource, hasError]
+      [splatSource, hasError, initialLoadComplete]
     );
 
     if (hasError) {
@@ -475,14 +517,17 @@ function Scene({
           '🚨 Critical splat parsing error detected in global error handler'
         );
 
-        initiateSplatReload({
-          source: 'Global Error Handler',
-          message: errorMessage,
-          filename: event.filename,
-          lineno: event.lineno,
-          colno: event.colno,
-          error: event.error,
-        });
+        initiateSplatReload(
+          {
+            source: 'Global Error Handler',
+            message: errorMessage,
+            filename: event.filename,
+            lineno: event.lineno,
+            colno: event.colno,
+            error: event.error,
+          },
+          initialLoadComplete
+        );
 
         return;
       }
@@ -504,11 +549,14 @@ function Scene({
       if (isParseFileError) {
         console.error('🚨 Critical splat parsing error in promise rejection');
 
-        initiateSplatReload({
-          source: 'Promise Rejection',
-          message: errorMessage,
-          reason: event.reason,
-        });
+        initiateSplatReload(
+          {
+            source: 'Promise Rejection',
+            message: errorMessage,
+            reason: event.reason,
+          },
+          initialLoadComplete
+        );
       }
     };
 
@@ -958,12 +1006,13 @@ function Scene({
                 position={deviceConfig.splatConfig.position}
                 scale={deviceConfig.splatConfig.scale}
               >
-                <SplatErrorBoundary>
+                <SplatErrorBoundary initialLoadComplete={initialLoadComplete}>
                   <SplatWithErrorHandling
                     alphaTest={manualAlphaTest}
                     chunkSize={0.01}
                     splatSize={deviceConfig.splatConfig.size}
                     onSplatLoaded={onSplatLoaded}
+                    initialLoadComplete={initialLoadComplete}
                   />
                 </SplatErrorBoundary>
               </mesh>
@@ -1186,7 +1235,7 @@ export default function App({
           // iOS Safari specific optimizations
           ...(isIOSSafari() && {
             contextAttributes: {
-              powerPreference: 'default',
+              powerPreference: 'high-performance',
               antialias: false,
               depth: false,
               stencil: false,
