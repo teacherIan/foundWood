@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pure CSS Spinner Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 50px;
+            background-color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Test if keyframes work at all */
+        @keyframes spin-smooth {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes test-color {
+            0% {
+                background-color: red;
+            }
+
+            50% {
+                background-color: blue;
+            }
+
+            100% {
+                background-color: red;
+            }
+        }
+
+        .spinner-test {
+            border: 5px solid rgba(119, 72, 28, 0.2);
+            border-radius: 50%;
+            border-top: 5px solid #77481c;
+            width: 50px;
+            height: 50px;
+            animation: spin-smooth 1s linear infinite;
+            margin: 20px;
+        }
+
+        .color-test {
+            width: 50px;
+            height: 50px;
+            animation: test-color 2s linear infinite;
+            margin: 20px;
+        }
+
+        .manual-test {
+            border: 5px solid rgba(119, 72, 28, 0.2);
+            border-radius: 50%;
+            border-top: 5px solid #77481c;
+            width: 50px;
+            height: 50px;
+            margin: 20px;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CSS Animation Test</h1>
+
+    <div class="container">
+        <span>CSS Keyframe Spinner:</span>
+        <div class="spinner-test"></div>
+    </div>
+
+    <div class="container">
+        <span>Color Animation Test:</span>
+        <div class="color-test"></div>
+    </div>
+
+    <div class="container">
+        <span>JavaScript Manual Rotation:</span>
+        <div class="manual-test" id="manual-spinner"></div>
+    </div>
+
+    <div class="container">
+        <span>Inline Style Animation:</span>
+        <div style="
+            border: 5px solid rgba(119, 72, 28, 0.2);
+            border-radius: 50%;
+            border-top: 5px solid #77481c;
+            width: 50px;
+            height: 50px;
+            animation: spin-smooth 1s linear infinite;
+        "></div>
+    </div>
+
+    <script>
+        // Manual rotation test
+        const manualSpinner = document.getElementById('manual-spinner');
+        let rotation = 0;
+
+        function rotateManual() {
+            rotation += 2;
+            manualSpinner.style.transform = `rotate(${rotation}deg)`;
+            requestAnimationFrame(rotateManual);
+        }
+
+        rotateManual();
+
+        // Debug all animations
+        setTimeout(() => {
+            const spinners = document.querySelectorAll('.spinner-test, .color-test');
+            spinners.forEach((spinner, index) => {
+                const style = window.getComputedStyle(spinner);
+                console.log(`Spinner ${index}:`, {
+                    animation: style.getPropertyValue('animation'),
+                    transform: style.getPropertyValue('transform'),
+                });
+            });
+        }, 1000);
+    </script>
+</body>
+
+</html>

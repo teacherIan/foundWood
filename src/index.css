@@ -162,6 +162,9 @@ body {
     }
 }
 
+/* Loading spinner with maximum specificity and fallbacks */
+.font-loading-screen .loading-spinner,
+div.loading-spinner,
 .loading-spinner {
     border: 5px solid rgba(119, 72, 28, 0.2) !important;
     border-radius: 50% !important;
@@ -169,6 +172,9 @@ body {
     width: 50px !important;
     height: 50px !important;
     animation: spin-smooth 1s linear infinite !important;
+    -webkit-animation: spin-smooth 1s linear infinite !important;
+    -moz-animation: spin-smooth 1s linear infinite !important;
+    -o-animation: spin-smooth 1s linear infinite !important;
     margin: 0 !important;
     /* Remove all margins */
     flex-shrink: 0 !important;
@@ -182,10 +188,9 @@ body {
     /* Enhanced performance */
     will-change: transform !important;
     /* Inform browser about animation */
-    transform: translateZ(0) !important;
-    /* Force hardware acceleration */
-    -webkit-transform: translateZ(0) !important;
-    /* Webkit prefix */
+    /* REMOVED: static transform to avoid conflicts with animation transform */
+    /* transform: translateZ(0) !important; */
+    /* -webkit-transform: translateZ(0) !important; */
 }
 
 /* Loading text styling */
@@ -221,13 +226,52 @@ body {
     }
 }
 
-/* Enhanced spin animation for better performance */
+/* Enhanced spin animation for better performance with all browser prefixes */
 @keyframes spin-smooth {
-    from {
+    0% {
         transform: rotate(0deg);
     }
 
-    to {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Webkit prefix for older Safari versions */
+@-webkit-keyframes spin-smooth {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+/* Mozilla prefix */
+@-moz-keyframes spin-smooth {
+    0% {
+        -moz-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -moz-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+/* Opera prefix */
+@-o-keyframes spin-smooth {
+    0% {
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -o-transform: rotate(360deg);
         transform: rotate(360deg);
     }
 }

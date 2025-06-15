@@ -280,6 +280,7 @@ function App() {
   // Mark initial load as complete when all assets are loaded
   // UPDATED: No longer wait for images since preloading is disabled
   // Loading order: Fonts → Splat → Initial Load Complete
+  // Add minimum loading time to ensure spinner is visible
   useEffect(() => {
     if (
       !state.initialLoadComplete &&
@@ -288,12 +289,20 @@ function App() {
       // REMOVED: && state.imagesLoaded (no longer preloading images)
     ) {
       console.log(
-        '🎉 All initial assets loaded! Marking initial load as complete.'
+        '🎉 All initial assets loaded! Adding minimum display time for loading screen...'
       );
       console.log(
         '📋 Updated loading order: Fonts ✅ → Splat ✅ → Complete ✅ (images load on-demand)'
       );
-      dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
+
+      // Add a minimum 2-second delay to ensure loading screen is visible long enough
+      // to see the spinner animation
+      setTimeout(() => {
+        console.log(
+          '⏰ Minimum loading time elapsed, marking load as complete'
+        );
+        dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
+      }, 2000);
     }
   }, [
     state.fontsLoaded,
@@ -311,6 +320,7 @@ function App() {
 
   // Font loading detection with improved error handling
   useEffect(() => {
+    console.log('🎨 Starting font loading...');
     const fonts = [
       new FontFaceObserver('driftWood'),
       new FontFaceObserver('CustomFont'),
@@ -318,16 +328,19 @@ function App() {
       new FontFaceObserver('Lobster Two'),
     ];
 
-    Promise.all(fonts.map((font) => font.load()))
-      .then(() => {
-        console.log('✅ All fonts loaded successfully');
-        dispatch({ type: 'SET_FONTS_LOADED' });
-      })
-      .catch((error) => {
-        console.error('Font loading error:', error);
-        console.log('⚠️ Proceeding without all fonts loaded');
-        dispatch({ type: 'SET_FONTS_LOADED' }); // Proceed anyway
-      });
+    // Add artificial delay to test loading screen
+    setTimeout(() => {
+      Promise.all(fonts.map((font) => font.load()))
+        .then(() => {
+          console.log('✅ All fonts loaded successfully');
+          dispatch({ type: 'SET_FONTS_LOADED' });
+        })
+        .catch((error) => {
+          console.error('Font loading error:', error);
+          console.log('⚠️ Proceeding without all fonts loaded');
+          dispatch({ type: 'SET_FONTS_LOADED' }); // Proceed anyway
+        });
+    }, 1000); // 1 second delay to ensure loading screen shows
   }, []);
 
   const handleSplatLoadedCallback = useCallback(() => {
@@ -823,7 +836,30 @@ function App() {
       {/* Show loading screen overlay when needed */}
       {shouldShowLoading && (
         <div className="font-loading-screen">
-          <div className="loading-spinner" aria-label="Loading spinner"></div>
+          <div
+            className="loading-spinner"
+            aria-label="Loading spinner"
+            style={{
+              // Ensure animation works even if CSS fails to load properly
+              animation: 'spin-smooth 1s linear infinite',
+              WebkitAnimation: 'spin-smooth 1s linear infinite',
+            }}
+            ref={(el) => {
+              // Debug the spinner element when it's created
+              if (el) {
+                console.log('🔍 Loading spinner element created');
+                setTimeout(() => {
+                  const computedStyle = window.getComputedStyle(el);
+                  console.log('🎨 Spinner computed styles:', {
+                    animation: computedStyle.getPropertyValue('animation'),
+                    transform: computedStyle.getPropertyValue('transform'),
+                    display: computedStyle.getPropertyValue('display'),
+                    visibility: computedStyle.getPropertyValue('visibility'),
+                  });
+                }, 100);
+              }
+            }}
+          ></div>
           <div
             role="status"
             aria-live="polite"

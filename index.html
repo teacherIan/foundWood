@@ -17,6 +17,28 @@
 <body style="background-color: #ffffff !important;">
   <div id="root" style="background-color: #ffffff !important;"></div>
   <script type="module" src="/src/main.jsx"></script>
+
+  <!-- Debug script for loading spinner -->
+  <script>
+    // Wait for the React app to load and then debug the spinner
+    setTimeout(() => {
+      const spinner = document.querySelector('.loading-spinner');
+      if (spinner) {
+        console.log('🔍 Loading spinner found, checking animation...');
+        const computedStyle = window.getComputedStyle(spinner);
+        console.log('Animation:', computedStyle.getPropertyValue('animation'));
+        console.log('Transform:', computedStyle.getPropertyValue('transform'));
+
+        // Force animation if not working
+        if (!computedStyle.getPropertyValue('animation').includes('spin')) {
+          console.log('⚠️ Animation not detected, forcing it...');
+          spinner.style.animation = 'spin-smooth 1s linear infinite';
+        }
+      } else {
+        console.log('⏳ No spinner found yet, loading complete or not started');
+      }
+    }, 2000);
+  </script>
 </body>
 
 </html>
