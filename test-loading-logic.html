@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Logic Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .status {
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        button {
+            background: #77481c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #8b5a2b;
+        }
+
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .old-logic,
+        .new-logic {
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .old-logic {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+
+        .new-logic {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Loading Logic Simplification Test</h1>
+
+    <div class="test-container">
+        <h2>Behavior Comparison</h2>
+
+        <div class="comparison">
+            <div class="old-logic">
+                <h3>🔴 OLD LOGIC (Fixed)</h3>
+                <p><strong>Loading Condition:</strong><br>
+                    <code>fontsLoaded && splatLoaded</code>
+                </p>
+                <p><strong>Problems:</strong></p>
+                <ul>
+                    <li>Waited for fonts unnecessarily</li>
+                    <li>2-second minimum delay</li>
+                    <li>Multiple dependencies</li>
+                    <li>Slower startup</li>
+                </ul>
+                <div id="old-demo-status" class="status loading">Simulating old behavior...</div>
+                <button onclick="simulateOldLogic()">Test Old Logic</button>
+            </div>
+
+            <div class="new-logic">
+                <h3>✅ NEW LOGIC (Current)</h3>
+                <p><strong>Loading Condition:</strong><br>
+                    <code>splatLoaded ONLY</code>
+                </p>
+                <p><strong>Benefits:</strong></p>
+                <ul>
+                    <li>Only waits for 3D scene</li>
+                    <li>1-second minimum delay</li>
+                    <li>Single dependency</li>
+                    <li>Faster startup</li>
+                </ul>
+                <div id="new-demo-status" class="status loading">Simulating new behavior...</div>
+                <button onclick="simulateNewLogic()">Test New Logic</button>
+            </div>
+        </div>
+
+        <div class="log" id="comparison-log"></div>
+    </div>
+
+    <script>
+        function log(message, category = '') {
+            const logElement = document.getElementById('comparison-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = category ? `[${category}] ` : '';
+            logElement.innerHTML += `[${timestamp}] ${prefix}${message}<br>`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function setStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status ${type}`;
+        }
+
+        function simulateOldLogic() {
+            log('🔴 TESTING OLD LOGIC', 'OLD');
+            setStatus('old-demo-status', 'Loading fonts...', 'loading');
+
+            // Simulate font loading delay
+            setTimeout(() => {
+                log('✅ Fonts loaded (after 1.5s)', 'OLD');
+                setStatus('old-demo-status', 'Loading 3D scene...', 'loading');
+
+                // Simulate splat loading
+                setTimeout(() => {
+                    log('✅ Splat loaded (after 2.5s total)', 'OLD');
+                    setStatus('old-demo-status', 'Adding minimum delay...', 'loading');
+
+                    // Minimum 2-second delay
+                    setTimeout(() => {
+                        log('✅ OLD LOGIC COMPLETE (after 4.5s total)', 'OLD');
+                        setStatus('old-demo-status', 'Complete - 4.5s total', 'success');
+                    }, 2000);
+                }, 1000);
+            }, 1500);
+        }
+
+        function simulateNewLogic() {
+            log('✅ TESTING NEW LOGIC', 'NEW');
+            setStatus('new-demo-status', 'Loading 3D scene...', 'loading');
+
+            // Fonts load in background (not blocking)
+            setTimeout(() => {
+                log('⚡ Fonts loading in background (non-blocking)', 'NEW');
+            }, 500);
+
+            // Simulate splat loading
+            setTimeout(() => {
+                log('✅ Splat loaded (after 1.5s)', 'NEW');
+                setStatus('new-demo-status', 'Adding minimum delay...', 'loading');
+
+                // Minimum 1-second delay
+                setTimeout(() => {
+                    log('✅ NEW LOGIC COMPLETE (after 2.5s total)', 'NEW');
+                    setStatus('new-demo-status', 'Complete - 2.5s total', 'success');
+                    log('🚀 Result: 2s faster than old logic!', 'NEW');
+                }, 1000);
+            }, 1500);
+        }
+
+        // Auto-run comparison on page load
+        window.addEventListener('load', () => {
+            log('🧪 Loading logic comparison test initialized');
+            log('Click the buttons above to test old vs new loading behavior');
+        });
+    </script>
+</body>
+
+</html>

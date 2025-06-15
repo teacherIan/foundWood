@@ -277,45 +277,39 @@ function App() {
   ]);
   */
 
-  // Mark initial load as complete when all assets are loaded
-  // UPDATED: No longer wait for images since preloading is disabled
-  // Loading order: Fonts → Splat → Initial Load Complete
+  // Mark initial load as complete when splat is loaded
+  // UPDATED: Only wait for splat loading - fonts load in background
+  // Loading order: Splat → Initial Load Complete (fonts load separately)
   // Add minimum loading time to ensure spinner is visible
   useEffect(() => {
     if (
       !state.initialLoadComplete &&
-      state.fontsLoaded &&
       state.splatLoaded
-      // REMOVED: && state.imagesLoaded (no longer preloading images)
+      // REMOVED: state.fontsLoaded - fonts load in background
+      // REMOVED: state.imagesLoaded - images load on-demand
     ) {
       console.log(
-        '🎉 All initial assets loaded! Adding minimum display time for loading screen...'
+        '🎉 Splat loaded! Adding minimum display time for loading screen...'
       );
       console.log(
-        '📋 Updated loading order: Fonts ✅ → Splat ✅ → Complete ✅ (images load on-demand)'
+        '📋 Simplified loading order: Splat ✅ → Complete ✅ (fonts and images load separately)'
       );
 
-      // Add a minimum 2-second delay to ensure loading screen is visible long enough
-      // to see the spinner animation
+      // Add a minimum 1-second delay to ensure loading screen is visible
+      // just long enough to see the spinner animation
       setTimeout(() => {
         console.log(
           '⏰ Minimum loading time elapsed, marking load as complete'
         );
         dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
-      }, 2000);
+      }, 1000); // Reduced from 2s to 1s since we only wait for splat
     }
-  }, [
-    state.fontsLoaded,
-    state.splatLoaded,
-    // REMOVED: state.imagesLoaded,
-    state.initialLoadComplete,
-  ]);
+  }, [state.splatLoaded, state.initialLoadComplete]);
 
   // Immediate state logging on component mount
   console.log('🚀 App component mounted with initial state:', {
-    fontsLoaded: state.fontsLoaded,
     splatLoaded: state.splatLoaded,
-    shouldShowLoading: !state.fontsLoaded || !state.splatLoaded,
+    shouldShowLoading: !state.splatLoaded,
   });
 
   // Font loading detection with improved error handling
@@ -342,9 +336,8 @@ function App() {
 
   const handleSplatLoadedCallback = useCallback(() => {
     console.log('🎯 Splat loaded callback triggered in App.jsx');
-    console.log('🎬 STEP 3 COMPLETE: Splat (3D scene) loaded after images');
+    console.log('🎬 3D SCENE LOADED: Ready to dismiss loading screen');
     console.log('Current state before splat loaded:', {
-      fontsLoaded: state.fontsLoaded,
       splatLoaded: state.splatLoaded,
     });
     dispatch({ type: 'SET_SPLAT_LOADED' });
@@ -480,16 +473,8 @@ function App() {
   const shouldShowLoading = !state.initialLoadComplete;
 
   console.log('🔍 Loading check:', {
-    fontsLoaded: state.fontsLoaded,
     splatLoaded: state.splatLoaded,
-    imagesLoaded: state.imagesLoaded,
     initialLoadComplete: state.initialLoadComplete,
-    showGallery: state.showGallery,
-    isPreloading: isPreloading,
-    progressTotal: preloadingState.progress.total,
-    progressLoaded: preloadingState.progress.loaded,
-    progressComplete:
-      preloadingState.progress.loaded >= preloadingState.progress.total,
     shouldShowLoading: shouldShowLoading,
   });
   console.log('🎯 Final loading decision:', shouldShowLoading);
@@ -870,15 +855,13 @@ function App() {
             }}
           >
             <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-              Loading{!state.fontsLoaded ? ' fonts' : ''}
-              {!state.splatLoaded && state.fontsLoaded ? ' 3D scene' : ''}...
+              Loading 3D scene...
             </div>
             {/* REMOVED: Image loading progress since preloading is disabled */}
             <div style={{ textAlign: 'center', marginBottom: '20px' }}>
               <small>
-                Step 1 - Fonts: {state.fontsLoaded ? '✅' : '❌'} | Step 2 - 3D
-                Scene: {state.splatLoaded ? '✅' : '❌'} | Images: Load
-                on-demand ⚡
+                3D Scene: {state.splatLoaded ? '✅' : '❌'} | Fonts: Loading in
+                background | Images: Load on-demand ⚡
               </small>
             </div>
             <div
