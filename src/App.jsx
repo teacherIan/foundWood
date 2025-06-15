@@ -328,19 +328,16 @@ function App() {
       new FontFaceObserver('Lobster Two'),
     ];
 
-    // Add artificial delay to test loading screen
-    setTimeout(() => {
-      Promise.all(fonts.map((font) => font.load()))
-        .then(() => {
-          console.log('✅ All fonts loaded successfully');
-          dispatch({ type: 'SET_FONTS_LOADED' });
-        })
-        .catch((error) => {
-          console.error('Font loading error:', error);
-          console.log('⚠️ Proceeding without all fonts loaded');
-          dispatch({ type: 'SET_FONTS_LOADED' }); // Proceed anyway
-        });
-    }, 1000); // 1 second delay to ensure loading screen shows
+    Promise.all(fonts.map((font) => font.load()))
+      .then(() => {
+        console.log('✅ All fonts loaded successfully');
+        dispatch({ type: 'SET_FONTS_LOADED' });
+      })
+      .catch((error) => {
+        console.error('Font loading error:', error);
+        console.log('⚠️ Proceeding without all fonts loaded');
+        dispatch({ type: 'SET_FONTS_LOADED' }); // Proceed anyway
+      });
   }, []);
 
   const handleSplatLoadedCallback = useCallback(() => {
