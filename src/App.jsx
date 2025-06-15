@@ -197,7 +197,10 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // State for rotating inspirational sayings during loading
-  const [currentSayingIndex, setCurrentSayingIndex] = useState(0);
+  // Start with a random saying each time the page loads
+  const [currentSayingIndex, setCurrentSayingIndex] = useState(() =>
+    Math.floor(Math.random() * loadingSayings.length)
+  );
   const [sayingOpacity, setSayingOpacity] = useState(1);
 
   // Initialize image preloader to start loading images at startup
