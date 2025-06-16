@@ -36,22 +36,22 @@
 @supports (-webkit-touch-callout: none) {
     html {
         height: -webkit-fill-available;
-        background: #ffffff !important;
-        /* Ensure Safari has white background */
+        background: #f5f5f5 !important;
+        /* Ensure Safari has consistent background */
     }
 
     body {
         height: -webkit-fill-available;
         min-height: -webkit-fill-available;
-        background: #ffffff !important;
-        /* Ensure Safari body has white background */
+        background: #f5f5f5 !important;
+        /* Ensure Safari body has consistent background */
     }
 
     #root {
         height: -webkit-fill-available;
         min-height: -webkit-fill-available;
-        background: #ffffff !important;
-        /* Ensure Safari root has white background */
+        background: #f5f5f5 !important;
+        /* Ensure Safari root has consistent background */
     }
 }
 

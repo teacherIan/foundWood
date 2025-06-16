@@ -20,11 +20,11 @@
 }
 
 .formContainer {
-    /* Modern glassmorphism card */
-    background: rgba(255, 255, 255, 0.95);
+    /* Modern glassmorphism card with consistent background */
+    background: rgba(245, 245, 245, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(245, 245, 245, 0.2);
     border-radius: 20px;
     box-shadow:
         0 20px 40px rgba(0, 0, 0, 0.15),
@@ -156,7 +156,7 @@
     border-radius: 12px;
     font-size: 16px;
     font-family: inherit;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(245, 245, 245, 0.9);
     color: #333;
     outline: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -179,7 +179,7 @@
         0 0 0 3px rgba(119, 72, 28, 0.1),
         0 4px 12px rgba(119, 72, 28, 0.15);
     transform: translateY(-2px);
-    background: rgba(255, 255, 255, 1);
+    background: rgba(245, 245, 245, 1);
 }
 
 .form-control label {
@@ -191,7 +191,7 @@
     font-weight: 500;
     pointer-events: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(245, 245, 245, 0.9);
     padding: 0 8px;
     border-radius: 4px;
     transform-origin: left center;
@@ -205,7 +205,7 @@
     font-size: 12px;
     color: #77481c;
     font-weight: 600;
-    background: rgba(255, 255, 255, 1);
+    background: rgba(245, 245, 245, 1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -351,7 +351,7 @@ a:hover {
 .exit-border-top-icon {
     width: 32px;
     height: 32px;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(245, 245, 245, 0.8);
     border: 1px solid rgba(119, 72, 28, 0.2);
     border-radius: 50%;
     display: flex;

@@ -1198,7 +1198,7 @@ function App() {
                 style={{
                   width: '100vw',
                   height: '100vh',
-                  background: '#ffffff',
+                  background: '#f5f5f5',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -1220,8 +1220,7 @@ function App() {
                 style={{
                   width: '100vw',
                   height: '100vh',
-                  background:
-                    'linear-gradient(135deg, #f5f1eb 0%, #ede4d3 100%)',
+                  background: '#f5f5f5', // Consistent background color
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -1232,11 +1231,12 @@ function App() {
               >
                 <div
                   style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    backgroundColor: 'rgba(245, 245, 245, 0.95)',
                     padding: '40px',
                     borderRadius: '12px',
                     boxShadow: '0 4px 20px rgba(119, 72, 28, 0.1)',
                     maxWidth: '500px',
+                    border: '1px solid rgba(119, 72, 28, 0.1)',
                   }}
                 >
                   <h2

@@ -542,10 +542,10 @@ function Scene({
   // TEMPORARILY DISABLED: WebGL cleanup manager for iOS Safari
   // const cleanupManagerRef = useRef(new WebGLCleanupManager());
 
-  // Set scene background to white to ensure consistent background
+  // Set scene background to match theme color for consistency
   useEffect(() => {
     if (scene) {
-      scene.background = new THREE.Color('#ffffff');
+      scene.background = new THREE.Color('#f5f5f5');
     }
   }, [scene]);
 
@@ -1279,7 +1279,7 @@ export default function App({
         dpr={performanceConfig.dpr}
         performance={performanceConfig.performance}
         style={{
-          background: '#ffffff', // Pure white background for Canvas
+          background: '#f5f5f5', // Consistent background color matching theme
           position: 'fixed', // Fixed to viewport to prevent container issues
           top: 0,
           left: 0,

@@ -26,8 +26,8 @@ html {
     /* Prevent pull-to-refresh on iOS Safari */
     overscroll-behavior-y: contain;
     /* REMOVED: position: fixed that was causing layout issues */
-    background: #ffffff !important;
-    /* Force white background */
+    background: #f5f5f5 !important;
+    /* Force consistent background color */
     height: 100%;
 }
 
@@ -38,17 +38,17 @@ body {
     /* FIXED: Removed position: fixed and overflow: hidden that caused black background */
     width: 100%;
     height: 100%;
-    background: #ffffff !important;
-    /* White background with !important to override any conflicts */
-    background-color: #ffffff !important;
+    background: #f5f5f5 !important;
+    /* Consistent background with theme color */
+    background-color: #f5f5f5 !important;
     /* Double declaration for safety */
 }
 
 .app-container,
 .appContainer {
     position: relative;
-    background: #ffffff !important;
-    /* Force white background */
+    background: #f5f5f5 !important;
+    /* Force consistent background color */
     background-color: #ffffff !important;
     /* Double declaration */
     min-height: 100vh;
