@@ -31,7 +31,7 @@ import {
 // - CDN-ready (static assets can be served from CDN)
 
 // OPTIMIZED: Large splat files moved to public directory to avoid bundling (~39MB)
-const splat = '/assets/experience/fixed_model.splat'; // Served statically, not bundled
+const splat = '/assets/experience/new_fixed_PLY.splat'; // Served statically, not bundled
 
 // Splat validation utility
 const validateSplatFile = async (splatUrl) => {
@@ -679,7 +679,7 @@ function App() {
   // UPDATED: Wait for both splat loading AND validation completion, OR graceful failure
   // Loading order: Splat Validation ✅ → Splat Loaded ✅ → Initial Load Complete ✅
   // OR: Splat Validation ❌ → Graceful Fallback → Initial Load Complete ✅
-  // OR: 3-Second Timeout → Force Complete ⏰
+  // OR: 3-Second Timeout → Force Complete ⏰ (OVERRIDES EVERYTHING)
   useEffect(() => {
     if (
       !state.initialLoadComplete &&
@@ -692,7 +692,7 @@ function App() {
       // Clear the 3-second timeout since loading completed normally
       if (loadingTimeoutRef.current) {
         console.log(
-          '⏰ Clearing 3-second timeout - loading completed normally'
+          '⏰ Clearing 3-second timeout - loading completed normally before timeout'
         );
         clearTimeout(loadingTimeoutRef.current);
         loadingTimeoutRef.current = null;
@@ -759,11 +759,13 @@ function App() {
   }, []);
 
   // **NEW**: 3-Second Maximum Loading Timeout
-  // Force the loading screen to end after 3 seconds regardless of splat status
-  // This allows users to view the experience even if the splat hasn't fully loaded
+  // Force the loading screen to end after 3 seconds NO MATTER WHAT
+  // This ensures users never wait more than 3 seconds, even if splat is still loading/validating
   useEffect(() => {
-    if (!state.initialLoadComplete && !splatValidation.isValidating) {
-      console.log('⏰ Starting 3-second maximum loading timeout...');
+    if (!state.initialLoadComplete) {
+      console.log(
+        '⏰ Starting 3-second MAXIMUM loading timeout - will force completion regardless of loading status...'
+      );
 
       // Clear any existing timeout
       if (loadingTimeoutRef.current) {
@@ -773,14 +775,16 @@ function App() {
       loadingTimeoutRef.current = setTimeout(() => {
         if (!state.initialLoadComplete) {
           console.log(
-            '⏰ 3-second maximum loading timeout reached - forcing load complete'
+            '⏰ 3-SECOND MAXIMUM TIMEOUT REACHED - FORCING LOAD COMPLETE NOW!'
           );
           console.log(
-            '🚀 Loading screen will end now, allowing splat to be viewed even if incomplete'
+            '🚀 Loading screen ending after 3 seconds - splat may still be loading but user can now interact'
           );
           dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
+        } else {
+          console.log('⏰ 3-second timeout fired but loading already complete');
         }
-      }, 3000); // 3 seconds maximum
+      }, 3000); // 3 seconds ABSOLUTE MAXIMUM
 
       // Cleanup timeout on unmount or when loading completes
       return () => {
@@ -790,7 +794,7 @@ function App() {
         }
       };
     }
-  }, [state.initialLoadComplete, splatValidation.isValidating]);
+  }, [state.initialLoadComplete]); // Only depend on initialLoadComplete, not validation status
 
   const handleSplatLoadedCallback = useCallback(() => {
     console.log('🎯 Splat loaded callback triggered in App.jsx');
@@ -1481,7 +1485,7 @@ function App() {
                           splatValidation.retryCount + 1
                         })...`
                       : '🔍 Preparing 3D scene files...'
-                    : '🪵 Crafting your experience (max 3 seconds) 🪵'}
+                    : '🪵 Maximum wait time: 3 seconds 🪵'}
                 </div>
               </div>
 

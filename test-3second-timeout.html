@@ -85,8 +85,9 @@
 
 <body>
     <div class="container">
-        <h1>🕐 3-Second Loading Timeout Test</h1>
-        <p>This test simulates the new 3-second maximum loading timeout feature.</p>
+        <h1>🕐 3-Second ABSOLUTE Maximum Loading Timeout Test</h1>
+        <p>This test verifies that the loading screen ALWAYS ends after exactly 3 seconds, regardless of what is
+            happening with splat loading or validation.</p>
 
         <div class="timer" id="timer">Ready to test</div>
         <div id="status" class="status loading">Ready to test timeout behavior</div>
@@ -159,10 +160,9 @@
             document.getElementById('log').innerHTML = '';
             document.getElementById('timer').textContent = 'Ready to test';
             setStatus('Ready to test timeout behavior', 'loading');
-        }
-
-        function simulate3SecondTimeout() {
-            log('Starting 3-second maximum loading timeout...', 'START');
+        } function simulate3SecondTimeout() {
+            log('Starting 3-second ABSOLUTE MAXIMUM loading timeout...', 'START');
+            log('This timeout will fire NO MATTER WHAT after exactly 3 seconds', 'INFO');
 
             // Clear any existing timeout
             if (timeoutRef) {
@@ -171,14 +171,14 @@
             }
 
             startTimer();
-            setStatus('Loading... (max 3 seconds)', 'loading');
+            setStatus('Loading... (ABSOLUTE MAX: 3 seconds)', 'loading');
 
             timeoutRef = setTimeout(() => {
-                log('3-second maximum loading timeout reached - forcing load complete', 'TIMEOUT');
-                log('Loading screen will end now, allowing splat to be viewed even if incomplete', 'TIMEOUT');
+                log('3-SECOND ABSOLUTE MAXIMUM TIMEOUT REACHED - FORCING LOAD COMPLETE NOW!', 'TIMEOUT');
+                log('Loading screen ending after 3 seconds - splat may still be loading but user can now interact', 'TIMEOUT');
                 stopTimer();
-                setStatus('TIMEOUT TRIGGERED - Loading forced complete', 'timeout');
-            }, 3000); // 3 seconds maximum
+                setStatus('ABSOLUTE TIMEOUT TRIGGERED - Loading forced complete', 'timeout');
+            }, 3000); // 3 seconds ABSOLUTE MAXIMUM
 
             return timeoutRef;
         }
@@ -215,9 +215,10 @@
         }
 
         // Initial setup
-        log('🔧 3-Second Loading Timeout test page ready!');
-        log('This simulates the new maximum loading timeout feature.');
-        log('The loading screen will ALWAYS end after 3 seconds, even if splat is still loading.');
+        log('🔧 3-Second ABSOLUTE MAXIMUM Loading Timeout test page ready!');
+        log('This simulates the corrected maximum loading timeout feature.');
+        log('The loading screen will ALWAYS end after EXACTLY 3 seconds, no matter what is happening.');
+        log('This timeout starts immediately and overrides all other loading logic.');
     </script>
 </body>
 
