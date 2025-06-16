@@ -204,22 +204,12 @@ const AnimatedLoadingContainer = memo(({ children, shouldShow }) => {
 });
 
 const AnimatedLoadingSpinner = memo(() => {
-  const spinnerSpring = useSpring({
-    from: {
-      opacity: 0,
-    },
-    to: {
-      opacity: 1,
-    },
-    config: { mass: 1, tension: 120, friction: 12 },
-    delay: 800,
-  });
-
   return (
-    <animated.div
+    <div
       style={{
-        opacity: spinnerSpring.opacity,
         marginBottom: '30px',
+        opacity: 0,
+        animation: 'fadeInUp 0.8s ease-out 0.8s forwards', // Restore CSS animation with delay
       }}
     >
       <div
@@ -231,7 +221,7 @@ const AnimatedLoadingSpinner = memo(() => {
           WebkitAnimation: 'spin-smooth 1.2s ease-in-out infinite',
         }}
       />
-    </animated.div>
+    </div>
   );
 });
 
@@ -357,45 +347,20 @@ const AnimatedLoadingStatus = memo(({ children, delay = 0 }) => {
 });
 
 const AnimatedLoadingSaying = memo(({ children, opacity, delay = 0 }) => {
-  const [hasAppeared, setHasAppeared] = useState(false);
+  const [hasInitialAnimationCompleted, setHasInitialAnimationCompleted] =
+    useState(false);
 
-  const sayingSpring = useSpring({
-    from: {
-      opacity: 0,
-      transform: 'translateY(30px) scale(0.9)',
-      filter: 'blur(4px)',
-    },
-    to: {
-      opacity: hasAppeared ? opacity : 1,
-      transform: hasAppeared
-        ? 'translateY(0px) scale(1)'
-        : 'translateY(0px) scale(1)',
-      filter: hasAppeared ? 'blur(0px)' : 'blur(0px)',
-    },
-    config: { mass: 1, tension: 140, friction: 18 },
-    delay: hasAppeared ? 0 : delay,
-    onRest: () => setHasAppeared(true),
-  });
-
-  // When children change (new saying), create a subtle bounce effect
-  const bounceSpring = useSpring({
-    from: { transform: 'scale(1)' },
-    to: async (next) => {
-      if (hasAppeared) {
-        await next({ transform: 'scale(1.05)' });
-        await next({ transform: 'scale(1)' });
-      }
-    },
-    config: { mass: 0.8, tension: 300, friction: 20 },
-  });
+  // Track when initial animation completes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setHasInitialAnimationCompleted(true);
+    }, 2800); // 2.0s delay + 0.8s animation duration
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <animated.div
+    <div
       style={{
-        ...sayingSpring,
-        transform: hasAppeared
-          ? bounceSpring.transform
-          : sayingSpring.transform,
         fontStyle: 'italic',
         fontSize: '1.2rem',
         color: '#8b5a2b',
@@ -407,10 +372,19 @@ const AnimatedLoadingSaying = memo(({ children, opacity, delay = 0 }) => {
         padding: '0 20px',
         fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
         letterSpacing: '0.3px',
+        minHeight: '2.4rem', // Keep this to prevent layout shift when text changes
+        // Use runtime opacity after initial animation, otherwise use CSS animation
+        opacity: hasInitialAnimationCompleted ? opacity : 0,
+        animation: hasInitialAnimationCompleted
+          ? 'none'
+          : 'fadeInUp 0.8s ease-out 2.0s forwards',
+        transition: hasInitialAnimationCompleted
+          ? 'opacity 0.3s ease-in-out'
+          : 'none',
       }}
     >
       {children}
-    </animated.div>
+    </div>
   );
 });
 
@@ -910,7 +884,7 @@ function App() {
         );
         setSayingOpacity(1);
       }, 300); // Half second for fade transition
-    }, 3500); // Change saying every 3.5 seconds (including transition time)
+    }, 4000); // Slightly longer interval to enjoy each saying
 
     return () => clearInterval(interval);
   }, [shouldShowLoading, activeSayings.length, setActiveSayingIndex]);
@@ -1325,74 +1299,131 @@ function App() {
       {shouldShowLoading && (
         <div className="font-loading-screen">
           <AnimatedLoadingContainer shouldShow={shouldShowLoading}>
-            <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-              <h2
-                style={{
-                  margin: '0 0 10px 0',
-                  fontSize: '1.6rem',
-                  fontWeight: '600',
-                  color: '#77481c',
-                  fontFamily:
-                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                  opacity: 0,
-                  animation: 'fadeInUp 0.8s ease-out 0.2s forwards',
-                }}
-              >
-                Welcome to Doug's Found Wood
-              </h2>
+            {/* Fixed layout container to prevent jumping */}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '400px', // Fixed height to prevent layout shifts
+                width: '100%',
+                maxWidth: '500px',
+                margin: '0 auto',
+              }}
+            >
+              {/* Title section with fixed heights */}
               <div
                 style={{
-                  fontSize: '1.1rem',
-                  color: '#8b5a2b',
-                  fontFamily:
-                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                  marginBottom: '8px',
-                  opacity: 0,
-                  animation: 'fadeInUp 0.8s ease-out 0.4s forwards',
+                  textAlign: 'center',
+                  marginBottom: '30px',
+                  minHeight: '120px', // Fixed height for title section
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
                 }}
               >
-                Preparing your handcrafted journey...
+                <h2
+                  style={{
+                    margin: '0 0 10px 0',
+                    fontSize: '1.6rem',
+                    fontWeight: '600',
+                    color: '#77481c',
+                    fontFamily:
+                      '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                    opacity: 0,
+                    animation: 'fadeInUp 0.8s ease-out 0.2s forwards', // Restore CSS animation
+                  }}
+                >
+                  Welcome to Doug's Found Wood
+                </h2>
+                <div
+                  style={{
+                    fontSize: '1.1rem',
+                    color: '#8b5a2b',
+                    fontFamily:
+                      '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                    marginBottom: '8px',
+                    opacity: 0,
+                    animation: 'fadeInUp 0.8s ease-out 0.4s forwards', // Restore CSS animation
+                  }}
+                >
+                  Preparing your handcrafted journey...
+                </div>
+                <div
+                  style={{
+                    fontSize: '0.9rem',
+                    color: '#a67c52',
+                    fontFamily:
+                      '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                    fontStyle: 'italic',
+                    opacity: 0,
+                    animation: 'fadeInUp 0.8s ease-out 0.6s forwards', // Restore CSS animation
+                  }}
+                >
+                  Each piece tells a story
+                </div>
               </div>
+
+              {/* Spinner with fixed height */}
               <div
                 style={{
-                  fontSize: '0.9rem',
-                  color: '#a67c52',
-                  fontFamily:
-                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                  fontStyle: 'italic',
-                  opacity: 0,
-                  animation: 'fadeInUp 0.8s ease-out 0.6s forwards',
+                  minHeight: '80px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: '30px',
                 }}
               >
-                Each piece tells a story
+                <AnimatedLoadingSpinner />
+              </div>
+
+              {/* Loading status with fixed height */}
+              <div
+                style={{
+                  textAlign: 'center',
+                  marginBottom: '25px',
+                  minHeight: '30px', // Fixed height for status
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '0.95rem',
+                    color: '#9d7856',
+                    fontFamily:
+                      '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                    fontWeight: '500',
+                    opacity: 0,
+                    animation: 'fadeInUp 0.8s ease-out 1.0s forwards', // Restore CSS animation
+                  }}
+                >
+                  {splatValidation.isValidating
+                    ? splatValidation.retryCount > 0
+                      ? `🔄 Optimizing 3D scene (attempt ${
+                          splatValidation.retryCount + 1
+                        })...`
+                      : '🔍 Preparing 3D scene files...'
+                    : '🪵 Crafting your experience with care 🪵'}
+                </div>
+              </div>
+
+              {/* Quote section with fixed height */}
+              <div
+                style={{
+                  minHeight: '80px', // Fixed height for quotes to prevent jumping
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '100%',
+                }}
+              >
+                <AnimatedLoadingSaying opacity={sayingOpacity} delay={0}>
+                  {activeSayings[activeSayingIndex]}
+                </AnimatedLoadingSaying>
               </div>
             </div>
-            <AnimatedLoadingSpinner />
-            {/* Dynamic loading status based on validation state */}
-            <div style={{ textAlign: 'center', marginBottom: '25px' }}>
-              <div
-                style={{
-                  fontSize: '0.95rem',
-                  color: '#9d7856',
-                  fontFamily:
-                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                  fontWeight: '500',
-                  opacity: 0,
-                  animation: 'fadeInUp 0.8s ease-out 1.0s forwards',
-                }}
-              >
-                {splatValidation.isValidating
-                  ? splatValidation.retryCount > 0
-                    ? `🔄 Optimizing 3D scene (attempt ${
-                        splatValidation.retryCount + 1
-                      })...`
-                    : '🔍 Preparing 3D scene files...'
-                  : '🪵 Crafting your experience with care 🪵'}
-              </div>
-            </div>
-            <AnimatedLoadingSaying opacity={sayingOpacity} delay={2000}>
-              {activeSayings[activeSayingIndex]}
-            </AnimatedLoadingSaying>
           </AnimatedLoadingContainer>
         </div>
       )}
