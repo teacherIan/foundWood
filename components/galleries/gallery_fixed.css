@@ -134,7 +134,7 @@
     transform: translateX(-50%);
     display: flex;
     gap: var(--space-2);
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(245, 245, 245, 0.8);
     padding: var(--space-4);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
@@ -747,7 +747,7 @@
     .currentPhoto {
         max-width: 68vw;
         /* Slightly reduced to create better balance */
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(245, 245, 245, 0.3);
         border-radius: 12px;
     }
 
@@ -834,7 +834,7 @@
         justify-content: center;
         align-items: center;
         /* Add subtle background to define the image area */
-        background: rgba(255, 255, 255, 0.5);
+        background: rgba(245, 245, 245, 0.5);
         border-radius: 15px;
         margin-right: 2vw;
         /* Add margin to balance the layout */
@@ -924,7 +924,7 @@
     .currentPhoto {
         max-width: 75vw;
         /* Prevent excessive image width */
-        background: rgba(255, 255, 255, 0.6);
+        background: rgba(245, 245, 245, 0.6);
         border-radius: 20px;
         padding: 2vh;
         /* Add padding around the image */

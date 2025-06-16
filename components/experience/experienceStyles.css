@@ -33,7 +33,7 @@
     display: flex;
     gap: var(--space-4);
     z-index: var(--z-header);
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(245, 245, 245, 0.8);
     padding: var(--space-4);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);

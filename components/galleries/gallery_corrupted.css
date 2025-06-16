@@ -136,7 +136,7 @@
     transform: translateX(-50%);
     display: flex;
     gap: var(--space-2);
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(245, 245, 245, 0.8);
     padding: var(--space-4);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
@@ -625,664 +625,969 @@
     position: relative;
     color: var(--brown);
     font-size: calc(0.8vw + 0.8vh + 10px);
-    font-family: sans-serif;%, -50%);
-    flex-direction: column;vh + 10px);
-    width: 100%;ter;
+    font-family: sans-serif;
+    %,
+    -50%);
+    flex-direction: column;
+    vh+10px);
+    width: 100%;
+    ter;
     /* Full width of left panel */
     text-align: center;
     /* Center text to align with thumbnails */
-    padding: 0; 0;
-    z-index: 1000001;x;
+    padding: 0;
+    0;
+    z-index: 1000001;
+    x;
     /* Ensure text is above everything */
-    /* Make text non-selectable */s */
-    -webkit-user-select: none;2vh + 10px);
-    -moz-user-select: none;oo large */
-    -ms-user-select: none;x 1px 0px black);
-    user-select: none;e: 2px #77481c;
-}   -webkit-text-fill-color: #ffffff;
     /* Make text non-selectable */
-.galleryContact {select: none;
-    position: absolute;one;
-    top: 80%;select: none;
-    left: 50%;t: none;
+    s */ -webkit-user-select: none;
+    2vh+10px);
+    -moz-user-select: none;
+    oo large */ -ms-user-select: none;
+    x 1px 0px black);
+    user-select: none;
+    e: 2px #77481c;
+}
+
+-webkit-text-fill-color: #ffffff;
+
+/* Make text non-selectable */
+.galleryContact {
+    select: none;
+    position: absolute;
+    one;
+    top: 80%;
+    select: none;
+    left: 50%;
+    t: none;
     transform: translate(-50%, -50%);
     font-size: calc(1vw + 1vh + 10px);
     cursor: pointer;
 }
+
 .furniturePrice {
-.furnitureName {solute;
-    margin-top: 0;
-    margin-bottom: 5px;ex-end;
-    text-align: center;nd;
-    /* Center align with thumbnails */
-    font-size: calc(1.2vw + 1.2vh + 10px);
-    /* Responsive but not too large */
-    filter: drop-shadow(1px 1px 0px black);
-    -webkit-text-stroke: 2px #77481c;
-    -webkit-text-fill-color: #ffffff;
-    /* Make text non-selectable */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;;
-    user-select: none;
-    /* Ensure it doesn't shrink */+ 8px);
-    flex-shrink: 0;ller for narrow panel */
-}   text-align: center;
-    /* Center align with thumbnails */
-.furniturePrice {1.4;
-    position: absolute;lectable */
-    display: flex;elect: none;
-    justify-content: flex-end;
-    align-items: flex-end;
-    left: 10%;t: none;
-    bottom: 10%;rolling when content overflows */
-    width: 100%;auto;
-    color: var(--brown);
-    font-family: "Poppins";ent taking up too much space */
-}   /* Custom scrollbar styling */
-    scrollbar-width: thin;
-.furnitureDescription {ba(119, 72, 28, 0.3) transparent;
-    margin-top: 5px;
-    font-family: "Poppins";
-    width: 100%;bar for furniture description */
-    font-size: calc(0.6vw + 0.6vh + 8px);{
-    /* Slightly smaller for narrow panel */
-    text-align: center;
-    /* Center align with thumbnails */
-    line-height: 1.4;::-webkit-scrollbar-track {
-    /* Make text non-selectable */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;bkit-scrollbar-thumb {
-    user-select: none;19, 72, 28, 0.3);
-    /* Enable scrolling when content overflows */
-    overflow-y: auto;
-    max-height: 15vh;
-    /* Limit height to prevent taking up too much space */
-    /* Custom scrollbar styling */0.5);
-    scrollbar-width: thin;
-    scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
-}* Custom scrollbar for mobile description text */
-.mobileProductDescription::-webkit-scrollbar {
-/* Custom scrollbar for furniture description */
-.furnitureDescription::-webkit-scrollbar {
-    width: 4px;
-}mobileProductDescription::-webkit-scrollbar-track {
-    background: transparent;
-.furnitureDescription::-webkit-scrollbar-track {
-    background: transparent;
-}mobileProductDescription::-webkit-scrollbar-thumb {
-    background: rgba(119, 72, 28, 0.3);
-.furnitureDescription::-webkit-scrollbar-thumb {
-    background: rgba(119, 72, 28, 0.3);
-    border-radius: 2px;
-}mobileProductDescription::-webkit-scrollbar-thumb:hover {
-    background: rgba(119, 72, 28, 0.5);
-.furnitureDescription::-webkit-scrollbar-thumb:hover {
-    background: rgba(119, 72, 28, 0.5);
-}arrow {
-    animation: bounce 2s infinite;
-/* Custom scrollbar for mobile description text */
-.mobileProductDescription::-webkit-scrollbar {
-    width: 4px;
-}keyframes bounce {
-
-.mobileProductDescription::-webkit-scrollbar-track {
-    background: transparent;
-}   50%,
-    80%,
-.mobileProductDescription::-webkit-scrollbar-thumb {
-    background: rgba(119, 72, 28, 0.3);
-    border-radius: 2px;
-}
-    40% {
-.mobileProductDescription::-webkit-scrollbar-thumb:hover {
-    background: rgba(119, 72, 28, 0.5);
-}
-    60% {
-.arrow {transform: translateY(-4px);
-    animation: bounce 2s infinite;
-    display: inline-block;
-}
-@media (min-width: 768px),
-@keyframes bounce {cape),
-(pointer: fine) {
-    0%,bileProductInfo.always-visible {
-    20%,display: none !important;
-    50%,
-    80%,
-    100% {
-        transform: translateY(0);mage transitions */
-    }eLoading {
-    position: absolute;
-    40% {50%;
-        transform: translateY(-8px);
-    }ransform: translate(-50%, -50%);
-    width: 40px;
-    60% {t: 40px;
-        transform: translateY(-4px);28, 0.3);
-    }order-top: 3px solid var(--brown);
-}   border-radius: 50%;
-    animation: spin 1s linear infinite;
-@media (min-width: 768px),mooth image transitions */
-(orientation: landscape),ate(-50%, -50%) rotate(360deg);
-(pointer: fine) {
-    .mobileProductInfo.always-visible {
-        display: none !important;
-    }rge desktop screens (1440px and above) - maximize image space */
-}media (min-width: 1440px) and (max-width: 1919px) {
-    .galleryContainer {
-/* Loading indicator for smooth image transitions */
-.imageLoading { less padding for large screens */
-    position: absolute;
-    top: 50%;d gap to prevent awkward spacing */
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px;l {
-    height: 40px;vw;
-    border: 3px solid rgba(119, 72, 28, 0.3);arge screens */
-    border-top: 3px solid var(--brown);
-    border-radius: 50%;utiful brown border styling for large screens */
-    animation: spin 1s linear infinite; 0.92);
-    z-index: 1000;x solid var(--brown);
-}       border-radius: 15px;
-        box-shadow: 0 8px 35px rgba(119, 72, 28, 0.2);
-@keyframes spin {
-    0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }   max-width: 68vw;
-        /* Slightly reduced to create better balance */
-    100% {ckground: rgba(255, 255, 255, 0.3);
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
-}
-    .thumbNails {
-/* Large desktop screens (1440px and above) - maximize image space */
-@media (min-width: 1440px) and (max-width: 1919px) {nt squashing */
-    .galleryContainer {
-        padding-top: 6vh !important;
-        /* Even less padding for large screens */too */
-        gap: 1.5vw; 0 0 0 3px rgba(119, 72, 28, 0.5) !important;
-        /* Add gap to prevent awkward spacing */
-    }   background: rgba(119, 72, 28, 0.05) !important;
-    }
-    .productPanel {
-        width: 28vw;rown background to individual thumbnails on large screens */
-        /* Even more compact left panel for large screens */
-        padding: 2vh 1.5vw;9, 72, 28, 0.05) !important;
-        /* Enhanced beautiful brown border styling for large screens */
-        background: rgba(245, 245, 245, 0.92);, 0.15) !important;
-        border: 3px solid var(--brown);
-        border-radius: 15px;
-        box-shadow: 0 8px 35px rgba(119, 72, 28, 0.2);
-    }   height: 25vh;
-        /* More space for text on large screens */
-    .currentPhoto {
-        max-width: 68vw;
-        /* Slightly reduced to create better balance */
-        background: rgba(255, 255, 255, 0.3);;
-        border-radius: 12px;arge screens */
-    }   /* Make text non-selectable */
-        -webkit-user-select: none;
-    .thumbNails {-select: none;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        /* Fixed 5 columns for large screens - prevent squashing */
-        gap: 12px;k: 0;
-        /* More spacing */
-        /* Ensure brown styling on large screens too */
-        box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5) !important;
-        border-radius: 10px !important; 10px);
-        background: rgba(119, 72, 28, 0.05) !important;
-    }   line-height: 1.6;
-        /* More line spacing */
-    /* Apply light brown background to individual thumbnails on large screens */
-    .thumbNailPhoto {select: none;
-        background: rgba(119, 72, 28, 0.05) !important;
-        border: 3px solid var(--brown) !important;
-        box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
-    }   /* Enable scrolling when content overflows */
-        overflow-y: auto;
-    .productInfo {: 18vh;
-        height: 25vh;th: thin;
-        /* More space for text on large screens */ansparent;
-    }
-}
     .furnitureName {
-        font-size: calc(1.0vw + 1.0vh + 14px);======= */
-        /* Larger text for large screens */
-        /* Make text non-selectable */
-        -webkit-user-select: none;t;
-        -moz-user-select: none;ide screens */
-        -ms-user-select: none;r;
-        user-select: none;r;
-        flex-shrink: 0;
-    }   /* Add gap between left panel and image area */
-    }
-    .furnitureDescription {
-        font-size: calc(0.6vw + 0.6vh + 10px);
-        /* Better readability */
-        line-height: 1.6;act for ultra-wide */
-        /* More line spacing */
-        /* Make text non-selectable */t too wide panels */
-        -webkit-user-select: none;
-        -moz-user-select: none; styling for ultra-wide screens */
-        -ms-user-select: none;245, 245, 0.95);
-        user-select: none;var(--brown);
-        /* Enable scrolling when content overflows */
-        overflow-y: auto;x 40px rgba(119, 72, 28, 0.25);
-        max-height: 18vh;
-        scrollbar-width: thin;
-        scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
-    }   flex: 1;
-}       max-width: 70vw;
-        /* Reduced from 75vw to create better balance */
-/* ========== ULTRA-WIDE SCREENS (>1920px) ========== */
-@media (min-width: 1920px) {
-    .galleryContainer {ackground to define the image area */
-        padding-top: 5vh !important;55, 0.5);
-        /* Optimize for ultra-wide screens */
-        justify-content: center;
-        align-items: center;ance the layout */
-        gap: 2vw;
-        /* Add gap between left panel and image area */
-    }thumbNails {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-    .galleryLeftTop {lumns for ultra-wide - prevent squashing */
-        width: 25vw;50px;
-        /* Even more compact for ultra-wide */oo wide */
-        max-width: 400px;
-        /* Set maximum width to prevent too wide panels */
-        padding: 2vh 1.5vw;ling on ultra-wide screens too */
-        /* Premium brown border styling for ultra-wide screens */
-        background: rgba(245, 245, 245, 0.95);
-        border: 3px solid var(--brown);.05) !important;
-        border-radius: 18px;
-        box-shadow: 0 10px 40px rgba(119, 72, 28, 0.25);
-    }* Apply light brown background to individual thumbnails on ultra-wide screens */
-    .thumbNailPhoto {
-    .currentPhoto { rgba(119, 72, 28, 0.05) !important;
-        flex: 1;4px solid var(--brown) !important;
-        max-width: 70vw;x 10px rgba(119, 72, 28, 0.2) !important;
-        /* Reduced from 75vw to create better balance */
-        justify-content: center;
-        align-items: center;
-        /* Add subtle background to define the image area */
-        background: rgba(255, 255, 255, 0.5);
-        border-radius: 15px;ectable */
-        margin-right: 2vw;t: none;
-        /* Add margin to balance the layout */
-    }   -ms-user-select: none;
-        user-select: none;
-    .thumbNails {nk: 0;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        /* Fixed 4 columns for ultra-wide - prevent squashing */
-        max-width: 350px; {
-        /* Prevent thumbnails from spreading too wide */x);
-        margin: 0 auto;ription */
-        /* Center the thumbnail grid */
-        /* Ensure brown styling on ultra-wide screens too */
-        box-shadow: 0 0 0 4px rgba(119, 72, 28, 0.5) !important;
-        border-radius: 12px !important;
-        background: rgba(119, 72, 28, 0.05) !important;
-    }   -webkit-user-select: none;
-        -moz-user-select: none;
-    /* Apply light brown background to individual thumbnails on ultra-wide screens */
-    .thumbNailPhoto {none;
-        background: rgba(119, 72, 28, 0.05) !important;
-        border: 4px solid var(--brown) !important;
-        box-shadow: 0 3px 10px rgba(119, 72, 28, 0.2) !important;
-    }   scrollbar-width: thin;
-        scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
-    .furnitureName {
-        font-size: clamp(18px, 0.8vw + 0.8vh + 16px, 28px);
-        /* Clamped text size */
-        /* Make text non-selectable */2560px) ========== */
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;tainer width */
-        flex-shrink: 0;
-    }   /* Center the entire gallery */
-        padding-top: 4vh !important;
-    .furnitureDescription {
-        font-size: clamp(14px, 0.5vw + 0.5vh + 12px, 20px);
-        /* Clamped description */ery large screens */
-        max-width: 350px;
-        /* Prevent text from being too wide */
-        margin: 0 auto;
-        /* Center the text */
-        /* Make text non-selectable */
-        -webkit-user-select: none;
-        -moz-user-select: none;nel */
-        -ms-user-select: none;
-        user-select: none;or readability */
-        /* Enable scrolling when content overflows */
-        overflow-y: auto;to prevent too narrow */
-        max-height: 20vh;n border styling for 4K screens */
-        scrollbar-width: thin;245, 245, 0.98);
-        scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
-    }   border-radius: 22px;
-}       box-shadow: 0 15px 50px rgba(119, 72, 28, 0.3);
-        padding: 3vh 2vw;
-/* ========== 4K AND HIGHER SCREENS (>2560px) ========== */
-@media (min-width: 2560px) {
-    .galleryContainer {
-        max-width: 2400px;
-        /* Set maximum container width */*/
-        margin: 0 auto;a(255, 255, 255, 0.6);
-        /* Center the entire gallery */
-        padding-top: 4vh !important;
-        padding-left: 2vw;und the image */
-        padding-right: 2vw;
-        /* Add side padding for very large screens */
-        gap: 3vw;
-        /* Increase gap for 4K screens */minmax(0, 1fr));
-    }   /* Fewer columns for better proportion - prevent squashing */
-        max-width: 400px;
-    .galleryLeftTop {
-        width: 20vw;ps on 4K screens */
-        /* Very compact left panel */
-        max-width: 480px;
-        /* Maximum width for readability */
-        min-width: 350px;20px, 1vw + 1vh + 18px, 32px);
-        /* Minimum width to prevent too narrow */
-        /* Luxurious brown border styling for 4K screens */
-        background: rgba(245, 245, 245, 0.98);
-        border: 4px solid var(--brown);
-        border-radius: 22px;e;
-        box-shadow: 0 15px 50px rgba(119, 72, 28, 0.3);
-        padding: 3vh 2vw;
-    }
-
-    .currentPhoto {iption {
-        max-width: 75vw;(16px, 0.7vw + 0.7vh + 14px, 24px);
-        /* Prevent excessive image width */
-        background: rgba(255, 255, 255, 0.6);
-        border-radius: 20px; none;
-        padding: 2vh;ect: none;
-        /* Add padding around the image */
-    }   user-select: none;
-        /* Enable scrolling when content overflows */
-    .thumbNails {y: auto;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        /* Fewer columns for better proportion - prevent squashing */
-        max-width: 400px;rgba(119, 72, 28, 0.3) transparent;
-        gap: 15px;
-        /* Larger gaps on 4K screens */
-    }
-/* ========== SAFARI iOS SPECIFIC FIXES ========== */
-    .furnitureName { and apply specific fixes */
-        font-size: clamp(20px, 1vw + 1vh + 18px, 32px);nd (orientation: portrait) {
-        /* Larger text for 4K */
-        /* Make text non-selectable */uch;
-        -webkit-user-select: none;te3d(0, 0, 0);
-        -moz-user-select: none;0, 0, 0);
-        -ms-user-select: none;
-        user-select: none;
-        flex-shrink: 0;
-    }   -webkit-overflow-scrolling: touch;
-        -webkit-transform: translate3d(0, 0, 0);
-    .furnitureDescription {e3d(0, 0, 0);
-        font-size: clamp(16px, 0.7vw + 0.7vh + 14px, 24px);
-        /* Larger description for 4K */
-        /* Make text non-selectable */
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none; none;
-        user-select: none;ght-color: transparent;
-        /* Enable scrolling when content overflows */
-        overflow-y: auto;
-        max-height: 22vh;
-        scrollbar-width: thin;one;
-        scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
-    }   -webkit-touch-callout: none;
-}       -webkit-tap-highlight-color: transparent;
-        -webkit-appearance: none;
-/* ========== SAFARI iOS SPECIFIC FIXES ========== */
-/* Detect Safari iOS and apply specific fixes */
-@media screen and (-webkit-min-device-pixel-ratio: 1) and (orientation: portrait) {
-    .galleryContainer {
-        -webkit-overflow-scrolling: touch;
-        -webkit-transform: translate3d(0, 0, 0);o: 1) and (max-width: 768px) and (orientation: portrait) {
-        transform: translate3d(0, 0, 0);
-    }   -webkit-text-size-adjust: none;
-        text-size-adjust: none;
-    .currentPhoto {
-        -webkit-overflow-scrolling: touch;
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-    }   /* Use fixed positioning for better Safari iOS support */
-        top: 0;
-    .masterImage {
-        -webkit-user-select: none;
-        user-select: none;
-        -webkit-touch-callout: none;
-        -webkit-tap-highlight-color: transparent;
-    }
-}
-    .thumbNailPhoto {
-        -webkit-user-select: none; ========== */
-        user-select: none;
-        -webkit-touch-callout: none; ========== */
-        -webkit-tap-highlight-color: transparent;
-        -webkit-appearance: none;
-        appearance: none;anslateZ(0);
-    }ransform: translateZ(0);
-}
-
-/* Additional Safari iOS portrait fixes */
-@media screen and (-webkit-min-device-pixel-ratio: 1) and (max-width: 768px) and (orientation: portrait) {
-    body {eProductInfo {
-        -webkit-text-size-adjust: none; 0.98) !important;
-        text-size-adjust: none;
-    }
-
-    .galleryContainer { */
-        position: fixed;rance: none) {
-        /* Use fixed positioning for better Safari iOS support */
-        top: 0;: -webkit-flex !important;
-        left: 0; flex !important;
-        right: 0;lex-direction: row;
-        bottom: 0;tion: row;
-        overflow-y: auto;scrolling: touch;
-        -webkit-overflow-scrolling: touch;
-    }   /* Ensure padding is preserved in Safari fixes */
-}       width: 100%;
-        /* Match mobile styles */
-/* ========== END SAFARI iOS FIXES ========== */
-        position: relative;
-/* ========== SAFARI RENDERING FIXES ========== */
-/* Force Safari to properly render elements */
-.galleryContainer * {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);;
-}       display: flex;
-        -webkit-flex-direction: column;
-/* Safari iOS backdrop-filter fallback */@supports not (backdrop-filter: blur(10px)) {    .mobileProductInfo {        background: rgba(245, 245, 245, 0.98) !important;    }}/* Safari flexbox fixes */@supports (-webkit-appearance: none) {    .thumbNails {        display: -webkit-flex !important;        display: flex !important;        -webkit-flex-direction: row;        flex-direction: row;        -webkit-overflow-scrolling: touch;        padding: 1em 0;        /* Ensure padding is preserved in Safari fixes */        width: 100%;        /* Match mobile styles */        max-width: 100vw;        position: relative;        justify-content: flex-start;    }    .currentPhoto {        display: -webkit-flex;        display: flex;        -webkit-flex-direction: column;        flex-direction: column;        -webkit-align-items: center;        align-items: center;    }}/* ========== END SAFARI RENDERING FIXES ========== */
-
-/* ========== MOBILE STYLES ========== */
-@media (orientation: portrait) and (max-width: 767px), (max-width: 600px) {
-    .galleryContainer {
-        flex-direction: column;
-        justify-content: flex-start;
-        width: 100vw;
-        margin: 0;
-        padding: 7vh 0 0 0;
-        /* Adjust for mobile header */
-        box-sizing: border-box;
-        z-index: auto;
-        background-color: #f5f5f5;
-        gap: 0;
-        /* Safari iOS specific fixes */
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-        -webkit-overflow-scrolling: touch;
-        min-height: 100vh;
-        /* Fallback for Safari iOS */
-        min-height: 100svh;
-        /* Progressive enhancement */
-    }
-
-    .productPanel {
-        width: 100vw;
-        /* Full width on mobile */
-        height: auto;
-        /* Let content determine height */
-        padding: 1.5vh 1em;
-        order: 1;
-        /* Move thumbnails to top on mobile */
-        z-index: auto;
-        /* Reset z-index for mobile */
-        background: transparent;
-        border: none;
-        border-radius: 0;
-        box-shadow: none;
-        /* Light brown border styling for mobile portrait */
-        border-bottom: 1px solid var(--brown);
-        /* Subtle separator */
-        margin-bottom: 0.5em;
-    }
-
-    .productInfo {
-        display: none;
-        /* Hide product info on mobile - use thumbnails only */
-    }
-
-    .currentPhoto {
-        order: 2;
-        /* Image comes after thumbnails on mobile */
-        width: 100vw;
-        height: auto;
-        max-height: 55vh;
-        /* Progressive enhancement for modern browsers */
+        solute;
+        margin-top: 0;
+        margin-bottom: 5px;
+        ex-end;
         text-align: center;
-        box-sizing: border-box;
-        z-index: auto;
-        /* Reset z-index for mobile */
-        background-color: #f5f5f5;
-        overflow: hidden;
-        /* Prevent scroll issues */
-        -webkit-overflow-scrolling: touch;
-        /* Safari iOS smooth scrolling */
+        nd;
+        /* Center align with thumbnails */
+        font-size: calc(1.2vw + 1.2vh + 10px);
+        /* Responsive but not too large */
+        filter: drop-shadow(1px 1px 0px black);
+        -webkit-text-stroke: 2px #77481c;
+        -webkit-text-fill-color: #ffffff;
+        /* Make text non-selectable */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        ;
+        user-select: none;
+        /* Ensure it doesn't shrink */
+        +8px);
+        flex-shrink: 0;
+        ller for narrow panel */
     }
 
-    .thumbNails {
-        display: -webkit-flex !important;
-        display: flex !important;
-        -webkit-flex-direction: row;
-        flex-direction: row;
-        -webkit-overflow-scrolling: touch;
-        padding: 1em 0;
+    text-align: center;
+
+    /* Center align with thumbnails */
+    .furniturePrice {
+        1.4;
+        position: absolute;
+        lectable */ display: flex;
+        elect: none;
+        justify-content: flex-end;
+        align-items: flex-end;
+        left: 10%;
+        t: none;
+        bottom: 10%;
+        rolling when content overflows */ width: 100%;
+        auto;
+        color: var(--brown);
+        font-family: "Poppins";
+        ent taking up too much space */
+    }
+
+    /* Custom scrollbar styling */
+    scrollbar-width: thin;
+
+    .furnitureDescription {
+        ba(119, 72, 28, 0.3) transparent;
+        margin-top: 5px;
+        font-family: "Poppins";
         width: 100%;
-        /* Match mobile styles */
-        max-width: 100vw;
-        position: relative;
-        justify-content: flex-start;
-        background: transparent;
-        border-radius: 0;
-        -webkit-overflow-scrolling: touch;
-        touch-action: pan-x;
-        z-index: auto;
-        position: relative;
-        margin: 0;
-        /* Reset margins */
-        grid-template-columns: none;
-        /* Override grid for mobile */
-        align-items: center;
-        /* Center thumbnails vertically */
-        min-height: 80px;
-        /* Ensure consistent height */
-        justify-content: flex-start;
-        /* Align thumbnails to the start */
-        box-sizing: border-box;
-        /* Ensure padding is included in width calculation */
-        order: 1;
-        /* Thumbnails appear first */
-        border-bottom: 1px solid rgba(119, 72, 28, 0.2);
-        /* Subtle separator */
-        margin-bottom: 0.5em;
-        /* Small space between thumbnails and image */
-        /* Safari iOS specific fixes */
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-        will-change: scroll-position;
-        /* Enhanced dragging experience */
-        scroll-behavior: smooth;
-        -webkit-scroll-behavior: smooth;
-        scrollbar-width: none;
-        /* Hide scrollbar on mobile */
-        -ms-overflow-style: none;
-        /* Hide scrollbar for IE and Edge */
-    }
+        bar for furniture description */ font-size: calc(0.6vw + 0.6vh + 8px);
 
-    .thumbNails::-webkit-scrollbar {
-        display: none;
-        /* Hide scrollbar for Chrome, Safari, and Opera */
-    }
+            {
+            /* Slightly smaller for narrow panel */
+            text-align: center;
+            /* Center align with thumbnails */
+            line-height: 1.4;
 
-    .thumbNailPhoto {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        /* Keep perfect circles on mobile */
-        flex: 0 0 auto;
-        /* Prevent flex shrinking */
-        border: 2px var(--brown) solid;
-        cursor: pointer;
-        transition: 0.4s ease-in-out;
-        filter: grayscale(50%);
-        opacity: 0.8;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        object-fit: cover;
-    }
+            ::-webkit-scrollbar-track {
+                /* Make text non-selectable */
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
 
-    .thumbNailPhoto:first-child {
-        margin-left: 1em;
-    }
+                bkit-scrollbar-thumb {
+                    user-select: none;
+                    19,
+                    72,
+                    28,
+                    0.3);
+                    /* Enable scrolling when content overflows */
+                    overflow-y: auto;
+                    max-height: 15vh;
+                    /* Limit height to prevent taking up too much space */
+                    /* Custom scrollbar styling */
+                    0.5);
+                    scrollbar-width: thin;
+                    scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
+                }
 
-    .thumbNailPhoto:last-child {
-        margin-right: 1em;
-    }
+                * Custom scrollbar for mobile description text */ .mobileProductDescription::-webkit-scrollbar {
 
-    .thumbNailPhoto.grayscale {
-        filter: none;
-        opacity: 1;
-        transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(119, 72, 28, 0.3);
-    }
-}
+                    /* Custom scrollbar for furniture description */
+                    .furnitureDescription::-webkit-scrollbar {
+                        width: 4px;
+                    }
 
-/* ========== TABLET OPTIMIZATIONS ========== */
-@media (min-width: 768px) and (max-width: 1024px) {
-    .productPanel {
-        width: 35vw;
-        /* Slightly wider on tablets */
-        padding: 1.5vh 1.5vw;
-        align-items: center;
-        /* Keep centering on tablets */
-        /* Maintain beautiful brown border styling on tablets */
-        background: rgba(245, 245, 245, 0.85);
-        border: 2px solid var(--brown);
-        border-radius: 15px;
-        box-shadow: 0 6px 25px rgba(119, 72, 28, 0.18);
-    }
+                    mobileProductDescription::-webkit-scrollbar-track {
+                        background: transparent;
 
-    .thumbNails {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        /* Fixed 3 columns on tablets - prevent squashing */
-        gap: 6px;
-        /* Ensure brown styling on tablets too */
-        box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5) !important;
-        border-radius: 10px !important;
-        background: rgba(119, 72, 28, 0.05) !important;
-    }
+                        .furnitureDescription::-webkit-scrollbar-track {
+                            background: transparent;
+                        }
 
-    /* Apply light brown background to individual thumbnails on tablets */
-    .thumbNailPhoto {
-        background: rgba(119, 72, 28, 0.05) !important;
-        border: 2px solid var(--brown) !important;
-        box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
-    }
-}
+                        mobileProductDescription::-webkit-scrollbar-thumb {
+                            background: rgba(119, 72, 28, 0.3);
 
-/* ========== ENHANCED CURSOR BEHAVIOR ========== */
+                            .furnitureDescription::-webkit-scrollbar-thumb {
+                                background: rgba(119, 72, 28, 0.3);
+                                border-radius: 2px;
+                            }
+
+                            mobileProductDescription::-webkit-scrollbar-thumb:hover {
+                                background: rgba(119, 72, 28, 0.5);
+
+                                .furnitureDescription::-webkit-scrollbar-thumb:hover {
+                                    background: rgba(119, 72, 28, 0.5);
+                                }
+
+                                arrow {
+                                    animation: bounce 2s infinite;
+
+                                    /* Custom scrollbar for mobile description text */
+                                    .mobileProductDescription::-webkit-scrollbar {
+                                        width: 4px;
+                                    }
+
+                                    keyframes bounce {
+
+                                        .mobileProductDescription::-webkit-scrollbar-track {
+                                            background: transparent;
+                                        }
+
+                                        50%,
+                                        80%,
+                                        .mobileProductDescription::-webkit-scrollbar-thumb {
+                                            background: rgba(119, 72, 28, 0.3);
+                                            border-radius: 2px;
+                                        }
+
+                                        40% {
+                                            .mobileProductDescription::-webkit-scrollbar-thumb:hover {
+                                                background: rgba(119, 72, 28, 0.5);
+                                            }
+
+                                            60% {
+                                                .arrow {
+                                                    transform: translateY(-4px);
+                                                    animation: bounce 2s infinite;
+                                                    display: inline-block;
+                                                }
+
+                                                @media (min-width: 768px),
+                                                @keyframes bounce {
+
+                                                    cape),
+                                                    (pointer: fine) {
+
+                                                        0%,
+                                                        bileProductInfo.always-visible {
+                                                            20%,
+                                                            display: none !important;
+
+                                                            50%,
+                                                            80%,
+                                                            100% {
+                                                                transform: translateY(0);
+                                                                mage transitions */
+                                                            }
+
+                                                            eLoading {
+                                                                position: absolute;
+
+                                                                40% {
+                                                                    50%;
+                                                                    transform: translateY(-8px);
+                                                                }
+
+                                                                ransform: translate(-50%, -50%);
+                                                                width: 40px;
+
+                                                                60% {
+                                                                    t: 40px;
+                                                                    transform: translateY(-4px);
+                                                                    28,
+                                                                    0.3);
+                                                                }
+
+                                                                order-top: 3px solid var(--brown);
+                                                            }
+
+                                                            border-radius: 50%;
+                                                            animation: spin 1s linear infinite;
+                                                            @media (min-width: 768px),
+                                                            mooth image transitions */ (orientation: landscape),
+                                                            ate(-50%, -50%) rotate(360deg);
+
+                                                            (pointer: fine) {
+                                                                .mobileProductInfo.always-visible {
+                                                                    display: none !important;
+                                                                }
+
+                                                                rge desktop screens (1440px and above) - maximize image space */
+                                                            }
+
+                                                            media (min-width: 1440px) and (max-width: 1919px) {
+                                                                .galleryContainer {
+
+                                                                    /* Loading indicator for smooth image transitions */
+                                                                    .imageLoading {
+                                                                        less padding for large screens */ position: absolute;
+                                                                        top: 50%;
+                                                                        d gap to prevent awkward spacing */ left: 50%;
+                                                                        transform: translate(-50%, -50%);
+                                                                        width: 40px;
+
+                                                                        l {
+                                                                            height: 40px;
+                                                                            vw;
+                                                                            border: 3px solid rgba(119, 72, 28, 0.3);
+                                                                            arge screens */ border-top: 3px solid var(--brown);
+                                                                            border-radius: 50%;
+                                                                            utiful brown border styling for large screens */ animation: spin 1s linear infinite;
+                                                                            0.92);
+                                                                            z-index: 1000;
+                                                                            x solid var(--brown);
+                                                                        }
+
+                                                                        border-radius: 15px;
+                                                                        box-shadow: 0 8px 35px rgba(119, 72, 28, 0.2);
+
+                                                                        @keyframes spin {
+                                                                            0% {
+                                                                                transform: translate(-50%, -50%) rotate(0deg);
+                                                                            }
+
+                                                                            max-width: 68vw;
+
+                                                                            /* Slightly reduced to create better balance */
+                                                                            100% {
+                                                                                ckground: rgba(255, 255, 255, 0.3);
+                                                                                transform: translate(-50%, -50%) rotate(360deg);
+                                                                            }
+                                                                        }
+
+                                                                        .thumbNails {
+
+                                                                            /* Large desktop screens (1440px and above) - maximize image space */
+                                                                            @media (min-width: 1440px) and (max-width: 1919px) {
+                                                                                nt squashing */ .galleryContainer {
+                                                                                    padding-top: 6vh !important;
+                                                                                    /* Even less padding for large screens */
+                                                                                    too */ gap: 1.5vw;
+                                                                                    0 0 0 3px rgba(119, 72, 28, 0.5) !important;
+                                                                                    /* Add gap to prevent awkward spacing */
+                                                                                }
+
+                                                                                background: rgba(119, 72, 28, 0.05) !important;
+                                                                            }
+
+                                                                            .productPanel {
+                                                                                width: 28vw;
+                                                                                rown background to individual thumbnails on large screens */
+                                                                                /* Even more compact left panel for large screens */
+                                                                                padding: 2vh 1.5vw;
+                                                                                9,
+                                                                                72,
+                                                                                28,
+                                                                                0.05) !important;
+                                                                                /* Enhanced beautiful brown border styling for large screens */
+                                                                                background: rgba(245, 245, 245, 0.92);
+                                                                                ,
+                                                                                0.15) !important;
+                                                                                border: 3px solid var(--brown);
+                                                                                border-radius: 15px;
+                                                                                box-shadow: 0 8px 35px rgba(119, 72, 28, 0.2);
+                                                                            }
+
+                                                                            height: 25vh;
+
+                                                                            /* More space for text on large screens */
+                                                                            .currentPhoto {
+                                                                                max-width: 68vw;
+                                                                                /* Slightly reduced to create better balance */
+                                                                                background: rgba(255, 255, 255, 0.3);
+                                                                                ;
+                                                                                border-radius: 12px;
+                                                                                arge screens */
+                                                                            }
+
+                                                                            /* Make text non-selectable */
+                                                                            -webkit-user-select: none;
+
+                                                                            .thumbNails {
+                                                                                -select: none;
+                                                                                grid-template-columns: repeat(5, minmax(0, 1fr));
+                                                                                /* Fixed 5 columns for large screens - prevent squashing */
+                                                                                gap: 12px;
+                                                                                k: 0;
+                                                                                /* More spacing */
+                                                                                /* Ensure brown styling on large screens too */
+                                                                                box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5) !important;
+                                                                                border-radius: 10px !important;
+                                                                                10px);
+                                                                                background: rgba(119, 72, 28, 0.05) !important;
+                                                                            }
+
+                                                                            line-height: 1.6;
+
+                                                                            /* More line spacing */
+                                                                            /* Apply light brown background to individual thumbnails on large screens */
+                                                                            .thumbNailPhoto {
+                                                                                select: none;
+                                                                                background: rgba(119, 72, 28, 0.05) !important;
+                                                                                border: 3px solid var(--brown) !important;
+                                                                                box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
+                                                                            }
+
+                                                                            /* Enable scrolling when content overflows */
+                                                                            overflow-y: auto;
+
+                                                                            .productInfo {
+                                                                                : 18vh;
+                                                                                height: 25vh;
+                                                                                th: thin;
+                                                                                /* More space for text on large screens */
+                                                                                ansparent;
+                                                                            }
+                                                                        }
+
+                                                                        .furnitureName {
+                                                                            font-size: calc(1.0vw + 1.0vh + 14px);
+                                                                            =======*/
+                                                                            /* Larger text for large screens */
+                                                                            /* Make text non-selectable */
+                                                                            -webkit-user-select: none;
+                                                                            t;
+                                                                            -moz-user-select: none;
+                                                                            ide screens */ -ms-user-select: none;
+                                                                            r;
+                                                                            user-select: none;
+                                                                            r;
+                                                                            flex-shrink: 0;
+                                                                        }
+
+                                                                        /* Add gap between left panel and image area */
+                                                                    }
+
+                                                                    .furnitureDescription {
+                                                                        font-size: calc(0.6vw + 0.6vh + 10px);
+                                                                        /* Better readability */
+                                                                        line-height: 1.6;
+                                                                        act for ultra-wide */
+                                                                        /* More line spacing */
+                                                                        /* Make text non-selectable */
+                                                                        t too wide panels */ -webkit-user-select: none;
+                                                                        -moz-user-select: none;
+                                                                        styling for ultra-wide screens */ -ms-user-select: none;
+                                                                        245,
+                                                                        245,
+                                                                        0.95);
+                                                                        user-select: none;
+                                                                        var(--brown);
+                                                                        /* Enable scrolling when content overflows */
+                                                                        overflow-y: auto;
+                                                                        x 40px rgba(119, 72, 28, 0.25);
+                                                                        max-height: 18vh;
+                                                                        scrollbar-width: thin;
+                                                                        scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
+                                                                    }
+
+                                                                    flex: 1;
+                                                                }
+
+                                                                max-width: 70vw;
+
+                                                                /* Reduced from 75vw to create better balance */
+                                                                /* ========== ULTRA-WIDE SCREENS (>1920px) ========== */
+                                                                @media (min-width: 1920px) {
+                                                                    .galleryContainer {
+                                                                        ackground to define the image area */ padding-top: 5vh !important;
+                                                                        55,
+                                                                        0.5);
+                                                                        /* Optimize for ultra-wide screens */
+                                                                        justify-content: center;
+                                                                        align-items: center;
+                                                                        ance the layout */ gap: 2vw;
+                                                                        /* Add gap between left panel and image area */
+                                                                    }
+
+                                                                    thumbNails {
+                                                                        grid-template-columns: repeat(4, minmax(0, 1fr));
+
+                                                                        .galleryLeftTop {
+                                                                            lumns for ultra-wide - prevent squashing */ width: 25vw;
+                                                                            50px;
+                                                                            /* Even more compact for ultra-wide */
+                                                                            oo wide */ max-width: 400px;
+                                                                            /* Set maximum width to prevent too wide panels */
+                                                                            padding: 2vh 1.5vw;
+                                                                            ling on ultra-wide screens too */
+                                                                            /* Premium brown border styling for ultra-wide screens */
+                                                                            background: rgba(245, 245, 245, 0.95);
+                                                                            border: 3px solid var(--brown);
+                                                                            .05) !important;
+                                                                            border-radius: 18px;
+                                                                            box-shadow: 0 10px 40px rgba(119, 72, 28, 0.25);
+                                                                        }
+
+                                                                        * Apply light brown background to individual thumbnails on ultra-wide screens */ .thumbNailPhoto {
+                                                                            .currentPhoto {
+                                                                                rgba(119, 72, 28, 0.05) !important;
+                                                                                flex: 1;
+                                                                                4px solid var(--brown) !important;
+                                                                                max-width: 70vw;
+                                                                                x 10px rgba(119, 72, 28, 0.2) !important;
+                                                                                /* Reduced from 75vw to create better balance */
+                                                                                justify-content: center;
+                                                                                align-items: center;
+                                                                                /* Add subtle background to define the image area */
+                                                                                background: rgba(255, 255, 255, 0.5);
+                                                                                border-radius: 15px;
+                                                                                ectable */ margin-right: 2vw;
+                                                                                t: none;
+                                                                                /* Add margin to balance the layout */
+                                                                            }
+
+                                                                            -ms-user-select: none;
+                                                                            user-select: none;
+
+                                                                            .thumbNails {
+                                                                                nk: 0;
+                                                                                grid-template-columns: repeat(4, minmax(0, 1fr));
+                                                                                /* Fixed 4 columns for ultra-wide - prevent squashing */
+                                                                                max-width: 350px;
+
+                                                                                    {
+                                                                                    /* Prevent thumbnails from spreading too wide */
+                                                                                    x);
+                                                                                    margin: 0 auto;
+                                                                                    ription */
+                                                                                    /* Center the thumbnail grid */
+                                                                                    /* Ensure brown styling on ultra-wide screens too */
+                                                                                    box-shadow: 0 0 0 4px rgba(119, 72, 28, 0.5) !important;
+                                                                                    border-radius: 12px !important;
+                                                                                    background: rgba(119, 72, 28, 0.05) !important;
+                                                                                }
+
+                                                                                -webkit-user-select: none;
+                                                                                -moz-user-select: none;
+
+                                                                                /* Apply light brown background to individual thumbnails on ultra-wide screens */
+                                                                                .thumbNailPhoto {
+                                                                                    none;
+                                                                                    background: rgba(119, 72, 28, 0.05) !important;
+                                                                                    border: 4px solid var(--brown) !important;
+                                                                                    box-shadow: 0 3px 10px rgba(119, 72, 28, 0.2) !important;
+                                                                                }
+
+                                                                                scrollbar-width: thin;
+                                                                                scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
+
+                                                                                .furnitureName {
+                                                                                    font-size: clamp(18px, 0.8vw + 0.8vh + 16px, 28px);
+                                                                                    /* Clamped text size */
+                                                                                    /* Make text non-selectable */
+                                                                                    2560px)==========*/ -webkit-user-select: none;
+                                                                                    -moz-user-select: none;
+                                                                                    -ms-user-select: none;
+                                                                                    user-select: none;
+                                                                                    tainer width */ flex-shrink: 0;
+                                                                                }
+
+                                                                                /* Center the entire gallery */
+                                                                                padding-top: 4vh !important;
+
+                                                                                .furnitureDescription {
+                                                                                    font-size: clamp(14px, 0.5vw + 0.5vh + 12px, 20px);
+                                                                                    /* Clamped description */
+                                                                                    ery large screens */ max-width: 350px;
+                                                                                    /* Prevent text from being too wide */
+                                                                                    margin: 0 auto;
+                                                                                    /* Center the text */
+                                                                                    /* Make text non-selectable */
+                                                                                    -webkit-user-select: none;
+                                                                                    -moz-user-select: none;
+                                                                                    nel */ -ms-user-select: none;
+                                                                                    user-select: none;
+                                                                                    or readability */
+                                                                                    /* Enable scrolling when content overflows */
+                                                                                    overflow-y: auto;
+                                                                                    to prevent too narrow */ max-height: 20vh;
+                                                                                    n border styling for 4K screens */ scrollbar-width: thin;
+                                                                                    245,
+                                                                                    245,
+                                                                                    0.98);
+                                                                                    scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
+                                                                                }
+
+                                                                                border-radius: 22px;
+                                                                            }
+
+                                                                            box-shadow: 0 15px 50px rgba(119, 72, 28, 0.3);
+                                                                            padding: 3vh 2vw;
+
+                                                                            /* ========== 4K AND HIGHER SCREENS (>2560px) ========== */
+                                                                            @media (min-width: 2560px) {
+                                                                                .galleryContainer {
+                                                                                    max-width: 2400px;
+                                                                                    /* Set maximum container width */
+                                                                                    */ margin: 0 auto;
+                                                                                    a(255, 255, 255, 0.6);
+                                                                                    /* Center the entire gallery */
+                                                                                    padding-top: 4vh !important;
+                                                                                    padding-left: 2vw;
+                                                                                    und the image */ padding-right: 2vw;
+                                                                                    /* Add side padding for very large screens */
+                                                                                    gap: 3vw;
+                                                                                    /* Increase gap for 4K screens */
+                                                                                    minmax(0, 1fr));
+                                                                                }
+
+                                                                                /* Fewer columns for better proportion - prevent squashing */
+                                                                                max-width: 400px;
+
+                                                                                .galleryLeftTop {
+                                                                                    width: 20vw;
+                                                                                    ps on 4K screens */
+                                                                                    /* Very compact left panel */
+                                                                                    max-width: 480px;
+                                                                                    /* Maximum width for readability */
+                                                                                    min-width: 350px;
+                                                                                    20px,
+                                                                                    1vw+1vh+18px,
+                                                                                    32px);
+                                                                                    /* Minimum width to prevent too narrow */
+                                                                                    /* Luxurious brown border styling for 4K screens */
+                                                                                    background: rgba(245, 245, 245, 0.98);
+                                                                                    border: 4px solid var(--brown);
+                                                                                    border-radius: 22px;
+                                                                                    e;
+                                                                                    box-shadow: 0 15px 50px rgba(119, 72, 28, 0.3);
+                                                                                    padding: 3vh 2vw;
+                                                                                }
+
+                                                                                .currentPhoto {
+                                                                                    iption {
+                                                                                        max-width: 75vw;
+                                                                                        (16px, 0.7vw + 0.7vh + 14px, 24px);
+                                                                                        /* Prevent excessive image width */
+                                                                                        background: rgba(255, 255, 255, 0.6);
+                                                                                        border-radius: 20px;
+                                                                                        none;
+                                                                                        padding: 2vh;
+                                                                                        ect: none;
+                                                                                        /* Add padding around the image */
+                                                                                    }
+
+                                                                                    user-select: none;
+
+                                                                                    /* Enable scrolling when content overflows */
+                                                                                    .thumbNails {
+                                                                                        y: auto;
+                                                                                        grid-template-columns: repeat(3, minmax(0, 1fr));
+                                                                                        /* Fewer columns for better proportion - prevent squashing */
+                                                                                        max-width: 400px;
+                                                                                        rgba(119, 72, 28, 0.3) transparent;
+                                                                                        gap: 15px;
+                                                                                        /* Larger gaps on 4K screens */
+                                                                                    }
+
+                                                                                    /* ========== SAFARI iOS SPECIFIC FIXES ========== */
+                                                                                    .furnitureName {
+                                                                                        and apply specific fixes */ font-size: clamp(20px, 1vw + 1vh + 18px, 32px);
+
+                                                                                        nd (orientation: portrait) {
+                                                                                            /* Larger text for 4K */
+                                                                                            /* Make text non-selectable */
+                                                                                            uch;
+                                                                                            -webkit-user-select: none;
+                                                                                            te3d(0, 0, 0);
+                                                                                            -moz-user-select: none;
+                                                                                            0,
+                                                                                            0,
+                                                                                            0);
+                                                                                            -ms-user-select: none;
+                                                                                            user-select: none;
+                                                                                            flex-shrink: 0;
+                                                                                        }
+
+                                                                                        -webkit-overflow-scrolling: touch;
+                                                                                        -webkit-transform: translate3d(0, 0, 0);
+
+                                                                                        .furnitureDescription {
+                                                                                            e3d(0, 0, 0);
+                                                                                            font-size: clamp(16px, 0.7vw + 0.7vh + 14px, 24px);
+                                                                                            /* Larger description for 4K */
+                                                                                            /* Make text non-selectable */
+                                                                                            -webkit-user-select: none;
+                                                                                            -moz-user-select: none;
+                                                                                            -ms-user-select: none;
+                                                                                            none;
+                                                                                            user-select: none;
+                                                                                            ght-color: transparent;
+                                                                                            /* Enable scrolling when content overflows */
+                                                                                            overflow-y: auto;
+                                                                                            max-height: 22vh;
+                                                                                            scrollbar-width: thin;
+                                                                                            one;
+                                                                                            scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
+                                                                                        }
+
+                                                                                        -webkit-touch-callout: none;
+                                                                                    }
+
+                                                                                    -webkit-tap-highlight-color: transparent;
+                                                                                    -webkit-appearance: none;
+
+                                                                                    /* ========== SAFARI iOS SPECIFIC FIXES ========== */
+                                                                                    /* Detect Safari iOS and apply specific fixes */
+                                                                                    @media screen and (-webkit-min-device-pixel-ratio: 1) and (orientation: portrait) {
+                                                                                        .galleryContainer {
+                                                                                            -webkit-overflow-scrolling: touch;
+                                                                                            -webkit-transform: translate3d(0, 0, 0);
+
+                                                                                            o: 1) and (max-width: 768px) and (orientation: portrait) {
+                                                                                                transform: translate3d(0, 0, 0);
+                                                                                            }
+
+                                                                                            -webkit-text-size-adjust: none;
+                                                                                            text-size-adjust: none;
+
+                                                                                            .currentPhoto {
+                                                                                                -webkit-overflow-scrolling: touch;
+                                                                                                -webkit-transform: translate3d(0, 0, 0);
+                                                                                                transform: translate3d(0, 0, 0);
+                                                                                            }
+
+                                                                                            /* Use fixed positioning for better Safari iOS support */
+                                                                                            top: 0;
+
+                                                                                            .masterImage {
+                                                                                                -webkit-user-select: none;
+                                                                                                user-select: none;
+                                                                                                -webkit-touch-callout: none;
+                                                                                                -webkit-tap-highlight-color: transparent;
+                                                                                            }
+                                                                                        }
+
+                                                                                        .thumbNailPhoto {
+                                                                                            -webkit-user-select: none;
+                                                                                            ==========*/ user-select: none;
+                                                                                            -webkit-touch-callout: none;
+                                                                                            ==========*/ -webkit-tap-highlight-color: transparent;
+                                                                                            -webkit-appearance: none;
+                                                                                            appearance: none;
+                                                                                            anslateZ(0);
+                                                                                        }
+
+                                                                                        ransform: translateZ(0);
+                                                                                    }
+
+                                                                                    /* Additional Safari iOS portrait fixes */
+                                                                                    @media screen and (-webkit-min-device-pixel-ratio: 1) and (max-width: 768px) and (orientation: portrait) {
+                                                                                        body {
+                                                                                            eProductInfo {
+                                                                                                -webkit-text-size-adjust: none;
+                                                                                                0.98) !important;
+                                                                                                text-size-adjust: none;
+                                                                                            }
+
+                                                                                            .galleryContainer {
+                                                                                                */ position: fixed;
+
+                                                                                                rance: none) {
+                                                                                                    /* Use fixed positioning for better Safari iOS support */
+                                                                                                    top: 0;
+                                                                                                    : -webkit-flex !important;
+                                                                                                    left: 0;
+                                                                                                    flex !important;
+                                                                                                    right: 0;
+                                                                                                    lex-direction: row;
+                                                                                                    bottom: 0;
+                                                                                                    tion: row;
+                                                                                                    overflow-y: auto;
+                                                                                                    scrolling: touch;
+                                                                                                    -webkit-overflow-scrolling: touch;
+                                                                                                }
+
+                                                                                                /* Ensure padding is preserved in Safari fixes */
+                                                                                            }
+
+                                                                                            width: 100%;
+                                                                                            /* Match mobile styles */
+                                                                                            /* ========== END SAFARI iOS FIXES ========== */
+                                                                                            position: relative;
+
+                                                                                            /* ========== SAFARI RENDERING FIXES ========== */
+                                                                                            /* Force Safari to properly render elements */
+                                                                                            .galleryContainer * {
+                                                                                                -webkit-transform: translateZ(0);
+                                                                                                transform: translateZ(0);
+                                                                                                ;
+                                                                                            }
+
+                                                                                            display: flex;
+                                                                                            -webkit-flex-direction: column;
+
+                                                                                            /* Safari iOS backdrop-filter fallback */
+                                                                                            @supports not (backdrop-filter: blur(10px)) {
+                                                                                                .mobileProductInfo {
+                                                                                                    background: rgba(245, 245, 245, 0.98) !important;
+                                                                                                }
+                                                                                            }
+
+                                                                                            /* Safari flexbox fixes */
+                                                                                            @supports (-webkit-appearance: none) {
+                                                                                                .thumbNails {
+                                                                                                    display: -webkit-flex !important;
+                                                                                                    display: flex !important;
+                                                                                                    -webkit-flex-direction: row;
+                                                                                                    flex-direction: row;
+                                                                                                    -webkit-overflow-scrolling: touch;
+                                                                                                    padding: 1em 0;
+                                                                                                    /* Ensure padding is preserved in Safari fixes */
+                                                                                                    width: 100%;
+                                                                                                    /* Match mobile styles */
+                                                                                                    max-width: 100vw;
+                                                                                                    position: relative;
+                                                                                                    justify-content: flex-start;
+                                                                                                }
+
+                                                                                                .currentPhoto {
+                                                                                                    display: -webkit-flex;
+                                                                                                    display: flex;
+                                                                                                    -webkit-flex-direction: column;
+                                                                                                    flex-direction: column;
+                                                                                                    -webkit-align-items: center;
+                                                                                                    align-items: center;
+                                                                                                }
+                                                                                            }
+
+                                                                                            /* ========== END SAFARI RENDERING FIXES ========== */
+
+                                                                                            /* ========== MOBILE STYLES ========== */
+                                                                                            @media (orientation: portrait) and (max-width: 767px),
+                                                                                            (max-width: 600px) {
+                                                                                                .galleryContainer {
+                                                                                                    flex-direction: column;
+                                                                                                    justify-content: flex-start;
+                                                                                                    width: 100vw;
+                                                                                                    margin: 0;
+                                                                                                    padding: 7vh 0 0 0;
+                                                                                                    /* Adjust for mobile header */
+                                                                                                    box-sizing: border-box;
+                                                                                                    z-index: auto;
+                                                                                                    background-color: #f5f5f5;
+                                                                                                    gap: 0;
+                                                                                                    /* Safari iOS specific fixes */
+                                                                                                    -webkit-transform: translateZ(0);
+                                                                                                    transform: translateZ(0);
+                                                                                                    -webkit-overflow-scrolling: touch;
+                                                                                                    min-height: 100vh;
+                                                                                                    /* Fallback for Safari iOS */
+                                                                                                    min-height: 100svh;
+                                                                                                    /* Progressive enhancement */
+                                                                                                }
+
+                                                                                                .productPanel {
+                                                                                                    width: 100vw;
+                                                                                                    /* Full width on mobile */
+                                                                                                    height: auto;
+                                                                                                    /* Let content determine height */
+                                                                                                    padding: 1.5vh 1em;
+                                                                                                    order: 1;
+                                                                                                    /* Move thumbnails to top on mobile */
+                                                                                                    z-index: auto;
+                                                                                                    /* Reset z-index for mobile */
+                                                                                                    background: transparent;
+                                                                                                    border: none;
+                                                                                                    border-radius: 0;
+                                                                                                    box-shadow: none;
+                                                                                                    /* Light brown border styling for mobile portrait */
+                                                                                                    border-bottom: 1px solid var(--brown);
+                                                                                                    /* Subtle separator */
+                                                                                                    margin-bottom: 0.5em;
+                                                                                                }
+
+                                                                                                .productInfo {
+                                                                                                    display: none;
+                                                                                                    /* Hide product info on mobile - use thumbnails only */
+                                                                                                }
+
+                                                                                                .currentPhoto {
+                                                                                                    order: 2;
+                                                                                                    /* Image comes after thumbnails on mobile */
+                                                                                                    width: 100vw;
+                                                                                                    height: auto;
+                                                                                                    max-height: 55vh;
+                                                                                                    /* Progressive enhancement for modern browsers */
+                                                                                                    text-align: center;
+                                                                                                    box-sizing: border-box;
+                                                                                                    z-index: auto;
+                                                                                                    /* Reset z-index for mobile */
+                                                                                                    background-color: #f5f5f5;
+                                                                                                    overflow: hidden;
+                                                                                                    /* Prevent scroll issues */
+                                                                                                    -webkit-overflow-scrolling: touch;
+                                                                                                    /* Safari iOS smooth scrolling */
+                                                                                                }
+
+                                                                                                .thumbNails {
+                                                                                                    display: -webkit-flex !important;
+                                                                                                    display: flex !important;
+                                                                                                    -webkit-flex-direction: row;
+                                                                                                    flex-direction: row;
+                                                                                                    -webkit-overflow-scrolling: touch;
+                                                                                                    padding: 1em 0;
+                                                                                                    width: 100%;
+                                                                                                    /* Match mobile styles */
+                                                                                                    max-width: 100vw;
+                                                                                                    position: relative;
+                                                                                                    justify-content: flex-start;
+                                                                                                    background: transparent;
+                                                                                                    border-radius: 0;
+                                                                                                    -webkit-overflow-scrolling: touch;
+                                                                                                    touch-action: pan-x;
+                                                                                                    z-index: auto;
+                                                                                                    position: relative;
+                                                                                                    margin: 0;
+                                                                                                    /* Reset margins */
+                                                                                                    grid-template-columns: none;
+                                                                                                    /* Override grid for mobile */
+                                                                                                    align-items: center;
+                                                                                                    /* Center thumbnails vertically */
+                                                                                                    min-height: 80px;
+                                                                                                    /* Ensure consistent height */
+                                                                                                    justify-content: flex-start;
+                                                                                                    /* Align thumbnails to the start */
+                                                                                                    box-sizing: border-box;
+                                                                                                    /* Ensure padding is included in width calculation */
+                                                                                                    order: 1;
+                                                                                                    /* Thumbnails appear first */
+                                                                                                    border-bottom: 1px solid rgba(119, 72, 28, 0.2);
+                                                                                                    /* Subtle separator */
+                                                                                                    margin-bottom: 0.5em;
+                                                                                                    /* Small space between thumbnails and image */
+                                                                                                    /* Safari iOS specific fixes */
+                                                                                                    -webkit-transform: translateZ(0);
+                                                                                                    transform: translateZ(0);
+                                                                                                    will-change: scroll-position;
+                                                                                                    /* Enhanced dragging experience */
+                                                                                                    scroll-behavior: smooth;
+                                                                                                    -webkit-scroll-behavior: smooth;
+                                                                                                    scrollbar-width: none;
+                                                                                                    /* Hide scrollbar on mobile */
+                                                                                                    -ms-overflow-style: none;
+                                                                                                    /* Hide scrollbar for IE and Edge */
+                                                                                                }
+
+                                                                                                .thumbNails::-webkit-scrollbar {
+                                                                                                    display: none;
+                                                                                                    /* Hide scrollbar for Chrome, Safari, and Opera */
+                                                                                                }
+
+                                                                                                .thumbNailPhoto {
+                                                                                                    width: 60px;
+                                                                                                    height: 60px;
+                                                                                                    border-radius: 50%;
+                                                                                                    /* Keep perfect circles on mobile */
+                                                                                                    flex: 0 0 auto;
+                                                                                                    /* Prevent flex shrinking */
+                                                                                                    border: 2px var(--brown) solid;
+                                                                                                    cursor: pointer;
+                                                                                                    transition: 0.4s ease-in-out;
+                                                                                                    filter: grayscale(50%);
+                                                                                                    opacity: 0.8;
+                                                                                                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                                                                                                    object-fit: cover;
+                                                                                                }
+
+                                                                                                .thumbNailPhoto:first-child {
+                                                                                                    margin-left: 1em;
+                                                                                                }
+
+                                                                                                .thumbNailPhoto:last-child {
+                                                                                                    margin-right: 1em;
+                                                                                                }
+
+                                                                                                .thumbNailPhoto.grayscale {
+                                                                                                    filter: none;
+                                                                                                    opacity: 1;
+                                                                                                    transform: scale(1.05);
+                                                                                                    box-shadow: 0 4px 12px rgba(119, 72, 28, 0.3);
+                                                                                                }
+                                                                                            }
+
+                                                                                            /* ========== TABLET OPTIMIZATIONS ========== */
+                                                                                            @media (min-width: 768px) and (max-width: 1024px) {
+                                                                                                .productPanel {
+                                                                                                    width: 35vw;
+                                                                                                    /* Slightly wider on tablets */
+                                                                                                    padding: 1.5vh 1.5vw;
+                                                                                                    align-items: center;
+                                                                                                    /* Keep centering on tablets */
+                                                                                                    /* Maintain beautiful brown border styling on tablets */
+                                                                                                    background: rgba(245, 245, 245, 0.85);
+                                                                                                    border: 2px solid var(--brown);
+                                                                                                    border-radius: 15px;
+                                                                                                    box-shadow: 0 6px 25px rgba(119, 72, 28, 0.18);
+                                                                                                }
+
+                                                                                                .thumbNails {
+                                                                                                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                                                                                                    /* Fixed 3 columns on tablets - prevent squashing */
+                                                                                                    gap: 6px;
+                                                                                                    /* Ensure brown styling on tablets too */
+                                                                                                    box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5) !important;
+                                                                                                    border-radius: 10px !important;
+                                                                                                    background: rgba(119, 72, 28, 0.05) !important;
+                                                                                                }
+
+                                                                                                /* Apply light brown background to individual thumbnails on tablets */
+                                                                                                .thumbNailPhoto {
+                                                                                                    background: rgba(119, 72, 28, 0.05) !important;
+                                                                                                    border: 2px solid var(--brown) !important;
+                                                                                                    box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
+                                                                                                }
+                                                                                            }
+
+                                                                                            /* ========== ENHANCED CURSOR BEHAVIOR ========== */
