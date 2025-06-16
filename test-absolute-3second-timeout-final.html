@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-Second Timeout Test - Doug's Found Wood</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 5px solid #77481c;
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #77481c;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .status.waiting {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.complete {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #77481c;
+            border-radius: 8px;
+        }
+
+        .instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🎯 3-Second Absolute Timeout Test</h1>
+
+    <div class="instructions">
+        <h3>Test Instructions:</h3>
+        <ol>
+            <li><strong>Start Timer:</strong> Click "Reload Site" below to begin the test</li>
+            <li><strong>Watch Timer:</strong> The timer will count down from 3 seconds</li>
+            <li><strong>Verify Result:</strong> Loading screen should disappear at exactly 0.0 seconds</li>
+            <li><strong>Expected:</strong> You should see the 3D scene or graceful fallback after 3 seconds</li>
+        </ol>
+        <p><strong>Note:</strong> The site may load faster than 3 seconds, but the loading screen should ALWAYS stay for
+            exactly 3 seconds regardless.</p>
+    </div>
+
+    <div class="test-section">
+        <h3>⏱️ Timeout Timer</h3>
+        <div class="timer" id="timer">3.0</div>
+        <div class="status waiting" id="status">Waiting for test to start...</div>
+        <button onclick="startTest()"
+            style="padding: 10px 20px; font-size: 1.1rem; background: #77481c; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            🔄 Reload Site & Start Timer
+        </button>
+    </div>
+
+    <div class="test-section">
+        <h3>🌐 Doug's Found Wood Site</h3>
+        <iframe id="siteFrame" src="about:blank"></iframe>
+    </div>
+
+    <script>
+        let timer;
+        let startTime;
+
+        function startTest() {
+            // Reset everything
+            clearInterval(timer);
+            document.getElementById('status').className = 'status waiting';
+            document.getElementById('status').textContent = 'Test running... Loading screen should be visible for exactly 3 seconds';
+
+            // Load the site
+            document.getElementById('siteFrame').src = 'http://localhost:5177';
+
+            // Start countdown
+            startTime = Date.now();
+            let timeLeft = 3.0;
+
+            document.getElementById('timer').textContent = timeLeft.toFixed(1);
+
+            timer = setInterval(() => {
+                const elapsed = (Date.now() - startTime) / 1000;
+                timeLeft = Math.max(0, 3.0 - elapsed);
+
+                document.getElementById('timer').textContent = timeLeft.toFixed(1);
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    document.getElementById('status').className = 'status complete';
+                    document.getElementById('status').textContent = '✅ 3 seconds complete! Loading screen should now be dismissed.';
+                    document.getElementById('timer').textContent = '0.0';
+                }
+            }, 50); // Update every 50ms for smooth countdown
+        }
+
+        // Auto-start test when page loads
+        window.addEventListener('load', () => {
+            setTimeout(startTest, 1000); // Start after 1 second to let everything load
+        });
+    </script>
+</body>
+
+</html>

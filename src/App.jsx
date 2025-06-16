@@ -22,7 +22,6 @@ import {
   useSpringRef,
 } from '@react-spring/web';
 
-// Splat Pre-validation System - Prevents Canvas mounting until splat is verified
 // PERFORMANCE OPTIMIZATION: Large splat files (39MB+) are now served from public directory
 // instead of being bundled. This provides:
 // - Faster builds (Vite doesn't process large files)
@@ -32,125 +31,6 @@ import {
 
 // OPTIMIZED: Large splat files moved to public directory to avoid bundling (~39MB)
 const splat = '/assets/experience/new_fixed_PLY.splat'; // Served statically, not bundled
-
-// Splat validation utility
-const validateSplatFile = async (splatUrl) => {
-  try {
-    console.log('🔍 Validating splat file:', splatUrl);
-
-    const response = await fetch(splatUrl);
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch splat: ${response.status} ${response.statusText}`
-      );
-    }
-
-    const arrayBuffer = await response.arrayBuffer();
-
-    // Basic validation - check if file has reasonable size and headers
-    if (arrayBuffer.byteLength < 1000) {
-      throw new Error('Splat file too small - likely corrupted');
-    }
-
-    // Check for common splat file patterns (basic validation)
-    const uint8Array = new Uint8Array(arrayBuffer);
-    const hasValidHeader = uint8Array.length > 100; // Basic size check
-
-    if (!hasValidHeader) {
-      throw new Error('Invalid splat file format detected');
-    }
-
-    console.log('✅ Splat file validation passed:', {
-      url: splatUrl,
-      size: arrayBuffer.byteLength,
-      isValid: true,
-    });
-
-    return { isValid: true, url: splatUrl, size: arrayBuffer.byteLength };
-  } catch (error) {
-    console.error('❌ Splat validation failed:', error);
-    return { isValid: false, error: error.message, url: splatUrl };
-  }
-};
-
-// Pre-load and validate splat files before Canvas mounting
-const useSplatPreloader = () => {
-  const [splatValidation, setSplatValidation] = useState({
-    isValidating: true,
-    validSplatUrl: null,
-    error: null,
-    attemptedUrls: [],
-    retryCount: 0,
-  });
-
-  useEffect(() => {
-    let cancelled = false;
-    const maxRetries = 3;
-    const retryDelay = 1000; // 1 seconds between retries
-
-    const validateSplatsWithRetry = async (attemptNumber = 1) => {
-      if (cancelled) return;
-
-      console.log(
-        `🚀 Starting splat validation attempt ${attemptNumber}/${maxRetries}...`
-      );
-
-      // Validate the primary splat file
-      const primaryResult = await validateSplatFile(splat);
-      if (cancelled) return;
-
-      if (primaryResult.isValid) {
-        console.log('✅ Splat validation successful!');
-        setSplatValidation({
-          isValidating: false,
-          validSplatUrl: splat,
-          error: null,
-          attemptedUrls: [splat],
-          retryCount: attemptNumber - 1,
-        });
-        return;
-      }
-
-      // Primary splat failed - check if we should retry
-      if (attemptNumber < maxRetries) {
-        console.log(
-          `⚠️ Splat validation failed (attempt ${attemptNumber}/${maxRetries}), retrying in ${
-            retryDelay / 1000
-          }s...`
-        );
-        setSplatValidation((prev) => ({
-          ...prev,
-          retryCount: attemptNumber,
-        }));
-
-        setTimeout(() => {
-          validateSplatsWithRetry(attemptNumber + 1);
-        }, retryDelay);
-        return;
-      }
-
-      // All retries exhausted - gracefully degrade without user intervention
-      console.error(
-        '🚨 Splat file failed to load after all retries. Continuing without 3D scene.'
-      );
-      setSplatValidation({
-        isValidating: false,
-        validSplatUrl: null,
-        error: 'Splat loading failed after retries',
-        attemptedUrls: [splat],
-        retryCount: maxRetries,
-      });
-    };
-
-    validateSplatsWithRetry();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  return splatValidation;
-};
 
 // TEMPORARILY DISABLED: Image preloading to reduce memory pressure
 // import { useImagePreloader } from '../components/galleries/useImagePreloader';
@@ -570,36 +450,46 @@ function reducer(state, action) {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // **CRITICAL**: Pre-validate splat files before Canvas mounting
-  // This prevents users from seeing error screens or reload messages
-  const splatValidation = useSplatPreloader();
+  // **SIMPLIFIED**: Skip splat validation since we have a 3-second timeout
+  // Just provide the splat URL directly - no pre-validation needed
+  const splatUrl = '/assets/experience/new_fixed_PLY.splat';
 
   // State for rotating inspirational sayings during loading
   // Start with a random saying each time the page loads
   const [currentSayingIndex, setCurrentSayingIndex] = useState(() =>
     Math.floor(Math.random() * loadingSayings.length)
   );
-  const [currentRetrySayingIndex, setCurrentRetrySayingIndex] = useState(() =>
-    Math.floor(Math.random() * retrySayings.length)
-  );
   const [sayingOpacity, setSayingOpacity] = useState(1);
 
-  // **ABSOLUTE 3-SECOND TIMEOUT**: Starts immediately when component mounts
-  // This CANNOT be interrupted and WILL fire after exactly 3 seconds
+  // **EXIT ANIMATION STATE**: Track when the loading screen should exit
+  const [isExiting, setIsExiting] = useState(false);
+
+  // **ABSOLUTE 4-SECOND TIMEOUT**: Enhanced for better animation timing
+  // This CANNOT be interrupted and WILL fire after exactly 4 seconds
   const loadingTimeoutRef = useRef(null);
 
   // Start the absolute timeout immediately on component mount
   useEffect(() => {
     console.log(
-      '🚨 ABSOLUTE 3-SECOND TIMEOUT STARTING NOW - Component just mounted!'
+      '🚨 ABSOLUTE 4-SECOND TIMEOUT STARTING NOW - Component just mounted!'
     );
 
     loadingTimeoutRef.current = setTimeout(() => {
       console.log(
-        '🚨 ABSOLUTE 3-SECOND TIMEOUT FIRED - FORCING LOAD COMPLETE REGARDLESS OF ANY CONDITIONS!'
+        '🎬 ABSOLUTE 4-SECOND TIMEOUT FIRED - STARTING EPIC EXIT ANIMATIONS!'
       );
-      dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
-    }, 3000); // 3 seconds ABSOLUTE - no conditions, no dependencies
+
+      // First trigger exit animations
+      setIsExiting(true);
+
+      // Then complete loading after EPIC exit animation duration
+      setTimeout(() => {
+        console.log(
+          '🎬 EPIC EXIT ANIMATIONS COMPLETE - DISMISSING LOADING SCREEN!'
+        );
+        dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
+      }, 2100); // 2100ms for epic exit animations (0.9s delay + 1.2s duration)
+    }, 4000); // 4 seconds ABSOLUTE - enhanced timing for EPIC experience
 
     // Cleanup on unmount only
     return () => {
@@ -609,15 +499,10 @@ function App() {
     };
   }, []); // Empty dependency array - run ONCE on mount only
 
-  // Determine which sayings to use based on retry state
-  const isRetrying = splatValidation.retryCount > 0;
-  const activeSayings = isRetrying ? retrySayings : loadingSayings;
-  const activeSayingIndex = isRetrying
-    ? currentRetrySayingIndex
-    : currentSayingIndex;
-  const setActiveSayingIndex = isRetrying
-    ? setCurrentRetrySayingIndex
-    : setCurrentSayingIndex;
+  // Simplified sayings - no retry logic needed
+  const activeSayings = loadingSayings;
+  const activeSayingIndex = currentSayingIndex;
+  const setActiveSayingIndex = setCurrentSayingIndex;
 
   // Initialize image preloader to start loading images at startup
   // TEMPORARILY DISABLED: Image preloading to reduce memory pressure
@@ -696,54 +581,8 @@ function App() {
   ]);
   */
 
-  // Mark initial load as complete when splat is loaded AND validated OR when splat fails gracefully
-  // UPDATED: Wait for both splat loading AND validation completion, OR graceful failure
-  // Loading order: Splat Validation ✅ → Splat Loaded ✅ → Initial Load Complete ✅
-  // OR: Splat Validation ❌ → Graceful Fallback → Initial Load Complete ✅
-  // OR: 3-Second Absolute Timeout → Force Complete ⏰ (OVERRIDES EVERYTHING)
-  useEffect(() => {
-    if (
-      !state.initialLoadComplete &&
-      !splatValidation.isValidating && // Validation is complete (success or failure)
-      ((state.splatLoaded && !splatValidation.error) || // Success case: splat loaded and no error
-        splatValidation.error) // Failure case: graceful degradation
-      // REMOVED: state.fontsLoaded - fonts load in background
-      // REMOVED: state.imagesLoaded - images load on-demand
-    ) {
-      // NOTE: We do NOT clear the 3-second timeout here - it's completely independent
-      // The timeout will fire on its own schedule or be cleared on component unmount
-
-      if (splatValidation.error) {
-        console.log(
-          '⚠️ Splat loading failed, but continuing with graceful fallback...'
-        );
-        console.log(
-          '📋 Graceful loading order: Splat Validation ❌ → Fallback ✅ → Complete ✅'
-        );
-      } else {
-        console.log(
-          '🎉 Splat validated and loaded! Adding minimum display time for loading screen...'
-        );
-        console.log(
-          '📋 Complete loading order: Splat Validation ✅ → Splat Loaded ✅ → Complete ✅'
-        );
-      }
-
-      // Add a minimum 1-second delay to ensure loading screen is visible
-      // just long enough to see the spinner animation
-      setTimeout(() => {
-        console.log(
-          '⏰ Minimum loading time elapsed, marking load as complete'
-        );
-        dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
-      }, 1000); // Reduced from 2s to 1s since we only wait for splat
-    }
-  }, [
-    state.splatLoaded,
-    state.initialLoadComplete,
-    splatValidation.isValidating,
-    splatValidation.error,
-  ]);
+  // REMOVED: All normal loading completion logic
+  // The loading screen ONLY ends via the 3-second timeout - no other conditions matter
 
   // Immediate state logging on component mount
   console.log('🚀 App component mounted with initial state:', {
@@ -907,20 +746,19 @@ function App() {
     immediate: !state.initialLoadComplete, // Only animate after loading is complete
   });
 
-  // Loading screen should ONLY appear during initial website startup
-  // After initial load is complete, never show loading screen again
-  // Also show loading during splat validation
-  const shouldShowLoading =
-    !state.initialLoadComplete || splatValidation.isValidating;
+  // Loading screen should ONLY appear until the 3-second timeout fires
+  // No other conditions matter - ABSOLUTE timeout control only
+  const shouldShowLoading = !state.initialLoadComplete;
 
   console.log('🔍 Loading check:', {
-    splatLoaded: state.splatLoaded,
     initialLoadComplete: state.initialLoadComplete,
-    splatValidating: splatValidation.isValidating,
-    splatError: splatValidation.error,
     shouldShowLoading: shouldShowLoading,
+    timeoutActive: loadingTimeoutRef.current !== null,
   });
-  console.log('🎯 Final loading decision:', shouldShowLoading);
+  console.log(
+    '🎯 Final loading decision (ABSOLUTE TIMEOUT ONLY):',
+    shouldShowLoading
+  );
 
   // Rotate inspirational sayings during loading
   useEffect(() => {
@@ -1237,7 +1075,7 @@ function App() {
             </div>
           </div>
 
-          {/* Conditional Canvas rendering - only mount when splat is validated */}
+          {/* Simplified Canvas rendering - no validation needed */}
           <div
             style={{
               opacity: state.showContactPage ? 0.3 : 1, // Keep scene visible but dimmed
@@ -1245,112 +1083,32 @@ function App() {
               transition: 'opacity 0.3s ease-in-out',
             }}
           >
-            {splatValidation.isValidating ? (
-              // Still validating splat files - show nothing (loading screen will cover this)
-              <div
-                style={{
-                  width: '100vw',
-                  height: '100vh',
-                  background: '#f5f5f5',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '1.1rem',
-                  color: '#77481c',
-                  fontFamily:
-                    '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                }}
-              >
-                {splatValidation.retryCount > 0
-                  ? `Optimizing 3D scene (attempt ${
-                      splatValidation.retryCount + 1
-                    })...`
-                  : 'Validating 3D scene files...'}
-              </div>
-            ) : splatValidation.error ? (
-              // Splat validation failed - show graceful fallback without 3D scene
-              <div
-                style={{
-                  width: '100vw',
-                  height: '100vh',
-                  background: '#f5f5f5', // Consistent background color
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '20px',
-                  textAlign: 'center',
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: 'rgba(245, 245, 245, 0.95)',
-                    padding: '40px',
-                    borderRadius: '12px',
-                    boxShadow: '0 4px 20px rgba(119, 72, 28, 0.1)',
-                    maxWidth: '500px',
-                    border: '1px solid rgba(119, 72, 28, 0.1)',
-                  }}
-                >
-                  <h2
-                    style={{
-                      color: '#77481c',
-                      marginBottom: '20px',
-                      fontSize: '1.8rem',
-                      fontFamily:
-                        '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                    }}
-                  >
-                    Welcome to Doug's Found Wood
-                  </h2>
-                  <p
-                    style={{
-                      color: '#8b5a2b',
-                      marginBottom: '20px',
-                      fontSize: '1.1rem',
-                      lineHeight: '1.6',
-                      fontFamily:
-                        '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                    }}
-                  >
-                    Explore our handcrafted furniture collection through our
-                    gallery and learn more about our sustainable woodworking
-                    practices.
-                  </p>
-                  <p
-                    style={{
-                      color: '#a67c52',
-                      fontSize: '0.95rem',
-                      fontStyle: 'italic',
-                      fontFamily:
-                        '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                    }}
-                  >
-                    The interactive 3D experience is currently unavailable, but
-                    you can still browse our full collection.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              // Splat validation successful - mount Canvas with validated splat
-              <NewCanvas
-                isAnimating={state.isAnimating}
-                showContactPage={state.showContactPage}
-                showTypes={state.showTypes}
-                showGallery={state.showGallery}
-                onSplatLoaded={handleSplatLoadedCallback}
-                imagesLoaded={state.imagesLoaded}
-                initialLoadComplete={state.initialLoadComplete}
-                validatedSplatUrl={splatValidation.validSplatUrl}
-              />
-            )}
+            {/* Always mount Canvas with splat URL directly */}
+            <NewCanvas
+              isAnimating={state.isAnimating}
+              showContactPage={state.showContactPage}
+              showTypes={state.showTypes}
+              showGallery={state.showGallery}
+              onSplatLoaded={handleSplatLoadedCallback}
+              imagesLoaded={state.imagesLoaded}
+              initialLoadComplete={state.initialLoadComplete}
+              validatedSplatUrl={splatUrl}
+            />
           </div>
         </div>
       </div>
 
-      {/* Show loading screen overlay when needed */}
+      {/* Show loading screen overlay when needed - enhanced animations */}
       {shouldShowLoading && (
-        <div className="font-loading-screen">
+        <div
+          className="font-loading-screen"
+          style={{
+            opacity: 1,
+            animation: isExiting
+              ? 'epicBackgroundExit 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.9s forwards'
+              : 'none',
+          }}
+        >
           <AnimatedLoadingContainer shouldShow={shouldShowLoading}>
             {/* Fixed layout container to prevent jumping */}
             <div
@@ -1384,8 +1142,10 @@ function App() {
                     color: '#77481c',
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                    opacity: 0,
-                    animation: 'fadeInUp 0.8s ease-out 0.2s forwards', // Restore CSS animation
+                    opacity: isExiting ? 1 : 0, // Maintain opacity during transition
+                    animation: isExiting
+                      ? 'epicFadeOutUp 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards'
+                      : 'fadeInUp 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards',
                   }}
                 >
                   Welcome to Doug's Found Wood
@@ -1397,8 +1157,10 @@ function App() {
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     marginBottom: '8px',
-                    opacity: 0,
-                    animation: 'fadeInUp 0.8s ease-out 0.4s forwards', // Restore CSS animation
+                    opacity: isExiting ? 1 : 0, // Maintain opacity during transition
+                    animation: isExiting
+                      ? 'epicFadeOutLeft 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.15s forwards'
+                      : 'fadeInUp 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards',
                   }}
                 >
                   Preparing your handcrafted journey...
@@ -1410,15 +1172,17 @@ function App() {
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     fontStyle: 'italic',
-                    opacity: 0,
-                    animation: 'fadeInUp 0.8s ease-out 0.6s forwards', // Restore CSS animation
+                    opacity: isExiting ? 1 : 0, // Maintain opacity during transition
+                    animation: isExiting
+                      ? 'epicFadeOutRight 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s forwards'
+                      : 'fadeInUp 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards',
                   }}
                 >
                   Each piece tells a story
                 </div>
               </div>
 
-              {/* Spinner with fixed height - increased clearance to prevent cropping */}
+              {/* Spinner with fixed height - enhanced animation */}
               <div
                 style={{
                   minHeight: '100px', // Increased from 80px to provide more clearance
@@ -1429,6 +1193,10 @@ function App() {
                   padding: '10px', // Add padding for extra safety margin
                   position: 'relative',
                   zIndex: 10, // Ensure spinner stays on top
+                  opacity: isExiting ? 1 : 0, // Maintain opacity during transition
+                  animation: isExiting
+                    ? 'epicSpinnerExit 1.0s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.45s forwards'
+                    : 'spinnerFadeIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.2s forwards',
                 }}
               >
                 <AnimatedLoadingSpinner />
@@ -1452,21 +1220,17 @@ function App() {
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     fontWeight: '500',
-                    opacity: 0,
-                    animation: 'fadeInUp 0.8s ease-out 1.0s forwards', // Restore CSS animation
+                    opacity: isExiting ? 1 : 0, // Maintain opacity during transition
+                    animation: isExiting
+                      ? 'epicFadeOutDown 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.6s forwards'
+                      : 'fadeInUp 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.8s forwards',
                   }}
                 >
-                  {splatValidation.isValidating
-                    ? splatValidation.retryCount > 0
-                      ? `🔄 Optimizing 3D scene (attempt ${
-                          splatValidation.retryCount + 1
-                        })...`
-                      : '🔍 Preparing 3D scene files...'
-                    : '🪵 ABSOLUTE maximum: 3 seconds 🪵'}
+                  🪵 Crafting your experience... 🪵
                 </div>
               </div>
 
-              {/* Quote section with fixed height */}
+              {/* Quote section with fixed height - enhanced animation */}
               <div
                 style={{
                   minHeight: '80px', // Fixed height for quotes to prevent jumping
@@ -1474,6 +1238,10 @@ function App() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   width: '100%',
+                  opacity: isExiting ? 1 : 0, // Maintain opacity during transition
+                  animation: isExiting
+                    ? 'epicFadeOutScale 1.0s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.75s forwards'
+                    : 'fadeInUp 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2.4s forwards',
                 }}
               >
                 <AnimatedLoadingSaying opacity={sayingOpacity} delay={0}>

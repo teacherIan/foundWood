@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exit Animations Verification - Fixed Timing Issues</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .demo-section {
+            margin: 40px 0;
+            padding: 30px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .demo-section h2 {
+            margin-top: 0;
+            color: #555;
+        }
+
+        /* CURRENT IMPLEMENTATION - Fixed animations */
+        .loading-screen {
+            position: relative;
+            background: linear-gradient(135deg, #f5f1eb 0%, #e8ddd4 50%, #d4c4b0 100%);
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Fixed fadeOutDown - no more bounce */
+        @keyframes fadeOutDown {
+            0% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate3d(0, -30px, 0) scale(0.95);
+            }
+        }
+
+        /* Smooth background container exit */
+        @keyframes fadeOutBackground {
+            0% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate3d(0, -20px, 0);
+            }
+        }
+
+        @keyframes spinnerFadeOut {
+            0% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+
+            50% {
+                opacity: 0.3;
+                transform: translate3d(0, -10px, 0) scale(1.2);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate3d(0, -30px, 0) scale(0.7);
+            }
+        }
+
+        /* FIXED TIMING - Consistent 0.1s intervals */
+        .exit-bg {
+            animation: fadeOutBackground 0.6s cubic-bezier(0.4, 0, 0.6, 1) 0.5s forwards;
+        }
+
+        .exit-1 {
+            animation: fadeOutDown 0.6s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+        }
+
+        .exit-2 {
+            animation: fadeOutDown 0.6s cubic-bezier(0.4, 0, 0.6, 1) 0.1s forwards;
+        }
+
+        .exit-3 {
+            animation: fadeOutDown 0.6s cubic-bezier(0.4, 0, 0.6, 1) 0.2s forwards;
+        }
+
+        .exit-4 {
+            animation: spinnerFadeOut 0.6s cubic-bezier(0.4, 0, 0.6, 1) 0.3s forwards;
+        }
+
+        .exit-5 {
+            animation: fadeOutDown 0.6s cubic-bezier(0.4, 0, 0.6, 1) 0.4s forwards;
+        }
+
+        .exit-6 {
+            animation: fadeOutDown 0.6s cubic-bezier(0.4, 0, 0.6, 1) 0.5s forwards;
+        }
+
+        .element {
+            margin: 15px 0;
+            padding: 12px 20px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #77481c;
+            font-weight: 500;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(119, 72, 28, 0.2);
+            border-radius: 50%;
+            border-top: 3px solid #77481c;
+            margin: 20px auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button {
+            background: #77481c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #5a3515;
+        }
+
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .timing-info {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .timing-info h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+
+        .timing-list {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .timing-list li {
+            margin: 5px 0;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>✅ Exit Animations Verification - Timing Issues Fixed</h1>
+
+        <div class="demo-section">
+            <h2>Fixed Implementation - Smooth & Consistent</h2>
+            <div class="timing-info">
+                <h3>🎯 Fixed Timing Sequence:</h3>
+                <ul class="timing-list">
+                    <li><strong>0.0s:</strong> Title exits (no bounce)</li>
+                    <li><strong>0.1s:</strong> Subtitle exits (smooth)</li>
+                    <li><strong>0.2s:</strong> Tagline exits (smooth)</li>
+                    <li><strong>0.3s:</strong> Spinner exits (enhanced)</li>
+                    <li><strong>0.4s:</strong> Status exits (smooth)</li>
+                    <li><strong>0.5s:</strong> Quote exits + Background container</li>
+                </ul>
+                <p><strong>Total Exit Duration:</strong> 1.1s (0.5s delay + 0.6s animation)</p>
+            </div>
+
+            <div class="loading-screen" id="loadingScreen">
+                <div class="element" id="title">Welcome to Doug's Found Wood</div>
+                <div class="element" id="subtitle">Preparing your handcrafted journey...</div>
+                <div class="element" id="tagline">Each piece tells a story</div>
+                <div class="spinner" id="spinner"></div>
+                <div class="element" id="status">🪵 Crafting your experience... 🪵</div>
+                <div class="element" id="quote">Like trees, the finest furniture grows with time</div>
+            </div>
+
+            <div class="controls">
+                <button onclick="testFixedExitAnimations()">▶️ Test Fixed Exit Animations</button>
+                <button onclick="resetDemo()">🔄 Reset Demo</button>
+            </div>
+
+            <div class="status" id="statusDisplay">Ready to test</div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🎉 Issues Resolved</h2>
+            <ul>
+                <li>✅ <strong>Removed 30% bounce</strong> - No more jarring motion in the middle</li>
+                <li>✅ <strong>Consistent 0.1s intervals</strong> - Smooth sequential timing</li>
+                <li>✅ <strong>Unified 0.6s duration</strong> - All elements exit at same speed</li>
+                <li>✅ <strong>Smooth background exit</strong> - Container exits consistently</li>
+                <li>✅ <strong>Professional easing</strong> - cubic-bezier(0.4, 0, 0.6, 1) throughout</li>
+                <li>✅ <strong>Hardware acceleration</strong> - translate3d for smooth performance</li>
+            </ul>
+        </div>
+
+        <div class="demo-section">
+            <h2>📊 Performance Comparison</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h3 style="color: #d32f2f;">❌ Previous Issues:</h3>
+                    <ul>
+                        <li>30% bounce causing jarring motion</li>
+                        <li>Irregular timing (0.15s, 0.3s, 0.45s gaps)</li>
+                        <li>Mixed durations (0.8s vs 1.0s)</li>
+                        <li>Background delay conflicts (0.9s)</li>
+                        <li>"Strange behavior in the middle"</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #2e7d32;">✅ Current Solution:</h3>
+                    <ul>
+                        <li>Smooth linear motion (no bounce)</li>
+                        <li>Consistent 0.1s intervals</li>
+                        <li>Unified 0.6s duration</li>
+                        <li>Coordinated background exit (0.5s)</li>
+                        <li>Polished, professional experience</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testFixedExitAnimations() {
+            const statusDisplay = document.getElementById('statusDisplay');
+            const loadingScreen = document.getElementById('loadingScreen');
+
+            // Reset all elements first
+            resetDemo();
+
+            statusDisplay.textContent = 'Starting fixed exit sequence...';
+            statusDisplay.style.color = '#2e7d32';
+
+            setTimeout(() => {
+                // Apply consistent exit animations
+                loadingScreen.classList.add('exit-bg');
+                document.getElementById('title').classList.add('exit-1');
+                document.getElementById('subtitle').classList.add('exit-2');
+                document.getElementById('tagline').classList.add('exit-3');
+                document.getElementById('spinner').classList.add('exit-4');
+                document.getElementById('status').classList.add('exit-5');
+                document.getElementById('quote').classList.add('exit-6');
+
+                statusDisplay.textContent = 'Playing smooth exit animations (no bounce, consistent timing)...';
+
+                // Update status during sequence
+                setTimeout(() => {
+                    statusDisplay.textContent = '✨ Exit animations complete - smooth and professional!';
+                    statusDisplay.style.color = '#2e7d32';
+                }, 1200);
+
+            }, 100);
+        }
+
+        function resetDemo() {
+            const elements = ['title', 'subtitle', 'tagline', 'spinner', 'status', 'quote'];
+            const loadingScreen = document.getElementById('loadingScreen');
+
+            // Remove all exit classes
+            loadingScreen.classList.remove('exit-bg');
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                element.classList.remove('exit-1', 'exit-2', 'exit-3', 'exit-4', 'exit-5', 'exit-6');
+            });
+
+            document.getElementById('statusDisplay').textContent = 'Ready to test';
+            document.getElementById('statusDisplay').style.color = '#333';
+        }
+
+        // Auto-demo on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                testFixedExitAnimations();
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>
