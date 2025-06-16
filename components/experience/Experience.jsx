@@ -821,8 +821,8 @@ function Scene({
 
       camera.position.x = slowWave + fastWave * 0.5;
       camera.position.y =
-        (windowWidth < 480 ? 2 : 1.2) + verticalWave + breathingEffect * 0.3;
-      camera.position.z = (windowWidth < 480 ? 2 : 3) + breathingEffect;
+        (windowWidth < 480 ? 1.5 : 1.2) + verticalWave + breathingEffect * 0.3;
+      camera.position.z = (windowWidth < 480 ? 1.7 : 3) + breathingEffect;
 
       // Subtle rotation for more dynamic feel + downward tilt to see text better
       camera.rotation.y = slowWave * 0.03;
