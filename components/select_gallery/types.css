@@ -11,6 +11,11 @@
     pointer-events: auto;
 }
 
+/* When types are not visible (opacity 0), disable pointer events to allow Canvas interaction */
+.typesContainer[data-visible="false"] {
+    pointer-events: none;
+}
+
 .blurBackground {
     position: absolute;
     top: 0;

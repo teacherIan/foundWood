@@ -225,6 +225,7 @@ export default function Types({
           height: '100svh',
         }}
         className="typesContainer"
+        data-visible={showTypes}
       >
         {springs.map((spring, index) => (
           <animated.div

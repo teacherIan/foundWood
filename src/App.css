@@ -58,7 +58,7 @@ body {
 canvas {
     /* Let React Three Fiber Canvas component handle positioning */
     cursor: grab !important;
-    z-index: 0 !important;
+    /* Remove z-index override to allow inline styles to work */
     /* Remove conflicting positioning - let inline styles take precedence */
 }
 

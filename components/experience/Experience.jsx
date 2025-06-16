@@ -520,6 +520,7 @@ function Scene({
   showContactPage,
   showTypes,
   showGallery,
+  hasOverlay, // Accept hasOverlay as prop instead of calculating locally
   onSplatLoaded,
   imagesLoaded,
   initialLoadComplete,
@@ -670,8 +671,18 @@ function Scene({
     };
   }, []);
 
-  // Check if any overlay is active - must be defined before useEffect
-  const hasOverlay = showContactPage || showTypes || showGallery;
+  // hasOverlay is now passed as prop from parent component
+
+  // Debug overlay state
+  useEffect(() => {
+    console.log('🔍 Overlay state changed:', {
+      hasOverlay,
+      showContactPage,
+      showTypes,
+      showGallery,
+      presentationControlsEnabled: !hasOverlay,
+    });
+  }, [hasOverlay, showContactPage, showTypes, showGallery]);
 
   // useEffect for manualAlphaTest animation - THE MOST IMPORTANT ANIMATION
   // REQUIREMENT: When splat is loaded and visible, animate alphaTest from 1.0 to 0.0
@@ -736,7 +747,7 @@ function Scene({
           `🎭 Overlay detected - animating alpha to 1.0 (showContactPage: ${showContactPage}, showTypes: ${showTypes}, showGallery: ${showGallery})`
         );
         targetAlpha = 1.0; // Animate to 1.0 when any overlay is shown
-        
+
         // Slower animation for contact page specifically
         if (showContactPage) {
           duration = 1200; // 1.2 seconds for contact page - slower, more elegant
@@ -746,7 +757,7 @@ function Scene({
       } else {
         console.log('🎭 No overlay - animating alpha back to 0.0');
         targetAlpha = 0.0; // Animate back to 0.0 when all overlays are hidden
-        
+
         // Slower return animation for contact page specifically
         if (showContactPage === false) {
           duration = 800; // 800ms for contact page closing - smooth transition
@@ -832,8 +843,15 @@ function Scene({
         Math.sin(idleTimeRef.current * 0.5) * 0.05 * interactionFactor;
 
       camera.position.x = slowWave + fastWave * 0.5;
-      camera.position.y =
-        (windowWidth < 480 ? 1.5 : 1.2) + verticalWave + breathingEffect * 0.3;
+      
+      // Calculate the base Y position with constraints
+      const baseY = windowWidth < 480 ? 1.5 : 1.2;
+      const animatedY = baseY + verticalWave + breathingEffect * 0.3;
+      
+      // Apply Y-axis constraint: never go below grass level (y = 0.3)
+      const minY = 0.3; // Minimum Y position to stay above grass level
+      camera.position.y = Math.max(animatedY, minY);
+      
       camera.position.z = (windowWidth < 480 ? 1.7 : 3) + breathingEffect;
 
       // Subtle rotation for more dynamic feel + downward tilt to see text better
@@ -857,28 +875,31 @@ function Scene({
     setTargetX(width > 1000 ? -1.5 : 0);
 
     if (camera) {
+      // Define minimum Y position to stay above grass level
+      const minY = 0.3;
+      
       if (width < 480) {
         if (isPortrait) {
-          camera.position.set(0, 1.6, 4.2);
+          camera.position.set(0, Math.max(1.6, minY), 4.2);
           camera.rotation.x = 0;
           camera.fov = 100;
         } else {
-          camera.position.set(0, 1.2, 3.2);
+          camera.position.set(0, Math.max(1.2, minY), 3.2);
           camera.rotation.x = 0;
           camera.fov = 100;
         }
       } else if (width < 1300) {
         if (isPortrait) {
-          camera.position.set(0, 1.1, 4.0);
+          camera.position.set(0, Math.max(1.1, minY), 4.0);
           camera.rotation.x = -0.05;
           camera.fov = 65;
         } else {
-          camera.position.set(0, 0.9, 3.5);
+          camera.position.set(0, Math.max(0.9, minY), 3.5);
           camera.rotation.x = -0.05;
           camera.fov = 60;
         }
       } else {
-        camera.position.set(0, 0.7, 3.2);
+        camera.position.set(0, Math.max(0.7, minY), 3.2);
         camera.rotation.x = -0.05;
         camera.fov = 55;
       }
@@ -1027,14 +1048,29 @@ function Scene({
         <PresentationControls
           makeDefault
           enabled={!hasOverlay}
-          global
-          snap
+          global={true}
+          snap={true}
           rotation={[0, 0, 0]}
-          polar={[-Math.PI / 3, Math.PI / 3]}
+          polar={[-Math.PI / 6, Math.PI / 3]}
           azimuth={[-Math.PI / 3, Math.PI / 3]}
           config={presentationConfig}
-          onStart={() => setUserInteracting(true)}
+          onStart={() => {
+            console.log('🎮 PresentationControls: User interaction started!', {
+              enabled: !hasOverlay,
+              hasOverlay,
+              showContactPage,
+              showTypes,
+              showGallery,
+              timestamp: new Date().toISOString()
+            });
+            setUserInteracting(true);
+          }}
           onEnd={() => {
+            console.log('🎮 PresentationControls: User interaction ended!', {
+              enabled: !hasOverlay,
+              hasOverlay,
+              timestamp: new Date().toISOString()
+            });
             // Reset after a delay to allow for smooth transition
             setTimeout(() => setUserInteracting(false), 100);
           }}
@@ -1279,6 +1315,21 @@ export default function App({
     };
   }, []);
 
+  // Define hasOverlay at the component level to match Scene component logic
+  const hasOverlay = showContactPage || showTypes || showGallery;
+
+  // Debug overlay state at the main component level
+  useEffect(() => {
+    console.log('🎯 Main Experience: Overlay state changed:', {
+      hasOverlay,
+      showContactPage,
+      showTypes,
+      showGallery,
+      canvasPointerEvents: hasOverlay ? 'none' : 'auto',
+      canvasZIndex: hasOverlay ? 1 : 1000,
+    });
+  }, [hasOverlay, showContactPage, showTypes, showGallery]);
+
   return (
     <>
       <Canvas
@@ -1297,7 +1348,26 @@ export default function App({
           left: 0,
           width: '100vw', // Use standard viewport units
           height: '100vh',
-          zIndex: showTypes || showGallery || showContactPage ? 1 : 10,
+          zIndex: hasOverlay ? 1 : 1000, // Simplified z-index logic
+          pointerEvents: hasOverlay ? 'none' : 'auto', // Disable pointer events when overlays are active
+          touchAction: 'none', // Prevent default touch actions that might interfere
+        }}
+        onMouseDown={(e) => {
+          console.log('🖱️ Canvas mouse down detected!', {
+            clientX: e.clientX,
+            clientY: e.clientY,
+            hasOverlay,
+            pointerEvents: hasOverlay ? 'none' : 'auto',
+          });
+        }}
+        onMouseMove={(e) => {
+          // Only log occasionally to avoid spam
+          if (Math.random() < 0.01) {
+            console.log('🖱️ Canvas mouse move detected!', {
+              hasOverlay,
+              pointerEvents: hasOverlay ? 'none' : 'auto',
+            });
+          }
         }}
         gl={{
           powerPreference:
@@ -1365,6 +1435,7 @@ export default function App({
           showContactPage={showContactPage}
           showTypes={showTypes}
           showGallery={showGallery}
+          hasOverlay={hasOverlay}
           isAnimating={isAnimating}
           onSplatLoaded={onSplatLoaded}
           imagesLoaded={imagesLoaded}
