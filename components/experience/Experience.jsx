@@ -674,7 +674,7 @@ function Scene({
   const hasOverlay = showContactPage || showTypes || showGallery;
 
   // useEffect for manualAlphaTest animation - THE MOST IMPORTANT ANIMATION
-  // REQUIREMENT: When splat is loaded and visible, animate alphaTest from 1.0 to 0.3
+  // REQUIREMENT: When splat is loaded and visible, animate alphaTest from 1.0 to 0.0
   useEffect(() => {
     // Always cancel the previous animation frame if one is pending
     if (alphaAnimationRequestRef.current) {
@@ -689,16 +689,16 @@ function Scene({
       // CRITICAL FIX: When loading completes and canvas becomes visible, start alpha animation immediately
       if (initialLoadComplete) {
         console.log(
-          '🎬 LOADING COMPLETE - Canvas now visible, starting 5-second alpha animation from 1.0 → 0.3'
+          '🎬 LOADING COMPLETE - Canvas now visible, starting 5-second alpha animation from 1.0 → 0.0'
         );
 
         const startTime = Date.now();
-        const animationDuration = 5000; // 5-second animation from 1.0 to 0.3 as requested
+        const animationDuration = 5000; // 5-second animation from 1.0 to 0.0 as requested
 
         const animateAlpha = () => {
           const elapsedTime = Date.now() - startTime;
           const progress = Math.min(elapsedTime / animationDuration, 1);
-          const currentAlpha = 1.0 + (0.3 - 1.0) * progress; // Interpolate from 1.0 to 0.3
+          const currentAlpha = 1.0 + (0.0 - 1.0) * progress; // Interpolate from 1.0 to 0.0
 
           setManualAlphaTest(currentAlpha);
 
@@ -708,7 +708,7 @@ function Scene({
           } else {
             alphaAnimationRequestRef.current = null;
             console.log(
-              '✅ 5-second alpha animation completed: splat now at alphaTest = 0.3'
+              '✅ 5-second alpha animation completed: splat now at alphaTest = 0.0'
             );
             setAlphaAnimationComplete(true);
           }
@@ -736,11 +736,23 @@ function Scene({
           `🎭 Overlay detected - animating alpha to 1.0 (showContactPage: ${showContactPage}, showTypes: ${showTypes}, showGallery: ${showGallery})`
         );
         targetAlpha = 1.0; // Animate to 1.0 when any overlay is shown
-        duration = 600; // 600ms - coordinated timing for all overlays
+        
+        // Slower animation for contact page specifically
+        if (showContactPage) {
+          duration = 1200; // 1.2 seconds for contact page - slower, more elegant
+        } else {
+          duration = 600; // 600ms for other overlays (types, gallery)
+        }
       } else {
-        console.log('🎭 No overlay - animating alpha back to 0.3');
-        targetAlpha = 0.3; // Animate back to 0.3 when all overlays are hidden
-        duration = 400; // 400ms - quick return to normal
+        console.log('🎭 No overlay - animating alpha back to 0.0');
+        targetAlpha = 0.0; // Animate back to 0.0 when all overlays are hidden
+        
+        // Slower return animation for contact page specifically
+        if (showContactPage === false) {
+          duration = 800; // 800ms for contact page closing - smooth transition
+        } else {
+          duration = 400; // 400ms for other overlays
+        }
       }
 
       // If already at the target, no need to animate
