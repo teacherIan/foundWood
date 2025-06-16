@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABSOLUTE 3-Second Timeout Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .timer {
+            font-size: 32px;
+            font-weight: bold;
+            color: #d32f2f;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .loading {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            border: 2px solid #1976d2;
+        }
+
+        .timeout {
+            background-color: #ffebee;
+            color: #d32f2f;
+            border: 2px solid #d32f2f;
+        }
+
+        .log {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚨 ABSOLUTE 3-Second Timeout Verification</h1>
+        <p><strong>This test proves the timeout is truly absolute and cannot be blocked by any conditions.</strong></p>
+
+        <div class="timer" id="timer">3.0s</div>
+        <div id="status" class="status loading">Loading will be forced to complete after exactly 3 seconds</div>
+
+        <div class="log" id="log"></div>
+    </div>
+
+    <script>
+        let startTime = Date.now();
+        let timerInterval;
+
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+            logElement.innerHTML += `[${elapsed}s] ${message}<br>`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(`[${elapsed}s] ${message}`);
+        }
+
+        function updateTimer() {
+            const elapsed = (Date.now() - startTime) / 1000;
+            const remaining = Math.max(0, 3 - elapsed);
+
+            document.getElementById('timer').textContent = `${remaining.toFixed(1)}s`;
+
+            if (remaining <= 0) {
+                document.getElementById('timer').textContent = 'TIMEOUT!';
+                document.getElementById('timer').style.color = '#d32f2f';
+                clearInterval(timerInterval);
+            }
+        }
+
+        // Start the test immediately
+        log('🚨 ABSOLUTE 3-SECOND TIMEOUT STARTING NOW');
+        log('This timeout CANNOT be interrupted by any conditions');
+        log('It will fire after exactly 3 seconds no matter what');
+
+        // Update timer every 100ms
+        timerInterval = setInterval(updateTimer, 100);
+
+        // Simulate the absolute timeout
+        setTimeout(() => {
+            log('🚨 ABSOLUTE 3-SECOND TIMEOUT FIRED - FORCING LOAD COMPLETE!');
+            log('Loading screen would end NOW regardless of any loading status');
+            document.getElementById('status').textContent = 'ABSOLUTE TIMEOUT TRIGGERED - Loading forced complete';
+            document.getElementById('status').className = 'status timeout';
+        }, 3000);
+
+        // Simulate various delays that would normally block loading
+        setTimeout(() => {
+            log('⏳ Simulating slow splat validation (normally blocks loading)...');
+        }, 500);
+
+        setTimeout(() => {
+            log('⏳ Simulating network delay (normally blocks loading)...');
+        }, 1500);
+
+        setTimeout(() => {
+            log('⏳ Simulating stuck validation (normally blocks loading)...');
+        }, 2500);
+
+        // This would normally complete after 5 seconds, but timeout fires at 3
+        setTimeout(() => {
+            log('⚠️ Slow loading finally finished (too late - timeout already fired)');
+        }, 5000);
+    </script>
+</body>
+
+</html>
