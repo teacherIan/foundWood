@@ -13,24 +13,6 @@
     border: 0;
 }
 
-/* Skip navigation link for accessibility */
-.skip-nav {
-    position: absolute;
-    top: -40px;
-    left: 6px;
-    background: #77481c;
-    color: white;
-    padding: 8px;
-    text-decoration: none;
-    border-radius: 4px;
-    z-index: 100000;
-    font-weight: bold;
-}
-
-.skip-nav:focus {
-    top: 6px;
-}
-
 /* Breadcrumb navigation styling */
 .breadcrumb {
     display: flex;

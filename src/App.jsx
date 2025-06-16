@@ -16,7 +16,15 @@ import {
 } from '@react-spring/web';
 
 // Splat Pre-validation System - Prevents Canvas mounting until splat is verified
-import splat from './assets/experience/full.splat';
+// PERFORMANCE OPTIMIZATION: Large splat files (39MB+) are now served from public directory
+// instead of being bundled. This provides:
+// - Faster builds (Vite doesn't process large files)
+// - Smaller JS bundles (no embedded 39MB assets)
+// - Better loading (browser can stream large files efficiently)
+// - CDN-ready (static assets can be served from CDN)
+
+// OPTIMIZED: Large splat files moved to public directory to avoid bundling (~39MB)
+const splat = '/assets/experience/fixed_model.splat'; // Served statically, not bundled
 
 // Splat validation utility
 const validateSplatFile = async (splatUrl) => {

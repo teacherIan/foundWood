@@ -17,7 +17,7 @@ import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three'; // Import useSpring and animated
 import * as THREE from 'three'; // Import Three.js for Color
 import './experienceStyles.css';
-import splat from '../../src/assets/experience/full.splat';
+// REMOVED: Duplicate splat import - now using validatedSplatUrl prop from parent
 
 /**
  * PRODUCTION SAFETY NOTE:
@@ -382,7 +382,7 @@ const SplatWithErrorHandling = memo(
     ...props
   }) => {
     // Use the pre-validated splat URL instead of trying multiple sources
-    const splatSource = validatedSplatUrl || splat;
+    const splatSource = validatedSplatUrl; // SIMPLIFIED: Always use prop, no fallback needed
 
     console.log(
       '🎯 SplatWithErrorHandling: Using pre-validated splat file:',
@@ -533,7 +533,7 @@ function Scene({
   const { camera, scene, gl } = useThree();
   const idleTimeRef = useRef(0);
   const interactionTimeRef = useRef(0);
-  const [manualAlphaTest, setManualAlphaTest] = useState(1.0); // Start with full opacity so splat is immediately visible
+  const [manualAlphaTest, setManualAlphaTest] = useState(0.8); // Start with higher alpha test for clean rendering
   const alphaAnimationRequestRef = useRef(null); // Ref to store animation frame request
   const isInitialMountRef = useRef(true); // Ref to track initial mount
   const [sceneError, setSceneError] = useState(null);
@@ -625,8 +625,8 @@ function Scene({
   useEffect(() => {
     console.log('🚀 Scene component mounted and ready');
     console.log('🎯 Splat file info:', {
-      primarySplat: splat,
-      splatType: typeof splat,
+      validatedSplatUrl,
+      splatType: typeof validatedSplatUrl,
     });
 
     // TEMPORARILY DISABLED: WebGL cleanup to rely on R3F's built-in memory management
@@ -700,16 +700,16 @@ function Scene({
       // CRITICAL FIX: When loading completes and canvas becomes visible, start alpha animation immediately
       if (initialLoadComplete) {
         console.log(
-          '🎬 LOADING COMPLETE - Canvas now visible, starting 5-second alpha animation from 1.0 → 0.0'
+          '🎬 LOADING COMPLETE - Canvas now visible, starting 5-second alpha animation from 0.8 → 0.1'
         );
 
         const startTime = Date.now();
-        const animationDuration = 5000; // 5-second animation from 1.0 to 0.0 as requested
+        const animationDuration = 5000; // 5-second animation from 0.8 to 0.1 for optimal rendering
 
         const animateAlpha = () => {
           const elapsedTime = Date.now() - startTime;
           const progress = Math.min(elapsedTime / animationDuration, 1);
-          const currentAlpha = 1.0 + (0.0 - 1.0) * progress; // Interpolate from 1.0 to 0.0
+          const currentAlpha = 0.8 + (0.1 - 0.8) * progress; // Interpolate from 0.8 to 0.1
 
           setManualAlphaTest(currentAlpha);
 
@@ -719,7 +719,7 @@ function Scene({
           } else {
             alphaAnimationRequestRef.current = null;
             console.log(
-              '✅ 5-second alpha animation completed: splat now at alphaTest = 0.0'
+              '✅ 5-second alpha animation completed: splat now at alphaTest = 0.1'
             );
             setAlphaAnimationComplete(true);
           }
@@ -744,9 +744,9 @@ function Scene({
 
       if (hasOverlay) {
         console.log(
-          `🎭 Overlay detected - animating alpha to 1.0 (showContactPage: ${showContactPage}, showTypes: ${showTypes}, showGallery: ${showGallery})`
+          `🎭 Overlay detected - animating alpha to 0.8 (showContactPage: ${showContactPage}, showTypes: ${showTypes}, showGallery: ${showGallery})`
         );
-        targetAlpha = 1.0; // Animate to 1.0 when any overlay is shown
+        targetAlpha = 0.8; // Animate to 0.8 when any overlay is shown for cleaner rendering
 
         // Slower animation for contact page specifically
         if (showContactPage) {
@@ -755,8 +755,8 @@ function Scene({
           duration = 600; // 600ms for other overlays (types, gallery)
         }
       } else {
-        console.log('🎭 No overlay - animating alpha back to 0.0');
-        targetAlpha = 0.0; // Animate back to 0.0 when all overlays are hidden
+        console.log('🎭 No overlay - animating alpha back to 0.1');
+        targetAlpha = 0.1; // Animate back to 0.1 when all overlays are hidden for optimal rendering
 
         // Slower return animation for contact page specifically
         if (showContactPage === false) {

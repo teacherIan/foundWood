@@ -4,7 +4,8 @@ import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  assetsInclude: ['**/*.glb', '**/*.JPG', '**/*.splat', '**/*.gltf'],
+  // OPTIMIZED: Remove splat from assetsInclude since they're now served from public
+  assetsInclude: ['**/*.glb', '**/*.JPG', '**/*.gltf'],
   plugins: [react()],
   server: {
     host: true,
@@ -16,11 +17,28 @@ export default defineConfig({
           'react-vendor': ['react', 'react-dom'],
           'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
         },
+        // OPTIMIZED: Ensure large assets aren't bundled
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name.split('.');
+          const ext = info[info.length - 1];
+          // Serve large 3D assets from separate directory
+          if (/splat|glb|gltf/.test(ext)) {
+            return `assets/3d/[name]-[hash][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
+        },
       },
     },
     chunkSizeWarningLimit: 1000,
     cssCodeSplit: true,
     sourcemap: true,
+    // OPTIMIZED: Increase asset inline limit for small assets, exclude large ones
+    assetsInlineLimit: (filePath, content) => {
+      // Never inline splat files (they're huge)
+      if (filePath.endsWith('.splat')) return false;
+      // Default behavior for other assets
+      return content.length < 4096;
+    },
   },
   css: {
     devSourcemap: true,
