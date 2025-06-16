@@ -97,12 +97,12 @@ const SplatWithErrorHandling = memo(({ ... }) => {
 4. **File Corruption**: Invalid splat file structure
 5. **Loading Timeout**: File takes longer than 30 seconds to load
 
-## Fallback Strategy
+## Automatic Retry Strategy
 
 1. **Primary**: `full.splat` (main splat file)
-2. **Fallback**: `my_splat.splat` (backup splat file)
-3. **Timeout**: 30-second loading limit
-4. **Final**: Automatic page reload with user notification
+2. **Retry Logic**: Up to 3 automatic attempts with 2-second delays
+3. **Graceful Degradation**: Beautiful fallback interface if all retries fail
+4. **No User Intervention**: Seamless background retry and fallback handling
 
 ## Files Modified
 

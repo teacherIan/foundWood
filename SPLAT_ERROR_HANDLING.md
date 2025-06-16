@@ -24,11 +24,12 @@ The Splat component can fail to parse files due to:
 - Provides visual placeholder when both files fail
 - Includes comprehensive error logging
 
-### 2. **Fallback Strategy**
+### 2. **Automatic Retry Strategy**
 
 - **Primary**: `full.splat` (main splat file)
-- **Fallback**: `my_splat.splat` (backup splat file)
-- **Final Fallback**: Brown box placeholder mesh
+- **Retry Logic**: Up to 3 automatic retry attempts with 2-second delays
+- **Graceful Degradation**: Beautiful fallback interface without 3D scene
+- **No User Intervention**: Automatic retry and fallback handling
 
 ### 3. **Error Boundary Protection**
 
@@ -56,13 +57,10 @@ const SplatWithErrorHandling = memo(
     // Automatic fallback logic
     const handleError = useCallback(
       (error) => {
-        if (splatSource === splat && !hasError) {
-          setSplatSource(splatFallback); // Try backup file
-        } else {
-          setHasError(true); // Show placeholder
-        }
+        console.error('Splat loading failed:', error);
+        setHasError(true); // Show placeholder
       },
-      [splatSource, hasError]
+      [hasError]
     );
 
     // Render fallback or actual splat

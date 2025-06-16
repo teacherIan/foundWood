@@ -16,7 +16,6 @@ import {
 
 // Splat Pre-validation System - Prevents Canvas mounting until splat is verified
 import splat from './assets/new_experience/full.splat';
-import splatFallback from './assets/new_experience/my_splat.splat';
 
 // Splat validation utility
 const validateSplatFile = async (splatUrl) => {
@@ -65,55 +64,69 @@ const useSplatPreloader = () => {
     validSplatUrl: null,
     error: null,
     attemptedUrls: [],
+    retryCount: 0,
   });
 
   useEffect(() => {
     let cancelled = false;
+    const maxRetries = 3;
+    const retryDelay = 1000; // 1 seconds between retries
 
-    const validateSplats = async () => {
-      console.log('🚀 Starting splat pre-validation...');
+    const validateSplatsWithRetry = async (attemptNumber = 1) => {
+      if (cancelled) return;
 
-      // Try primary splat first
+      console.log(
+        `🚀 Starting splat validation attempt ${attemptNumber}/${maxRetries}...`
+      );
+
+      // Validate the primary splat file
       const primaryResult = await validateSplatFile(splat);
       if (cancelled) return;
 
       if (primaryResult.isValid) {
+        console.log('✅ Splat validation successful!');
         setSplatValidation({
           isValidating: false,
           validSplatUrl: splat,
           error: null,
           attemptedUrls: [splat],
+          retryCount: attemptNumber - 1,
         });
         return;
       }
 
-      console.log('⚠️ Primary splat failed, trying fallback...');
+      // Primary splat failed - check if we should retry
+      if (attemptNumber < maxRetries) {
+        console.log(
+          `⚠️ Splat validation failed (attempt ${attemptNumber}/${maxRetries}), retrying in ${
+            retryDelay / 1000
+          }s...`
+        );
+        setSplatValidation((prev) => ({
+          ...prev,
+          retryCount: attemptNumber,
+        }));
 
-      // Try fallback splat
-      const fallbackResult = await validateSplatFile(splatFallback);
-      if (cancelled) return;
-
-      if (fallbackResult.isValid) {
-        setSplatValidation({
-          isValidating: false,
-          validSplatUrl: splatFallback,
-          error: null,
-          attemptedUrls: [splat, splatFallback],
-        });
+        setTimeout(() => {
+          validateSplatsWithRetry(attemptNumber + 1);
+        }, retryDelay);
         return;
       }
 
-      // Both failed
-      console.error('🚨 Both splat files failed validation!');
+      // All retries exhausted - gracefully degrade without user intervention
+      console.error(
+        '🚨 Splat file failed to load after all retries. Continuing without 3D scene.'
+      );
       setSplatValidation({
         isValidating: false,
         validSplatUrl: null,
-        error: 'Unable to load any splat file. Please refresh the page.',
-        attemptedUrls: [splat, splatFallback],
+        error: 'Splat loading failed after retries',
+        attemptedUrls: [splat],
+        retryCount: maxRetries,
       });
     };
 
-    validateSplats();
+    validateSplatsWithRetry();
 
     return () => {
       cancelled = true;
@@ -194,11 +207,9 @@ const AnimatedLoadingSpinner = memo(() => {
   const spinnerSpring = useSpring({
     from: {
       opacity: 0,
-      transform: 'scale(0)',
     },
     to: {
       opacity: 1,
-      transform: 'scale(1)',
     },
     config: { mass: 1, tension: 120, friction: 12 },
     delay: 800,
@@ -206,16 +217,21 @@ const AnimatedLoadingSpinner = memo(() => {
 
   return (
     <animated.div
-      className="loading-spinner"
-      aria-label="Loading spinner"
       style={{
-        ...spinnerSpring,
-        // Ensure animation works even if CSS fails to load properly
-        animation: 'spin-smooth 1.2s ease-in-out infinite',
-        WebkitAnimation: 'spin-smooth 1.2s ease-in-out infinite',
+        opacity: spinnerSpring.opacity,
         marginBottom: '30px',
       }}
-    />
+    >
+      <div
+        className="loading-spinner"
+        aria-label="Loading spinner"
+        style={{
+          // Use pure CSS for the spinner animation - no React Spring transform conflicts
+          animation: 'spin-smooth 1.2s ease-in-out infinite',
+          WebkitAnimation: 'spin-smooth 1.2s ease-in-out infinite',
+        }}
+      />
+    </animated.div>
   );
 });
 
@@ -421,6 +437,15 @@ const loadingSayings = [
   'Every piece has found its purpose',
 ];
 
+// Special sayings for when retries are happening
+const retrySayings = [
+  'Sometimes the best pieces need a little extra care',
+  'Patience creates the finest craftsmanship',
+  'Good things come to those who wait',
+  'Every craftsman knows: the second attempt often succeeds',
+  'Like sanding wood smooth, some things take multiple passes',
+];
+
 // State reducer for better state management
 const initialState = {
   fontsLoaded: false,
@@ -556,7 +581,20 @@ function App() {
   const [currentSayingIndex, setCurrentSayingIndex] = useState(() =>
     Math.floor(Math.random() * loadingSayings.length)
   );
+  const [currentRetrySayingIndex, setCurrentRetrySayingIndex] = useState(() =>
+    Math.floor(Math.random() * retrySayings.length)
+  );
   const [sayingOpacity, setSayingOpacity] = useState(1);
+
+  // Determine which sayings to use based on retry state
+  const isRetrying = splatValidation.retryCount > 0;
+  const activeSayings = isRetrying ? retrySayings : loadingSayings;
+  const activeSayingIndex = isRetrying
+    ? currentRetrySayingIndex
+    : currentSayingIndex;
+  const setActiveSayingIndex = isRetrying
+    ? setCurrentRetrySayingIndex
+    : setCurrentSayingIndex;
 
   // Initialize image preloader to start loading images at startup
   // TEMPORARILY DISABLED: Image preloading to reduce memory pressure
@@ -635,24 +673,34 @@ function App() {
   ]);
   */
 
-  // Mark initial load as complete when splat is loaded AND validated
-  // UPDATED: Wait for both splat loading AND validation completion
+  // Mark initial load as complete when splat is loaded AND validated OR when splat fails gracefully
+  // UPDATED: Wait for both splat loading AND validation completion, OR graceful failure
   // Loading order: Splat Validation ✅ → Splat Loaded ✅ → Initial Load Complete ✅
+  // OR: Splat Validation ❌ → Graceful Fallback → Initial Load Complete ✅
   useEffect(() => {
     if (
       !state.initialLoadComplete &&
-      state.splatLoaded &&
-      !splatValidation.isValidating &&
-      !splatValidation.error
+      !splatValidation.isValidating && // Validation is complete (success or failure)
+      ((state.splatLoaded && !splatValidation.error) || // Success case: splat loaded and no error
+        splatValidation.error) // Failure case: graceful degradation
       // REMOVED: state.fontsLoaded - fonts load in background
       // REMOVED: state.imagesLoaded - images load on-demand
     ) {
-      console.log(
-        '🎉 Splat validated and loaded! Adding minimum display time for loading screen...'
-      );
-      console.log(
-        '📋 Complete loading order: Splat Validation ✅ → Splat Loaded ✅ → Complete ✅'
-      );
+      if (splatValidation.error) {
+        console.log(
+          '⚠️ Splat loading failed, but continuing with graceful fallback...'
+        );
+        console.log(
+          '📋 Graceful loading order: Splat Validation ❌ → Fallback ✅ → Complete ✅'
+        );
+      } else {
+        console.log(
+          '🎉 Splat validated and loaded! Adding minimum display time for loading screen...'
+        );
+        console.log(
+          '📋 Complete loading order: Splat Validation ✅ → Splat Loaded ✅ → Complete ✅'
+        );
+      }
 
       // Add a minimum 1-second delay to ensure loading screen is visible
       // just long enough to see the spinner animation
@@ -857,15 +905,15 @@ function App() {
 
       // After fade out, change saying and fade in
       setTimeout(() => {
-        setCurrentSayingIndex(
-          (prevIndex) => (prevIndex + 1) % loadingSayings.length
+        setActiveSayingIndex(
+          (prevIndex) => (prevIndex + 1) % activeSayings.length
         );
         setSayingOpacity(1);
       }, 300); // Half second for fade transition
     }, 3500); // Change saying every 3.5 seconds (including transition time)
 
     return () => clearInterval(interval);
-  }, [shouldShowLoading]);
+  }, [shouldShowLoading, activeSayings.length, setActiveSayingIndex]);
 
   // TEMPORARILY DISABLED: iOS Safari specific global error handling
   /*
@@ -1186,15 +1234,20 @@ function App() {
                     '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                 }}
               >
-                Validating 3D scene files...
+                {splatValidation.retryCount > 0
+                  ? `Optimizing 3D scene (attempt ${
+                      splatValidation.retryCount + 1
+                    })...`
+                  : 'Validating 3D scene files...'}
               </div>
             ) : splatValidation.error ? (
-              // Splat validation failed - show friendly error message
+              // Splat validation failed - show graceful fallback without 3D scene
               <div
                 style={{
                   width: '100vw',
                   height: '100vh',
-                  background: '#ffffff',
+                  background:
+                    'linear-gradient(135deg, #f5f1eb 0%, #ede4d3 100%)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -1203,45 +1256,53 @@ function App() {
                   textAlign: 'center',
                 }}
               >
-                <h2
+                <div
                   style={{
-                    color: '#77481c',
-                    marginBottom: '20px',
-                    fontFamily:
-                      '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    padding: '40px',
+                    borderRadius: '12px',
+                    boxShadow: '0 4px 20px rgba(119, 72, 28, 0.1)',
+                    maxWidth: '500px',
                   }}
                 >
-                  3D Scene Temporarily Unavailable
-                </h2>
-                <p
-                  style={{
-                    color: '#8b5a2b',
-                    marginBottom: '30px',
-                    maxWidth: '400px',
-                    lineHeight: '1.5',
-                    fontFamily:
-                      '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                  }}
-                >
-                  We're having trouble loading the 3D scene files. Please
-                  refresh the page to try again.
-                </p>
-                <button
-                  onClick={() => window.location.reload()}
-                  style={{
-                    padding: '12px 24px',
-                    backgroundColor: '#77481c',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    fontSize: '1rem',
-                    fontFamily:
-                      '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                  }}
-                >
-                  Refresh Page
-                </button>
+                  <h2
+                    style={{
+                      color: '#77481c',
+                      marginBottom: '20px',
+                      fontSize: '1.8rem',
+                      fontFamily:
+                        '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                    }}
+                  >
+                    Welcome to Doug's Found Wood
+                  </h2>
+                  <p
+                    style={{
+                      color: '#8b5a2b',
+                      marginBottom: '20px',
+                      fontSize: '1.1rem',
+                      lineHeight: '1.6',
+                      fontFamily:
+                        '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                    }}
+                  >
+                    Explore our handcrafted furniture collection through our
+                    gallery and learn more about our sustainable woodworking
+                    practices.
+                  </p>
+                  <p
+                    style={{
+                      color: '#a67c52',
+                      fontSize: '0.95rem',
+                      fontStyle: 'italic',
+                      fontFamily:
+                        '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                    }}
+                  >
+                    The interactive 3D experience is currently unavailable, but
+                    you can still browse our full collection.
+                  </p>
+                </div>
               </div>
             ) : (
               // Splat validation successful - mount Canvas with validated splat
@@ -1306,18 +1367,7 @@ function App() {
                 Each piece tells a story
               </div>
             </div>
-            <div
-              className="loading-spinner"
-              aria-label="Loading spinner"
-              style={{
-                animation: 'spin-smooth 1.2s ease-in-out infinite',
-                WebkitAnimation: 'spin-smooth 1.2s ease-in-out infinite',
-                marginBottom: '30px',
-                opacity: 0,
-                animationDelay: '0.8s',
-                animationFillMode: 'forwards',
-              }}
-            />
+            <AnimatedLoadingSpinner />
             {/* Dynamic loading status based on validation state */}
             <div style={{ textAlign: 'center', marginBottom: '25px' }}>
               <div
@@ -1332,12 +1382,16 @@ function App() {
                 }}
               >
                 {splatValidation.isValidating
-                  ? '🔍 Preparing 3D scene files...'
+                  ? splatValidation.retryCount > 0
+                    ? `🔄 Optimizing 3D scene (attempt ${
+                        splatValidation.retryCount + 1
+                      })...`
+                    : '🔍 Preparing 3D scene files...'
                   : '🪵 Crafting your experience with care 🪵'}
               </div>
             </div>
             <AnimatedLoadingSaying opacity={sayingOpacity} delay={2000}>
-              {loadingSayings[currentSayingIndex]}
+              {activeSayings[activeSayingIndex]}
             </AnimatedLoadingSaying>
           </AnimatedLoadingContainer>
         </div>

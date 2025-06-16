@@ -18,7 +18,6 @@ import { useSpring, animated } from '@react-spring/three'; // Import useSpring a
 import * as THREE from 'three'; // Import Three.js for Color
 import './experienceStyles.css';
 import splat from '../../src/assets/new_experience/full.splat';
-import splatFallback from '../../src/assets/new_experience/my_splat.splat';
 
 /**
  * PRODUCTION SAFETY NOTE:
@@ -626,9 +625,7 @@ function Scene({
     console.log('🚀 Scene component mounted and ready');
     console.log('🎯 Splat file info:', {
       primarySplat: splat,
-      fallbackSplat: splatFallback,
       splatType: typeof splat,
-      fallbackType: typeof splatFallback,
     });
 
     // TEMPORARILY DISABLED: WebGL cleanup to rely on R3F's built-in memory management
