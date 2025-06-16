@@ -1,4 +1,5 @@
 import './App.css';
+import './seo-enhancements.css';
 import { useState, useCallback, useEffect, useReducer, memo } from 'react';
 import found_wood from './assets/found_wood_final_all.png';
 import Contact from '../components/contact/Contact';

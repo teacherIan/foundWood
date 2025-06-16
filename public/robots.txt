@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Allow all crawlers to access all content
+Disallow: /src/
+Disallow: /components/
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /*.jsx$
+
+# Sitemap location
+Sitemap: https://www.dfw.earth/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
