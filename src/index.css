@@ -192,6 +192,13 @@ div.loading-spinner,
     /* Inform browser about animation */
     /* Add subtle shadow for depth */
     box-shadow: 0 2px 8px rgba(139, 90, 43, 0.1) !important;
+    /* Ensure sufficient space for rotation - prevent cropping */
+    position: relative !important;
+    z-index: 100 !important;
+    /* Higher z-index to ensure visibility */
+    /* Add padding equivalent to provide rotation clearance */
+    transform-origin: center center !important;
+    /* Ensure rotation is centered */
 }
 
 /* Loading text styling */

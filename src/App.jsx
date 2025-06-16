@@ -210,6 +210,12 @@ const AnimatedLoadingSpinner = memo(() => {
         marginBottom: '30px',
         opacity: 0,
         animation: 'fadeInUp 0.8s ease-out 0.8s forwards', // Restore CSS animation with delay
+        position: 'relative',
+        width: '80px', // Explicit container size to prevent cropping
+        height: '80px', // Adequate space for 60px spinner + borders + rotation clearance
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       <div
@@ -219,6 +225,8 @@ const AnimatedLoadingSpinner = memo(() => {
           // Use pure CSS for the spinner animation - no React Spring transform conflicts
           animation: 'spin-smooth 1.2s ease-in-out infinite',
           WebkitAnimation: 'spin-smooth 1.2s ease-in-out infinite',
+          position: 'relative',
+          zIndex: 1,
         }}
       />
     </div>
@@ -1365,13 +1373,17 @@ function App() {
                 </div>
               </div>
 
-              {/* Spinner with fixed height */}
+              {/* Spinner with fixed height - increased clearance to prevent cropping */}
               <div
                 style={{
-                  minHeight: '80px',
+                  minHeight: '100px', // Increased from 80px to provide more clearance
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   marginBottom: '30px',
+                  padding: '10px', // Add padding for extra safety margin
+                  position: 'relative',
+                  zIndex: 10, // Ensure spinner stays on top
                 }}
               >
                 <AnimatedLoadingSpinner />
