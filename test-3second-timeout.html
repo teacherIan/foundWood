@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-Second Loading Timeout Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .loading {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #bbdefb;
+        }
+
+        .success {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .timeout {
+            background-color: #fff3e0;
+            color: #f57c00;
+            border: 1px solid #ffcc02;
+        }
+
+        button {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 10px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #1565c0;
+        }
+
+        .log {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1976d2;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🕐 3-Second Loading Timeout Test</h1>
+        <p>This test simulates the new 3-second maximum loading timeout feature.</p>
+
+        <div class="timer" id="timer">Ready to test</div>
+        <div id="status" class="status loading">Ready to test timeout behavior</div>
+
+        <button onclick="testNormalLoad()">Test Normal Load (1.5s)</button>
+        <button onclick="testSlowLoad()">Test Slow Load (5s - should timeout)</button>
+        <button onclick="testTimeoutOnly()">Test Timeout Only (3s)</button>
+        <button onclick="clearLog()">Clear Log</button>
+
+        <div class="log" id="log"></div>
+    </div>
+
+    <script>
+        let timeoutRef = null;
+        let loadingTimer = null;
+        let startTime = null;
+        let timerInterval = null;
+
+        function log(message, type = 'INFO') {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = {
+                'INFO': '📝',
+                'TIMEOUT': '⏰',
+                'SUCCESS': '✅',
+                'START': '🚀'
+            }[type] || '📝';
+
+            logElement.innerHTML += `[${timestamp}] ${prefix} ${message}<br>`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(`${prefix} ${message}`);
+        }
+
+        function setStatus(message, type = 'loading') {
+            const statusElement = document.getElementById('status');
+            statusElement.textContent = message;
+            statusElement.className = `status ${type}`;
+        }
+
+        function updateTimer() {
+            if (!startTime) return;
+
+            const elapsed = (Date.now() - startTime) / 1000;
+            const remaining = Math.max(0, 3 - elapsed);
+
+            if (remaining > 0) {
+                document.getElementById('timer').textContent =
+                    `${remaining.toFixed(1)}s remaining`;
+            } else {
+                document.getElementById('timer').textContent = 'TIMEOUT!';
+            }
+        }
+
+        function startTimer() {
+            startTime = Date.now();
+            document.getElementById('timer').textContent = '3.0s remaining';
+
+            timerInterval = setInterval(updateTimer, 100);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            startTime = null;
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+            document.getElementById('timer').textContent = 'Ready to test';
+            setStatus('Ready to test timeout behavior', 'loading');
+        }
+
+        function simulate3SecondTimeout() {
+            log('Starting 3-second maximum loading timeout...', 'START');
+
+            // Clear any existing timeout
+            if (timeoutRef) {
+                log('Clearing existing timeout');
+                clearTimeout(timeoutRef);
+            }
+
+            startTimer();
+            setStatus('Loading... (max 3 seconds)', 'loading');
+
+            timeoutRef = setTimeout(() => {
+                log('3-second maximum loading timeout reached - forcing load complete', 'TIMEOUT');
+                log('Loading screen will end now, allowing splat to be viewed even if incomplete', 'TIMEOUT');
+                stopTimer();
+                setStatus('TIMEOUT TRIGGERED - Loading forced complete', 'timeout');
+            }, 3000); // 3 seconds maximum
+
+            return timeoutRef;
+        }
+
+        function testNormalLoad() {
+            log('\n=== TEST: Normal Load (1.5s) ===', 'START');
+            const timeout = simulate3SecondTimeout();
+
+            // Simulate successful load after 1.5 seconds
+            setTimeout(() => {
+                log('Splat loaded successfully after 1.5s', 'SUCCESS');
+                log('Clearing 3-second timeout - loading completed normally', 'SUCCESS');
+                clearTimeout(timeout);
+                stopTimer();
+                setStatus('Normal load completed successfully', 'success');
+            }, 1500);
+        }
+
+        function testSlowLoad() {
+            log('\n=== TEST: Slow Load (5s - should timeout) ===', 'START');
+            simulate3SecondTimeout();
+
+            // Simulate slow load that would take 5 seconds (timeout should fire first)
+            setTimeout(() => {
+                log('Slow splat finally finished loading (after timeout)', 'INFO');
+                log('But timeout already fired - loading screen already dismissed', 'INFO');
+            }, 5000);
+        }
+
+        function testTimeoutOnly() {
+            log('\n=== TEST: Timeout Only (3s) ===', 'START');
+            simulate3SecondTimeout();
+            // Let timeout fire naturally without any other intervention
+        }
+
+        // Initial setup
+        log('🔧 3-Second Loading Timeout test page ready!');
+        log('This simulates the new maximum loading timeout feature.');
+        log('The loading screen will ALWAYS end after 3 seconds, even if splat is still loading.');
+    </script>
+</body>
+
+</html>
