@@ -1380,7 +1380,7 @@ export default function App({
             performanceConfig.iosConfig?.premultipliedAlpha || false, // Disable for simpler blending
           preserveDrawingBuffer:
             performanceConfig.iosConfig?.preserveDrawingBuffer || false, // Critical for iOS Safari memory management
-          outputColorSpace: 'srgb',
+          outputColorSpace: 'srgb-linear', // Use sRGB for consistent color rendering
           failIfMajorPerformanceCaveat:
             performanceConfig.iosConfig?.failIfMajorPerformanceCaveat ?? false, // Allow fallback to software rendering if needed
           // iOS Safari specific optimizations

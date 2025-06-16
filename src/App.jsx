@@ -461,8 +461,9 @@ function App() {
   );
   const [sayingOpacity, setSayingOpacity] = useState(1);
 
-  // **EXIT ANIMATION STATE**: Track when the loading screen should exit
+  // **EPIC ANIMATION STATE**: Track loading screen phases to prevent flash
   const [isExiting, setIsExiting] = useState(false);
+  const [elementsVisible, setElementsVisible] = useState(false);
 
   // **ABSOLUTE 4-SECOND TIMEOUT**: Enhanced for better animation timing
   // This CANNOT be interrupted and WILL fire after exactly 4 seconds
@@ -474,9 +475,12 @@ function App() {
       '🚨 ABSOLUTE 4-SECOND TIMEOUT STARTING NOW - Component just mounted!'
     );
 
+    // Make elements visible immediately to start entrance animations
+    setElementsVisible(true);
+
     loadingTimeoutRef.current = setTimeout(() => {
       console.log(
-        '🎬 ABSOLUTE 4-SECOND TIMEOUT FIRED - STARTING EPIC EXIT ANIMATIONS!'
+        '🚨 ABSOLUTE 4-SECOND TIMEOUT FIRED - STARTING EPIC EXIT ANIMATIONS!'
       );
 
       // First trigger exit animations
@@ -488,7 +492,7 @@ function App() {
           '🎬 EPIC EXIT ANIMATIONS COMPLETE - DISMISSING LOADING SCREEN!'
         );
         dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
-      }, 2100); // 2100ms for epic exit animations (0.9s delay + 1.2s duration)
+      }, 2500); // 2500ms for epic exit animations to complete
     }, 4000); // 4 seconds ABSOLUTE - enhanced timing for EPIC experience
 
     // Cleanup on unmount only
@@ -1098,43 +1102,47 @@ function App() {
         </div>
       </div>
 
-      {/* Show loading screen overlay when needed - enhanced animations */}
+      {/* 🎬 EPIC LOADING SCREEN - No Flash, Pure Spectacle */}
       {shouldShowLoading && (
         <div
           className="font-loading-screen"
           style={{
             opacity: 1,
             animation: isExiting
-              ? 'epicBackgroundExit 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.9s forwards'
+              ? 'epicBackgroundZoomOut 2.0s var(--epic-exit-easing) 0.5s forwards'
               : 'none',
           }}
         >
           <AnimatedLoadingContainer shouldShow={shouldShowLoading}>
-            {/* Fixed layout container to prevent jumping */}
+            {/* Epic Layout Container */}
             <div
               style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                minHeight: '400px', // Fixed height to prevent layout shifts
+                minHeight: '400px',
                 width: '100%',
                 maxWidth: '500px',
                 margin: '0 auto',
+                position: 'relative',
               }}
             >
-              {/* Title section with fixed heights */}
+              {/* Title Section - Epic Entrance */}
               <div
                 style={{
                   textAlign: 'center',
                   marginBottom: '30px',
-                  minHeight: '120px', // Fixed height for title section
+                  minHeight: '120px',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
                 }}
               >
                 <h2
+                  className={`loading-element ${
+                    elementsVisible ? 'visible entering' : ''
+                  } ${isExiting ? 'exiting' : ''}`}
                   style={{
                     margin: '0 0 10px 0',
                     fontSize: '1.6rem',
@@ -1142,112 +1150,174 @@ function App() {
                     color: '#77481c',
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                    opacity: isExiting ? 1 : 0, // Maintain opacity during transition
+                    opacity: elementsVisible && !isExiting ? 1 : 0,
                     animation: isExiting
-                      ? 'epicFadeOutUp 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards'
-                      : 'fadeInUp 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards',
+                      ? 'epicExitUpAndAway 1.5s var(--epic-exit-easing) forwards'
+                      : elementsVisible
+                      ? 'epicEntranceSlideUp 1.2s var(--epic-entrance-easing) 0.3s forwards'
+                      : 'none',
                   }}
                 >
                   Welcome to Doug's Found Wood
                 </h2>
                 <div
+                  className={`loading-element ${
+                    elementsVisible ? 'visible entering' : ''
+                  } ${isExiting ? 'exiting' : ''}`}
                   style={{
                     fontSize: '1.1rem',
                     color: '#8b5a2b',
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     marginBottom: '8px',
-                    opacity: isExiting ? 1 : 0, // Maintain opacity during transition
+                    opacity: elementsVisible && !isExiting ? 1 : 0,
                     animation: isExiting
-                      ? 'epicFadeOutLeft 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.15s forwards'
-                      : 'fadeInUp 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards',
+                      ? 'epicExitLeftWithSpin 1.6s var(--epic-exit-easing) 0.2s forwards'
+                      : elementsVisible
+                      ? 'epicEntranceSlideLeft 1.2s var(--epic-entrance-easing) 0.6s forwards'
+                      : 'none',
                   }}
                 >
                   Preparing your handcrafted journey...
                 </div>
                 <div
+                  className={`loading-element ${
+                    elementsVisible ? 'visible entering' : ''
+                  } ${isExiting ? 'exiting' : ''}`}
                   style={{
                     fontSize: '0.9rem',
                     color: '#a67c52',
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     fontStyle: 'italic',
-                    opacity: isExiting ? 1 : 0, // Maintain opacity during transition
+                    opacity: elementsVisible && !isExiting ? 1 : 0,
                     animation: isExiting
-                      ? 'epicFadeOutRight 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s forwards'
-                      : 'fadeInUp 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards',
+                      ? 'epicExitRightWithSpin 1.7s var(--epic-exit-easing) 0.4s forwards'
+                      : elementsVisible
+                      ? 'epicEntranceSlideRight 1.2s var(--epic-entrance-easing) 0.9s forwards'
+                      : 'none',
                   }}
                 >
                   Each piece tells a story
                 </div>
               </div>
 
-              {/* Spinner with fixed height - enhanced animation */}
+              {/* Epic Spinner */}
               <div
+                className={`loading-element ${
+                  elementsVisible ? 'visible entering' : ''
+                } ${isExiting ? 'exiting' : ''}`}
                 style={{
-                  minHeight: '100px', // Increased from 80px to provide more clearance
+                  minHeight: '100px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: '30px',
-                  padding: '10px', // Add padding for extra safety margin
+                  padding: '10px',
                   position: 'relative',
-                  zIndex: 10, // Ensure spinner stays on top
-                  opacity: isExiting ? 1 : 0, // Maintain opacity during transition
+                  zIndex: 10,
+                  opacity: elementsVisible && !isExiting ? 1 : 0,
                   animation: isExiting
-                    ? 'epicSpinnerExit 1.0s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.45s forwards'
-                    : 'spinnerFadeIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.2s forwards',
+                    ? 'epicSpinnerExitBlast 2.0s var(--epic-exit-easing) 0.6s forwards'
+                    : elementsVisible
+                    ? 'epicSpinnerEntrance 1.5s var(--epic-entrance-easing) 1.2s forwards'
+                    : 'none',
                 }}
               >
                 <AnimatedLoadingSpinner />
               </div>
 
-              {/* Loading status with fixed height */}
+              {/* Status Text */}
               <div
                 style={{
                   textAlign: 'center',
                   marginBottom: '25px',
-                  minHeight: '30px', // Fixed height for status
+                  minHeight: '30px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
                 <div
+                  className={`loading-element ${
+                    elementsVisible ? 'visible entering' : ''
+                  } ${isExiting ? 'exiting' : ''}`}
                   style={{
                     fontSize: '0.95rem',
                     color: '#9d7856',
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     fontWeight: '500',
-                    opacity: isExiting ? 1 : 0, // Maintain opacity during transition
+                    opacity: elementsVisible && !isExiting ? 1 : 0,
                     animation: isExiting
-                      ? 'epicFadeOutDown 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.6s forwards'
-                      : 'fadeInUp 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.8s forwards',
+                      ? 'epicExitDownAndScale 1.8s var(--epic-exit-easing) 0.8s forwards'
+                      : elementsVisible
+                      ? 'epicEntranceSlideUp 1.2s var(--epic-entrance-easing) 1.8s forwards'
+                      : 'none',
                   }}
                 >
                   🪵 Crafting your experience... 🪵
                 </div>
               </div>
 
-              {/* Quote section with fixed height - enhanced animation */}
+              {/* Quote Section */}
               <div
+                className={`loading-element ${
+                  elementsVisible ? 'visible entering' : ''
+                } ${isExiting ? 'exiting' : ''}`}
                 style={{
-                  minHeight: '80px', // Fixed height for quotes to prevent jumping
+                  minHeight: '80px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   width: '100%',
-                  opacity: isExiting ? 1 : 0, // Maintain opacity during transition
+                  opacity: elementsVisible && !isExiting ? 1 : 0,
                   animation: isExiting
-                    ? 'epicFadeOutScale 1.0s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.75s forwards'
-                    : 'fadeInUp 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2.4s forwards',
+                    ? 'epicExitUpAndAway 2.2s var(--epic-exit-easing) 1.0s forwards'
+                    : elementsVisible
+                    ? 'epicEntranceSlideUp 1.2s var(--epic-entrance-easing) 2.4s forwards'
+                    : 'none',
                 }}
               >
                 <AnimatedLoadingSaying opacity={sayingOpacity} delay={0}>
                   {activeSayings[activeSayingIndex]}
                 </AnimatedLoadingSaying>
               </div>
+
+              {/* Particle Burst on Exit */}
+              {isExiting && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    width: '0',
+                    height: '0',
+                    pointerEvents: 'none',
+                  }}
+                >
+                  {Array.from({ length: 20 }).map((_, i) => {
+                    const angle = (i / 20) * Math.PI * 2;
+                    const distance = 60 + Math.random() * 40;
+                    const x = Math.cos(angle) * distance;
+                    const y = Math.sin(angle) * distance;
+
+                    return (
+                      <div
+                        key={i}
+                        className="particle"
+                        style={{
+                          '--particle-x': `${x}px`,
+                          '--particle-y': `${y}px`,
+                          animation: `particleBurst 1.5s ease-out ${
+                            i * 0.05
+                          }s forwards`,
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </AnimatedLoadingContainer>
         </div>

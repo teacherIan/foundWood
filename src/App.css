@@ -9,6 +9,239 @@
     --brown: #8b4513;
     --light_brown: #d2b48c;
     --lightGreen: #d2b48c;
+
+    /* Timing Control Variables */
+    --epic-entrance-duration: 1.2s;
+    --epic-exit-duration: 1.8s;
+    --epic-entrance-easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --epic-exit-easing: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Element State Variables */
+    --element-opacity: 0;
+    --element-scale: 0.8;
+    --element-y: 30px;
+    --element-rotation: 0deg;
+    --element-blur: 8px;
+}
+
+/* 🌟 Epic Entrance Animations */
+@keyframes epicEntranceSlideUp {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 30px, 0) scale(0.8) rotateX(15deg);
+        filter: blur(8px);
+    }
+
+    60% {
+        opacity: 0.8;
+        transform: translate3d(0, -5px, 0) scale(1.05) rotateX(-2deg);
+        filter: blur(2px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateX(0deg);
+        filter: blur(0px);
+    }
+}
+
+@keyframes epicEntranceSlideLeft {
+    0% {
+        opacity: 0;
+        transform: translate3d(-50px, 20px, 0) scale(0.7) rotateY(25deg);
+        filter: blur(10px);
+    }
+
+    70% {
+        opacity: 0.9;
+        transform: translate3d(3px, -2px, 0) scale(1.03) rotateY(-3deg);
+        filter: blur(1px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateY(0deg);
+        filter: blur(0px);
+    }
+}
+
+@keyframes epicEntranceSlideRight {
+    0% {
+        opacity: 0;
+        transform: translate3d(50px, 20px, 0) scale(0.7) rotateY(-25deg);
+        filter: blur(10px);
+    }
+
+    70% {
+        opacity: 0.9;
+        transform: translate3d(-3px, -2px, 0) scale(1.03) rotateY(3deg);
+        filter: blur(1px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateY(0deg);
+        filter: blur(0px);
+    }
+}
+
+@keyframes epicSpinnerEntrance {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 40px, 0) scale(0.3) rotate(0deg);
+        filter: blur(15px);
+    }
+
+    30% {
+        opacity: 0.4;
+        transform: translate3d(0, -8px, 0) scale(0.8) rotate(180deg);
+        filter: blur(5px);
+    }
+
+    70% {
+        opacity: 0.8;
+        transform: translate3d(0, 2px, 0) scale(1.1) rotate(300deg);
+        filter: blur(2px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotate(360deg);
+        filter: blur(0px);
+    }
+}
+
+/* 🚀 Epic Exit Animations - Directional and Spectacular */
+@keyframes epicExitUpAndAway {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateX(0deg);
+        filter: blur(0px);
+    }
+
+    40% {
+        opacity: 0.6;
+        transform: translate3d(0, -20px, 0) scale(1.15) rotateX(-10deg);
+        filter: blur(3px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, -100px, 0) scale(0.3) rotateX(-45deg);
+        filter: blur(20px);
+    }
+}
+
+@keyframes epicExitLeftWithSpin {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateZ(0deg);
+        filter: blur(0px);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: translate3d(-40px, -10px, 0) scale(1.2) rotateZ(-15deg);
+        filter: blur(5px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(-200px, -30px, 0) scale(0.2) rotateZ(-60deg);
+        filter: blur(25px);
+    }
+}
+
+@keyframes epicExitRightWithSpin {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateZ(0deg);
+        filter: blur(0px);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: translate3d(40px, -10px, 0) scale(1.2) rotateZ(15deg);
+        filter: blur(5px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(200px, -30px, 0) scale(0.2) rotateZ(60deg);
+        filter: blur(25px);
+    }
+}
+
+@keyframes epicSpinnerExitBlast {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+        filter: blur(0px);
+    }
+
+    25% {
+        opacity: 0.8;
+        transform: translate3d(0, -15px, 0) scale(1.5) rotate(270deg);
+        filter: blur(2px);
+    }
+
+    60% {
+        opacity: 0.3;
+        transform: translate3d(0, -40px, 0) scale(2.5) rotate(720deg);
+        filter: blur(8px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, -80px, 0) scale(4) rotate(1080deg);
+        filter: blur(30px);
+    }
+}
+
+@keyframes epicExitDownAndScale {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+    }
+
+    30% {
+        opacity: 0.7;
+        transform: translate3d(0, 15px, 0) scale(1.1);
+        filter: blur(2px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, 100px, 0) scale(0.3);
+        filter: blur(15px);
+    }
+}
+
+@keyframes epicBackgroundZoomOut {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+    }
+
+    30% {
+        opacity: 0.8;
+        transform: translate3d(0, -10px, 0) scale(1.05);
+        filter: blur(3px);
+    }
+
+    70% {
+        opacity: 0.3;
+        transform: translate3d(0, -30px, 0) scale(1.15);
+        filter: blur(10px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, -60px, 0) scale(1.3);
+        filter: blur(25px);
+    }
 }
 
 * {
@@ -87,181 +320,6 @@ canvas:active {
         transform: translate3d(0, 0, 0) scale(1);
     }
 }
-
-/* 🎬 EPIC EXIT ANIMATIONS - Spectacular directional exits */
-
-/* Title exits upward with dramatic bounce and scale */
-@keyframes epicFadeOutUp {
-    0% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1) rotateX(0deg);
-        filter: blur(0px);
-    }
-
-    30% {
-        opacity: 0.8;
-        transform: translate3d(0, -15px, 0) scale(1.1) rotateX(-5deg);
-        filter: blur(1px);
-    }
-
-    70% {
-        opacity: 0.3;
-        transform: translate3d(0, -40px, 0) scale(0.9) rotateX(-15deg);
-        filter: blur(3px);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate3d(0, -100px, 0) scale(0.7) rotateX(-30deg);
-        filter: blur(8px);
-    }
-}
-
-/* Subtitle exits left with spin and perspective */
-@keyframes epicFadeOutLeft {
-    0% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1) rotateY(0deg);
-        filter: blur(0px);
-    }
-
-    40% {
-        opacity: 0.7;
-        transform: translate3d(-25px, -5px, 0) scale(1.05) rotateY(-15deg);
-        filter: blur(2px);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate3d(-120px, -20px, 0) scale(0.6) rotateY(-45deg);
-        filter: blur(6px);
-    }
-}
-
-/* Tagline exits right with opposite spin */
-@keyframes epicFadeOutRight {
-    0% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1) rotateY(0deg);
-        filter: blur(0px);
-    }
-
-    40% {
-        opacity: 0.7;
-        transform: translate3d(25px, -5px, 0) scale(1.05) rotateY(15deg);
-        filter: blur(2px);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate3d(120px, -20px, 0) scale(0.6) rotateY(45deg);
-        filter: blur(6px);
-    }
-}
-
-/* Spinner epic exit - dramatic scaling and rotation */
-@keyframes epicSpinnerExit {
-    0% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
-        filter: blur(0px);
-    }
-
-    20% {
-        opacity: 0.9;
-        transform: translate3d(0, -8px, 0) scale(1.3) rotate(180deg);
-        filter: blur(1px);
-    }
-
-    60% {
-        opacity: 0.4;
-        transform: translate3d(0, -25px, 0) scale(1.8) rotate(540deg);
-        filter: blur(4px);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate3d(0, -60px, 0) scale(2.5) rotate(720deg);
-        filter: blur(10px);
-    }
-}
-
-/* Status exits downward with dramatic effect */
-@keyframes epicFadeOutDown {
-    0% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1);
-        filter: blur(0px);
-    }
-
-    30% {
-        opacity: 0.8;
-        transform: translate3d(0, 10px, 0) scale(1.08);
-        filter: blur(1px);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate3d(0, 80px, 0) scale(0.5);
-        filter: blur(8px);
-    }
-}
-
-/* Quote exits with dramatic scaling effect */
-@keyframes epicFadeOutScale {
-    0% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1) rotateZ(0deg);
-        filter: blur(0px);
-    }
-
-    25% {
-        opacity: 0.9;
-        transform: translate3d(0, -5px, 0) scale(1.15) rotateZ(2deg);
-        filter: blur(1px);
-    }
-
-    60% {
-        opacity: 0.4;
-        transform: translate3d(0, -15px, 0) scale(1.5) rotateZ(5deg);
-        filter: blur(3px);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate3d(0, -30px, 0) scale(2.2) rotateZ(10deg);
-        filter: blur(12px);
-    }
-}
-
-/* Epic background exit with dramatic zoom effect */
-@keyframes epicBackgroundExit {
-    0% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1);
-        filter: blur(0px);
-    }
-
-    40% {
-        opacity: 0.7;
-        transform: translate3d(0, -10px, 0) scale(1.02);
-        filter: blur(2px);
-    }
-
-    70% {
-        opacity: 0.3;
-        transform: translate3d(0, -25px, 0) scale(1.05);
-        filter: blur(5px);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate3d(0, -60px, 0) scale(1.1);
-        filter: blur(15px);
-    }
-}
-
-/* 📚 LEGACY ANIMATIONS - Keep for fallback */
 
 /* Smooth exit animation without bounce - fixes jarring motion */
 @keyframes fadeOutDown {
@@ -352,4 +410,68 @@ canvas:active {
 *[style*="animation"] {
     will-change: transform, opacity;
     transform: translate3d(0, 0, 0);
+}
+
+/* 🎯 Element State Classes - Prevents Flash */
+.loading-element {
+    opacity: 0;
+    will-change: transform, opacity, filter;
+    transform: translate3d(0, 0, 0);
+    /* Force hardware acceleration */
+}
+
+.loading-element.visible {
+    opacity: 1;
+}
+
+.loading-element.entering {
+    animation-fill-mode: forwards;
+}
+
+.loading-element.exiting {
+    animation-fill-mode: forwards;
+}
+
+/* 🌈 Particle Effects for Exit */
+@keyframes particleBurst {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(var(--particle-x), var(--particle-y)) scale(0.1);
+    }
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: linear-gradient(45deg, #77481c, #8b5a2b);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* 📱 Loading Spinner Enhanced */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(119, 72, 28, 0.2);
+    border-radius: 50%;
+    border-top: 3px solid #77481c;
+    animation: spin-smooth 1.2s ease-in-out infinite;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+}
+
+@keyframes spin-smooth {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
