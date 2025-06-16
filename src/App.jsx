@@ -4,7 +4,7 @@ import found_wood from './assets/found_wood_final_all.png';
 import Contact from '../components/contact/Contact';
 import Gallery from '../components/galleries/Gallery';
 import Types from '../components/select_gallery/Types';
-import NewCanvas from '../components/new_experience/Experience';
+import NewCanvas from '../components/experience/Experience';
 import FontFaceObserver from 'fontfaceobserver';
 import {
   useSpring,
@@ -15,7 +15,7 @@ import {
 } from '@react-spring/web';
 
 // Splat Pre-validation System - Prevents Canvas mounting until splat is verified
-import splat from './assets/new_experience/full.splat';
+import splat from './assets/experience/full.splat';
 
 // Splat validation utility
 const validateSplatFile = async (splatUrl) => {
@@ -139,8 +139,8 @@ const useSplatPreloader = () => {
 // TEMPORARILY DISABLED: Image preloading to reduce memory pressure
 // import { useImagePreloader } from '../components/galleries/useImagePreloader';
 // TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
-// import { useWebGLCleanup } from '../components/new_experience/useWebGLCleanup.js';
-// import { logMemoryUsage } from '../components/new_experience/WebGLCleanup.js';
+// import { useWebGLCleanup } from '../components/experience/useWebGLCleanup.js';
+// import { logMemoryUsage } from '../components/experience/WebGLCleanup.js';
 
 const configAnimation = {
   mass: 2,

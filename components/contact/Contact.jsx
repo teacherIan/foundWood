@@ -7,7 +7,7 @@ import './form.css';
 import bg_image_long from '../../src/assets/poly-snapshot_long.JPG';
 import bg_image_cell_3 from '../../src/assets/poly-snapshot_3.JPG';
 // TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
-// import { isIOSSafari } from '../new_experience/WebGLCleanup.js';
+// import { isIOSSafari } from '../experience/WebGLCleanup.js';
 
 export default function Contact({
   showContactPage,

@@ -3,7 +3,7 @@ import {
   WebGLCleanupManager,
   isIOSSafari,
   logMemoryUsage,
-} from '../new_experience/WebGLCleanup.js';
+} from './WebGLCleanup.js';
 
 /**
  * React hook for managing WebGL cleanup, especially for iOS Safari

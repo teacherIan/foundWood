@@ -17,7 +17,7 @@ import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three'; // Import useSpring and animated
 import * as THREE from 'three'; // Import Three.js for Color
 import './experienceStyles.css';
-import splat from '../../src/assets/new_experience/full.splat';
+import splat from '../../src/assets/experience/full.splat';
 
 /**
  * PRODUCTION SAFETY NOTE:
