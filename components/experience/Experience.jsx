@@ -843,15 +843,15 @@ function Scene({
         Math.sin(idleTimeRef.current * 0.5) * 0.05 * interactionFactor;
 
       camera.position.x = slowWave + fastWave * 0.5;
-      
+
       // Calculate the base Y position with constraints
       const baseY = windowWidth < 480 ? 1.5 : 1.2;
       const animatedY = baseY + verticalWave + breathingEffect * 0.3;
-      
+
       // Apply Y-axis constraint: never go below grass level (y = 0.3)
       const minY = 0.3; // Minimum Y position to stay above grass level
       camera.position.y = Math.max(animatedY, minY);
-      
+
       camera.position.z = (windowWidth < 480 ? 1.7 : 3) + breathingEffect;
 
       // Subtle rotation for more dynamic feel + downward tilt to see text better
@@ -877,7 +877,7 @@ function Scene({
     if (camera) {
       // Define minimum Y position to stay above grass level
       const minY = 0.3;
-      
+
       if (width < 480) {
         if (isPortrait) {
           camera.position.set(0, Math.max(1.6, minY), 4.2);
@@ -1061,7 +1061,7 @@ function Scene({
               showContactPage,
               showTypes,
               showGallery,
-              timestamp: new Date().toISOString()
+              timestamp: new Date().toISOString(),
             });
             setUserInteracting(true);
           }}
@@ -1069,7 +1069,7 @@ function Scene({
             console.log('🎮 PresentationControls: User interaction ended!', {
               enabled: !hasOverlay,
               hasOverlay,
-              timestamp: new Date().toISOString()
+              timestamp: new Date().toISOString(),
             });
             // Reset after a delay to allow for smooth transition
             setTimeout(() => setUserInteracting(false), 100);

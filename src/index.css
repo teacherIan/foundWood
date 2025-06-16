@@ -315,7 +315,8 @@ div.loading-spinner,
     padding: 0.5rem 0;
     align-items: center;
     /* Better vertical alignment */
-    pointer-events: none; /* Allow 3D scene interaction through header area */
+    pointer-events: none;
+    /* Allow 3D scene interaction through header area */
 }
 
 .menu {
@@ -330,7 +331,8 @@ div.loading-spinner,
     cursor: pointer;
     overflow: visible;
     background-color: transparent;
-    pointer-events: auto; /* Re-enable pointer events for menu items */
+    pointer-events: auto;
+    /* Re-enable pointer events for menu items */
 }
 
 .menu-item {
