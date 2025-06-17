@@ -416,6 +416,13 @@ div.loading-spinner,
     z-index: 20000;
 }
 
+/* DESKTOP FIX: Lower z-index on desktop to show canvas behind gallery */
+@media (min-width: 1025px) {
+    .galleryContainer {
+        z-index: 2000 !important;
+    }
+}
+
 .mobileProductInfo {
     z-index: 20001;
 }

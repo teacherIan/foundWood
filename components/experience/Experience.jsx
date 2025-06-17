@@ -1070,7 +1070,7 @@ export default function App({
           left: 0,
           width: '100vw', // Use standard viewport units
           height: '100vh',
-          zIndex: hasOverlay ? 1 : 1000, // Simplified z-index logic
+          zIndex: hasOverlay ? 1000 : 1000, // DESKTOP FIX: Keep canvas visible behind gallery
           pointerEvents: hasOverlay ? 'none' : 'auto', // Disable pointer events when overlays are active
           touchAction: 'none', // Prevent default touch actions that might interfere
         }}

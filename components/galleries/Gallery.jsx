@@ -1278,7 +1278,7 @@ export default function Gallery({
         width: '100svw', // Modern viewport units with VW fallback in CSS
         height: '100svh', // Modern viewport units with VH fallback in CSS
         opacity: showGallery ? 1 : 0,
-        zIndex: showGallery ? 20000 : 0,
+        zIndex: showGallery ? 20000 : 0, // Use CSS media queries to control z-index
         /* Prevent pull-to-refresh on mobile devices */
         overscrollBehavior: 'none',
         WebkitOverscrollBehavior: 'none',

@@ -90,6 +90,36 @@
     touch-action: pan-x pan-y;
 }
 
+/* DESKTOP FIX: Allow canvas to remain visible behind gallery on larger screens */
+@media (min-width: 1025px) {
+    .galleryContainer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: transparent;
+        /* Make background transparent to show canvas */
+        backdrop-filter: blur(2px);
+        /* Add subtle blur effect */
+        -webkit-backdrop-filter: blur(2px);
+        padding-top: 8vh;
+        /* Create semi-transparent overlay for content readability */
+    }
+
+    .galleryContainer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(245, 245, 245, 0.85);
+        /* Semi-transparent white */
+        z-index: -1;
+    }
+}
+
 /* iPad (portrait and landscape) - pull gallery down a bit */
 @media (min-width: 768px) and (max-width: 1024px) {
     .galleryContainer {
