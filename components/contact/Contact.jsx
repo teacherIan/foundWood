@@ -4,8 +4,9 @@ import { FaFacebook } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import emailjs from '@emailjs/browser';
 import './form.css';
-import bg_image_long from '../../src/assets/poly-snapshot_long.JPG';
-import bg_image_cell_3 from '../../src/assets/poly-snapshot_3.JPG';
+// Use public directory for JPG assets to avoid import analysis issues
+const bg_image_long = '/poly-snapshot_long.JPG';
+const bg_image_cell_3 = '/poly-snapshot_3.JPG';
 // TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
 // import { isIOSSafari } from '../experience/WebGLCleanup.js';
 

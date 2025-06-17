@@ -4,11 +4,16 @@ import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // OPTIMIZED: Remove splat from assetsInclude since they're now served from public
-  assetsInclude: ['**/*.glb', '**/*.JPG', '**/*.gltf'],
+  // Include all image formats that are actually imported via ES6 modules
+  assetsInclude: ['**/*.glb', '**/*.gltf', '**/*.splat', '**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.PNG'],
   plugins: [react()],
   server: {
     host: true,
+    force: true, // Force dependency re-optimization
+    fs: {
+      strict: false,
+    },
+    cors: true,
   },
   build: {
     rollupOptions: {
@@ -50,5 +55,8 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+  },
+  optimizeDeps: {
+    force: true, // Force dep pre-bundling
   },
 });
