@@ -168,64 +168,55 @@ canvas:active {
 
 /* 🎭 ELEGANT LOADING ANIMATIONS - Polished & Refined */
 
-/* Entrance animations with sophisticated, gentle transitions */
+/* Entrance animations with optimized performance */
 @keyframes seamlessEntranceTitle {
     0% {
         opacity: 0;
-        transform: translate3d(0, 24px, 0) scale(0.94);
-        filter: blur(1px);
+        transform: translate3d(0, 16px, 0) scale(0.98);
     }
 
-    60% {
-        opacity: 0.8;
-        transform: translate3d(0, -2px, 0) scale(1.01);
-        filter: blur(0.3px);
+    70% {
+        opacity: 0.95;
+        transform: translate3d(0, -1px, 0) scale(1.003);
     }
 
     100% {
         opacity: 1;
         transform: translate3d(0, 0, 0) scale(1);
-        filter: blur(0px);
     }
 }
 
 @keyframes seamlessEntranceSubtitle {
     0% {
         opacity: 0;
-        transform: translate3d(-16px, 18px, 0) scale(0.96);
-        filter: blur(0.8px);
+        transform: translate3d(0, 14px, 0) scale(0.97);
     }
 
-    70% {
-        opacity: 0.9;
-        transform: translate3d(1px, -1px, 0) scale(1.005);
-        filter: blur(0.2px);
+    75% {
+        opacity: 0.95;
+        transform: translate3d(0, -1px, 0) scale(1.002);
     }
 
     100% {
         opacity: 1;
         transform: translate3d(0, 0, 0) scale(1);
-        filter: blur(0px);
     }
 }
 
 @keyframes seamlessEntranceTagline {
     0% {
         opacity: 0;
-        transform: translate3d(18px, 16px, 0) scale(0.97);
-        filter: blur(0.6px);
+        transform: translate3d(0, 12px, 0) scale(0.98);
     }
 
-    65% {
-        opacity: 0.85;
-        transform: translate3d(-1px, -1px, 0) scale(1.003);
-        filter: blur(0.1px);
+    70% {
+        opacity: 0.9;
+        transform: translate3d(0, -0.5px, 0) scale(1.001);
     }
 
     100% {
         opacity: 1;
         transform: translate3d(0, 0, 0) scale(1);
-        filter: blur(0px);
     }
 }
 
@@ -636,3 +627,25 @@ canvas:active {
 .camera-zoom {
     animation: enhancedCameraZoom var(--epic-duration, 1.2s) ease-in-out forwards;
 }
+
+/* Smooth transition states for seamless handoff between entrance and exit animations */
+.loading-element-hold {
+    /* This class ensures elements maintain their final entrance state smoothly */
+    opacity: 1 !important;
+    transform: translate3d(0, 0, 0) scale(1) !important;
+    transition: none !important;
+    animation-fill-mode: forwards !important;
+}
+
+.loading-element-entrance {
+    /* Initial state for entrance animations */
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.loading-element-exit {
+    /* Ensure exit animations start from the correct state */
+    animation-fill-mode: forwards;
+}
+
+/* Enhanced entrance animations with better final states */

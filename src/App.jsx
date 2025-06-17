@@ -103,10 +103,6 @@ const AnimatedLoadingSpinner = memo(() => {
   return (
     <div
       style={{
-        marginBottom: '30px',
-        opacity: 0,
-        animation:
-          'spinnerFadeIn 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards',
         position: 'relative',
         width: '80px',
         height: '80px',
@@ -463,33 +459,51 @@ function App() {
 
   // **EXIT ANIMATION STATE**: Track when the loading screen should exit
   const [isExiting, setIsExiting] = useState(false);
+  
+  // **ENTRANCE COMPLETION STATE**: Track when entrance animations complete for smooth handoff
+  const [entranceComplete, setEntranceComplete] = useState(false);
 
-  // **ABSOLUTE 4-SECOND TIMEOUT**: Enhanced for better animation timing
-  // This CANNOT be interrupted and WILL fire after exactly 4 seconds
+  // **OPTIMIZED TIMING**: Improved for seamless transition between entrance and exit
+  // Total timeline: entrance animations end at ~3.1s, brief hold, then exit at 3.5s
   const loadingTimeoutRef = useRef(null);
+  const entranceCompleteRef = useRef(null);
 
-  // Start the absolute timeout immediately on component mount
+  // Track entrance completion for smooth transition
+  useEffect(() => {
+    entranceCompleteRef.current = setTimeout(() => {
+      console.log('✅ ENTRANCE ANIMATIONS COMPLETE - Elements now in hold state');
+      setEntranceComplete(true);
+    }, 3200); // 3.2s - just after the last entrance animation completes (quote at 1.8s + 1.3s = 3.1s)
+
+    return () => {
+      if (entranceCompleteRef.current) {
+        clearTimeout(entranceCompleteRef.current);
+      }
+    };
+  }, []);
+
+  // Start the optimized timeout immediately on component mount
   useEffect(() => {
     console.log(
-      '🚨 ABSOLUTE 4-SECOND TIMEOUT STARTING NOW - Component just mounted!'
+      '🚨 OPTIMIZED LOADING SEQUENCE STARTING - Component just mounted!'
     );
 
     loadingTimeoutRef.current = setTimeout(() => {
       console.log(
-        '🚨 ABSOLUTE 4-SECOND TIMEOUT FIRED - STARTING POLISHED EXIT ANIMATIONS!'
+        '✨ STARTING SEAMLESS EXIT TRANSITION - Perfect timing after entrance completion!'
       );
 
-      // First trigger exit animations
+      // First trigger exit animations with better timing
       setIsExiting(true);
 
-      // Then complete loading after enhanced exit animation duration
+      // Then complete loading after exit animation duration
       setTimeout(() => {
         console.log(
-          '✨ POLISHED EXIT ANIMATIONS COMPLETE - DISMISSING LOADING SCREEN!'
+          '🎉 SEAMLESS EXIT ANIMATIONS COMPLETE - LOADING SCREEN DISMISSED!'
         );
         dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
-      }, 1200); // 1200ms for enhanced exit animations to complete
-    }, 4000); // 4 seconds ABSOLUTE - enhanced timing for polished experience
+      }, 1200); // 1200ms for exit animations to complete
+    }, 3500); // 3.5 seconds - optimized for seamless transition (entrance completes at ~3.1s)
 
     // Cleanup on unmount only
     return () => {
@@ -1098,14 +1112,17 @@ function App() {
         </div>
       </div>
 
-      {/* Show loading screen overlay when needed - enhanced animations */}
+      {/* Show loading screen overlay when needed - seamless transition timing */}
       {shouldShowLoading && (
         <div
           className="font-loading-screen"
           style={{
             opacity: 1,
+            transform: 'translate3d(0, 0, 0)', // Force hardware acceleration
+            willChange: isExiting ? 'opacity, transform' : 'auto',
+            backfaceVisibility: 'hidden', // Prevent flicker
             animation: isExiting
-              ? 'epicBackgroundExit 0.9s cubic-bezier(0.4, 0, 0.6, 1) 0.6s forwards'
+              ? 'epicBackgroundExit 0.9s cubic-bezier(0.4, 0, 0.6, 1) 0.7s forwards'
               : 'none',
           }}
         >
@@ -1123,7 +1140,7 @@ function App() {
                 margin: '0 auto',
               }}
             >
-              {/* Title section with fixed heights */}
+              {/* Title section with fixed heights and optimized container */}
               <div
                 style={{
                   textAlign: 'center',
@@ -1132,6 +1149,8 @@ function App() {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
+                  transform: 'translate3d(0, 0, 0)', // Force hardware acceleration
+                  willChange: 'auto', // Optimize for changes
                 }}
               >
                 <h2
@@ -1142,10 +1161,15 @@ function App() {
                     color: '#77481c',
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
-                    opacity: 0,
+                    // Smooth state transitions: entrance -> hold -> exit
+                    opacity: isExiting ? undefined : (entranceComplete ? 1 : 0),
+                    transform: isExiting ? undefined : (entranceComplete ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 16px, 0) scale(0.98)'),
+                    willChange: 'transform, opacity',
+                    backfaceVisibility: 'hidden',
+                    transition: entranceComplete && !isExiting ? 'none' : undefined,
                     animation: isExiting
                       ? 'epicFadeOutUp 0.7s cubic-bezier(0.4, 0, 0.6, 1) forwards'
-                      : 'seamlessEntranceTitle 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards',
+                      : 'seamlessEntranceTitle 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards',
                   }}
                 >
                   Welcome to Doug's Found Wood
@@ -1157,10 +1181,15 @@ function App() {
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     marginBottom: '8px',
-                    opacity: 0,
+                    // Smooth state transitions: entrance -> hold -> exit
+                    opacity: isExiting ? undefined : (entranceComplete ? 1 : 0),
+                    transform: isExiting ? undefined : (entranceComplete ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 14px, 0) scale(0.97)'),
+                    willChange: 'transform, opacity',
+                    backfaceVisibility: 'hidden',
+                    transition: entranceComplete && !isExiting ? 'none' : undefined,
                     animation: isExiting
                       ? 'epicFadeOutLeft 0.7s cubic-bezier(0.4, 0, 0.6, 1) 0.1s forwards'
-                      : 'seamlessEntranceSubtitle 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.7s forwards',
+                      : 'seamlessEntranceSubtitle 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards',
                   }}
                 >
                   Preparing your handcrafted journey...
@@ -1172,17 +1201,22 @@ function App() {
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     fontStyle: 'italic',
-                    opacity: 0,
+                    // Smooth state transitions: entrance -> hold -> exit
+                    opacity: isExiting ? undefined : (entranceComplete ? 1 : 0),
+                    transform: isExiting ? undefined : (entranceComplete ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 12px, 0) scale(0.98)'),
+                    willChange: 'transform, opacity',
+                    backfaceVisibility: 'hidden',
+                    transition: entranceComplete && !isExiting ? 'none' : undefined,
                     animation: isExiting
                       ? 'epicFadeOutRight 0.7s cubic-bezier(0.4, 0, 0.6, 1) 0.2s forwards'
-                      : 'seamlessEntranceTagline 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.0s forwards',
+                      : 'seamlessEntranceTagline 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.3s forwards',
                   }}
                 >
                   Each piece tells a story
                 </div>
               </div>
 
-              {/* Spinner with fixed height - enhanced animation */}
+              {/* Spinner with fixed height - seamless transition */}
               <div
                 style={{
                   minHeight: '100px',
@@ -1193,10 +1227,12 @@ function App() {
                   padding: '10px',
                   position: 'relative',
                   zIndex: 10,
-                  opacity: 0,
+                  // Smooth state transitions: entrance -> hold -> exit
+                  opacity: isExiting ? undefined : (entranceComplete ? 1 : 0),
+                  transition: entranceComplete && !isExiting ? 'none' : undefined,
                   animation: isExiting
                     ? 'epicSpinnerExit 0.8s cubic-bezier(0.4, 0, 0.6, 1) 0.3s forwards'
-                    : 'seamlessEntranceSpinner 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.3s forwards',
+                    : 'seamlessEntranceSpinner 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.2s forwards',
                 }}
               >
                 <AnimatedLoadingSpinner />
@@ -1220,17 +1256,19 @@ function App() {
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     fontWeight: '500',
-                    opacity: 0,
+                    // Smooth state transitions: entrance -> hold -> exit
+                    opacity: isExiting ? undefined : (entranceComplete ? 1 : 0),
+                    transition: entranceComplete && !isExiting ? 'none' : undefined,
                     animation: isExiting
                       ? 'epicFadeOutDown 0.7s cubic-bezier(0.4, 0, 0.6, 1) 0.4s forwards'
-                      : 'seamlessEntranceStatus 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.9s forwards',
+                      : 'seamlessEntranceStatus 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.5s forwards',
                   }}
                 >
                   🪵 Crafting your experience... 🪵
                 </div>
               </div>
 
-              {/* Quote section with fixed height - enhanced animation */}
+              {/* Quote section with fixed height - seamless transition */}
               <div
                 style={{
                   minHeight: '80px',
@@ -1238,15 +1276,34 @@ function App() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   width: '100%',
-                  opacity: 0,
+                  // Smooth state transitions: entrance -> hold -> exit
+                  opacity: isExiting ? undefined : (entranceComplete ? 1 : 0),
+                  transition: entranceComplete && !isExiting ? 'none' : undefined,
                   animation: isExiting
                     ? 'epicFadeOutScale 0.8s cubic-bezier(0.4, 0, 0.6, 1) 0.5s forwards'
-                    : 'seamlessEntranceQuote 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2.5s forwards',
+                    : 'seamlessEntranceQuote 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.8s forwards',
                 }}
               >
-                <AnimatedLoadingSaying opacity={sayingOpacity} delay={0}>
+                <div
+                  style={{
+                    fontStyle: 'italic',
+                    fontSize: '1.2rem',
+                    color: '#8b5a2b',
+                    maxWidth: '380px',
+                    textAlign: 'center',
+                    lineHeight: '1.5',
+                    fontWeight: '500',
+                    margin: '0 auto',
+                    padding: '0 20px',
+                    fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                    letterSpacing: '0.3px',
+                    minHeight: '2.4rem',
+                    opacity: sayingOpacity,
+                    transition: 'opacity 0.4s cubic-bezier(0.4, 0, 0.6, 1)',
+                  }}
+                >
                   {activeSayings[activeSayingIndex]}
-                </AnimatedLoadingSaying>
+                </div>
               </div>
             </div>
           </AnimatedLoadingContainer>
