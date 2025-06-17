@@ -17,6 +17,10 @@
     margin: 0;
     box-sizing: border-box;
     font-family: var(--mainFont);
+    /* Optimize all elements for smooth transitions */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 html {
@@ -60,6 +64,10 @@ canvas {
     cursor: grab !important;
     /* Remove z-index override to allow inline styles to work */
     /* Remove conflicting positioning - let inline styles take precedence */
+    /* Optimize canvas for smooth animations */
+    transform: translateZ(0);
+    will-change: filter;
+    backface-visibility: hidden;
 }
 
 canvas:active {

@@ -1,4 +1,4 @@
-/* Modern Contact Form Styles - Glassmorphism Design */
+/* Modern Contact Form Styles - Optimized for Performance */
 
 .contactContainer {
     z-index: 30000;
@@ -7,29 +7,27 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    will-change: transform, opacity, backdrop-filter;
+    will-change: transform, opacity;
     padding: 20px;
-    /* Glassmorphism effect that shows 3D scene through blur */
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    /* Simplified background for better performance */
+    background: rgba(245, 245, 245, 0.95);
     /* Center the form container */
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Hardware acceleration */
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 .formContainer {
-    /* Modern glassmorphism card with consistent background */
-    background: rgba(245, 245, 245, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(245, 245, 245, 0.2);
+    /* Optimized glassmorphism card */
+    background: rgba(245, 245, 245, 0.98);
+    border: 1px solid rgba(119, 72, 28, 0.15);
     border-radius: 20px;
     box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.15),
-        0 0 100px rgba(119, 72, 28, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        0 10px 30px rgba(0, 0, 0, 0.1),
+        0 0 50px rgba(119, 72, 28, 0.05);
 
     /* Card layout */
     display: flex;
@@ -44,11 +42,15 @@
     overflow-y: auto;
     box-sizing: border-box;
 
-    /* Transform origin for smooth animations */
+    /* Optimized for smooth animations */
     transform-origin: center;
-    will-change: transform;
+    will-change: transform, opacity;
     position: relative;
     /* For absolute positioning of border bar */
+    
+    /* Hardware acceleration */
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 .formHeader {
@@ -84,7 +86,7 @@
     border: none;
     border-radius: 12px;
     color: white;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease-out;
     margin-top: 1.5rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -93,6 +95,10 @@
         0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
+    /* Performance optimizations */
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 .btn::before {
@@ -159,10 +165,14 @@
     background: rgba(245, 245, 245, 0.9);
     color: #333;
     outline: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease-out;
     box-sizing: border-box;
     resize: vertical;
     min-height: 50px;
+    /* Performance optimizations */
+    will-change: border-color, box-shadow, transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 .form-control textarea {
@@ -178,7 +188,7 @@
     box-shadow:
         0 0 0 3px rgba(119, 72, 28, 0.1),
         0 4px 12px rgba(119, 72, 28, 0.15);
-    transform: translateY(-2px);
+    transform: translateY(-1px) translateZ(0);
     background: rgba(245, 245, 245, 1);
 }
 

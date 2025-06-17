@@ -27,13 +27,12 @@ export default function Contact({
   const messageInputRef = useRef(null);
   const messageLabelRef = useRef(null);
 
-  const configAnimation = { mass: 3, tension: 40, friction: 20 };
+  const configAnimation = { mass: 1.2, tension: 100, friction: 28 };
 
   const [springs, api] = useSpring(() => ({
     from: {
       opacity: 0,
-      transform: 'scale(0.8) translateY(30px)',
-      backdropFilter: 'blur(0px)',
+      transform: 'scale(0.96) translateY(15px)',
     },
     config: configAnimation,
   }));
@@ -43,22 +42,21 @@ export default function Contact({
       api.start({
         from: {
           opacity: 0,
-          transform: 'scale(0.8) translateY(30px)',
-          backdropFilter: 'blur(0px)',
+          transform: 'scale(0.96) translateY(15px)',
         },
         to: {
           opacity: 1,
           transform: 'scale(1) translateY(0px)',
-          backdropFilter: 'blur(10px)',
         },
+        delay: 50, // Small delay for smoother entrance
       });
     } else {
       api.start({
         to: {
           opacity: 0,
-          transform: 'scale(0.8) translateY(30px)',
-          backdropFilter: 'blur(0px)',
+          transform: 'scale(0.96) translateY(15px)',
         },
+        immediate: false, // Ensure smooth exit
       });
     }
   }, [showContactPage, api]);

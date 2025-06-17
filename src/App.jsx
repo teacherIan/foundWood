@@ -1051,22 +1051,24 @@ function App() {
                 state.showContactPage || state.showTypes ? 'none' : 'auto',
               filter:
                 state.showContactPage || state.showTypes
-                  ? 'blur(20px)'
+                  ? 'blur(8px)'
                   : 'none',
               WebkitFilter:
                 state.showContactPage || state.showTypes
-                  ? 'blur(20px)'
+                  ? 'blur(8px)'
                   : 'none', // Webkit prefix for Safari and older browsers
               MozFilter:
                 state.showContactPage || state.showTypes
-                  ? 'blur(20px)'
+                  ? 'blur(8px)'
                   : 'none', // Mozilla prefix
               msFilter:
                 state.showContactPage || state.showTypes
-                  ? 'blur(20px)'
+                  ? 'blur(8px)'
                   : 'none', // IE prefix
               transition:
-                'filter 0.3s ease-in-out, -webkit-filter 0.3s ease-in-out, -moz-filter 0.3s ease-in-out',
+                'filter 0.2s ease-out, -webkit-filter 0.2s ease-out, -moz-filter 0.2s ease-out',
+              willChange: state.showContactPage || state.showTypes ? 'filter' : 'auto',
+              transform: 'translateZ(0)', // Force hardware acceleration
             }}
           >
             {/* Always mount Canvas with splat URL directly */}
