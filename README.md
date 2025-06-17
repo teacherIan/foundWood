@@ -28,17 +28,20 @@ A beautiful 3D interactive showcase for handcrafted wooden furniture, built with
 ### Installation
 
 1. Clone the repository
+
 ```bash
 git clone <repository-url>
 cd foundWood
 ```
 
 2. Install dependencies
+
 ```bash
 npm install
 ```
 
 3. Start the development server
+
 ```bash
 npm run dev
 ```

@@ -47,7 +47,7 @@
     will-change: transform, opacity;
     position: relative;
     /* For absolute positioning of border bar */
-    
+
     /* Hardware acceleration */
     transform: translateZ(0);
     backface-visibility: hidden;

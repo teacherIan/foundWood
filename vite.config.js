@@ -5,7 +5,15 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   // Include all image formats that are actually imported via ES6 modules
-  assetsInclude: ['**/*.glb', '**/*.gltf', '**/*.splat', '**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.PNG'],
+  assetsInclude: [
+    '**/*.glb',
+    '**/*.gltf',
+    '**/*.splat',
+    '**/*.jpg',
+    '**/*.jpeg',
+    '**/*.png',
+    '**/*.PNG',
+  ],
   plugins: [react()],
   server: {
     host: true,
