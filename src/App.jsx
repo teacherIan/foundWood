@@ -288,28 +288,8 @@ const AnimatedLoadingSaying = memo(({ children, opacity, delay = 0 }) => {
   );
 });
 
-// Collection of warm, welcoming messages for the loading screen
-const loadingSayings = [
-  'Like trees, the finest furniture grows with time',
-  'Crafting something beautiful takes time',
-  "Nature doesn't hurry, yet everything is accomplished",
-  'The best wood comes from the oldest trees',
-  'In every branch lies a future masterpiece',
-  'Every masterpiece begins with a single cut',
-  'Wood remembers the seasons in its rings',
-  'From forest floor to fine furniture',
-  'The forest teaches us to grow slowly and strong',
-  'Handcrafted with love and time',
-  'Each piece of wood tells its own story',
-  'True craftsmanship cannot be rushed',
-  'From fallen trees, beautiful furniture rises',
-  "The grain reveals nature's hidden patterns",
-  'Welcome to a world where wood comes alive',
-  'Discovering beauty in every knot and grain',
-  'Where sustainability meets artistry',
-  "Creating tomorrow from yesterday's trees",
-  'Every piece has found its purpose',
-];
+// Perfect single saying that captures Doug's Found Wood personality
+const loadingSaying = 'Every piece has found its purpose';
 
 // Special sayings for when retries are happening
 const retrySayings = [
@@ -450,13 +430,6 @@ function App() {
   // Just provide the splat URL directly - no pre-validation needed
   const splatUrl = '/assets/experience/new_fixed_PLY.splat';
 
-  // State for rotating inspirational sayings during loading
-  // Start with a random saying each time the page loads
-  const [currentSayingIndex, setCurrentSayingIndex] = useState(() =>
-    Math.floor(Math.random() * loadingSayings.length)
-  );
-  const [sayingOpacity, setSayingOpacity] = useState(1);
-
   // **EXIT ANIMATION STATE**: Track when the loading screen should exit
   const [isExiting, setIsExiting] = useState(false);
 
@@ -515,10 +488,7 @@ function App() {
     };
   }, []); // Empty dependency array - run ONCE on mount only
 
-  // Simplified sayings - no retry logic needed
-  const activeSayings = loadingSayings;
-  const activeSayingIndex = currentSayingIndex;
-  const setActiveSayingIndex = setCurrentSayingIndex;
+  // Single saying - no rotation logic needed
 
   // Initialize image preloader to start loading images at startup
   // TEMPORARILY DISABLED: Image preloading to reduce memory pressure
@@ -776,25 +746,7 @@ function App() {
     shouldShowLoading
   );
 
-  // Rotate inspirational sayings during loading
-  useEffect(() => {
-    if (!shouldShowLoading) return; // Only rotate during loading
-
-    const interval = setInterval(() => {
-      // Fade out current saying
-      setSayingOpacity(0);
-
-      // After fade out, change saying and fade in
-      setTimeout(() => {
-        setActiveSayingIndex(
-          (prevIndex) => (prevIndex + 1) % activeSayings.length
-        );
-        setSayingOpacity(1);
-      }, 300); // Half second for fade transition
-    }, 4000); // Slightly longer interval to enjoy each saying
-
-    return () => clearInterval(interval);
-  }, [shouldShowLoading, activeSayings.length, setActiveSayingIndex]);
+  // Single saying - no rotation needed
 
   // TEMPORARILY DISABLED: iOS Safari specific global error handling
   /*
@@ -1319,11 +1271,9 @@ function App() {
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     letterSpacing: '0.3px',
                     minHeight: '2.4rem',
-                    opacity: sayingOpacity,
-                    transition: 'opacity 0.4s cubic-bezier(0.4, 0, 0.6, 1)',
                   }}
                 >
-                  {activeSayings[activeSayingIndex]}
+                  {loadingSaying}
                 </div>
               </div>
             </div>
