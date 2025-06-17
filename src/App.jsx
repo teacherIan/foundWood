@@ -288,8 +288,8 @@ const AnimatedLoadingSaying = memo(({ children, opacity, delay = 0 }) => {
   );
 });
 
-// Perfect single saying that captures Doug's Found Wood personality
-const loadingSaying = 'Every piece has found its purpose';
+// Perfect saying that captures Doug's Found Wood personality and Maine craftsmanship
+const loadingSaying = 'Always unique, made in Maine';
 
 // Special sayings for when retries are happening
 const retrySayings = [
@@ -298,6 +298,7 @@ const retrySayings = [
   'Good things come to those who wait',
   'Every craftsman knows: the second attempt often succeeds',
   'Like sanding wood smooth, some things take multiple passes',
+  'Each piece from Maine tells its own story',
 ];
 
 // State reducer for better state management
@@ -1046,9 +1047,18 @@ function App() {
           {/* Simplified Canvas rendering - no validation needed */}
           <div
             style={{
-              opacity: state.showContactPage ? 0.3 : 1, // Keep scene visible but dimmed
-              pointerEvents: state.showContactPage ? 'none' : 'auto',
-              transition: 'opacity 0.3s ease-in-out',
+              pointerEvents:
+                state.showContactPage || state.showTypes ? 'none' : 'auto',
+              filter:
+                state.showContactPage || state.showTypes ? 'blur(2px)' : 'none',
+              WebkitFilter:
+                state.showContactPage || state.showTypes ? 'blur(2px)' : 'none', // Webkit prefix for Safari and older browsers
+              MozFilter:
+                state.showContactPage || state.showTypes ? 'blur(2px)' : 'none', // Mozilla prefix
+              msFilter:
+                state.showContactPage || state.showTypes ? 'blur(2px)' : 'none', // IE prefix
+              transition:
+                'filter 0.3s ease-in-out, -webkit-filter 0.3s ease-in-out, -moz-filter 0.3s ease-in-out',
             }}
           >
             {/* Always mount Canvas with splat URL directly */}

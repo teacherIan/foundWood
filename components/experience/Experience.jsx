@@ -34,228 +34,6 @@ import './experienceStyles.css';
  * providing automatic recovery from critical loading failures.
  */
 import driftwood from '../../src/assets/fonts/DriftWood-z8W4.ttf';
-
-// Utility function to detect splat parsing errors
-const isSplatParsingError = (errorMessage, context = {}) => {
-  const message = errorMessage.toLowerCase();
-
-  // Common splat parsing error patterns
-  const parseErrors = [
-    'failed to parse file',
-    'parse file',
-    'parsing error',
-    'failed to load splat',
-    'splat loading failed',
-    'invalid splat format',
-    'corrupted splat file',
-    'splat decode error',
-    'splat parse failed',
-  ];
-
-  // Check if error message contains any parsing error patterns
-  const hasParseError = parseErrors.some((pattern) =>
-    message.includes(pattern)
-  );
-
-  // Additional checks for splat-related errors
-  const isSplatRelated =
-    message.includes('splat') ||
-    context.filename?.includes('Splat.js') ||
-    context.filename?.includes('splat') ||
-    context.stack?.includes('Splat');
-
-  return (
-    hasParseError ||
-    (isSplatRelated &&
-      (message.includes('network error') ||
-        message.includes('loading failed') ||
-        message.includes('decode') ||
-        message.includes('buffer') ||
-        message.includes('format')))
-  );
-};
-const initiateSplatReload = (errorDetails, initialLoadComplete = false) => {
-  if (window.splatReloadInProgress) return;
-
-  // PRODUCTION SAFETY: Never reload page if we've made it past the initial loading screen
-  // This ensures users never see reload messages once they're using the app
-  if (initialLoadComplete) {
-    console.warn(
-      '🚫 Splat error detected after initial load complete - NOT reloading page to maintain user experience'
-    );
-    console.log('📝 Error logged for debugging:', {
-      ...errorDetails,
-      timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent,
-      url: window.location.href,
-      note: 'PRODUCTION SAFE: No page reload attempted after initial load complete',
-    });
-    // Just log the error but don't reload - user experience is more important
-    return;
-  }
-
-  // ADDITIONAL SAFETY: Check for explicit reload disable (useful for production environments)
-  if (window.DISABLE_SPLAT_RELOAD === true) {
-    console.warn(
-      '🚫 Splat reload disabled by DISABLE_SPLAT_RELOAD flag - logging error only'
-    );
-    console.log('📝 Error logged for debugging:', {
-      ...errorDetails,
-      timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent,
-      url: window.location.href,
-      note: 'RELOAD DISABLED: DISABLE_SPLAT_RELOAD flag set to true',
-    });
-    return;
-  }
-
-  // DEVELOPMENT/INITIAL LOAD ONLY: Only allow reload during critical loading phase
-  // This ensures smooth initial loading experience while protecting ongoing user sessions
-  console.warn(
-    '⚠️ INITIAL LOAD PHASE: Splat error during loading - reload allowed for recovery'
-  );
-
-  window.splatReloadInProgress = true;
-
-  console.error(
-    '🚨 Critical splat parsing error during initial load - initiating reload'
-  );
-  console.log('📄 Error details:', {
-    ...errorDetails,
-    timestamp: new Date().toISOString(),
-    userAgent: navigator.userAgent,
-    url: window.location.href,
-    viewport: {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      devicePixelRatio: window.devicePixelRatio,
-    },
-    connection: navigator.connection
-      ? {
-          effectiveType: navigator.connection.effectiveType,
-          downlink: navigator.connection.downlink,
-          rtt: navigator.connection.rtt,
-        }
-      : 'unknown',
-    memory: navigator.deviceMemory || 'unknown',
-  });
-
-  // Send error to console for production debugging
-  console.group('🚨 SPLAT RELOAD TRIGGER (LOADING SCENE ONLY)');
-  console.error('Error Source:', errorDetails.source);
-  console.error('Error Message:', errorDetails.message);
-  console.error('Full Error:', errorDetails);
-  console.groupEnd();
-
-  // Create a user-friendly reload overlay
-  const reloadOverlay = document.createElement('div');
-  reloadOverlay.id = 'splat-reload-overlay';
-  reloadOverlay.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 999999999;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-    color: #77481c;
-    text-align: center;
-    padding: 20px;
-  `;
-
-  reloadOverlay.innerHTML = `
-    <div style="margin-bottom: 20px;">
-      <div style="
-        border: 5px solid rgba(119, 72, 28, 0.2);
-        border-radius: 50%;
-        border-top: 5px solid #77481c;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-        margin: 0 auto 20px auto;
-      "></div>
-      <h2 style="margin: 0 0 10px 0; font-size: 1.5rem; font-weight: 500;">
-        Refreshing 3D Scene
-      </h2>
-      <p style="margin: 0; font-size: 1.1rem; color: #8b5a2b; max-width: 400px;">
-        The 3D scene encountered a loading issue. We're refreshing the page to fix this automatically.
-      </p>
-    </div>
-  `;
-
-  // Add the spin animation
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  `;
-  document.head.appendChild(style);
-
-  document.body.appendChild(reloadOverlay);
-
-  // Reload after a brief delay
-  setTimeout(() => {
-    console.log(
-      '🔄 Reloading page due to splat parsing failure during initial load...'
-    );
-    window.location.reload();
-  }, 2000);
-};
-class SplatErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error('❌ SplatErrorBoundary caught an error:', error, errorInfo);
-
-    // Check if this is a splat parsing error
-    const errorMessage = error?.message || error?.toString() || '';
-    const isParseFileError = isSplatParsingError(errorMessage, {
-      stack: error?.stack,
-      componentStack: errorInfo?.componentStack,
-    });
-
-    if (isParseFileError) {
-      initiateSplatReload(
-        {
-          source: 'React Error Boundary',
-          message: errorMessage,
-          stack: error?.stack,
-          componentStack: errorInfo?.componentStack,
-        },
-        this.props.initialLoadComplete
-      );
-    }
-  }
-
-  render() {
-    if (this.state.hasError) {
-      // Fallback UI
-      return (
-        <mesh>
-          <boxGeometry args={[2, 2, 2]} />
-          <meshBasicMaterial color="#77481c" transparent opacity={0.3} />
-        </mesh>
-      );
-    }
-
-    return this.props.children;
-  }
-}
 // TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
 /*
 import {
@@ -377,8 +155,7 @@ const SplatWithErrorHandling = memo(
     chunkSize,
     splatSize,
     onSplatLoaded,
-    initialLoadComplete,
-    validatedSplatUrl, // NEW: Use pre-validated splat URL
+    validatedSplatUrl,
     ...props
   }) => {
     // Use the pre-validated splat URL instead of trying multiple sources
@@ -395,14 +172,10 @@ const SplatWithErrorHandling = memo(
 
     const handleError = useCallback(
       (error) => {
-        console.error(
-          '❌ Unexpected splat loading error after validation:',
-          error
-        );
-        // Since we pre-validated, this should be very rare
-        // Just log the error - no complex fallback needed
+        console.error('❌ Splat loading error:', error);
+        // Simply log the error without any reload logic
       },
-      [splatSource, initialLoadComplete]
+      [splatSource]
     );
 
     try {
@@ -550,65 +323,17 @@ function Scene({
     }
   }, [scene]);
 
-  // Enhanced error boundary for scene rendering with splat reload detection
+  // Enhanced error boundary for scene rendering - simplified without splat reload detection
   useEffect(() => {
     const handleError = (event) => {
       console.error('❌ Scene error caught:', event.error);
-
-      // Check for splat parsing errors that require page reload
-      const errorMessage =
-        event.error?.message || event.error?.toString() || '';
-      const isParseFileError = isSplatParsingError(errorMessage, {
-        filename: event.filename,
-        stack: event.error?.stack,
-      });
-
-      if (isParseFileError) {
-        console.error(
-          '🚨 Critical splat parsing error detected in global error handler'
-        );
-
-        initiateSplatReload(
-          {
-            source: 'Global Error Handler',
-            message: errorMessage,
-            filename: event.filename,
-            lineno: event.lineno,
-            colno: event.colno,
-            error: event.error,
-          },
-          initialLoadComplete
-        );
-
-        return;
-      }
-
-      // Normal error handling
+      // Simply log the error without any reload logic
       setSceneError(event.error);
     };
 
     const handleUnhandledRejection = (event) => {
       console.error('❌ Unhandled promise rejection caught:', event.reason);
-
-      // Check for splat parsing errors in promise rejections
-      const errorMessage =
-        event.reason?.message || event.reason?.toString() || '';
-      const isParseFileError = isSplatParsingError(errorMessage, {
-        stack: event.reason?.stack,
-      });
-
-      if (isParseFileError) {
-        console.error('🚨 Critical splat parsing error in promise rejection');
-
-        initiateSplatReload(
-          {
-            source: 'Promise Rejection',
-            message: errorMessage,
-            reason: event.reason,
-          },
-          initialLoadComplete
-        );
-      }
+      // Simply log the error without any reload logic
     };
 
     window.addEventListener('error', handleError);
@@ -1114,21 +839,18 @@ function Scene({
                 </>
               )}
 
-              {/* Splat component with alphaTest animation wrapped in error boundary */}
+              {/* Splat component with alphaTest animation - simplified without error boundary */}
               <mesh
                 position={deviceConfig.splatConfig.position}
                 scale={deviceConfig.splatConfig.scale}
               >
-                <SplatErrorBoundary initialLoadComplete={initialLoadComplete}>
-                  <SplatWithErrorHandling
-                    alphaTest={manualAlphaTest}
-                    chunkSize={0.01}
-                    splatSize={deviceConfig.splatConfig.size}
-                    onSplatLoaded={onSplatLoaded}
-                    initialLoadComplete={initialLoadComplete}
-                    validatedSplatUrl={validatedSplatUrl}
-                  />
-                </SplatErrorBoundary>
+                <SplatWithErrorHandling
+                  alphaTest={manualAlphaTest}
+                  chunkSize={0.01}
+                  splatSize={deviceConfig.splatConfig.size}
+                  onSplatLoaded={onSplatLoaded}
+                  validatedSplatUrl={validatedSplatUrl}
+                />
               </mesh>
             </>
           }
