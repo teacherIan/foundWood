@@ -459,7 +459,7 @@ function App() {
 
   // **EXIT ANIMATION STATE**: Track when the loading screen should exit
   const [isExiting, setIsExiting] = useState(false);
-  
+
   // **ENTRANCE COMPLETION STATE**: Track when entrance animations complete for smooth handoff
   const [entranceComplete, setEntranceComplete] = useState(false);
 
@@ -471,7 +471,9 @@ function App() {
   // Track entrance completion for smooth transition
   useEffect(() => {
     entranceCompleteRef.current = setTimeout(() => {
-      console.log('✅ ENTRANCE ANIMATIONS COMPLETE - Elements now in hold state');
+      console.log(
+        '✅ ENTRANCE ANIMATIONS COMPLETE - Elements now in hold state'
+      );
       setEntranceComplete(true);
     }, 3200); // 3.2s - just after the last entrance animation completes (quote at 1.8s + 1.3s = 3.1s)
 
@@ -1162,11 +1164,16 @@ function App() {
                     fontFamily:
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     // Smooth state transitions: entrance -> hold -> exit
-                    opacity: isExiting ? undefined : (entranceComplete ? 1 : 0),
-                    transform: isExiting ? undefined : (entranceComplete ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 16px, 0) scale(0.98)'),
+                    opacity: isExiting ? undefined : entranceComplete ? 1 : 0,
+                    transform: isExiting
+                      ? undefined
+                      : entranceComplete
+                      ? 'translate3d(0, 0, 0) scale(1)'
+                      : 'translate3d(0, 16px, 0) scale(0.98)',
                     willChange: 'transform, opacity',
                     backfaceVisibility: 'hidden',
-                    transition: entranceComplete && !isExiting ? 'none' : undefined,
+                    transition:
+                      entranceComplete && !isExiting ? 'none' : undefined,
                     animation: isExiting
                       ? 'epicFadeOutUp 0.7s cubic-bezier(0.4, 0, 0.6, 1) forwards'
                       : 'seamlessEntranceTitle 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards',
@@ -1182,11 +1189,16 @@ function App() {
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     marginBottom: '8px',
                     // Smooth state transitions: entrance -> hold -> exit
-                    opacity: isExiting ? undefined : (entranceComplete ? 1 : 0),
-                    transform: isExiting ? undefined : (entranceComplete ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 14px, 0) scale(0.97)'),
+                    opacity: isExiting ? undefined : entranceComplete ? 1 : 0,
+                    transform: isExiting
+                      ? undefined
+                      : entranceComplete
+                      ? 'translate3d(0, 0, 0) scale(1)'
+                      : 'translate3d(0, 14px, 0) scale(0.97)',
                     willChange: 'transform, opacity',
                     backfaceVisibility: 'hidden',
-                    transition: entranceComplete && !isExiting ? 'none' : undefined,
+                    transition:
+                      entranceComplete && !isExiting ? 'none' : undefined,
                     animation: isExiting
                       ? 'epicFadeOutLeft 0.7s cubic-bezier(0.4, 0, 0.6, 1) 0.1s forwards'
                       : 'seamlessEntranceSubtitle 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards',
@@ -1202,11 +1214,16 @@ function App() {
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     fontStyle: 'italic',
                     // Smooth state transitions: entrance -> hold -> exit
-                    opacity: isExiting ? undefined : (entranceComplete ? 1 : 0),
-                    transform: isExiting ? undefined : (entranceComplete ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 12px, 0) scale(0.98)'),
+                    opacity: isExiting ? undefined : entranceComplete ? 1 : 0,
+                    transform: isExiting
+                      ? undefined
+                      : entranceComplete
+                      ? 'translate3d(0, 0, 0) scale(1)'
+                      : 'translate3d(0, 12px, 0) scale(0.98)',
                     willChange: 'transform, opacity',
                     backfaceVisibility: 'hidden',
-                    transition: entranceComplete && !isExiting ? 'none' : undefined,
+                    transition:
+                      entranceComplete && !isExiting ? 'none' : undefined,
                     animation: isExiting
                       ? 'epicFadeOutRight 0.7s cubic-bezier(0.4, 0, 0.6, 1) 0.2s forwards'
                       : 'seamlessEntranceTagline 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.3s forwards',
@@ -1228,8 +1245,9 @@ function App() {
                   position: 'relative',
                   zIndex: 10,
                   // Smooth state transitions: entrance -> hold -> exit
-                  opacity: isExiting ? undefined : (entranceComplete ? 1 : 0),
-                  transition: entranceComplete && !isExiting ? 'none' : undefined,
+                  opacity: isExiting ? undefined : entranceComplete ? 1 : 0,
+                  transition:
+                    entranceComplete && !isExiting ? 'none' : undefined,
                   animation: isExiting
                     ? 'epicSpinnerExit 0.8s cubic-bezier(0.4, 0, 0.6, 1) 0.3s forwards'
                     : 'seamlessEntranceSpinner 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.2s forwards',
@@ -1257,8 +1275,9 @@ function App() {
                       '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     fontWeight: '500',
                     // Smooth state transitions: entrance -> hold -> exit
-                    opacity: isExiting ? undefined : (entranceComplete ? 1 : 0),
-                    transition: entranceComplete && !isExiting ? 'none' : undefined,
+                    opacity: isExiting ? undefined : entranceComplete ? 1 : 0,
+                    transition:
+                      entranceComplete && !isExiting ? 'none' : undefined,
                     animation: isExiting
                       ? 'epicFadeOutDown 0.7s cubic-bezier(0.4, 0, 0.6, 1) 0.4s forwards'
                       : 'seamlessEntranceStatus 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.5s forwards',
@@ -1277,8 +1296,9 @@ function App() {
                   justifyContent: 'center',
                   width: '100%',
                   // Smooth state transitions: entrance -> hold -> exit
-                  opacity: isExiting ? undefined : (entranceComplete ? 1 : 0),
-                  transition: entranceComplete && !isExiting ? 'none' : undefined,
+                  opacity: isExiting ? undefined : entranceComplete ? 1 : 0,
+                  transition:
+                    entranceComplete && !isExiting ? 'none' : undefined,
                   animation: isExiting
                     ? 'epicFadeOutScale 0.8s cubic-bezier(0.4, 0, 0.6, 1) 0.5s forwards'
                     : 'seamlessEntranceQuote 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.8s forwards',
@@ -1295,7 +1315,8 @@ function App() {
                     fontWeight: '500',
                     margin: '0 auto',
                     padding: '0 20px',
-                    fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+                    fontFamily:
+                      '"CustomFont", "Poppins", "Lobster Two", sans-serif',
                     letterSpacing: '0.3px',
                     minHeight: '2.4rem',
                     opacity: sayingOpacity,
