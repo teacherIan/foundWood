@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +13,7 @@
                 font-family: Arial, sans-serif;
                 background: #f0f0f0;
             }
-            
+
             .test-canvas {
                 position: fixed;
                 top: 0;
@@ -28,7 +29,7 @@
                 font-size: 2rem;
                 text-align: center;
             }
-            
+
             .test-header {
                 position: fixed;
                 top: 0;
@@ -44,7 +45,7 @@
                 border-bottom: 1px solid rgba(119, 69, 19, 0.1);
                 pointer-events: none;
             }
-            
+
             .test-menu {
                 pointer-events: auto;
                 z-index: 10001;
@@ -53,7 +54,7 @@
                 justify-content: space-around;
                 align-items: center;
             }
-            
+
             .test-menu-item {
                 pointer-events: auto;
                 z-index: 10002;
@@ -71,7 +72,7 @@
                 align-items: center;
                 justify-content: center;
             }
-            
+
             .test-overlay {
                 position: fixed;
                 top: 20vh;
@@ -88,7 +89,7 @@
                 border-radius: 10px;
                 backdrop-filter: blur(20px);
             }
-            
+
             .test-status {
                 position: fixed;
                 bottom: 20px;
@@ -105,6 +106,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="test-canvas">
         <div>
@@ -113,7 +115,7 @@
             <p>Z-index: 1</p>
         </div>
     </div>
-    
+
     <div class="test-header">
         <div class="test-menu">
             <div class="test-menu-item" onclick="toggleOverlay()">Gallery</div>
@@ -121,14 +123,14 @@
             <div class="test-menu-item" onclick="showStatus()">Test</div>
         </div>
     </div>
-    
+
     <div class="test-overlay" id="overlay" style="display: none;">
         <h2>Overlay Content</h2>
         <p>This overlay should be above the header menu</p>
         <p>Z-index: 20000</p>
         <button onclick="toggleOverlay()" style="margin-top: 20px; padding: 10px 20px;">Close</button>
     </div>
-    
+
     <div class="test-status" id="status">
         <strong>iPad Menu Z-Index Test</strong><br>
         Expected hierarchy:<br>
@@ -144,38 +146,38 @@
             const overlay = document.getElementById('overlay');
             overlay.style.display = overlay.style.display === 'none' ? 'flex' : 'none';
         }
-        
+
         function showStatus() {
             alert('Menu items are clickable and properly layered!');
         }
-        
+
         // Device detection
         const deviceInfo = document.getElementById('device-info');
         const isIPad = window.innerWidth >= 1024 && window.innerHeight >= 1366;
         const isPortrait = window.innerHeight > window.innerWidth;
-        
+
         deviceInfo.innerHTML = `<br><br><strong>Device:</strong> ${window.innerWidth}x${window.innerHeight}<br>
         <strong>iPad Portrait:</strong> ${isIPad && isPortrait ? 'YES' : 'NO'}<br>
         <strong>User Agent:</strong> ${navigator.userAgent.includes('iPad') ? 'iPad' : 'Other'}`;
-        
+
         // Check actual computed z-index values
         if (isIPad && isPortrait) {
             setTimeout(() => {
                 const header = document.querySelector('.test-header');
                 const menuItem = document.querySelector('.test-menu-item');
                 const canvas = document.querySelector('.test-canvas');
-                
+
                 if (header && menuItem && canvas) {
                     const headerZ = window.getComputedStyle(header).zIndex;
                     const menuZ = window.getComputedStyle(menuItem).zIndex;
                     const canvasZ = window.getComputedStyle(canvas).zIndex;
-                    
+
                     console.log('Computed Z-Index Values:', {
                         canvas: canvasZ,
                         header: headerZ,
                         menu: menuZ
                     });
-                    
+
                     deviceInfo.innerHTML += `<br><br><strong>Computed Z-Index:</strong><br>
                     Canvas: ${canvasZ}<br>
                     Header: ${headerZ}<br>
@@ -185,4 +187,5 @@
         }
     </script>
 </body>
+
 </html>

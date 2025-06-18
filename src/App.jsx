@@ -57,64 +57,87 @@ const AnimatedMenuItem = memo(({ children, onClick, isLogo = false }) => {
   });
 
   // Detect if this is a touch device
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  const isIpadDetected = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+  const isTouchDevice =
+    'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const isIpadDetected =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
   // iPad-optimized event handlers
-  const handleTouchStart = useCallback((e) => {
-    if (!isTouchDevice) return;
-    setTouchStarted(true);
-    setPressed(true);
-    // Prevent mouse events from firing after touch
-    e.preventDefault();
-  }, [isTouchDevice]);
-
-  const handleTouchEnd = useCallback((e) => {
-    if (!isTouchDevice || !touchStarted) return;
-    
-    setPressed(false);
-    setTouchStarted(false);
-    
-    // Call onClick directly for touch devices to ensure it fires
-    if (onClick) {
+  const handleTouchStart = useCallback(
+    (e) => {
+      if (!isTouchDevice) return;
+      setTouchStarted(true);
+      setPressed(true);
+      // Prevent mouse events from firing after touch
       e.preventDefault();
-      e.stopPropagation();
-      onClick(e);
-    }
-  }, [isTouchDevice, touchStarted, onClick]);
+    },
+    [isTouchDevice]
+  );
 
-  const handleClick = useCallback((e) => {
-    // Only handle click if this wasn't a touch interaction
-    if (touchStarted || isTouchDevice) {
-      e.preventDefault();
-      return;
-    }
-    if (onClick) {
-      onClick(e);
-    }
-  }, [touchStarted, isTouchDevice, onClick]);
+  const handleTouchEnd = useCallback(
+    (e) => {
+      if (!isTouchDevice || !touchStarted) return;
 
-  const handleMouseDown = useCallback((e) => {
-    if (isTouchDevice || touchStarted) return;
-    setPressed(true);
-  }, [isTouchDevice, touchStarted]);
+      setPressed(false);
+      setTouchStarted(false);
 
-  const handleMouseUp = useCallback((e) => {
-    if (isTouchDevice || touchStarted) return;
-    setPressed(false);
-  }, [isTouchDevice, touchStarted]);
+      // Call onClick directly for touch devices to ensure it fires
+      if (onClick) {
+        e.preventDefault();
+        e.stopPropagation();
+        onClick(e);
+      }
+    },
+    [isTouchDevice, touchStarted, onClick]
+  );
 
-  const handleMouseEnter = useCallback((e) => {
-    if (isTouchDevice || touchStarted) return;
-    setHovered(true);
-  }, [isTouchDevice, touchStarted]);
+  const handleClick = useCallback(
+    (e) => {
+      // Only handle click if this wasn't a touch interaction
+      if (touchStarted || isTouchDevice) {
+        e.preventDefault();
+        return;
+      }
+      if (onClick) {
+        onClick(e);
+      }
+    },
+    [touchStarted, isTouchDevice, onClick]
+  );
 
-  const handleMouseLeave = useCallback((e) => {
-    if (isTouchDevice || touchStarted) return;
-    setHovered(false);
-    setPressed(false);
-  }, [isTouchDevice, touchStarted]);
+  const handleMouseDown = useCallback(
+    (e) => {
+      if (isTouchDevice || touchStarted) return;
+      setPressed(true);
+    },
+    [isTouchDevice, touchStarted]
+  );
+
+  const handleMouseUp = useCallback(
+    (e) => {
+      if (isTouchDevice || touchStarted) return;
+      setPressed(false);
+    },
+    [isTouchDevice, touchStarted]
+  );
+
+  const handleMouseEnter = useCallback(
+    (e) => {
+      if (isTouchDevice || touchStarted) return;
+      setHovered(true);
+    },
+    [isTouchDevice, touchStarted]
+  );
+
+  const handleMouseLeave = useCallback(
+    (e) => {
+      if (isTouchDevice || touchStarted) return;
+      setHovered(false);
+      setPressed(false);
+    },
+    [isTouchDevice, touchStarted]
+  );
 
   return (
     <animated.div

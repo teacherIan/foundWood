@@ -16,7 +16,7 @@ console.log('📱 Device Check:', {
   isIPadPro,
   isPortrait,
   isIPadProPortrait,
-  shouldApplyFix: isIPadProPortrait
+  shouldApplyFix: isIPadProPortrait,
 });
 
 if (!isIPadProPortrait) {
@@ -24,7 +24,7 @@ if (!isIPadProPortrait) {
   console.log('✅ Current device uses standard layout');
 } else {
   console.log('🎯 iPad Pro Portrait detected - checking z-index hierarchy...');
-  
+
   // Check elements exist
   const header = document.querySelector('.header');
   const menu = document.querySelector('.menu');
@@ -37,7 +37,7 @@ if (!isIPadProPortrait) {
     menu: menu ? '✅ Found' : '❌ Missing',
     menuItems: `${menuItems.length} items found`,
     canvas: canvas ? '✅ Found' : '❌ Missing',
-    appContainer: appContainer ? '✅ Found' : '❌ Missing'
+    appContainer: appContainer ? '✅ Found' : '❌ Missing',
   });
 
   // Check z-index values
@@ -45,7 +45,7 @@ if (!isIPadProPortrait) {
     const headerStyles = window.getComputedStyle(header);
     const menuStyles = window.getComputedStyle(menu);
     const canvasStyles = window.getComputedStyle(canvas);
-    
+
     const headerZ = parseInt(headerStyles.zIndex) || 0;
     const menuZ = parseInt(menuStyles.zIndex) || 0;
     const canvasZ = parseInt(canvasStyles.zIndex) || 0;
@@ -54,12 +54,16 @@ if (!isIPadProPortrait) {
       canvas: canvasZ,
       header: headerZ,
       menu: menuZ,
-      hierarchyCorrect: canvasZ < headerZ && headerZ <= menuZ
+      hierarchyCorrect: canvasZ < headerZ && headerZ <= menuZ,
     });
 
     // Check if hierarchy is correct
     const isCorrectHierarchy = canvasZ < headerZ && headerZ <= menuZ;
-    console.log(isCorrectHierarchy ? '✅ Z-Index hierarchy is correct' : '❌ Z-Index hierarchy needs fixing');
+    console.log(
+      isCorrectHierarchy
+        ? '✅ Z-Index hierarchy is correct'
+        : '❌ Z-Index hierarchy needs fixing'
+    );
 
     // Check positioning
     console.log('📐 Positioning Check:', {
@@ -68,30 +72,33 @@ if (!isIPadProPortrait) {
       headerLeft: headerStyles.left,
       canvasPosition: canvasStyles.position,
       headerFixed: headerStyles.position === 'fixed',
-      canvasFixed: canvasStyles.position === 'fixed'
+      canvasFixed: canvasStyles.position === 'fixed',
     });
 
     // Check visibility
     const headerRect = header.getBoundingClientRect();
-    const menuItemsVisible = Array.from(menuItems).every(item => {
+    const menuItemsVisible = Array.from(menuItems).every((item) => {
       const rect = item.getBoundingClientRect();
       const styles = window.getComputedStyle(item);
-      return rect.width > 0 && rect.height > 0 && 
-             styles.opacity !== '0' && 
-             styles.visibility !== 'hidden';
+      return (
+        rect.width > 0 &&
+        rect.height > 0 &&
+        styles.opacity !== '0' &&
+        styles.visibility !== 'hidden'
+      );
     });
 
     console.log('👁️ Visibility Check:', {
       headerVisible: headerRect.width > 0 && headerRect.height > 0,
       headerOpacity: headerStyles.opacity,
       menuItemsVisible,
-      allMenuItemsRendered: menuItems.length >= 2
+      allMenuItemsRendered: menuItems.length >= 2,
     });
 
     // Check for stacking context issues
     if (appContainer) {
       const containerStyles = window.getComputedStyle(appContainer);
-      const createsStackingContext = 
+      const createsStackingContext =
         containerStyles.position !== 'static' ||
         containerStyles.transform !== 'none' ||
         containerStyles.isolation === 'isolate' ||
@@ -105,21 +112,24 @@ if (!isIPadProPortrait) {
         containerPosition: containerStyles.position,
         containerTransform: containerStyles.transform,
         containerIsolation: containerStyles.isolation,
-        contextFixed: !createsStackingContext
+        contextFixed: !createsStackingContext,
       });
 
       if (createsStackingContext) {
-        console.log('⚠️ App container still creates stacking context - this may cause issues');
+        console.log(
+          '⚠️ App container still creates stacking context - this may cause issues'
+        );
       } else {
         console.log('✅ App container does not create stacking context');
       }
     }
 
     // Overall assessment
-    const allChecksPass = isCorrectHierarchy && 
-                          headerStyles.position === 'fixed' && 
-                          canvasStyles.position === 'fixed' &&
-                          menuItemsVisible;
+    const allChecksPass =
+      isCorrectHierarchy &&
+      headerStyles.position === 'fixed' &&
+      canvasStyles.position === 'fixed' &&
+      menuItemsVisible;
 
     console.log('\n📋 Fix Verification Summary:');
     console.log('===========================');
@@ -154,9 +164,14 @@ if (isIPadProPortrait) {
     console.log('📊 First menu item:', {
       text: firstMenuItem.textContent?.trim(),
       clickable: styles.pointerEvents !== 'none',
-      position: { top: rect.top, left: rect.left, width: rect.width, height: rect.height },
+      position: {
+        top: rect.top,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height,
+      },
       zIndex: styles.zIndex,
-      background: styles.background
+      background: styles.background,
     });
   }
 }
@@ -164,4 +179,6 @@ if (isIPadProPortrait) {
 console.log('\n🔧 Need to debug further? Use:');
 console.log('document.querySelector(".header").style.border = "3px solid red"');
 console.log('document.querySelector("canvas").style.border = "3px solid blue"');
-console.log('Array.from(document.querySelectorAll(".menu-item")).forEach(item => item.style.background = "lime")');
+console.log(
+  'Array.from(document.querySelectorAll(".menu-item")).forEach(item => item.style.background = "lime")'
+);

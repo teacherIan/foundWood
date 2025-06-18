@@ -242,16 +242,21 @@ canvas {
 
 /* Override any existing problematic rules */
 @media screen {
-  /* Re-apply clean hierarchy - REMOVED the problematic * { z-index: unset } rule */
-  
-  canvas,
-  canvas[data-engine] {
-    z-index: 900 !important;
-  }
 
-  .header {
-    z-index: 20000 !important;
-  }
+    /* Remove any ultra-high z-index values that might exist */
+    * {
+        z-index: unset;
+    }
+
+    /* Re-apply clean hierarchy */
+    canvas,
+    canvas[data-engine] {
+        z-index: 900 !important;
+    }
+
+    .header {
+        z-index: 20000 !important;
+    }
 
     .menu {
         z-index: 20001 !important;

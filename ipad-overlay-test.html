@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,7 @@
         /* Import the actual CSS files to test real behavior */
         @import url('./src/index.css');
         @import url('./src/App.css');
-        
+
         /* Simulate the actual app structure */
         body {
             margin: 0;
@@ -40,7 +41,8 @@
             color: white;
             font-size: 3rem;
             text-align: center;
-            z-index: 900; /* Same as real canvas */
+            z-index: 900;
+            /* Same as real canvas */
         }
 
         /* Test info panel */
@@ -65,9 +67,17 @@
             border-radius: 5px;
         }
 
-        .success { background: rgba(0, 128, 0, 0.3); }
-        .fail { background: rgba(255, 0, 0, 0.3); }
-        .info { background: rgba(0, 0, 255, 0.3); }
+        .success {
+            background: rgba(0, 128, 0, 0.3);
+        }
+
+        .fail {
+            background: rgba(255, 0, 0, 0.3);
+        }
+
+        .info {
+            background: rgba(0, 0, 255, 0.3);
+        }
 
         /* Hover test for menu items */
         .menu-item {
@@ -75,6 +85,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="app-container">
         <!-- Simulate 3D Canvas Background -->
@@ -109,7 +120,7 @@
             result.className = 'test-status success';
             result.innerHTML = `✅ ${buttonName} button clicked successfully! Menu is interactive.`;
             document.getElementById('testResults').appendChild(result);
-            
+
             // Auto-remove after 3 seconds
             setTimeout(() => result.remove(), 3000);
         }
@@ -219,12 +230,12 @@
 
         // Run tests when page loads
         window.addEventListener('load', runOverlayTest);
-        
+
         // Re-run tests on orientation change
         window.addEventListener('orientationchange', () => {
             setTimeout(runOverlayTest, 100);
         });
-        
+
         // Re-run tests on resize
         window.addEventListener('resize', () => {
             setTimeout(runOverlayTest, 100);
@@ -242,4 +253,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -14,7 +14,7 @@ console.log('📱 Device Info:', {
   isIPad,
   isPortrait,
   isIPadPortrait,
-  userAgent: navigator.userAgent
+  userAgent: navigator.userAgent,
 });
 
 if (!isIPadPortrait) {
@@ -31,9 +31,9 @@ function getElementInfo(selector, name) {
 
   const styles = window.getComputedStyle(element);
   const rect = element.getBoundingClientRect();
-  
+
   // Check if element creates stacking context
-  const createsStackingContext = 
+  const createsStackingContext =
     styles.position !== 'static' ||
     styles.transform !== 'none' ||
     styles.isolation === 'isolate' ||
@@ -63,8 +63,8 @@ function getElementInfo(selector, name) {
       left: rect.left,
       width: rect.width,
       height: rect.height,
-      visible: rect.width > 0 && rect.height > 0
-    }
+      visible: rect.width > 0 && rect.height > 0,
+    },
   };
 
   console.log(`📊 ${name}:`, info);
@@ -81,19 +81,21 @@ const elements = [
   ['canvas', 'Canvas'],
   ['.typesContainer', 'Types Container'],
   ['.galleryContainer', 'Gallery Container'],
-  ['.contactContainer', 'Contact Container']
+  ['.contactContainer', 'Contact Container'],
 ];
 
 console.log('\n🔍 Element Analysis:');
 console.log('===================');
 
-const results = elements.map(([selector, name]) => getElementInfo(selector, name));
+const results = elements.map(([selector, name]) =>
+  getElementInfo(selector, name)
+);
 
 // Check for stacking context issues
 console.log('\n⚠️ Stacking Context Issues:');
 console.log('============================');
 
-results.forEach(result => {
+results.forEach((result) => {
   if (result && result.createsStackingContext) {
     console.log(`❌ ${result.element} creates stacking context:`, {
       position: result.position !== 'static' ? result.position : null,
@@ -103,7 +105,7 @@ results.forEach(result => {
       filter: result.filter !== 'none' ? result.filter : null,
       zIndex: result.zIndex !== 'auto' ? result.zIndex : null,
       willChange: result.willChange !== 'auto' ? result.willChange : null,
-      contain: result.contain !== 'none' ? result.contain : null
+      contain: result.contain !== 'none' ? result.contain : null,
     });
   }
 });
@@ -113,10 +115,10 @@ console.log('\n📊 Z-Index Hierarchy:');
 console.log('=====================');
 
 const zIndexElements = results
-  .filter(r => r && r.zIndex !== 'auto')
+  .filter((r) => r && r.zIndex !== 'auto')
   .sort((a, b) => parseInt(b.zIndex) - parseInt(a.zIndex));
 
-zIndexElements.forEach(element => {
+zIndexElements.forEach((element) => {
   console.log(`${element.element}: z-index ${element.zIndex}`);
 });
 
@@ -128,19 +130,26 @@ const menuItems = document.querySelectorAll('.menu-item');
 menuItems.forEach((item, index) => {
   const rect = item.getBoundingClientRect();
   const styles = window.getComputedStyle(item);
-  const isVisible = rect.width > 0 && rect.height > 0 && 
-                   styles.opacity !== '0' && 
-                   styles.visibility !== 'hidden' &&
-                   styles.display !== 'none';
-  
+  const isVisible =
+    rect.width > 0 &&
+    rect.height > 0 &&
+    styles.opacity !== '0' &&
+    styles.visibility !== 'hidden' &&
+    styles.display !== 'none';
+
   console.log(`Menu Item ${index + 1} (${item.textContent?.trim()}):`, {
     visible: isVisible,
-    rect: { top: rect.top, left: rect.left, width: rect.width, height: rect.height },
+    rect: {
+      top: rect.top,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height,
+    },
     opacity: styles.opacity,
     visibility: styles.visibility,
     display: styles.display,
     zIndex: styles.zIndex,
-    pointerEvents: styles.pointerEvents
+    pointerEvents: styles.pointerEvents,
   });
 });
 
@@ -148,14 +157,16 @@ menuItems.forEach((item, index) => {
 console.log('\n💡 Recommendations:');
 console.log('===================');
 
-const headerInfo = results.find(r => r && r.element === 'Header');
-const canvasInfo = results.find(r => r && r.element === 'Canvas');
-const appContainerInfo = results.find(r => r && r.element === 'App Container');
+const headerInfo = results.find((r) => r && r.element === 'Header');
+const canvasInfo = results.find((r) => r && r.element === 'Canvas');
+const appContainerInfo = results.find(
+  (r) => r && r.element === 'App Container'
+);
 
 if (headerInfo && canvasInfo) {
   const headerZ = parseInt(headerInfo.zIndex) || 0;
   const canvasZ = parseInt(canvasInfo.zIndex) || 0;
-  
+
   if (headerZ <= canvasZ) {
     console.log('❌ Header z-index should be higher than canvas');
     console.log(`   Current: Header(${headerZ}) vs Canvas(${canvasZ})`);
@@ -166,8 +177,12 @@ if (headerInfo && canvasInfo) {
 }
 
 if (appContainerInfo && appContainerInfo.createsStackingContext) {
-  console.log('❌ App container creates stacking context - this traps header z-index');
-  console.log('   Solution: Move header outside appContainer or remove stacking context properties');
+  console.log(
+    '❌ App container creates stacking context - this traps header z-index'
+  );
+  console.log(
+    '   Solution: Move header outside appContainer or remove stacking context properties'
+  );
 }
 
 console.log('\n🛠️ Quick Fix (paste in console):');
