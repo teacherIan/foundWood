@@ -39,17 +39,17 @@ function useTypeSpring(showTypes, index) {
         let targetY, targetX;
 
         if (index === 0) {
-          targetY = 16;
-          targetX = 56; // Slightly closer to center for small screens
+          targetY = 15;
+          targetX = 52; // Slightly closer to center for small screens
         } else if (index === 1) {
-          targetY = 16;
+          targetY = 10;
           targetX = 3; // Slightly inward from edge
         } else if (index === 2) {
-          targetY = 42;
+          targetY = 39;
           targetX = 3;
         } else {
           targetY = 57;
-          targetX = 56;
+          targetX = 53;
         }
 
         setSpring.start({
@@ -327,11 +327,6 @@ export default function Types({
               selected wood. From maple burl coffee tables with their swirling
               grain patterns to cedar Adirondack chairs with mahogany accents,
               each creation celebrates the natural character of the wood.
-            </p>
-            <p>
-              No two pieces are alike – the wood itself determines the final
-              form, making your furniture as individual as the tree it came
-              from.
             </p>
           </div>
         </animated.div>
