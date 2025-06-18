@@ -59,24 +59,13 @@ body {
     overflow: hidden;
 }
 
-canvas {
-    /* Let React Three Fiber Canvas component handle positioning */
-    cursor: grab !important;
-    /* Remove z-index override to allow inline styles to work */
-    /* Remove conflicting positioning - let inline styles take precedence */
-    /* Optimize canvas for smooth animations */
-    transform: translateZ(0);
-    will-change: filter;
-    backface-visibility: hidden;
-    /* Ensure canvas never gets pushed off-screen */
-    min-width: 100vw !important;
-    min-height: 100vh !important;
-    /* Prevent canvas from creating scrollbars or overflow */
-    box-sizing: border-box !important;
-}
-
 /* iPad Pro portrait mode - prevent canvas from being pushed off-screen */
 @media (min-width: 1024px) and (orientation: portrait) {
+
+    html canvas,
+    body canvas,
+    #root canvas,
+    div canvas,
     canvas {
         /* Override min-width/min-height constraints for iPad Pro portrait */
         min-width: 100vw !important;
@@ -95,6 +84,395 @@ canvas {
         left: 0 !important;
         right: 0 !important;
         bottom: 0 !important;
+        /* Ensure proper transform and containment */
+        transform: translate3d(0, 0, 0) !important;
+        will-change: transform !important;
+        contain: layout style paint !important;
+        /* Force z-index below overlays but ABOVE auto */
+        z-index: 1 !important;
+        /* Prevent any margin/padding interference */
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        outline: none !important;
+        /* Force proper box model */
+        box-sizing: border-box !important;
+        /* Modern positioning shorthand */
+        inset: 0 !important;
+        /* CRITICAL: Remove isolation that creates stacking context trap */
+        isolation: auto !important;
+    }
+
+    /* CRITICAL FIX: Force container styles to not interfere with canvas positioning */
+    .app-container,
+    .appContainer {
+        position: static !important;
+        /* Remove relative positioning that creates stacking context */
+        transform: none !important;
+        /* Remove any transforms that create stacking context */
+        overflow: visible !important;
+        /* Ensure overflow doesn't clip canvas */
+        contain: none !important;
+        /* Remove layout containment */
+        isolation: auto !important;
+        /* Remove isolation */
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        /* Ensure containers don't interfere with fixed positioning */
+        background: #f5f5f5 !important;
+        z-index: auto !important;
+    }
+
+    /* Fix the blur filter container that creates stacking context */
+    .appContainer>div {
+        position: static !important;
+        /* Remove any positioning that creates stacking context */
+        transform: none !important;
+        /* CRITICAL: Remove transform that creates stacking context */
+        /* CRITICAL: Don't force filter: none as it prevents canvas blur for button visibility */
+        will-change: auto !important;
+        /* Remove will-change that creates stacking context */
+        contain: none !important;
+        isolation: auto !important;
+        overflow: visible !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        /* Ensure this container doesn't interfere */
+        background: transparent !important;
+        z-index: auto !important;
+    }
+
+    /* CRITICAL: Ensure header buttons remain visible over blurred canvas */
+    .header {
+        z-index: 100 !important;
+        /* Simple hierarchy: canvas(1) < header(100) */
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 10vh !important;
+        pointer-events: none !important;
+        /* Ensure header doesn't create stacking context issues */
+        transform: none !important;
+        will-change: auto !important;
+        contain: none !important;
+        isolation: auto !important;
+        background: transparent !important;
+    }
+
+    /* CRITICAL ENHANCEMENT: Ensure header remains visible outside appContainer */
+    .header {
+        /* Ultra-high z-index to ensure header stays above everything */
+        z-index: 999999 !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 10vh !important;
+        /* Remove any properties that create stacking context */
+        isolation: auto !important;
+        transform: none !important;
+        will-change: auto !important;
+        contain: none !important;
+        filter: none !important;
+        /* Ensure proper display and interaction */
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        /* Style enhancements */
+        background: rgba(245, 245, 245, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        border-bottom: 1px solid rgba(139, 69, 19, 0.1) !important;
+    }
+
+    .menu {
+        pointer-events: auto !important;
+        /* Re-enable pointer events for menu items */
+        z-index: auto !important;
+        /* Inherit from parent header */
+        position: relative !important;
+        display: flex !important;
+        width: 100% !important;
+        justify-content: space-around !important;
+        align-items: center !important;
+        /* Ensure menu items are clickable and visible */
+        background: transparent !important;
+        isolation: auto !important;
+        transform: none !important;
+        contain: none !important;
+    }
+
+    .menu-item {
+        pointer-events: auto !important;
+        z-index: auto !important;
+        /* Inherit from parent header */
+        position: relative !important;
+        /* Ensure buttons have proper visibility */
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: flex !important;
+        /* Prevent any interference from canvas positioning */
+        transform: none !important;
+        isolation: auto !important;
+        contain: none !important;
+        /* Ensure proper rendering above canvas */
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 1px solid #77481c !important;
+        border-radius: 2em !important;
+        padding: 0.2em 0.5em !important;
+        font-size: clamp(1.5rem, 4vw, 3.5rem) !important;
+        -webkit-text-stroke: 2px #77481c !important;
+        color: #fff !important;
+        filter: drop-shadow(1px 1px 0px #1c5077) !important;
+        box-shadow: 2px 2px 2px #77481c !important;
+        /* Ensure buttons remain interactive */
+        cursor: pointer !important;
+        user-select: none !important;
+    }
+
+    /* CRITICAL: Override AnimatedMenuItem inline styles on iPad Pro */
+    .menu>div {
+        /* Force visibility and positioning for animated menu items */
+        z-index: auto !important;
+        position: relative !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: flex !important;
+        pointer-events: auto !important;
+        /* Reset any transforms that might create stacking contexts */
+        transform: none !important;
+        will-change: auto !important;
+        contain: none !important;
+        isolation: auto !important;
+        /* Ensure proper sizing */
+        flex: 1 !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* Target the actual text content inside animated menu items */
+    .menu>div>div {
+        /* Reset any problematic styles */
+        transform: none !important;
+        position: relative !important;
+        z-index: auto !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: flex !important;
+        pointer-events: auto !important;
+    }
+
+    /* Target animated logo specifically */
+    .menu>div>div>img {
+        z-index: auto !important;
+        position: relative !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+    }
+}
+
+/* ULTRA-AGGRESSIVE: Force canvas positioning on ALL devices */
+canvas,
+canvas[data-engine],
+canvas[style] {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    min-width: 100vw !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    outline: none !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    transform: translate3d(0, 0, 0) !important;
+    contain: layout style paint !important;
+    will-change: transform !important;
+    isolation: auto !important;
+}
+
+/* NUCLEAR OPTION: Override ANY canvas styling on large portrait devices */
+@media (min-width: 768px) and (orientation: portrait) {
+
+    * canvas,
+    *[style] canvas,
+    div[style*="position"] canvas,
+    canvas[style*="position"],
+    canvas[style*="top"],
+    canvas[style*="left"],
+    canvas[style*="width"],
+    canvas[style*="height"] {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        min-width: 100vw !important;
+        min-height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        outline: none !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+        transform: translate3d(0, 0, 0) !important;
+        contain: layout style paint !important;
+        will-change: transform !important;
+        isolation: auto !important;
+        inset: 0 !important;
+        z-index: 1 !important;
+    }
+}
+
+/* iPad Pro 12.9" portrait specific targeting */
+@media (min-width: 1024px) and (max-width: 1024px) and (min-height: 1366px) and (orientation: portrait) {
+
+    html,
+    body,
+    #root {
+        overflow: hidden !important;
+        height: 100vh !important;
+        width: 100vw !important;
+        position: relative !important;
+    }
+
+    canvas {
+        /* Ultra-specific targeting for iPad Pro 12.9" portrait */
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        min-width: 100vw !important;
+        min-height: 100vh !important;
+        /* Remove any potential margin/padding */
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        /* Force containment */
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+        /* Ensure z-index doesn't interfere */
+        z-index: 1 !important;
+        /* Force transform to ensure positioning */
+        transform: translate3d(0, 0, 0) !important;
+        /* Additional containment properties */
+        contain: layout style paint !important;
+        will-change: transform !important;
+        /* Remove isolation that causes stacking context issues */
+        isolation: auto !important;
+    }
+
+    /* CRITICAL: Override React Spring animations that hide navigation buttons */
+    .header *,
+    [class*="header"] *,
+    [class*="navigation"] *,
+    [class*="menu"] *,
+    .menu-item,
+    [data-text="Gallery"],
+    [data-text="Contact"] {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        display: flex !important;
+        z-index: 999999 !important;
+        position: relative !important;
+    }
+
+    /* Ensure header stacking context is correct with extremely high z-index */
+    .header,
+    header {
+        z-index: 999999 !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 10vh !important;
+        isolation: auto !important;
+    }
+}
+
+/* iPad Pro 11" portrait specific targeting */
+@media (min-width: 834px) and (max-width: 834px) and (min-height: 1194px) and (orientation: portrait) {
+
+    html,
+    body,
+    #root {
+        overflow: hidden !important;
+        height: 100vh !important;
+        width: 100vw !important;
+        position: relative !important;
+    }
+
+    canvas {
+        /* Ultra-specific targeting for iPad Pro 11" portrait */
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        min-width: 100vw !important;
+        min-height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+        z-index: 1 !important;
+        transform: translate3d(0, 0, 0) !important;
+        contain: layout style paint !important;
+        will-change: transform !important;
+        isolation: auto !important;
+    }
+
+    /* CRITICAL: Override React Spring animations that hide navigation buttons */
+    .header *,
+    [class*="header"] *,
+    [class*="navigation"] *,
+    [class*="menu"] *,
+    .menu-item,
+    [data-text="Gallery"],
+    [data-text="Contact"] {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        display: flex !important;
+        z-index: 999999 !important;
+        position: relative !important;
+    }
+
+    /* Ensure header stacking context is correct with extremely high z-index */
+    .header,
+    header {
+        z-index: 999999 !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 10vh !important;
+        isolation: auto !important;
     }
 }
 
@@ -111,11 +489,13 @@ canvas[style*="position: fixed"] {
     /* Prevent overflow that could push canvas off-screen */
     overflow: hidden !important;
     /* Ensure proper layering */
-    z-index: 900 !important; /* Lower than overlay z-indexes but visible */
+    z-index: 900 !important;
+    /* Lower than overlay z-indexes but visible */
 }
 
 /* Additional defensive CSS for iPad Pro and large tablets */
 @media (min-width: 768px) and (orientation: portrait) {
+
     canvas,
     canvas[style*="position: fixed"] {
         /* Force canvas to stay within viewport bounds on all tablets */
@@ -728,3 +1108,16 @@ canvas:active {
 }
 
 /* Enhanced entrance animations with better final states */
+
+/* iPad Pro portrait mode - prevent canvas from being pushed off-screen */
+@media (min-width: 1024px) and (orientation: portrait) {
+
+    html,
+    body,
+    #root {
+        overflow: hidden !important;
+        height: 100vh !important;
+        width: 100vw !important;
+        position: relative !important;
+    }
+}

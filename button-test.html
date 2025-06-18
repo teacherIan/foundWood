@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPad Pro Button Visibility Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        /* Simulate canvas background */
+        .canvas-simulation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(45deg, #8b4513, #d2b48c);
+            z-index: 1;
+        }
+
+        /* Simulate blurred canvas */
+        .canvas-simulation.blurred {
+            filter: blur(20px);
+            -webkit-filter: blur(20px);
+            -moz-filter: blur(20px);
+        }
+
+        /* Header styles matching our app */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 10vh;
+            z-index: 20000;
+            background: transparent;
+            display: flex;
+            justify-content: flex-start;
+            padding: 0.5rem 0;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .menu {
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
+            align-items: center;
+            font-size: clamp(1.5rem, 3.5vw, 3rem);
+            user-select: none;
+            cursor: pointer;
+            overflow: visible;
+            background-color: transparent;
+            pointer-events: auto;
+        }
+
+        .menu-item {
+            font-size: clamp(1.5rem, 4vw, 3.5rem);
+            border: 1px solid #77481c;
+            box-shadow: 2px 2px 2px #77481c;
+            border-radius: 2em;
+            padding: 0.2em 0.5em;
+            -webkit-text-stroke: 2px #77481c;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.9);
+            line-height: 1.2;
+            margin-top: 0.2em;
+            filter: drop-shadow(1px 1px 0px #1c5077);
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        /* iPad Pro Portrait specific rules */
+        @media (min-width: 768px) and (orientation: portrait) {
+            .header {
+                z-index: 30000 !important;
+                position: fixed !important;
+                isolation: auto !important;
+                contain: none !important;
+                transform: translateZ(0) !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: none !important;
+                background: transparent !important;
+            }
+
+            .menu {
+                pointer-events: auto !important;
+                z-index: 30001 !important;
+                isolation: auto !important;
+                contain: none !important;
+                transform: none !important;
+            }
+
+            .menu-item {
+                pointer-events: auto !important;
+                z-index: 30002 !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                position: relative !important;
+                isolation: auto !important;
+                contain: none !important;
+                transform: translateZ(0) !important;
+                background: rgba(255, 255, 255, 0.95) !important;
+                backdrop-filter: blur(5px) !important;
+                -webkit-backdrop-filter: blur(5px) !important;
+                border: 2px solid #77481c !important;
+                box-shadow: 0 2px 8px rgba(119, 72, 28, 0.3), 2px 2px 2px #77481c !important;
+                padding: 0.3em 0.6em !important;
+                margin: 0.1em !important;
+                -webkit-text-stroke: 2px #77481c !important;
+                color: #fff !important;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+                filter: drop-shadow(1px 1px 0px #1c5077) !important;
+                min-height: 44px !important;
+                min-width: 44px !important;
+                cursor: pointer !important;
+                user-select: none !important;
+            }
+        }
+
+        .info {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 40000;
+        }
+
+        .blur-toggle {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            background: #77481c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 40000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="canvas-simulation" id="canvas"></div>
+
+    <div class="header">
+        <div class="menu">
+            <div class="menu-item" onclick="buttonClick('Home')">🏠 Home</div>
+            <div class="menu-item" onclick="buttonClick('Gallery')">🖼️ Gallery</div>
+            <div class="menu-item" onclick="buttonClick('Contact')">📧 Contact</div>
+        </div>
+    </div>
+
+    <button class="blur-toggle" onclick="toggleBlur()">Toggle Canvas Blur</button>
+
+    <div class="info" id="info">
+        Loading...
+    </div>
+
+    <script>
+        function updateInfo() {
+            const info = document.getElementById('info');
+            const isPortrait = window.innerHeight > window.innerWidth;
+            const isIPadPro = window.innerWidth >= 768 && isPortrait;
+
+            info.innerHTML = `
+                Viewport: ${window.innerWidth} x ${window.innerHeight}<br>
+                Orientation: ${isPortrait ? 'Portrait' : 'Landscape'}<br>
+                iPad Pro Portrait: ${isIPadPro ? 'YES' : 'NO'}<br>
+                Device Pixel Ratio: ${window.devicePixelRatio}<br>
+                User Agent: ${navigator.userAgent.includes('iPad') ? 'iPad' : 'Other'}
+            `;
+        }
+
+        function buttonClick(button) {
+            alert(`${button} button clicked! Buttons are working correctly.`);
+        }
+
+        function toggleBlur() {
+            const canvas = document.getElementById('canvas');
+            canvas.classList.toggle('blurred');
+        }
+
+        window.addEventListener('resize', updateInfo);
+        window.addEventListener('orientationchange', updateInfo);
+        updateInfo();
+    </script>
+</body>
+
+</html>

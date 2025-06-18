@@ -34,7 +34,8 @@ function useTypeSpring(showTypes, index) {
       const isSmallMobile = window.innerWidth <= 480;
       const aspectRatio = window.innerWidth / window.innerHeight;
       // FIXED: iPad Pro detection - only applies to landscape mode with large dimensions
-      const isIPadProLandscape = window.innerWidth >= 1024 && window.innerHeight >= 768 && !isPortrait; // iPad Pro landscape only
+      const isIPadProLandscape =
+        window.innerWidth >= 1024 && window.innerHeight >= 768 && !isPortrait; // iPad Pro landscape only
 
       if (isIPadProLandscape) {
         // iPad Pro Landscape ONLY: Use desktop layout
@@ -185,7 +186,8 @@ function useExplanationTextSpring(showTypes) {
       const isSmallMobile = window.innerWidth <= 480;
       const aspectRatio = window.innerWidth / window.innerHeight;
       // FIXED: iPad Pro detection - only applies to landscape mode with large dimensions
-      const isIPadProLandscape = window.innerWidth >= 1024 && window.innerHeight >= 768 && !isPortrait; // iPad Pro landscape only
+      const isIPadProLandscape =
+        window.innerWidth >= 1024 && window.innerHeight >= 768 && !isPortrait; // iPad Pro landscape only
 
       let targetY;
       if (isIPadProLandscape) {
@@ -292,7 +294,10 @@ export default function Types({
                 window.innerWidth > 768 && window.innerWidth <= 1024;
               const isSmallMobile = window.innerWidth <= 480;
               // FIXED: iPad Pro detection - only applies to landscape mode with large dimensions
-              const isIPadProLandscape = window.innerWidth >= 1024 && window.innerHeight >= 768 && !isPortrait; // iPad Pro landscape only
+              const isIPadProLandscape =
+                window.innerWidth >= 1024 &&
+                window.innerHeight >= 768 &&
+                !isPortrait; // iPad Pro landscape only
 
               if (isIPadProLandscape) {
                 return '50%'; // iPad Pro Landscape: Use desktop positioning
@@ -314,7 +319,10 @@ export default function Types({
               const isSmallMobile = window.innerWidth <= 480;
               const aspectRatio = window.innerWidth / window.innerHeight;
               // FIXED: iPad Pro detection - only applies to landscape mode with large dimensions
-              const isIPadProLandscape = window.innerWidth >= 1024 && window.innerHeight >= 768 && !isPortrait; // iPad Pro landscape only
+              const isIPadProLandscape =
+                window.innerWidth >= 1024 &&
+                window.innerHeight >= 768 &&
+                !isPortrait; // iPad Pro landscape only
 
               if (isIPadProLandscape) {
                 return '50vh'; // iPad Pro Landscape: Use desktop centered positioning
@@ -339,7 +347,10 @@ export default function Types({
                 window.innerWidth > 768 && window.innerWidth <= 1024;
               const isSmallMobile = window.innerWidth <= 480;
               // FIXED: iPad Pro detection - only applies to landscape mode with large dimensions
-              const isIPadProLandscape = window.innerWidth >= 1024 && window.innerHeight >= 768 && !isPortrait; // iPad Pro landscape only
+              const isIPadProLandscape =
+                window.innerWidth >= 1024 &&
+                window.innerHeight >= 768 &&
+                !isPortrait; // iPad Pro landscape only
 
               if (isIPadProLandscape) {
                 return '35vw'; // iPad Pro Landscape: Use desktop compact width

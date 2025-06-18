@@ -1042,15 +1042,258 @@ export default function App({
 
   // Debug overlay state at the main component level
   useEffect(() => {
+    // Add iPad Pro detection debugging
+    const isIPadPro = window.innerWidth >= 1024 && window.innerHeight >= 1366;
+    const isPortrait = window.innerHeight > window.innerWidth;
+    const isIPadProPortrait = isIPadPro && isPortrait;
+
+    // Button visibility debugging
+    if (isIPadProPortrait) {
+      console.log(
+        '🎯 iPad Pro Portrait Mode Detected - Button Visibility Check:',
+        {
+          viewportWidth: window.innerWidth,
+          viewportHeight: window.innerHeight,
+          hasOverlay,
+          showContactPage,
+          showTypes,
+          showGallery,
+          headerElement: document.querySelector('.header'),
+          menuElement: document.querySelector('.menu'),
+          menuItems: document.querySelectorAll('.menu-item').length,
+          canvasElements: document.querySelectorAll('canvas').length,
+        }
+      );
+    }
+
+    // Debug log with variables in proper scope
     console.log('🎯 Main Experience: Overlay state changed:', {
       hasOverlay,
       showContactPage,
       showTypes,
       showGallery,
       canvasPointerEvents: hasOverlay ? 'none' : 'auto',
-      canvasZIndex: hasOverlay ? 1 : 1000,
+      canvasZIndex: hasOverlay ? 900 : 1000,
+      isIPadPro,
+      isPortrait,
+      viewport: { width: window.innerWidth, height: window.innerHeight },
     });
   }, [hasOverlay, showContactPage, showTypes, showGallery]);
+
+  // Enhanced iPad Pro portrait mode detection with better viewport constraints
+  const isIPadProPortrait = useMemo(() => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const isPortrait = height > width;
+
+    // iPad Pro 12.9" portrait: 1024x1366 or 1024x1368
+    const isIPadPro12 =
+      isPortrait &&
+      width >= 1024 &&
+      width <= 1024 &&
+      height >= 1366 &&
+      height <= 1380;
+
+    // iPad Pro 11" portrait: 834x1194 or similar
+    const isIPadPro11 =
+      isPortrait &&
+      width >= 820 &&
+      width <= 834 &&
+      height >= 1180 &&
+      height <= 1210;
+
+    // General large tablet portrait detection
+    const isLargeTabletPortrait = isPortrait && width >= 768 && height >= 1000;
+
+    const result = isIPadPro12 || isIPadPro11 || isLargeTabletPortrait;
+
+    if (result) {
+      console.log('📱 iPad Pro/Large Tablet Portrait detected:', {
+        width,
+        height,
+        isIPadPro12,
+        isIPadPro11,
+        isLargeTabletPortrait,
+        viewport: `${width}x${height}`,
+      });
+    }
+
+    return result;
+  }, []);
+
+  // Debug viewport changes for iPad Pro
+  useEffect(() => {
+    if (isIPadProPortrait) {
+      console.log('🎯 iPad Pro Portrait Canvas Positioning Debug:', {
+        viewport: `${window.innerWidth}x${window.innerHeight}`,
+        visualViewport: window.visualViewport
+          ? `${window.visualViewport.width}x${window.visualViewport.height}`
+          : 'not supported',
+        devicePixelRatio: window.devicePixelRatio,
+        orientation: window.screen?.orientation?.type || 'unknown',
+        canvasStyle: {
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: '100vw',
+          height: '100vh',
+        },
+      });
+
+      // AGGRESSIVE: Force canvas positioning via JavaScript DOM manipulation
+      const forceCanvasPosition = () => {
+        const canvases = document.querySelectorAll('canvas');
+        canvases.forEach((canvas, index) => {
+          console.log(`🎯 Forcing canvas ${index} position on iPad Pro:`, {
+            currentPosition: canvas.style.position,
+            currentTop: canvas.style.top,
+            currentLeft: canvas.style.left,
+            currentWidth: canvas.style.width,
+            currentHeight: canvas.style.height,
+          });
+
+          // Force positioning via direct style manipulation
+          canvas.style.setProperty('position', 'fixed', 'important');
+          canvas.style.setProperty('top', '0px', 'important');
+          canvas.style.setProperty('left', '0px', 'important');
+          canvas.style.setProperty('right', '0px', 'important');
+          canvas.style.setProperty('bottom', '0px', 'important');
+          canvas.style.setProperty('width', '100vw', 'important');
+          canvas.style.setProperty('height', '100vh', 'important');
+          canvas.style.setProperty('max-width', '100vw', 'important');
+          canvas.style.setProperty('max-height', '100vh', 'important');
+          canvas.style.setProperty('min-width', '100vw', 'important');
+          canvas.style.setProperty('min-height', '100vh', 'important');
+          canvas.style.setProperty('margin', '0px', 'important');
+          canvas.style.setProperty('padding', '0px', 'important');
+          canvas.style.setProperty('border', 'none', 'important');
+          canvas.style.setProperty('outline', 'none', 'important');
+          canvas.style.setProperty('overflow', 'hidden', 'important');
+          canvas.style.setProperty('box-sizing', 'border-box', 'important');
+          canvas.style.setProperty(
+            'transform',
+            'translate3d(0, 0, 0)',
+            'important'
+          );
+          canvas.style.setProperty('z-index', '900', 'important');
+          canvas.style.setProperty('inset', '0px', 'important');
+
+          console.log(`✅ Canvas ${index} positioning forced via JavaScript`);
+        });
+      };
+
+      // Force positioning immediately
+      forceCanvasPosition();
+
+      // Force positioning after a short delay to catch any late-loading canvases
+      setTimeout(forceCanvasPosition, 500);
+      setTimeout(forceCanvasPosition, 1000);
+
+      // Set up MutationObserver to watch for DOM changes that might affect canvas
+      const observer = new MutationObserver((mutations) => {
+        let shouldForcePosition = false;
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList') {
+            // Check if any canvas elements were added or modified
+            const addedNodes = Array.from(mutation.addedNodes);
+            const hasCanvas = addedNodes.some(
+              (node) =>
+                node.nodeName === 'CANVAS' ||
+                (node.querySelectorAll &&
+                  node.querySelectorAll('canvas').length > 0)
+            );
+            if (hasCanvas) {
+              shouldForcePosition = true;
+            }
+          } else if (
+            mutation.type === 'attributes' &&
+            mutation.target.nodeName === 'CANVAS'
+          ) {
+            shouldForcePosition = true;
+          }
+        });
+
+        if (shouldForcePosition) {
+          console.log(
+            '🔄 DOM mutation detected affecting canvas, forcing position...'
+          );
+          setTimeout(forceCanvasPosition, 50);
+        }
+      });
+
+      // Start observing DOM changes
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style', 'class'],
+      });
+
+      // Add viewport change listener for iPad Pro to detect and fix canvas positioning issues
+      const handleViewportChange = () => {
+        console.log('🔄 iPad Pro Viewport Changed:', {
+          innerViewport: `${window.innerWidth}x${window.innerHeight}`,
+          visualViewport: window.visualViewport
+            ? `${window.visualViewport.width}x${window.visualViewport.height}`
+            : 'not supported',
+          devicePixelRatio: window.devicePixelRatio,
+          orientation: window.screen?.orientation?.type || 'unknown',
+        });
+
+        // Force canvas positioning again on viewport changes
+        setTimeout(forceCanvasPosition, 100);
+
+        // Force a canvas rerender/repositioning by triggering a window resize event
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'));
+        }, 200);
+      };
+
+      // Listen for visual viewport changes (keyboard, rotation, etc.)
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', handleViewportChange);
+        window.visualViewport.addEventListener('scroll', handleViewportChange);
+      }
+
+      // Listen for orientation changes
+      window.addEventListener('orientationchange', handleViewportChange);
+
+      // Listen for window resize
+      window.addEventListener('resize', handleViewportChange);
+
+      return () => {
+        observer.disconnect();
+        if (window.visualViewport) {
+          window.visualViewport.removeEventListener(
+            'resize',
+            handleViewportChange
+          );
+          window.visualViewport.removeEventListener(
+            'scroll',
+            handleViewportChange
+          );
+        }
+        window.removeEventListener('orientationchange', handleViewportChange);
+        window.removeEventListener('resize', handleViewportChange);
+      };
+    }
+  }, [isIPadProPortrait]);
+
+  // ENHANCED iPad Pro button forcing with comprehensive debugging
+  useEffect(() => {
+    if (isIPadProPortrait) {
+      console.log(
+        '🚨 iPad Pro Portrait: Starting enhanced button debugging and fixing...'
+      );
+
+      let cleanupFunctions = [];
+
+      // Wait for React to fully render - removed debugging code
+      console.log('✅ iPad Pro portrait mode detected');
+    }
+  }, [isIPadProPortrait]);
 
   return (
     <>
@@ -1068,14 +1311,40 @@ export default function App({
           position: 'fixed', // Fixed to viewport to prevent container issues
           top: 0,
           left: 0,
+          right: 0, // Add right constraint
+          bottom: 0, // Add bottom constraint
           width: '100vw', // Use standard viewport units
           height: '100vh',
           maxWidth: '100vw', // Prevent canvas from exceeding viewport width
           maxHeight: '100vh', // Prevent canvas from exceeding viewport height
+          minWidth: '100vw', // Force minimum viewport width
+          minHeight: '100vh', // Force minimum viewport height
           zIndex: hasOverlay ? 900 : 1000, // Lower z-index when overlays are active to ensure they appear on top
           pointerEvents: hasOverlay ? 'none' : 'auto', // Disable pointer events when overlays are active
           touchAction: 'none', // Prevent default touch actions that might interfere
           overflow: 'hidden', // Ensure canvas doesn't create scrollbars
+          margin: 0, // Remove any potential margins
+          padding: 0, // Remove any potential padding
+          border: 'none', // Remove any potential borders
+          outline: 'none', // Remove any potential outlines
+          boxSizing: 'border-box', // Ensure proper box model
+          transform: isIPadProPortrait ? 'translate3d(0, 0, 0)' : undefined, // Force GPU acceleration on iPad Pro
+          // CRITICAL: Apply blur directly to canvas on iPad Pro portrait mode when overlays are active
+          filter: isIPadProPortrait && hasOverlay ? 'blur(20px)' : undefined,
+          WebkitFilter:
+            isIPadProPortrait && hasOverlay ? 'blur(20px)' : undefined,
+          MozFilter: isIPadProPortrait && hasOverlay ? 'blur(20px)' : undefined,
+          transition: isIPadProPortrait
+            ? 'filter 0.2s ease-out, -webkit-filter 0.2s ease-out, -moz-filter 0.2s ease-out'
+            : undefined,
+          // Enhanced iPad Pro portrait specific styles
+          ...(isIPadProPortrait && {
+            contain: 'layout style paint',
+            willChange: 'transform',
+            isolation: 'isolate',
+            // Force exact positioning constraints
+            inset: '0px', // Modern way to set top/right/bottom/left to 0
+          }),
         }}
         onMouseDown={(e) => {
           console.log('🖱️ Canvas mouse down detected!', {

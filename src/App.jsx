@@ -424,6 +424,60 @@ function reducer(state, action) {
   }
 }
 
+// Utility function to detect iPad Pro portrait mode and return appropriate styles
+const getIPadProPortraitStyles = () => {
+  const isPortrait = window.innerWidth < window.innerHeight;
+  const isIPadPro12 =
+    isPortrait &&
+    window.innerWidth >= 1024 &&
+    window.innerWidth <= 1024 &&
+    window.innerHeight >= 1366;
+  const isIPadPro11 =
+    isPortrait &&
+    window.innerWidth >= 820 &&
+    window.innerWidth <= 834 &&
+    window.innerHeight >= 1180;
+  const isLargeTabletPortrait =
+    isPortrait && window.innerWidth >= 768 && window.innerWidth < 1025;
+  const isIPadProPortrait = isIPadPro12 || isIPadPro11 || isLargeTabletPortrait;
+
+  return {
+    isIPadProPortrait,
+    containerStyles: isIPadProPortrait
+      ? {
+          position: 'static',
+          transform: 'none',
+          contain: 'none',
+          isolation: 'auto',
+          overflow: 'visible',
+          width: '100vw',
+          height: '100vh',
+          zIndex: 'auto',
+        }
+      : {},
+    canvasWrapperStyles: isIPadProPortrait
+      ? {
+          position: 'static',
+          transform: 'none',
+          contain: 'none',
+          isolation: 'auto',
+          overflow: 'visible',
+          width: '100vw',
+          height: '100vh',
+          zIndex: 'auto',
+          // IMPORTANT: Remove all filters since blur is now applied directly to canvas
+          filter: 'none',
+          WebkitFilter: 'none',
+          MozFilter: 'none',
+          willChange: 'auto',
+          transition: 'none', // Remove transition to prevent flicker
+          pointerEvents: 'auto',
+          background: 'transparent',
+        }
+      : null,
+  };
+};
+
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -929,11 +983,16 @@ function App() {
       {/* Always render the main app - use opacity and pointer-events instead of display:none */}
       <div
         className="app-container"
-        style={{
-          opacity: shouldShowLoading ? 0 : 1,
-          pointerEvents: shouldShowLoading ? 'none' : 'auto',
-          transition: 'opacity 0.3s ease-in-out',
-        }}
+        style={(() => {
+          const { containerStyles } = getIPadProPortraitStyles();
+          const baseStyles = {
+            opacity: shouldShowLoading ? 0 : 1,
+            pointerEvents: shouldShowLoading ? 'none' : 'auto',
+            transition: 'opacity 0.3s ease-in-out',
+          };
+
+          return { ...baseStyles, ...containerStyles };
+        })()}
       >
         {window.innerWidth < 1000 || !state.isAnimating ? null : (
           <div className="new_app_header">
@@ -992,7 +1051,47 @@ function App() {
           }
         />
 
-        <div className="appContainer">
+        {/* CRITICAL FIX: Move header outside appContainer to prevent stacking context issues */}
+        <div className="header">
+          <div className="menu">
+            {/* Animated icon size with React Spring */}
+            <AnimatedMenuItem onClick={handleEmblemClickCallback} isLogo={true}>
+              <div
+                style={{
+                  width: '2.5em', // Increased to accommodate larger home icon (1.8em)
+                  height: '2.5em',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  paddingTop: '0.2em', // Minimal padding
+                }}
+              >
+                <animated.img
+                  src={found_wood}
+                  className="icon"
+                  alt="Found Wood Logo"
+                  loading="lazy"
+                  style={{
+                    ...iconSpring,
+                    objectFit: 'contain',
+                  }}
+                />
+              </div>
+            </AnimatedMenuItem>
+            <AnimatedMenuItem onClick={handleGalleryTypesClickCallback}>
+              <div className="menu-item">Gallery</div>
+            </AnimatedMenuItem>
+            <AnimatedMenuItem onClick={handleContactPageClick}>
+              <div className="menu-item">Contact</div>
+            </AnimatedMenuItem>
+          </div>
+        </div>
+
+        <div
+          className="appContainer"
+          style={getIPadProPortraitStyles().containerStyles}
+        >
           <Contact
             showContactPage={state.showContactPage}
             setShowContactPage={(value) =>
@@ -1005,72 +1104,41 @@ function App() {
             showGallery={state.showGallery}
           />
 
-          <div className="header">
-            <div className="menu">
-              {/* Animated icon size with React Spring */}
-              <AnimatedMenuItem
-                onClick={handleEmblemClickCallback}
-                isLogo={true}
-              >
-                <div
-                  style={{
-                    width: '2.5em', // Increased to accommodate larger home icon (1.8em)
-                    height: '2.5em',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                    paddingTop: '0.2em', // Minimal padding
-                  }}
-                >
-                  <animated.img
-                    src={found_wood}
-                    className="icon"
-                    alt="Found Wood Logo"
-                    loading="lazy"
-                    style={{
-                      ...iconSpring,
-                      objectFit: 'contain',
-                    }}
-                  />
-                </div>
-              </AnimatedMenuItem>
-              <AnimatedMenuItem onClick={handleGalleryTypesClickCallback}>
-                <div className="menu-item">Gallery</div>
-              </AnimatedMenuItem>
-              <AnimatedMenuItem onClick={handleContactPageClick}>
-                <div className="menu-item">Contact</div>
-              </AnimatedMenuItem>
-            </div>
-          </div>
-
           {/* Simplified Canvas rendering - no validation needed */}
           <div
-            style={{
-              pointerEvents:
-                state.showContactPage || state.showTypes ? 'none' : 'auto',
-              filter:
-                state.showContactPage || state.showTypes
-                  ? 'blur(20px)'
-                  : 'none',
-              WebkitFilter:
-                state.showContactPage || state.showTypes
-                  ? 'blur(20px)'
-                  : 'none', // Webkit prefix for Safari and older browsers
-              MozFilter:
-                state.showContactPage || state.showTypes
-                  ? 'blur(20px)'
-                  : 'none', // Mozilla prefix
-              msFilter:
-                state.showContactPage || state.showTypes
-                  ? 'blur(20px)'
-                  : 'none', // IE prefix
-              transition:
-                'filter 0.2s ease-out, -webkit-filter 0.2s ease-out, -moz-filter 0.2s ease-out',
-              willChange:
-                state.showContactPage || state.showTypes ? 'filter' : 'auto',
-              transform: 'translateZ(0)', // Force hardware acceleration
-            }}
+            style={(() => {
+              const { isIPadProPortrait, canvasWrapperStyles } =
+                getIPadProPortraitStyles();
+
+              const baseStyles = {
+                pointerEvents:
+                  state.showContactPage || state.showTypes ? 'none' : 'auto',
+                filter:
+                  state.showContactPage || state.showTypes
+                    ? 'blur(20px)'
+                    : 'none',
+                WebkitFilter:
+                  state.showContactPage || state.showTypes
+                    ? 'blur(20px)'
+                    : 'none',
+                MozFilter:
+                  state.showContactPage || state.showTypes
+                    ? 'blur(20px)'
+                    : 'none',
+                transition:
+                  'filter 0.2s ease-out, -webkit-filter 0.2s ease-out, -moz-filter 0.2s ease-out',
+                willChange:
+                  state.showContactPage || state.showTypes ? 'filter' : 'auto',
+                transform: 'translateZ(0)',
+              };
+
+              // CRITICAL FIX: Override with iPad Pro portrait styles to remove stacking contexts
+              if (isIPadProPortrait && canvasWrapperStyles) {
+                return { ...baseStyles, ...canvasWrapperStyles };
+              }
+
+              return baseStyles;
+            })()}
           >
             {/* Always mount Canvas with splat URL directly */}
             <NewCanvas

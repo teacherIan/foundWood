@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPad Pro Button Visibility Test</title>
+    <style>
+        /* Simulate the exact same structure as our app */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        /* iPad Pro portrait mode CSS - exact copy from App.css */
+        @media (min-width: 1024px) and (orientation: portrait) {
+            .header {
+                z-index: 100 !important;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100vw !important;
+                height: 10vh !important;
+                pointer-events: none !important;
+                transform: none !important;
+                will-change: auto !important;
+                contain: none !important;
+                isolation: auto !important;
+                background: red !important;
+                /* Make it obvious */
+            }
+
+            .menu {
+                pointer-events: auto !important;
+                z-index: auto !important;
+                position: relative !important;
+                display: flex !important;
+                width: 100% !important;
+                justify-content: space-around !important;
+                align-items: center !important;
+                background: transparent !important;
+                isolation: auto !important;
+                transform: none !important;
+                contain: none !important;
+            }
+
+            .menu-item {
+                pointer-events: auto !important;
+                z-index: auto !important;
+                position: relative !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                display: flex !important;
+                transform: none !important;
+                isolation: auto !important;
+                contain: none !important;
+                background: lime !important;
+                /* Make it obvious */
+                border: 1px solid #77481c !important;
+                border-radius: 2em !important;
+                padding: 0.2em 0.5em !important;
+                font-size: clamp(1.5rem, 4vw, 3.5rem) !important;
+                color: black !important;
+                cursor: pointer !important;
+                user-select: none !important;
+            }
+
+            /* Canvas behind everything */
+            canvas {
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                z-index: 1 !important;
+                background: blue !important;
+            }
+        }
+
+        /* General styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 10vh;
+            z-index: 100;
+            background: red;
+            display: flex;
+            justify-content: flex-start;
+            padding: 0.5rem 0;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .menu {
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
+            align-items: center;
+            font-size: clamp(1.5rem, 3.5vw, 3rem);
+            user-select: none;
+            pointer-events: auto;
+        }
+
+        .menu-item {
+            background: lime;
+            border: 1px solid #77481c;
+            border-radius: 2em;
+            padding: 0.2em 0.5em;
+            color: black;
+            cursor: pointer;
+            user-select: none;
+            pointer-events: auto;
+        }
+
+        .canvas-mock {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            background: blue;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="menu">
+            <div class="menu-item">Home</div>
+            <div class="menu-item">Gallery</div>
+            <div class="menu-item">Contact</div>
+        </div>
+    </div>
+
+    <div class="canvas-mock">
+        Mock Canvas (Should be behind buttons)
+    </div>
+
+    <script>
+        function checkButtonVisibility() {
+            console.log('🔍 Checking button visibility...');
+
+            const header = document.querySelector('.header');
+            const menu = document.querySelector('.menu');
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            console.log('Header:', header ? 'Found' : 'NOT FOUND');
+            console.log('Menu:', menu ? 'Found' : 'NOT FOUND');
+            console.log('Menu items:', menuItems.length);
+
+            if (header) {
+                const styles = window.getComputedStyle(header);
+                console.log('Header styles:', {
+                    position: styles.position,
+                    zIndex: styles.zIndex,
+                    top: styles.top,
+                    left: styles.left,
+                    width: styles.width,
+                    height: styles.height,
+                    background: styles.background,
+                    opacity: styles.opacity,
+                    visibility: styles.visibility,
+                    display: styles.display,
+                });
+            }
+
+            menuItems.forEach((item, index) => {
+                const styles = window.getComputedStyle(item);
+                const rect = item.getBoundingClientRect();
+                console.log(`Menu item ${index + 1}:`, {
+                    text: item.textContent,
+                    position: styles.position,
+                    zIndex: styles.zIndex,
+                    background: styles.background,
+                    opacity: styles.opacity,
+                    visibility: styles.visibility,
+                    display: styles.display,
+                    rect: {
+                        top: rect.top,
+                        left: rect.left,
+                        width: rect.width,
+                        height: rect.height,
+                    },
+                    visible: rect.width > 0 && rect.height > 0,
+                });
+            });
+        }
+
+        // Check immediately and on resize
+        checkButtonVisibility();
+        window.addEventListener('resize', checkButtonVisibility);
+
+        // Add click handlers
+        document.querySelectorAll('.menu-item').forEach((item, index) => {
+            item.addEventListener('click', () => {
+                console.log(`Button ${index + 1} clicked:`, item.textContent);
+                alert(`Button clicked: ${item.textContent}`);
+            });
+        });
+
+        // Force iPad Pro portrait detection
+        if (window.innerWidth >= 1024 && window.innerHeight >= 1366 && window.innerHeight > window.innerWidth) {
+            console.log('🎯 iPad Pro Portrait Mode Detected!');
+            console.log(`Viewport: ${window.innerWidth}x${window.innerHeight}`);
+
+            // Force emergency visibility after a delay
+            setTimeout(() => {
+                console.log('🚨 EMERGENCY: Forcing button visibility');
+
+                const header = document.querySelector('.header');
+                if (header) {
+                    header.style.setProperty('background', 'rgba(255, 0, 0, 0.9)', 'important');
+                    header.style.setProperty('border', '5px solid yellow', 'important');
+                }
+
+                document.querySelectorAll('.menu-item').forEach((item) => {
+                    item.style.setProperty('background', 'lime', 'important');
+                    item.style.setProperty('border', '5px solid red', 'important');
+                    item.style.setProperty('font-size', '3rem', 'important');
+                    item.style.setProperty('z-index', '10000', 'important');
+                });
+
+                checkButtonVisibility();
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>

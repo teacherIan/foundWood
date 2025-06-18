@@ -4,7 +4,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Redressed&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-/* driftWood font is only used for certain components, so keep it here */
 @font-face {
     font-family: "driftWood";
     src: url("./assets/fonts/DriftWood-z8W4.ttf") format("truetype");
@@ -13,7 +12,21 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: "CustomFont";
+    src: url("./assets/fonts/bubble_font.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 
+@font-face {
+    font-family: "CustomFont";
+    src: url("./assets/fonts/bubble_font.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 
 /* ===== VARIABLES ===== */
 :root {
@@ -115,7 +128,7 @@ body {
     }
 }
 
-/* ===== HEADER & MENU - DEFAULT DESKTOP BEHAVIOR ===== */
+/* ===== HEADER & MENU ===== */
 .header {
     position: fixed;
     top: 0;
@@ -165,12 +178,11 @@ body {
     object-fit: contain;
 }
 
-/* ===== CANVAS STYLES - DESKTOP DEFAULT ===== */
+/* ===== CANVAS STYLES ===== */
 canvas {
     z-index: 1 !important;
 }
 
-/* DESKTOP: Canvas should fill viewport but be behind header */
 canvas[data-engine="three.js r3f"],
 canvas[style*="position"],
 div[style*="position"]>canvas {
@@ -422,17 +434,8 @@ div[style*="position"]>canvas {
         z-index: 2000 !important;
     }
 
-    /* Ensure canvas is visible behind desktop gallery */
     canvas {
         z-index: 900 !important;
-    }
-
-    /* DESKTOP: Header should be transparent overlay, canvas full viewport behind it */
-    .header {
-        background: transparent !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        border-bottom: none !important;
     }
 }
 
@@ -441,14 +444,6 @@ div[style*="position"]>canvas {
     .icon {
         width: 1.8em !important;
         height: 1.8em !important;
-    }
-
-    /* iPad landscape should behave like desktop */
-    .header {
-        background: transparent !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        border-bottom: none !important;
     }
 }
 

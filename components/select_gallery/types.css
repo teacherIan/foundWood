@@ -1,34 +1,45 @@
 .typesContainer {
-    position: fixed; /* Changed from absolute to fixed for better viewport stability */
+    position: fixed;
+    /* Changed from absolute to fixed for better viewport stability */
     z-index: 2000;
     width: 100vw;
-    height: 100vh; /* Changed from 100svh to 100vh for better browser compatibility */
+    height: 100vh;
+    /* Changed from 100svh to 100vh for better browser compatibility */
     top: 0;
     left: 0;
     text-align: center;
     pointer-events: auto;
-    background: transparent; /* Ensure background is transparent */
-    overflow: hidden; /* Prevent any content from going outside viewport */
-    max-width: 100vw; /* Ensure container doesn't exceed viewport width */
-    max-height: 100vh; /* Ensure container doesn't exceed viewport height */
+    background: transparent;
+    /* Ensure background is transparent */
+    overflow: hidden;
+    /* Prevent any content from going outside viewport */
+    max-width: 100vw;
+    /* Ensure container doesn't exceed viewport width */
+    max-height: 100vh;
+    /* Ensure container doesn't exceed viewport height */
 }
 
 /* Only apply blur when types are visible */
 .typesContainer[data-visible="true"] {
-    backdrop-filter: blur(2px); /* Add subtle blur to background scene when visible */
-    -webkit-backdrop-filter: blur(2px); /* Safari support */
-    background: rgba(245, 245, 245, 0.1); /* Very subtle white overlay as fallback when visible */
+    backdrop-filter: blur(2px);
+    /* Add subtle blur to background scene when visible */
+    -webkit-backdrop-filter: blur(2px);
+    /* Safari support */
+    background: rgba(245, 245, 245, 0.1);
+    /* Very subtle white overlay as fallback when visible */
 }
 
 /* Ensure backdrop-filter works properly on all screen sizes when visible */
 @supports (backdrop-filter: blur(2px)) {
     .typesContainer[data-visible="true"] {
-        background: rgba(245, 245, 245, 0.05) !important; /* Very minimal background when backdrop-filter is supported and visible */
+        background: rgba(245, 245, 245, 0.05) !important;
+        /* Very minimal background when backdrop-filter is supported and visible */
     }
 }
 
 /* Additional viewport constraints for small screens that might push canvas off-screen */
-@media (max-width: 480px), (max-height: 600px) {
+@media (max-width: 480px),
+(max-height: 600px) {
     .typesContainer {
         /* Ensure container is never larger than viewport on small screens */
         width: 100vw !important;
@@ -56,6 +67,29 @@
         bottom: 0 !important;
         /* Prevent any overflow */
         overflow: hidden !important;
+        /* Additional containment properties */
+        contain: layout style paint !important;
+        will-change: opacity, transform !important;
+        /* Ensure proper z-index stacking */
+        z-index: 2000 !important;
+    }
+}
+
+/* Enhanced iPad Pro 12.9" specific targeting */
+@media (min-width: 1024px) and (max-width: 1024px) and (min-height: 1366px) and (orientation: portrait) {
+    .typesContainer {
+        /* Ultra-specific containment for iPad Pro 12.9" */
+        isolation: isolate !important;
+        transform: translate3d(0, 0, 0) !important;
+    }
+}
+
+/* Enhanced iPad Pro 11" specific targeting */
+@media (min-width: 834px) and (max-width: 834px) and (min-height: 1194px) and (orientation: portrait) {
+    .typesContainer {
+        /* Ultra-specific containment for iPad Pro 11" */
+        isolation: isolate !important;
+        transform: translate3d(0, 0, 0) !important;
     }
 }
 
