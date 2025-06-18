@@ -33,8 +33,34 @@ function useTypeSpring(showTypes, index) {
       const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
       const isSmallMobile = window.innerWidth <= 480;
       const aspectRatio = window.innerWidth / window.innerHeight;
+      // FIXED: iPad Pro detection - only applies to landscape mode with large dimensions
+      const isIPadProLandscape = window.innerWidth >= 1024 && window.innerHeight >= 768 && !isPortrait; // iPad Pro landscape only
 
-      if (isPortrait && isSmallMobile) {
+      if (isIPadProLandscape) {
+        // iPad Pro Landscape ONLY: Use desktop layout
+        let targetY, targetX;
+
+        if (index === 0) {
+          targetY = 15;
+          targetX = 8;
+        } else if (index === 1) {
+          targetY = 10;
+          targetX = 70;
+        } else if (index === 2) {
+          targetY = 60;
+          targetX = 8;
+        } else {
+          targetY = 48;
+          targetX = 70;
+        }
+
+        setSpring.start({
+          y: targetY,
+          x: targetX,
+          opacity: 1,
+          delay: 200 + index * 120,
+        });
+      } else if (isPortrait && isSmallMobile) {
         // Very small mobile devices: tighter layout
         let targetY, targetX;
 
@@ -158,9 +184,13 @@ function useExplanationTextSpring(showTypes) {
       const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
       const isSmallMobile = window.innerWidth <= 480;
       const aspectRatio = window.innerWidth / window.innerHeight;
+      // FIXED: iPad Pro detection - only applies to landscape mode with large dimensions
+      const isIPadProLandscape = window.innerWidth >= 1024 && window.innerHeight >= 768 && !isPortrait; // iPad Pro landscape only
 
       let targetY;
-      if (isPortrait && isSmallMobile) {
+      if (isIPadProLandscape) {
+        targetY = 0; // iPad Pro Landscape: Use desktop/landscape centered positioning
+      } else if (isPortrait && isSmallMobile) {
         targetY = 36; // Small mobile: slightly lower to avoid button overlap
       } else if (isPortrait && isMobile) {
         targetY = 35; // Standard mobile: lower position to avoid button overlap
@@ -221,8 +251,8 @@ export default function Types({
     <>
       <animated.div
         style={{
-          width: '100svw',
-          height: '100svh',
+          width: '100vw',
+          height: '100vh',
         }}
         className="typesContainer"
         data-visible={showTypes}
@@ -232,8 +262,8 @@ export default function Types({
             key={index}
             style={{
               position: 'absolute',
-              left: spring.x ? spring.x.to((x) => `${x}svw`) : '0svw',
-              transform: spring.y.to((y) => `translateY(${y}svh)`),
+              left: spring.x ? spring.x.to((x) => `${x}vw`) : '0vw',
+              transform: spring.y.to((y) => `translateY(${y}vh)`),
               opacity: spring.opacity,
             }}
           >
@@ -261,8 +291,12 @@ export default function Types({
               const isTablet =
                 window.innerWidth > 768 && window.innerWidth <= 1024;
               const isSmallMobile = window.innerWidth <= 480;
+              // FIXED: iPad Pro detection - only applies to landscape mode with large dimensions
+              const isIPadProLandscape = window.innerWidth >= 1024 && window.innerHeight >= 768 && !isPortrait; // iPad Pro landscape only
 
-              if (isPortrait && isSmallMobile) {
+              if (isIPadProLandscape) {
+                return '50%'; // iPad Pro Landscape: Use desktop positioning
+              } else if (isPortrait && isSmallMobile) {
                 return '27.5%'; // Small mobile: slightly more centered
               } else if (isPortrait && isMobile) {
                 return '25%'; // Mobile: offset to avoid button overlap
@@ -279,19 +313,23 @@ export default function Types({
                 window.innerWidth > 768 && window.innerWidth <= 1024;
               const isSmallMobile = window.innerWidth <= 480;
               const aspectRatio = window.innerWidth / window.innerHeight;
+              // FIXED: iPad Pro detection - only applies to landscape mode with large dimensions
+              const isIPadProLandscape = window.innerWidth >= 1024 && window.innerHeight >= 768 && !isPortrait; // iPad Pro landscape only
 
-              if (isPortrait && isSmallMobile) {
-                return '45svh'; // Small mobile: lower position for tight layout
+              if (isIPadProLandscape) {
+                return '50vh'; // iPad Pro Landscape: Use desktop centered positioning
+              } else if (isPortrait && isSmallMobile) {
+                return '45vh'; // Small mobile: lower position for tight layout
               } else if (isPortrait && isMobile) {
-                return '45svh'; // Mobile: lower position
+                return '45vh'; // Mobile: lower position
               } else if (isPortrait && isTablet) {
-                return aspectRatio < 0.7 ? '30svh' : '35svh'; // Tablet: adjust based on aspect ratio
+                return aspectRatio < 0.7 ? '30vh' : '35vh'; // Tablet: adjust based on aspect ratio
               } else {
-                return '50svh'; // Desktop: perfect center
+                return '50vh'; // Desktop: perfect center
               }
             })(),
             transform: explanationSpring.y.to(
-              (y) => `translateX(-50%) translateY(-50%) translateY(${y}svh)` // Always center horizontally and vertically
+              (y) => `translateX(-50%) translateY(-50%) translateY(${y}vh)` // Always center horizontally and vertically
             ),
             opacity: explanationSpring.opacity,
             width: (() => {
@@ -300,15 +338,19 @@ export default function Types({
               const isTablet =
                 window.innerWidth > 768 && window.innerWidth <= 1024;
               const isSmallMobile = window.innerWidth <= 480;
+              // FIXED: iPad Pro detection - only applies to landscape mode with large dimensions
+              const isIPadProLandscape = window.innerWidth >= 1024 && window.innerHeight >= 768 && !isPortrait; // iPad Pro landscape only
 
-              if (isPortrait && isSmallMobile) {
-                return '52svw'; // Small mobile: narrower for tighter layout
+              if (isIPadProLandscape) {
+                return '35vw'; // iPad Pro Landscape: Use desktop compact width
+              } else if (isPortrait && isSmallMobile) {
+                return '52vw'; // Small mobile: narrower for tighter layout
               } else if (isPortrait && isMobile) {
-                return '50svw'; // Mobile: wider for readability
+                return '50vw'; // Mobile: wider for readability
               } else if (isPortrait && isTablet) {
-                return '45svw'; // Tablet: slightly narrower
+                return '45vw'; // Tablet: slightly narrower
               } else {
-                return '35svw'; // Desktop: compact
+                return '35vw'; // Desktop: compact
               }
             })(),
             textAlign: 'center',

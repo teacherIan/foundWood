@@ -567,7 +567,7 @@
     .currentPhoto {
         height: calc(100vh - 12vh);
         /* Use VH instead of SVH for Safari */
-        height: calc(100svh - 12svh);
+        height: calc(100vh - 12vh);
         /* Progressive enhancement */
         width: 100vw;
         box-sizing: border-box;
@@ -1293,7 +1293,7 @@
         -webkit-overflow-scrolling: touch;
         min-height: 100vh;
         /* Fallback for Safari iOS */
-        min-height: 100svh;
+        min-height: 100vh;
         /* Progressive enhancement */
         /* Three-section layout distribution */
         display: flex;

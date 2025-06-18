@@ -1070,9 +1070,12 @@ export default function App({
           left: 0,
           width: '100vw', // Use standard viewport units
           height: '100vh',
-          zIndex: hasOverlay ? 1000 : 1000, // DESKTOP FIX: Keep canvas visible behind gallery
+          maxWidth: '100vw', // Prevent canvas from exceeding viewport width
+          maxHeight: '100vh', // Prevent canvas from exceeding viewport height
+          zIndex: hasOverlay ? 900 : 1000, // Lower z-index when overlays are active to ensure they appear on top
           pointerEvents: hasOverlay ? 'none' : 'auto', // Disable pointer events when overlays are active
           touchAction: 'none', // Prevent default touch actions that might interfere
+          overflow: 'hidden', // Ensure canvas doesn't create scrollbars
         }}
         onMouseDown={(e) => {
           console.log('🖱️ Canvas mouse down detected!', {

@@ -1275,8 +1275,8 @@ export default function Gallery({
       className="galleryContainer"
       style={{
         ...gallerySpring,
-        width: '100svw', // Modern viewport units with VW fallback in CSS
-        height: '100svh', // Modern viewport units with VH fallback in CSS
+        width: '100vw', // Use standard viewport units for better compatibility
+        height: '100vh', // Use standard viewport units for better compatibility
         opacity: showGallery ? 1 : 0,
         zIndex: showGallery ? 20000 : 0, // Use CSS media queries to control z-index
         /* Prevent pull-to-refresh on mobile devices */

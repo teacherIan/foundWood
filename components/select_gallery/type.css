@@ -1,7 +1,7 @@
 .typeContainer {
     display: flex;
     flex-direction: column;
-    width: 30svw;
+    width: 30vw;
     color: var(--brown);
     cursor: pointer;
     border-radius: 2000px;
@@ -24,7 +24,7 @@
 /* Size variations based on content */
 @media (orientation: landscape) {
     .typeContainer {
-        width: 20svw;
+        width: 20vw;
         min-width: 200px;
         max-width: 300px;
     }
@@ -32,7 +32,7 @@
     /* Larger sizes for desktop screens */
     @media (min-width: 1200px) {
         .typeContainer {
-            width: 22svw;
+            width: 22vw;
             min-width: 250px;
             max-width: 350px;
         }
@@ -40,7 +40,7 @@
 
     @media (min-width: 1600px) {
         .typeContainer {
-            width: 24svw;
+            width: 24vw;
             min-width: 280px;
             max-width: 400px;
         }
@@ -50,7 +50,7 @@
 
 @media (orientation: portrait) {
     .typeContainer {
-        width: 35svw;
+        width: 35vw;
         min-width: 180px;
         max-width: 280px;
     }
@@ -58,7 +58,7 @@
     /* Larger sizes for tablet portrait */
     @media (min-width: 768px) {
         .typeContainer {
-            width: 30svw;
+            width: 30vw;
             min-width: 220px;
             max-width: 320px;
         }

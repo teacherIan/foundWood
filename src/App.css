@@ -68,6 +68,77 @@ canvas {
     transform: translateZ(0);
     will-change: filter;
     backface-visibility: hidden;
+    /* Ensure canvas never gets pushed off-screen */
+    min-width: 100vw !important;
+    min-height: 100vh !important;
+    /* Prevent canvas from creating scrollbars or overflow */
+    box-sizing: border-box !important;
+}
+
+/* iPad Pro portrait mode - prevent canvas from being pushed off-screen */
+@media (min-width: 1024px) and (orientation: portrait) {
+    canvas {
+        /* Override min-width/min-height constraints for iPad Pro portrait */
+        min-width: 100vw !important;
+        min-height: 100vh !important;
+        /* Force exact viewport dimensions */
+        width: 100vw !important;
+        height: 100vh !important;
+        /* Ensure canvas stays within viewport bounds */
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        /* Prevent any overflow that could push content off-screen */
+        overflow: hidden !important;
+        /* Force positioning within viewport */
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+    }
+}
+
+/* Ensure canvas is always visible behind overlays */
+canvas[style*="position: fixed"] {
+    /* Force proper positioning for fixed canvas */
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    /* Ensure canvas takes full viewport */
+    width: 100vw !important;
+    height: 100vh !important;
+    /* Prevent overflow that could push canvas off-screen */
+    overflow: hidden !important;
+    /* Ensure proper layering */
+    z-index: 900 !important; /* Lower than overlay z-indexes but visible */
+}
+
+/* Additional defensive CSS for iPad Pro and large tablets */
+@media (min-width: 768px) and (orientation: portrait) {
+    canvas,
+    canvas[style*="position: fixed"] {
+        /* Force canvas to stay within viewport bounds on all tablets */
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        min-width: 100vw !important;
+        min-height: 100vh !important;
+        /* Prevent any layout shifts that could push canvas off-screen */
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        outline: none !important;
+        /* Force viewport containment */
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+    }
 }
 
 canvas:active {
