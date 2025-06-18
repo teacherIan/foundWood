@@ -11,7 +11,7 @@ import {
 import found_wood from './assets/found_wood_final_all.png';
 import Contact from '../components/contact/Contact';
 import Gallery from '../components/galleries/Gallery';
-import Types from '../components/select_gallery/Types';
+import GalleryTypeSelector from '../components/select_gallery/GalleryTypeSelector';
 import NewCanvas from '../components/experience/Experience';
 import FontFaceObserver from 'fontfaceobserver';
 import {
@@ -162,6 +162,10 @@ const AnimatedMenuItem = memo(({ children, onClick, isLogo = false }) => {
         // Ensure proper pointer events
         pointerEvents: 'auto',
         cursor: 'pointer',
+        // Prevent stacking context isolation - critical for z-index hierarchy
+        position: 'relative',
+        zIndex: 'inherit',
+        isolation: 'auto',
       }}
     >
       {children}
@@ -1121,7 +1125,7 @@ function App() {
           onClose={handleHideGalleryCallback}
         />
 
-        <Types
+        <GalleryTypeSelector
           showTypes={state.showTypes}
           onGalleryTypesClick={handleHideTypesCallback}
           onMissionButtonClick={handleMissionButtonClickCallback}

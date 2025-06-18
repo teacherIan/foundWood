@@ -1,4 +1,4 @@
-.typesContainer {
+.galleryTypeSelector {
     position: fixed;
     /* Changed from absolute to fixed for better viewport stability */
     z-index: 21000;
@@ -21,7 +21,7 @@
 }
 
 /* Only apply blur when types are visible */
-.typesContainer[data-visible="true"] {
+.galleryTypeSelector[data-visible="true"] {
     backdrop-filter: blur(2px);
     /* Add subtle blur to background scene when visible */
     -webkit-backdrop-filter: blur(2px);
@@ -32,7 +32,7 @@
 
 /* Ensure backdrop-filter works properly on all screen sizes when visible */
 @supports (backdrop-filter: blur(2px)) {
-    .typesContainer[data-visible="true"] {
+    .galleryTypeSelector[data-visible="true"] {
         background: rgba(245, 245, 245, 0.05) !important;
         /* Very minimal background when backdrop-filter is supported and visible */
     }
@@ -41,7 +41,7 @@
 /* Additional viewport constraints for small screens that might push canvas off-screen */
 @media (max-width: 480px),
 (max-height: 600px) {
-    .typesContainer {
+    .galleryTypeSelector {
         /* Ensure container is never larger than viewport on small screens */
         width: 100vw !important;
         height: 100vh !important;
@@ -54,7 +54,7 @@
 
 /* iPad Pro portrait mode - ensure overlay doesn't interfere with canvas positioning */
 @media (min-width: 1024px) and (orientation: portrait) {
-    .typesContainer {
+    .galleryTypeSelector {
         /* Force exact viewport dimensions */
         width: 100vw !important;
         height: 100vh !important;
@@ -80,30 +80,30 @@
 
 /* Enhanced iPad Pro 12.9" specific targeting */
 @media (min-width: 1024px) and (max-width: 1024px) and (min-height: 1366px) and (orientation: portrait) {
-    .typesContainer {
+    .galleryTypeSelector {
         /* Ultra-specific containment for iPad Pro 12.9" */
         isolation: auto !important;
         /* Remove isolation that blocks interactions */
         transform: translate3d(0, 0, 0) !important;
-        z-index: 21000 !important;
-        /* Ensure above header */
+        z-index: 19000 !important;
+        /* FIXED: Keep below header (20000+) to prevent menu blur */
     }
 }
 
 /* Enhanced iPad Pro 11" specific targeting */
 @media (min-width: 834px) and (max-width: 834px) and (min-height: 1194px) and (orientation: portrait) {
-    .typesContainer {
+    .galleryTypeSelector {
         /* Ultra-specific containment for iPad Pro 11" */
         isolation: auto !important;
         /* Remove isolation that blocks interactions */
         transform: translate3d(0, 0, 0) !important;
-        z-index: 21000 !important;
-        /* Ensure above header */
+        z-index: 19000 !important;
+        /* FIXED: Keep below header (20000+) to prevent menu blur */
     }
 }
 
 /* When types are not visible (opacity 0), disable pointer events to allow Canvas interaction */
-.typesContainer[data-visible="false"] {
+.galleryTypeSelector[data-visible="false"] {
     pointer-events: none;
 }
 
@@ -158,7 +158,7 @@
         min-height: 120px;
     }
 
-    .explanationContent .typeHeader {
+    .explanationContent .galleryTypeHeader {
         font-size: 12px !important;
     }
 
@@ -178,7 +178,7 @@
         border-radius: 16px;
     }
 
-    .explanationContent .typeHeader {
+    .explanationContent .galleryTypeHeader {
         font-size: 14px !important;
         margin-bottom: 10px;
     }
@@ -199,7 +199,7 @@
         border-radius: 18px;
     }
 
-    .explanationContent .typeHeader {
+    .explanationContent .galleryTypeHeader {
         font-size: 16px !important;
         margin-bottom: 12px;
     }
@@ -277,7 +277,7 @@
         border-radius: 12px;
     }
 
-    .explanationContent .typeHeader {
+    .explanationContent .galleryTypeHeader {
         font-size: 10px !important;
         margin-bottom: 6px;
     }
@@ -298,7 +298,7 @@
         min-height: 100px;
     }
 
-    .explanationContent .typeHeader {
+    .explanationContent .galleryTypeHeader {
         font-size: 10px !important;
         margin-bottom: 4px;
     }
@@ -319,7 +319,7 @@
         min-height: 80px;
     }
 
-    .explanationContent .typeHeader {
+    .explanationContent .galleryTypeHeader {
         font-size: 9px !important;
         margin-bottom: 3px;
     }
@@ -350,7 +350,7 @@
         padding: 18px;
     }
 
-    .explanationContent .typeHeader {
+    .explanationContent .galleryTypeHeader {
         font-size: 18px !important;
     }
 
@@ -375,7 +375,7 @@
         box-shadow: 0 10px 35px rgba(119, 72, 28, 0.3);
     }
 
-    .explanationContent .typeHeader {
+    .explanationContent .galleryTypeHeader {
         -webkit-text-stroke: 1.5px #77481c;
         filter: drop-shadow(0.7px 0.7px 0.2px #000000dd);
     }

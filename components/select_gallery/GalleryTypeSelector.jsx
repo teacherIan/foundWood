@@ -1,7 +1,7 @@
 import { useSpring, animated } from '@react-spring/web';
-import Type from './Type';
-import './types.css';
-import './type.css';
+import GalleryTypeButton from './GalleryTypeButton';
+import './galleryTypeSelector.css';
+import './galleryTypeButton.css';
 import { useEffect } from 'react';
 import chair from '../../src/assets/noBG/double_chair_final_noBG.png';
 // import table from '../../src/assets/noBG/plantStand_new.png';
@@ -219,7 +219,7 @@ function useExplanationTextSpring(showTypes) {
   return spring;
 }
 
-export default function Types({
+export default function GalleryTypeSelector({
   showTypes,
   onGalleryTypesClick,
   onMissionButtonClick,
@@ -256,7 +256,7 @@ export default function Types({
           width: '100vw',
           height: '100svh',
         }}
-        className="typesContainer"
+        className="galleryTypeSelector"
         data-visible={showTypes}
       >
         {springs.map((spring, index) => (
@@ -269,7 +269,7 @@ export default function Types({
               opacity: spring.opacity,
             }}
           >
-            <Type
+            <GalleryTypeButton
               img={imgArray[index]}
               header={imgHeader[index]}
               onTypeSelect={onTypeSelect}
@@ -370,7 +370,7 @@ export default function Types({
         >
           <div className="explanationContent">
             <div
-              className="typeHeader"
+              className="galleryTypeHeader"
               dangerouslySetInnerHTML={{
                 __html: 'Custom Crafted <br/> for You',
               }}

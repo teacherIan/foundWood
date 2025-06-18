@@ -142,7 +142,7 @@ canvas {
 }
 
 /* ===== Z-INDEX LAYERS ===== */
-.typesContainer {
+.galleryTypeSelector {
     z-index: var(--z-modal);
 }
 

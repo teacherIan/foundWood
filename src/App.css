@@ -231,27 +231,61 @@ canvas {
 
 /* ===== OVERLAY COMPONENTS ===== */
 
-/* Ensure overlays appear above navigation */
-.typesContainer,
+/* Ensure overlays appear above canvas but BELOW navigation */
+.galleryTypeSelector,
 .galleryContainer,
 .contactContainer {
-    z-index: 21000 !important;
+    z-index: 19000 !important;
+    /* Below header (20000+) but above canvas (900) */
+}
+
+/* ===== HEADER PROTECTION FROM BACKDROP-FILTER ===== */
+
+/* Ensure header/menu is never affected by overlay backdrop-filter effects */
+.header,
+.menu,
+.menu-item {
+    /* Force header elements to be immune to backdrop-filter from overlays */
+    isolation: isolate !important;
+    /* Create new stacking context to prevent backdrop-filter inheritance */
+}
+
+/* Specifically for iPad Pro where backdrop-filter was causing menu blur */
+@media (min-width: 768px) and (orientation: portrait) {
+
+    .header,
+    .menu,
+    .menu-item {
+        /* Enhanced protection on iPad Pro */
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        /* Ensure menu background is distinct */
+        background: rgba(245, 245, 245, 0.95) !important;
+        /* Add subtle backdrop blur to header itself for readability */
+    }
+
+    .header {
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        /* Apply backdrop-filter to header container, not individual items */
+        border-bottom: 1px solid rgba(139, 69, 19, 0.1) !important;
+    }
 }
 
 /* ===== FORCE CLEAN SLATE FOR PROBLEMATIC ELEMENTS ===== */
 
 /* Override any existing problematic rules */
 @media screen {
-  /* Re-apply clean hierarchy - REMOVED the problematic * { z-index: unset } rule */
-  
-  canvas,
-  canvas[data-engine] {
-    z-index: 900 !important;
-  }
+    /* Re-apply clean hierarchy - REMOVED the problematic * { z-index: unset } rule */
 
-  .header {
-    z-index: 20000 !important;
-  }
+    canvas,
+    canvas[data-engine] {
+        z-index: 900 !important;
+    }
+
+    .header {
+        z-index: 20000 !important;
+    }
 
     .menu {
         z-index: 20001 !important;
@@ -266,10 +300,11 @@ canvas {
         z-index: 20003 !important;
     }
 
-    .typesContainer,
+    .galleryTypeSelector,
     .galleryContainer,
     .contactContainer {
-        z-index: 21000 !important;
+        z-index: 19000 !important;
+        /* Below header (20000+) but above canvas (900) */
     }
 
     /* Force proper positioning */
@@ -389,4 +424,31 @@ canvas:active {
 *[style*="animation"] {
     will-change: transform, opacity;
     transform: translate3d(0, 0, 0);
+}
+
+/* ===== REACT SPRING STACKING CONTEXT FIX ===== */
+/* Prevent React Spring animations from creating stacking contexts that interfere with z-index */
+[style*="transform"] .menu-item,
+[style*="scale"] .menu-item {
+    /* Force z-index to work within animated containers - HIGHER than overlays */
+    position: relative !important;
+    z-index: 30000 !important;
+    /* Higher than any overlay to ensure buttons are always clickable */
+}
+
+/* Ensure AnimatedMenuItem containers don't trap z-index */
+.menu>div[style*="transform"] {
+    /* Ensure the animated wrapper doesn't create isolation */
+    position: relative !important;
+    z-index: inherit !important;
+    /* Allow child z-index to escape to parent stacking context */
+    isolation: auto !important;
+}
+
+/* Menu item drop shadow fix - use box-shadow instead of filter to avoid stacking context */
+.menu-item {
+    /* ...existing code... */
+    /* Replace filter with box-shadow to avoid creating stacking context */
+    filter: none !important;
+    box-shadow: 1px 1px 0px #1c5077, 2px 2px 2px #77481c !important;
 }

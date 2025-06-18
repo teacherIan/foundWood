@@ -1,9 +1,9 @@
-import './type.css';
+import './galleryTypeButton.css';
 import { useState, useEffect } from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import types from '../galleries/dataTypes/types';
 
-export default function Type({
+export default function GalleryTypeButton({
   img,
   header,
   onTypeSelect,
@@ -72,17 +72,17 @@ export default function Type({
       onClick={() => handleClick()}
       onMouseEnter={() => setActive(true)}
       onMouseLeave={() => setActive(false)}
-      className="typeContainer"
+      className="galleryTypeButton"
       style={{
         ...springs,
       }}
     >
       {' '}
       <div
-        className="typeHeader"
+        className="galleryTypeHeader"
         dangerouslySetInnerHTML={{ __html: header }}
       />
-      <img className="typeImage" src={img} />
+      <img className="galleryTypeImage" src={img} />
     </animated.div>
   );
 }

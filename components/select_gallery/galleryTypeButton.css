@@ -1,4 +1,4 @@
-.typeContainer {
+.galleryTypeButton {
     display: flex;
     flex-direction: column;
     width: 30vw;
@@ -11,12 +11,12 @@
     pointer-events: auto;
 }
 
-.typeImage {
+.galleryTypeImage {
     width: 100%;
     overflow: visible;
 }
 
-.typeHeader {
+.galleryTypeHeader {
     display: block;
     font-size: calc(2vh + 1.5vw + 15px);
     filter: drop-shadow(0.5px 0.5px 0.1px #000000dd);
@@ -27,7 +27,7 @@
 
 /* Size variations based on content */
 @media (orientation: landscape) {
-    .typeContainer {
+    .galleryTypeButton {
         width: 20vw;
         min-width: 200px;
         max-width: 300px;
@@ -35,7 +35,7 @@
 
     /* Larger sizes for desktop screens */
     @media (min-width: 1200px) {
-        .typeContainer {
+        .galleryTypeButton {
             width: 22vw;
             min-width: 250px;
             max-width: 350px;
@@ -43,7 +43,7 @@
     }
 
     @media (min-width: 1600px) {
-        .typeContainer {
+        .galleryTypeButton {
             width: 24vw;
             min-width: 280px;
             max-width: 400px;
@@ -53,7 +53,7 @@
 
 
 @media (orientation: portrait) {
-    .typeContainer {
+    .galleryTypeButton {
         width: 35vw;
         min-width: 180px;
         max-width: 280px;
@@ -61,7 +61,7 @@
 
     /* Larger sizes for tablet portrait */
     @media (min-width: 768px) {
-        .typeContainer {
+        .galleryTypeButton {
             width: 30vw;
             min-width: 220px;
             max-width: 320px;
