@@ -9,14 +9,13 @@ export default defineConfig({
         require('autoprefixer'),
         require('postcss-nested'),
         require('postcss-custom-media')({
-          importFrom: 'src/styles/variables.css'
+          importFrom: 'src/styles/variables.css',
         }),
-        ...(process.env.NODE_ENV === 'production' 
-          ? [require('cssnano')({ preset: 'default' })] 
-          : []
-        )
-      ]
-    }
+        ...(process.env.NODE_ENV === 'production'
+          ? [require('cssnano')({ preset: 'default' })]
+          : []),
+      ],
+    },
   },
   assetsInclude: [
     '**/*.glb',
@@ -32,15 +31,15 @@ export default defineConfig({
     host: true,
     force: true,
     fs: {
-      allow: ['..']
-    }
+      allow: ['..'],
+    },
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@components': path.resolve(__dirname, './components'),
-      '@styles': path.resolve(__dirname, './src/styles')
-    }
+      '@styles': path.resolve(__dirname, './src/styles'),
+    },
   },
   build: {
     cssCodeSplit: true,
@@ -53,8 +52,8 @@ export default defineConfig({
             return `css/[name]-[hash][extname]`;
           }
           return `assets/[name]-[hash][extname]`;
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 });
