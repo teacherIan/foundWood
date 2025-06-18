@@ -45,31 +45,100 @@ const configAnimation = {
   precision: 0.0005,
 };
 
-// Memoized AnimatedMenuItem component
+// Memoized AnimatedMenuItem component with iPad touch event fix
 const AnimatedMenuItem = memo(({ children, onClick, isLogo = false }) => {
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
+  const [touchStarted, setTouchStarted] = useState(false);
 
   const springProps = useSpring({
     scale: hovered || pressed ? 1.1 : 1,
     config: configAnimation,
   });
 
+  // Detect if this is a touch device
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const isIpadDetected = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  // iPad-optimized event handlers
+  const handleTouchStart = useCallback((e) => {
+    if (!isTouchDevice) return;
+    setTouchStarted(true);
+    setPressed(true);
+    // Prevent mouse events from firing after touch
+    e.preventDefault();
+  }, [isTouchDevice]);
+
+  const handleTouchEnd = useCallback((e) => {
+    if (!isTouchDevice || !touchStarted) return;
+    
+    setPressed(false);
+    setTouchStarted(false);
+    
+    // Call onClick directly for touch devices to ensure it fires
+    if (onClick) {
+      e.preventDefault();
+      e.stopPropagation();
+      onClick(e);
+    }
+  }, [isTouchDevice, touchStarted, onClick]);
+
+  const handleClick = useCallback((e) => {
+    // Only handle click if this wasn't a touch interaction
+    if (touchStarted || isTouchDevice) {
+      e.preventDefault();
+      return;
+    }
+    if (onClick) {
+      onClick(e);
+    }
+  }, [touchStarted, isTouchDevice, onClick]);
+
+  const handleMouseDown = useCallback((e) => {
+    if (isTouchDevice || touchStarted) return;
+    setPressed(true);
+  }, [isTouchDevice, touchStarted]);
+
+  const handleMouseUp = useCallback((e) => {
+    if (isTouchDevice || touchStarted) return;
+    setPressed(false);
+  }, [isTouchDevice, touchStarted]);
+
+  const handleMouseEnter = useCallback((e) => {
+    if (isTouchDevice || touchStarted) return;
+    setHovered(true);
+  }, [isTouchDevice, touchStarted]);
+
+  const handleMouseLeave = useCallback((e) => {
+    if (isTouchDevice || touchStarted) return;
+    setHovered(false);
+    setPressed(false);
+  }, [isTouchDevice, touchStarted]);
+
   return (
     <animated.div
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onMouseDown={() => setPressed(true)}
-      onMouseUp={() => setPressed(false)}
-      onTouchStart={() => setPressed(true)}
-      onTouchEnd={() => setPressed(false)}
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       style={{
         transform: springProps.scale.to((s) => `scale(${s})`),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         height: isLogo ? 'auto' : '100%',
+        // Enhanced touch handling for iPad
+        touchAction: 'manipulation',
+        WebkitTouchCallout: 'none',
+        WebkitUserSelect: 'none',
+        userSelect: 'none',
+        // Ensure proper pointer events
+        pointerEvents: 'auto',
+        cursor: 'pointer',
       }}
     >
       {children}

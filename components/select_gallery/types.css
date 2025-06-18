@@ -1,7 +1,7 @@
 .typesContainer {
     position: fixed;
     /* Changed from absolute to fixed for better viewport stability */
-    z-index: 2000;
+    z-index: 21000; /* Higher than header to ensure buttons are clickable */
     width: 100vw;
     height: 100vh;
     /* Changed from 100svh to 100vh for better browser compatibility */
@@ -70,8 +70,10 @@
         /* Additional containment properties */
         contain: layout style paint !important;
         will-change: opacity, transform !important;
-        /* Ensure proper z-index stacking */
-        z-index: 2000 !important;
+        /* Ensure proper z-index stacking - higher than header */
+        z-index: 21000 !important;
+        /* Remove isolation that can block interactions */
+        isolation: auto !important;
     }
 }
 
@@ -79,8 +81,9 @@
 @media (min-width: 1024px) and (max-width: 1024px) and (min-height: 1366px) and (orientation: portrait) {
     .typesContainer {
         /* Ultra-specific containment for iPad Pro 12.9" */
-        isolation: isolate !important;
+        isolation: auto !important; /* Remove isolation that blocks interactions */
         transform: translate3d(0, 0, 0) !important;
+        z-index: 21000 !important; /* Ensure above header */
     }
 }
 
@@ -88,8 +91,9 @@
 @media (min-width: 834px) and (max-width: 834px) and (min-height: 1194px) and (orientation: portrait) {
     .typesContainer {
         /* Ultra-specific containment for iPad Pro 11" */
-        isolation: isolate !important;
+        isolation: auto !important; /* Remove isolation that blocks interactions */
         transform: translate3d(0, 0, 0) !important;
+        z-index: 21000 !important; /* Ensure above header */
     }
 }
 

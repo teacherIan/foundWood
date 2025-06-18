@@ -162,10 +162,10 @@ body {
         background: transparent !important;
     }
 
-    /* CRITICAL ENHANCEMENT: Ensure header remains visible outside appContainer */
+    /* FIXED: Consistent header styling for all devices - transparent overlay */
     .header {
-        /* Ultra-high z-index to ensure header stays above everything */
-        z-index: 999999 !important;
+        /* Consistent z-index across all devices */
+        z-index: 20000 !important;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
@@ -181,14 +181,14 @@ body {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        pointer-events: auto !important;
+        pointer-events: none !important; /* Header non-interactive, menu items interactive */
         visibility: visible !important;
         opacity: 1 !important;
-        /* Style enhancements */
-        background: rgba(245, 245, 245, 0.95) !important;
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        border-bottom: 1px solid rgba(139, 69, 19, 0.1) !important;
+        /* TRANSPARENT OVERLAY: Same behavior as desktop/mobile */
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border-bottom: none !important;
     }
 
     .menu {
@@ -432,17 +432,17 @@ body {
     will-change: auto !important;
   }
 
-  /* Page overlays - Higher than navigation but lower than emergency modals */
+  /* Page overlays - Higher than navigation to ensure interactions work */
   .typesContainer {
-    z-index: 20000 !important;
+    z-index: 21000 !important; /* Higher than header for clickable buttons */
   }
 
   .galleryContainer {
-    z-index: 20000 !important;
+    z-index: 21000 !important; /* Higher than header for clickable elements */
   }
 
   .contactContainer {
-    z-index: 20000 !important;
+    z-index: 21000 !important; /* Higher than header for clickable elements */
   }
 }
 
@@ -574,14 +574,14 @@ canvas[style] {
         visibility: visible !important;
         pointer-events: auto !important;
         display: flex !important;
-        z-index: 999999 !important;
+        z-index: 20002 !important; /* Consistent with menu items */
         position: relative !important;
     }
 
-    /* Ensure header stacking context is correct with extremely high z-index */
+    /* Ensure header stacking context is correct with consistent z-index */
     .header,
     header {
-        z-index: 999999 !important;
+        z-index: 20000 !important; /* Consistent with overall hierarchy */
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
@@ -638,14 +638,14 @@ canvas[style] {
         visibility: visible !important;
         pointer-events: auto !important;
         display: flex !important;
-        z-index: 999999 !important;
+        z-index: 20002 !important; /* Consistent with menu items */
         position: relative !important;
     }
 
-    /* Ensure header stacking context is correct with extremely high z-index */
+    /* Ensure header stacking context is correct with consistent z-index */
     .header,
     header {
-        z-index: 999999 !important;
+        z-index: 20000 !important; /* Consistent with overall hierarchy */
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;

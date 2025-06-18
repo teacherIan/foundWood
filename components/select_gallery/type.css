@@ -5,6 +5,10 @@
     color: var(--brown);
     cursor: pointer;
     border-radius: 2000px;
+    /* Ensure buttons are clickable */
+    position: relative;
+    z-index: 1;
+    pointer-events: auto;
 }
 
 .typeImage {

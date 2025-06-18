@@ -254,7 +254,7 @@ export default function Types({
       <animated.div
         style={{
           width: '100vw',
-          height: '100vh',
+          height: '100svh',
         }}
         className="typesContainer"
         data-visible={showTypes}

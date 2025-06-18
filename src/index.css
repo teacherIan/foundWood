@@ -77,7 +77,7 @@ body {
     color: #77481c !important;
     font-family: "CustomFont", "Poppins", "Lobster Two", sans-serif !important;
     font-size: 1.2rem !important;
-    z-index: 999999999 !important;
+    z-index: 30000 !important; /* Loading screen should be above everything */
     overflow: hidden !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -201,7 +201,7 @@ div[style*="position"]>canvas {
 
 /* ===== Z-INDEX LAYERS ===== */
 .typesContainer {
-    z-index: 2000;
+    z-index: 21000; /* Higher than header for clickable buttons */
 }
 
 .galleryContainer {
