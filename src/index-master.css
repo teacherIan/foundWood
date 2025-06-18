@@ -1,0 +1,127 @@
+/* ===== FOUNDWOOD INDEX STYLES (CLEAN VERSION) ===== */
+/* This replaces both index.css and index-clean.css */
+
+@import "./styles/index.css";
+
+/* ===== ADDITIONAL APP-SPECIFIC STYLES ===== */
+
+/* Legacy font support (keep for backward compatibility) */
+@font-face {
+    font-family: "driftWood";
+    src: url("./assets/fonts/DriftWood-z8W4.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Legacy variable support */
+:root {
+    --brown: #77481c;
+    --blue: lightblue;
+    --lightGreen: #d9ebc7;
+    --white: #f5f5f5;
+    --background: #f5f5f5;
+    --mainFont: "CustomFont", "Poppins", "Lobster Two", sans-serif;
+    --secondaryFont: "driftWood", "CustomFont", "Poppins", sans-serif;
+}
+
+/* Utility classes for gallery navigation */
+.selectButton {
+    cursor: pointer;
+    position: absolute;
+    user-select: none;
+    width: 10vw;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: var(--z-dropdown);
+    background: transparent;
+    transition: var(--transition-fast);
+}
+
+.selectButton:hover {
+    background: rgba(119, 72, 28, 0.05);
+}
+
+.selectButton.right {
+    top: 0;
+    left: 90vw;
+    justify-content: flex-end;
+}
+
+.selectButton.left {
+    top: 0;
+    left: 0;
+    justify-content: flex-start;
+}
+
+.arrow {
+    color: var(--primary);
+    font-size: clamp(60px, 8vw, 100px);
+    padding: var(--space-4);
+    border-radius: var(--radius-full);
+    background: rgba(245, 245, 245, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: var(--transition-base);
+}
+
+.arrow:hover {
+    background: rgba(245, 245, 245, 0.95);
+    transform: scale(1.1);
+    box-shadow: var(--shadow-brand);
+}
+
+/* Gallery transition effects */
+.galleryContainer,
+.currentPhoto,
+.masterImage,
+.thumbNailPhoto {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Component z-index organization */
+.typesContainer {
+    z-index: var(--z-modal);
+}
+
+.galleryContainer {
+    z-index: var(--z-gallery);
+}
+
+.contactContainer {
+    z-index: var(--z-contact);
+}
+
+.mobileProductInfo {
+    z-index: calc(var(--z-gallery) + 1);
+}
+
+.swipeIndicator {
+    z-index: calc(var(--z-gallery) + 2);
+}
+
+/* Clean up any remaining legacy styles */
+.new_app_header,
+.new_app_info,
+.new_app_small_header {
+    font-family: var(--font-primary);
+    color: var(--white);
+    text-align: center;
+}
+
+.new_app_small_header {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0px 0px calc(20px + env(safe-area-inset-bottom));
+    z-index: var(--z-overlay);
+    font-size: clamp(3rem, 4vw, 5rem);
+    filter: drop-shadow(1px 1px 0px var(--black));
+    user-select: none;
+    pointer-events: none;
+    -webkit-text-stroke: 1px var(--primary);
+    -webkit-text-fill-color: var(--white);
+}

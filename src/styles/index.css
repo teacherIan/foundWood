@@ -1,0 +1,80 @@
+/* ===== FOUNDWOOD MASTER STYLES ===== */
+/* Import order is important - variables first, then base, then components */
+
+/* Core System */
+@import './variables.css';
+@import './base.css';
+@import './layout.css';
+@import './responsive.css';
+@import './animations.css';
+
+/* Component Styles */
+/* Note: These will be updated to use the clean versions */
+/* @import '../components/contact/form-clean.css'; */
+/* @import '../components/galleries/gallery-clean.css'; */
+/* @import '../components/experience/experienceStyles.css'; */
+
+/* ===== GLOBAL OVERRIDES (Use sparingly) ===== */
+
+/* Ensure consistent font loading */
+body {
+    font-family: var(--font-primary);
+}
+
+/* Consistent scrollbar styling across browsers */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--light-brown);
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--light-brown);
+    border-radius: var(--radius-base);
+}
+
+*::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: var(--radius-base);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: var(--brown-dark);
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Selection styles */
+::selection {
+    background: rgba(119, 72, 28, 0.2);
+    color: var(--text-primary);
+}
+
+::-moz-selection {
+    background: rgba(119, 72, 28, 0.2);
+    color: var(--text-primary);
+}
+
+/* Print styles */
+@media print {
+    * {
+        background: white !important;
+        color: black !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    .header,
+    .contactContainer,
+    .galleryContainer {
+        display: none !important;
+    }
+}

@@ -1,54 +1,41 @@
-/* Modern Contact Form Styles - Optimized for Performance */
+/* ===== FOUNDWOOD CONTACT FORM STYLES ===== */
+@import '../../src/styles/variables.css';
 
 .contactContainer {
-    z-index: 30000;
+    z-index: var(--z-contact);
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     will-change: transform, opacity;
-    padding: 20px;
-    /* Simplified background for better performance */
+    padding: var(--space-5);
     background: rgba(245, 245, 245, 0.95);
-    /* Center the form container */
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Hardware acceleration */
     transform: translateZ(0);
     backface-visibility: hidden;
 }
 
 .formContainer {
-    /* Optimized glassmorphism card */
     background: rgba(245, 245, 245, 0.98);
     border: 1px solid rgba(119, 72, 28, 0.15);
-    border-radius: 20px;
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.1),
-        0 0 50px rgba(119, 72, 28, 0.05);
-
-    /* Card layout */
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl), var(--shadow-brand);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 80px 40px 40px 40px;
-    /* Added top padding for border bar */
+    padding: calc(var(--space-20) + var(--space-4)) var(--space-10) var(--space-10) var(--space-10);
     max-width: 500px;
     width: 100%;
     max-height: 85vh;
     overflow-y: auto;
     box-sizing: border-box;
-
-    /* Optimized for smooth animations */
     transform-origin: center;
     will-change: transform, opacity;
     position: relative;
-    /* For absolute positioning of border bar */
-
-    /* Hardware acceleration */
     transform: translateZ(0);
     backface-visibility: hidden;
 }
