@@ -100,3 +100,15 @@
     --content-padding: var(--space-4);
     --content-padding-mobile: var(--space-2);
 }
+
+/* ===== FOUNDWOOD VARIABLES & DESIGN TOKENS ===== */
+
+/* ===== POSTCSS BENEFITS DEMONSTRATED ===== */
+/*
+✅ PostCSS Autoprefixer: Automatically adds vendor prefixes
+✅ PostCSS Nested: Enables nested CSS syntax like Sass
+✅ CSSnano: Minifies and optimizes CSS for production
+✅ Modern CSS Features: Supports latest CSS specifications
+*/
+
+/* ===== CORE COLORS ===== */

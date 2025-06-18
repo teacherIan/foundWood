@@ -7,9 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "css:analyze": "echo 'CSS Bundle Analysis:' && npm run build 2>&1 | grep -E '(css|CSS)'",
-    "css:format": "prettier --write 'src/**/*.css' 'components/**/*.css'",
-    "css:validate": "echo 'Checking CSS syntax...' && node -e \"console.log('✅ CSS PostCSS setup is working!')\""
+    "lint:css": "stylelint 'src/**/*.css' 'components/**/*.css'",
+    "format:css": "prettier --write 'src/**/*.css' 'components/**/*.css'"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -29,9 +28,13 @@
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
-    "autoprefixer": "^10.4.21",
-    "cssnano": "^7.0.7",
-    "postcss-nested": "^7.0.2",
-    "vite": "^5.1.3"
+    "vite": "^5.1.3",
+    "autoprefixer": "^10.4.16",
+    "postcss-nested": "^6.0.1",
+    "postcss-custom-media": "^10.0.2",
+    "cssnano": "^6.0.2",
+    "stylelint": "^16.0.2",
+    "stylelint-config-standard": "^36.0.0",
+    "prettier": "^3.1.1"
   }
 }
