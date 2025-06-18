@@ -243,7 +243,7 @@ div[style*="position"]>canvas {
     }
 }
 
-/* ===== IPAD PRO PORTRAIT MODE - CRITICAL FIX ===== */
+/* ===== IPAD PRO PORTRAIT MODE - TRANSPARENT OVERLAY LIKE MOBILE/DESKTOP ===== */
 @media (min-width: 768px) and (orientation: portrait) {
 
     /* CANVAS POSITIONING */
@@ -267,12 +267,12 @@ div[style*="position"]>canvas {
         will-change: transform !important;
         isolation: auto !important;
         transform: translate3d(0, 0, 0) !important;
-        z-index: 1 !important;
+        z-index: 900 !important; /* Same as desktop for overlay behavior */
     }
 
-    /* HEADER POSITIONING - MOVED OUTSIDE APPCONTAINER */
+    /* HEADER POSITIONING - TRANSPARENT OVERLAY LIKE DESKTOP/MOBILE */
     .header {
-        z-index: 999999 !important;
+        z-index: 20000 !important; /* Same as desktop/mobile */
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
@@ -285,20 +285,21 @@ div[style*="position"]>canvas {
         filter: none !important;
         opacity: 1 !important;
         visibility: visible !important;
-        pointer-events: auto !important;
+        pointer-events: none !important; /* Header itself non-interactive */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        background: rgba(245, 245, 245, 0.95) !important;
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        border-bottom: 1px solid rgba(139, 69, 19, 0.1) !important;
+        /* TRANSPARENT BACKGROUND LIKE DESKTOP/MOBILE */
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border-bottom: none !important;
     }
 
-    /* MENU CONTAINER */
+    /* MENU CONTAINER - TRANSPARENT OVERLAY */
     .menu {
         pointer-events: auto !important;
-        z-index: 999999 !important;
+        z-index: 20001 !important; /* Same as desktop/mobile hierarchy */
         isolation: auto !important;
         contain: none !important;
         transform: none !important;
@@ -309,9 +310,10 @@ div[style*="position"]>canvas {
         align-items: center !important;
         opacity: 1 !important;
         visibility: visible !important;
+        background: transparent !important; /* Transparent like desktop/mobile */
     }
 
-    /* FORCE ALL MENU ITEMS VISIBLE */
+    /* MENU ITEMS - TRANSPARENT OVERLAY STYLE LIKE DESKTOP/MOBILE */
     .menu-item,
     .header .menu>div,
     .header [class*="animated"],
@@ -320,7 +322,7 @@ div[style*="position"]>canvas {
         opacity: 1 !important;
         visibility: visible !important;
         pointer-events: auto !important;
-        z-index: 999999 !important;
+        z-index: 20002 !important; /* Same as desktop/mobile hierarchy */
         position: relative !important;
         display: flex !important;
         transform: none !important;
@@ -329,36 +331,46 @@ div[style*="position"]>canvas {
         contain: none !important;
     }
 
-    /* MENU ITEM STYLING */
+    /* MENU ITEM STYLING - TRANSPARENT BACKGROUND LIKE DESKTOP/MOBILE */
     .menu-item {
         pointer-events: auto !important;
-        z-index: 999999 !important;
+        z-index: 20002 !important; /* Same as desktop/mobile hierarchy */
         opacity: 1 !important;
         visibility: visible !important;
         position: relative !important;
         isolation: auto !important;
         contain: none !important;
-        transform: translateZ(0) !important;
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(5px) !important;
-        -webkit-backdrop-filter: blur(5px) !important;
-        border: 2px solid #77481c !important;
-        box-shadow: 0 2px 8px rgba(119, 72, 28, 0.3), 2px 2px 2px #77481c !important;
+        transform: none !important;
+        /* TRANSPARENT BACKGROUND LIKE DESKTOP/MOBILE - NOT SOLID */
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        /* Enhanced borders for better visibility on canvas */
+        border: 1px solid #77481c !important;
+        box-shadow: 2px 2px 2px #77481c !important;
+        border-radius: 2em !important;
         padding: 0.3em 0.6em !important;
         margin: 0.1em !important;
         -webkit-text-stroke: 2px #77481c !important;
         color: #fff !important;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
         filter: drop-shadow(1px 1px 0px #1c5077) !important;
         min-height: 44px !important;
         min-width: 44px !important;
         cursor: pointer !important;
         user-select: none !important;
+        /* Stronger text stroke for visibility over canvas */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+    }
+
+    /* HOVER EFFECT FOR BETTER FEEDBACK */
+    .menu-item:hover {
+        background: rgba(119, 72, 28, 0.2) !important;
+        transform: scale(1.05) !important;
     }
 
     /* ICON STYLING */
     .icon {
-        z-index: 999999 !important;
+        z-index: 20003 !important; /* Same as desktop/mobile hierarchy */
         pointer-events: auto !important;
         opacity: 1 !important;
         visibility: visible !important;
@@ -389,7 +401,7 @@ div[style*="position"]>canvas {
         max-height: 100vh !important;
         min-width: 100vw !important;
         min-height: 100vh !important;
-        z-index: 1 !important;
+        z-index: 900 !important; /* Same as desktop for overlay behavior */
     }
 }
 

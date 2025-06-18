@@ -278,6 +278,185 @@ body {
     }
 }
 
+/* ===== IPAD MENU Z-INDEX FIX - TRANSPARENT OVERLAY LIKE DESKTOP/MOBILE ===== */
+/* This makes iPad behave with the same transparent overlay behavior as desktop/mobile */
+
+/* IPAD PRO SPECIFIC TARGETING - More precise than existing rules */
+@media (min-width: 1024px) and (orientation: portrait) {
+  
+  /* STEP 1: Fix container stacking contexts that trap z-index values */
+  .app-container,
+  .appContainer {
+    position: static !important;
+    transform: none !important;
+    isolation: auto !important;
+    contain: none !important;
+    will-change: auto !important;
+    filter: none !important;
+    z-index: auto !important;
+  }
+
+  /* STEP 2: Fix canvas wrapper stacking contexts */
+  .appContainer > div {
+    position: static !important;
+    transform: none !important;
+    isolation: auto !important;
+    contain: none !important;
+    will-change: auto !important;
+    /* Note: Don't force filter: none here as it prevents canvas blur for overlays */
+  }
+
+  /* STEP 3: Set clear, consistent z-index hierarchy - TRANSPARENT OVERLAY LIKE DESKTOP/MOBILE */
+  
+  /* Canvas - Background layer */
+  canvas,
+  canvas[data-engine],
+  canvas[style*="position"] {
+    z-index: 900 !important; /* Same as desktop for overlay behavior */
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+
+  /* Header - TRANSPARENT overlay like desktop/mobile */
+  .header {
+    z-index: 20000 !important; /* Same as desktop/mobile */
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 10vh !important;
+    /* Remove all stacking context creators */
+    isolation: auto !important;
+    contain: none !important;
+    transform: none !important;
+    will-change: auto !important;
+    filter: none !important;
+    /* TRANSPARENT BACKGROUND LIKE DESKTOP/MOBILE */
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-bottom: none !important;
+    pointer-events: none !important; /* Header itself non-interactive */
+  }
+
+  /* Menu container - TRANSPARENT overlay */
+  .menu {
+    pointer-events: auto !important;
+    z-index: 20001 !important; /* Same as desktop/mobile hierarchy */
+    position: relative !important;
+    display: flex !important;
+    width: 100% !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    /* Remove stacking context creators */
+    isolation: auto !important;
+    contain: none !important;
+    transform: none !important;
+    will-change: auto !important;
+    background: transparent !important; /* Transparent like desktop/mobile */
+  }
+
+  /* Menu items - TRANSPARENT overlay style like desktop/mobile */
+  .menu-item {
+    pointer-events: auto !important;
+    z-index: 20002 !important; /* Same as desktop/mobile hierarchy */
+    position: relative !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    /* Remove stacking context creators */
+    isolation: auto !important;
+    contain: none !important;
+    transform: none !important;
+    will-change: auto !important;
+    /* TRANSPARENT BACKGROUND LIKE DESKTOP/MOBILE - NOT SOLID */
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    /* Enhanced borders for better visibility on canvas */
+    border: 1px solid #77481c !important;
+    box-shadow: 2px 2px 2px #77481c !important;
+    border-radius: 2em !important;
+    padding: 0.3em 0.6em !important;
+    font-size: clamp(1.5rem, 4vw, 3.5rem) !important;
+    -webkit-text-stroke: 2px #77481c !important;
+    color: #fff !important;
+    filter: drop-shadow(1px 1px 0px #1c5077) !important;
+    min-height: 44px !important; /* Accessibility: minimum touch target */
+    min-width: 44px !important;
+    cursor: pointer !important;
+    user-select: none !important;
+    /* Stronger text stroke for visibility over canvas */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+  }
+
+  /* HOVER EFFECT FOR BETTER FEEDBACK */
+  .menu-item:hover {
+    background: rgba(119, 72, 28, 0.2) !important;
+    transform: scale(1.05) !important;
+  }
+
+  /* Icon - Logo/home button */
+  .icon {
+    z-index: 20003 !important; /* Same as desktop/mobile hierarchy */
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: relative !important;
+    /* Remove stacking context creators */
+    isolation: auto !important;
+    contain: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  /* Override any React Spring animations that might hide navigation elements */
+  .header *,
+  [class*="header"] *,
+  [class*="menu"] *,
+  .menu > div,
+  .menu > div > div,
+  .menu > div > div > img {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    /* Remove stacking context creators that could trap z-index */
+    isolation: auto !important;
+    contain: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  /* Page overlays - Higher than navigation but lower than emergency modals */
+  .typesContainer {
+    z-index: 20000 !important;
+  }
+
+  .galleryContainer {
+    z-index: 20000 !important;
+  }
+
+  .contactContainer {
+    z-index: 20000 !important;
+  }
+}
+
+/* IPAD PRO 11" SPECIFIC - Apply same z-index hierarchy */
+@media (min-width: 834px) and (max-width: 834px) and (min-height: 1194px) and (orientation: portrait) {
+  .header { z-index: 10000 !important; }
+  .menu { z-index: 10001 !important; }
+  .menu-item { z-index: 10002 !important; }
+  .icon { z-index: 10003 !important; }
+  canvas { z-index: 1 !important; }
+}
+
+/* ===== END IPAD MENU Z-INDEX FIX ===== */
+
 /* ULTRA-AGGRESSIVE: Force canvas positioning on ALL devices */
 canvas,
 canvas[data-engine],

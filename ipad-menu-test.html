@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPad Menu Z-Index Test</title>
+    <style>
+        /* Test iPad-specific z-index hierarchy */
+        @media (min-width: 1024px) and (orientation: portrait) {
+            body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background: #f0f0f0;
+            }
+            
+            .test-canvas {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: linear-gradient(45deg, #3498db, #e74c3c);
+                z-index: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 2rem;
+                text-align: center;
+            }
+            
+            .test-header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 10vh;
+                z-index: 10000;
+                background: rgba(245, 245, 245, 0.95);
+                backdrop-filter: blur(10px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-bottom: 1px solid rgba(119, 69, 19, 0.1);
+                pointer-events: none;
+            }
+            
+            .test-menu {
+                pointer-events: auto;
+                z-index: 10001;
+                display: flex;
+                width: 100%;
+                justify-content: space-around;
+                align-items: center;
+            }
+            
+            .test-menu-item {
+                pointer-events: auto;
+                z-index: 10002;
+                background: rgba(255, 255, 255, 0.95);
+                border: 2px solid #77481c;
+                border-radius: 2em;
+                padding: 0.5em 1em;
+                color: #77481c;
+                font-weight: bold;
+                backdrop-filter: blur(5px);
+                cursor: pointer;
+                min-height: 44px;
+                min-width: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .test-overlay {
+                position: fixed;
+                top: 20vh;
+                left: 10vw;
+                width: 80vw;
+                height: 60vh;
+                z-index: 20000;
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                border-radius: 10px;
+                backdrop-filter: blur(20px);
+            }
+            
+            .test-status {
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 15px;
+                border-radius: 10px;
+                z-index: 30000;
+                font-family: monospace;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-canvas">
+        <div>
+            <h1>Mock Canvas Background</h1>
+            <p>This should be behind the header menu</p>
+            <p>Z-index: 1</p>
+        </div>
+    </div>
+    
+    <div class="test-header">
+        <div class="test-menu">
+            <div class="test-menu-item" onclick="toggleOverlay()">Gallery</div>
+            <div class="test-menu-item" onclick="toggleOverlay()">Contact</div>
+            <div class="test-menu-item" onclick="showStatus()">Test</div>
+        </div>
+    </div>
+    
+    <div class="test-overlay" id="overlay" style="display: none;">
+        <h2>Overlay Content</h2>
+        <p>This overlay should be above the header menu</p>
+        <p>Z-index: 20000</p>
+        <button onclick="toggleOverlay()" style="margin-top: 20px; padding: 10px 20px;">Close</button>
+    </div>
+    
+    <div class="test-status" id="status">
+        <strong>iPad Menu Z-Index Test</strong><br>
+        Expected hierarchy:<br>
+        • Canvas (background): z-index 1<br>
+        • Header: z-index 10000<br>
+        • Menu Items: z-index 10002<br>
+        • Overlays: z-index 20000<br>
+        <span id="device-info"></span>
+    </div>
+
+    <script>
+        function toggleOverlay() {
+            const overlay = document.getElementById('overlay');
+            overlay.style.display = overlay.style.display === 'none' ? 'flex' : 'none';
+        }
+        
+        function showStatus() {
+            alert('Menu items are clickable and properly layered!');
+        }
+        
+        // Device detection
+        const deviceInfo = document.getElementById('device-info');
+        const isIPad = window.innerWidth >= 1024 && window.innerHeight >= 1366;
+        const isPortrait = window.innerHeight > window.innerWidth;
+        
+        deviceInfo.innerHTML = `<br><br><strong>Device:</strong> ${window.innerWidth}x${window.innerHeight}<br>
+        <strong>iPad Portrait:</strong> ${isIPad && isPortrait ? 'YES' : 'NO'}<br>
+        <strong>User Agent:</strong> ${navigator.userAgent.includes('iPad') ? 'iPad' : 'Other'}`;
+        
+        // Check actual computed z-index values
+        if (isIPad && isPortrait) {
+            setTimeout(() => {
+                const header = document.querySelector('.test-header');
+                const menuItem = document.querySelector('.test-menu-item');
+                const canvas = document.querySelector('.test-canvas');
+                
+                if (header && menuItem && canvas) {
+                    const headerZ = window.getComputedStyle(header).zIndex;
+                    const menuZ = window.getComputedStyle(menuItem).zIndex;
+                    const canvasZ = window.getComputedStyle(canvas).zIndex;
+                    
+                    console.log('Computed Z-Index Values:', {
+                        canvas: canvasZ,
+                        header: headerZ,
+                        menu: menuZ
+                    });
+                    
+                    deviceInfo.innerHTML += `<br><br><strong>Computed Z-Index:</strong><br>
+                    Canvas: ${canvasZ}<br>
+                    Header: ${headerZ}<br>
+                    Menu: ${menuZ}`;
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>
