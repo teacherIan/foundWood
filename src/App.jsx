@@ -803,50 +803,55 @@ function App() {
           </div>
         ) : null}
 
-        <Gallery
-          galleryType={state.activeGalleryType}
-          showGallery={state.showGallery}
-          showGalleryString={state.activeGalleryTypeString}
-          showDetails={state.showDetails}
-          setShowDetails={(value) =>
-            dispatch({ type: 'SET_SHOW_DETAILS', payload: value })
-          }
-          galleryTypeArr={state.galleryTypeArr}
-          setGalleryTypeArr={(arr) =>
-            dispatch({ type: 'SET_GALLERY_TYPE_ARR', payload: arr })
-          }
-          currentPhoto={state.currentPhoto}
-          setCurrentPhoto={(photo) =>
-            dispatch({ type: 'SET_CURRENT_PHOTO', payload: photo })
-          }
-          setShowInfographic={(value) =>
-            dispatch({ type: 'SET_SHOW_INFOGraphic', payload: value })
-          }
-          showInfographic={state.showInfographic}
-          onClose={handleHideGalleryCallback}
-        />
+        {state.showGallery && (
+          <Gallery
+            galleryType={state.activeGalleryType}
+            showGallery={state.showGallery}
+            showGalleryString={state.activeGalleryTypeString}
+            showDetails={state.showDetails}
+            setShowDetails={(value) =>
+              dispatch({ type: 'SET_SHOW_DETAILS', payload: value })
+            }
+            galleryTypeArr={state.galleryTypeArr}
+            setGalleryTypeArr={(arr) =>
+              dispatch({ type: 'SET_GALLERY_TYPE_ARR', payload: arr })
+            }
+            currentPhoto={state.currentPhoto}
+            setCurrentPhoto={(photo) =>
+              dispatch({ type: 'SET_CURRENT_PHOTO', payload: photo })
+            }
+            setShowInfographic={(value) =>
+              dispatch({ type: 'SET_SHOW_INFOGraphic', payload: value })
+            }
+            showInfographic={state.showInfographic}
+            onClose={handleHideGalleryCallback}
+          />
+        )}
 
-        <GalleryTypeSelector
-          showTypes={state.showTypes}
-          onGalleryTypesClick={handleHideTypesCallback}
-          onMissionButtonClick={handleMissionButtonClickCallback}
-          onTypeSelect={handleGalleryButtonClickCallback}
-          setActiveGalleryType={(type, typeString) =>
-            dispatch({
-              type: 'SET_GALLERY_TYPE',
-              payload: { type, typeString },
-            })
-          }
-          setActiveGalleryTypeString={(typeString, type) =>
-            dispatch({
-              type: 'SET_GALLERY_TYPE',
-              payload: {
-                type: typeof type === 'number' ? type : state.activeGalleryType,
-                typeString,
-              },
-            })
-          }
-        />
+        {state.showTypes && (
+          <GalleryTypeSelector
+            showTypes={state.showTypes}
+            onGalleryTypesClick={handleHideTypesCallback}
+            onMissionButtonClick={handleMissionButtonClickCallback}
+            onTypeSelect={handleGalleryButtonClickCallback}
+            setActiveGalleryType={(type, typeString) =>
+              dispatch({
+                type: 'SET_GALLERY_TYPE',
+                payload: { type, typeString },
+              })
+            }
+            setActiveGalleryTypeString={(typeString, type) =>
+              dispatch({
+                type: 'SET_GALLERY_TYPE',
+                payload: {
+                  type:
+                    typeof type === 'number' ? type : state.activeGalleryType,
+                  typeString,
+                },
+              })
+            }
+          />
+        )}
 
         {/* CRITICAL FIX: Move header outside appContainer to prevent stacking context issues */}
         <div className="header">
@@ -889,17 +894,19 @@ function App() {
           className="appContainer"
           style={getIPadProPortraitStyles().containerStyles}
         >
-          <Contact
-            showContactPage={state.showContactPage}
-            setShowContactPage={(value) =>
-              dispatch({ type: 'SET_SHOW_CONTACT', payload: value })
-            }
-            setIsAnimating={(value) =>
-              dispatch({ type: 'SET_ANIMATING', payload: value })
-            }
-            showTypes={state.showTypes}
-            showGallery={state.showGallery}
-          />
+          {state.showContactPage && (
+            <Contact
+              showContactPage={state.showContactPage}
+              setShowContactPage={(value) =>
+                dispatch({ type: 'SET_SHOW_CONTACT', payload: value })
+              }
+              setIsAnimating={(value) =>
+                dispatch({ type: 'SET_ANIMATING', payload: value })
+              }
+              showTypes={state.showTypes}
+              showGallery={state.showGallery}
+            />
+          )}
 
           {/* Simplified Canvas rendering - no validation needed */}
           <div
