@@ -231,6 +231,11 @@ body {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
+    /* Enhanced transitions for smooth animations */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+    position: relative;
+    overflow: hidden;
 }
 
 .icon {
@@ -279,6 +284,34 @@ canvas {
     }
 }
 
+/* Enhanced hover effects for all devices */
+.menu-item:hover {
+    background: linear-gradient(135deg, 
+        rgba(119, 72, 28, 0.15) 0%, 
+        rgba(210, 180, 140, 0.25) 50%, 
+        rgba(139, 69, 19, 0.15) 100%);
+    box-shadow: 
+        4px 4px 8px rgba(119, 72, 28, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 20px rgba(210, 180, 140, 0.3);
+    border-color: rgba(210, 180, 140, 0.8);
+    filter: drop-shadow(2px 2px 4px rgba(28, 80, 119, 0.4))
+           brightness(1.1)
+           contrast(1.05);
+    -webkit-text-stroke: 2px rgba(119, 72, 28, 0.9);
+}
+
+/* Touch devices hover simulation */
+.menu-item:active {
+    background: linear-gradient(135deg, 
+        rgba(119, 72, 28, 0.2) 0%, 
+        rgba(210, 180, 140, 0.3) 50%, 
+        rgba(139, 69, 19, 0.2) 100%);
+    box-shadow: 
+        2px 2px 4px rgba(119, 72, 28, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
 /* Desktop and landscape devices */
 @media (min-width: 1025px),
 (orientation: landscape) and (min-width: 769px) {
@@ -289,11 +322,6 @@ canvas {
     .menu-item {
         font-size: clamp(1.8rem, 2.5vw, 3.5rem);
         padding: 0.3em 0.7em;
-    }
-
-    .menu-item:hover {
-        transform: scale(1.05);
-        background: rgba(119, 72, 28, 0.1);
     }
 }
 

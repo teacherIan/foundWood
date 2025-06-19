@@ -55,6 +55,7 @@ const AnimatedMenuItem = memo(
 
     const springProps = useSpring({
       scale: (hovered || pressed) && !disabled ? 1.1 : 1,
+      brightness: (hovered || pressed) && !disabled ? 1.05 : 1,
       config: configAnimation,
     });
 
@@ -164,6 +165,7 @@ const AnimatedMenuItem = memo(
         onTouchEnd={disabled ? undefined : handleTouchEnd}
         style={{
           transform: springProps.scale.to((s) => `scale(${s})`),
+          filter: springProps.brightness.to((b) => `brightness(${b})`),
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

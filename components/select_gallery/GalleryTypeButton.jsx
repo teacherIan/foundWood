@@ -21,8 +21,10 @@ export default function GalleryTypeButton({
   };
 
   const [springs, api] = useSpring(() => ({
-    // background: `linear-gradient(to bottom, #ff000000,#ff000000, #ff000000)`,
-    scale: 0.9,
+    background: `linear-gradient(to bottom, rgba(119, 72, 28, 0), rgba(119, 72, 28, 0), rgba(119, 72, 28, 0))`,
+    scale: 0.95,
+    transform: 'translateY(0px)',
+    boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.1)',
     config: configAnimation,
   }));
 
@@ -57,13 +59,17 @@ export default function GalleryTypeButton({
   useEffect(() => {
     if (active) {
       api.start({
-        // background: `linear-gradient(to bottom, #77481C11,#00000000, #77481C11)`,
-        scale: 1,
+        background: `linear-gradient(to bottom, rgba(119, 72, 28, 0.08), rgba(119, 72, 28, 0.02), rgba(119, 72, 28, 0.08))`,
+        scale: 1.05,
+        transform: 'translateY(-3px)',
+        boxShadow: '0px 15px 35px rgba(0, 0, 0, 0.25)',
       });
     } else {
       api.start({
-        // background: `linear-gradient(to bottom, #00000000,#00000000, #77481C00)`,
-        scale: 0.9,
+        background: `linear-gradient(to bottom, rgba(119, 72, 28, 0), rgba(119, 72, 28, 0), rgba(119, 72, 28, 0))`,
+        scale: 0.95,
+        transform: 'translateY(0px)',
+        boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.1)',
       });
     }
   }, [active, api]);

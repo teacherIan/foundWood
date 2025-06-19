@@ -4,16 +4,45 @@
     width: 30vw;
     color: var(--brown);
     cursor: pointer;
-    border-radius: 2000px;
+    border-radius: 20px;
     /* Ensure buttons are clickable */
     position: relative;
     z-index: 1;
     pointer-events: auto;
+    /* Enhanced styling for better hover effects */
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(119, 72, 28, 0.1);
+    overflow: hidden;
+}
+
+.galleryTypeButton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border-radius: 18px;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.galleryTypeButton:hover::before {
+    opacity: 1;
 }
 
 .galleryTypeImage {
     width: 100%;
     overflow: visible;
+    transition: filter 0.3s ease, transform 0.3s ease;
+    transform-origin: center;
+}
+
+.galleryTypeButton:hover .galleryTypeImage {
+    filter: brightness(1.1) contrast(1.05);
 }
 
 .galleryTypeHeader {
@@ -23,6 +52,14 @@
     color: white;
     -webkit-text-stroke: 1px #77481c;
     -webkit-text-fill-color: #ffffff;
+    transition: all 0.3s ease;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.galleryTypeButton:hover .galleryTypeHeader {
+    filter: drop-shadow(0px 0px 8px rgba(119, 72, 28, 0.6)) drop-shadow(0.5px 0.5px 0.1px #000000dd);
+    transform: translateY(-2px);
 }
 
 /* Size variations based on content */
