@@ -1,4 +1,7 @@
 @import "./styles/base.css";
+@import "./styles/layout.css";
+@import "./styles/variables.css";
+@import "./styles/animations.css";
 
 /* ===== FONTS ===== */
 @import url("https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Redressed&display=swap");

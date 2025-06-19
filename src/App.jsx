@@ -887,16 +887,6 @@ function App() {
   // No other conditions matter - ABSOLUTE timeout control only
   const shouldShowLoading = !state.initialLoadComplete;
 
-  console.log('🔍 Loading check:', {
-    initialLoadComplete: state.initialLoadComplete,
-    shouldShowLoading: shouldShowLoading,
-    timeoutActive: loadingTimeoutRef.current !== null,
-  });
-  console.log(
-    '🎯 Final loading decision (ABSOLUTE TIMEOUT ONLY):',
-    shouldShowLoading
-  );
-
   // Single saying - no rotation needed
 
   // TEMPORARILY DISABLED: iOS Safari specific global error handling
