@@ -585,9 +585,10 @@ export default function Gallery({
   const [imageSpring, imageApi] = useSpring(() => ({
     transform: 'translate(0%, 0%) scale(1)',
     config: {
-      tension: 30, // Balanced tension for responsiveness
-      friction: 50, // Smooth friction
-      mass: 1.5, // Moderate mass for good feel
+      tension: 25, // Reduced tension for slower, more deliberate movement
+      friction: 90, // Higher friction for smoother control
+      mass: 2.0, // Higher mass for more weighted, deliberate feel
+      precision: 0.01, // Higher precision to reduce micro-animations
     },
   }));
 
@@ -609,8 +610,14 @@ export default function Gallery({
       }
       setImgAspect(aspectRatio);
       setImageLoading(false); // Image finished loading
+
+      // Ensure transform is reset after image loads to prevent conflicts
+      if (!isHovering) {
+        imageApi.set({ transform: 'translate(0%, 0%) scale(1)' });
+        currentTransformRef.current = 'translate(0%, 0%) scale(1)';
+      }
     },
-    [imgAspect, isImageLoaded]
+    [imgAspect, isImageLoaded, isHovering, imageApi]
   );
 
   // Manual touch event registration for non-passive touchmove
@@ -675,9 +682,10 @@ export default function Gallery({
     // Reset hover state and image transform when photo changes
     setIsHovering(false);
     currentTransformRef.current = 'translate(0%, 0%) scale(1)';
-    imageApi.start({
+
+    // Use set instead of start to avoid animation conflicts during image transitions
+    imageApi.set({
       transform: 'translate(0%, 0%) scale(1)',
-      immediate: true, // Immediate reset to prevent conflicts
     });
   }, [currentPhoto, imageApi]); // Handle window resize for responsive behavior
   useEffect(() => {
@@ -686,11 +694,12 @@ export default function Gallery({
       // This is especially important for orientation changes
       setIsHovering(false);
       currentTransformRef.current = 'translate(0%, 0%) scale(1)';
-      // Reset image transform using React Spring API
-      imageApi.start({
+
+      // Use set instead of start to avoid animation conflicts during resize
+      imageApi.set({
         transform: 'translate(0%, 0%) scale(1)',
-        immediate: true, // Immediate reset on resize
       });
+
       if (window.innerWidth < window.innerHeight) {
         setTouchPan({ x: 0, y: 0 });
       }
@@ -877,8 +886,9 @@ export default function Gallery({
 
   // Add refs for throttling mouse movement
   const lastMouseMoveTime = useRef(0);
-  const throttleDelay = 16; // Reduced throttle for smoother movement
+  const throttleDelay = 8; // Reduced throttle for smoother movement
   const currentTransformRef = useRef('translate(0%, 0%) scale(1)');
+  const animationFrameRef = useRef(null);
 
   // Image hover/pan functionality
   const handleImageMouseMove = useCallback(
@@ -890,66 +900,97 @@ export default function Gallery({
       )
         return;
 
-      // Throttle mouse move events to reduce jittering
-      const now = Date.now();
-      if (now - lastMouseMoveTime.current < throttleDelay) {
-        return;
+      // Cancel any pending animation frame
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
-      lastMouseMoveTime.current = now;
 
-      const container = imageContainerRef.current;
-      const rect = container.getBoundingClientRect();
+      // Use requestAnimationFrame for smoother movement
+      animationFrameRef.current = requestAnimationFrame(() => {
+        const container = imageContainerRef.current;
+        if (!container) return;
 
-      // Calculate relative position (0 to 1)
-      const relativeX = (e.clientX - rect.left) / rect.width;
-      const relativeY = (e.clientY - rect.top) / rect.height;
+        const rect = container.getBoundingClientRect();
 
-      // Calculate the maximum translation based on the image size vs container
-      // We want to be able to move the image around to see all parts
-      const maxTranslateX = 35; // Reduced percentage for more stability
-      const maxTranslateY = 35; // Reduced percentage for more stability
+        // Calculate relative position (0 to 1)
+        const relativeX = Math.max(
+          0,
+          Math.min(1, (e.clientX - rect.left) / rect.width)
+        );
+        const relativeY = Math.max(
+          0,
+          Math.min(1, (e.clientY - rect.top) / rect.height)
+        );
 
-      // Calculate the actual translation
-      const translateX = maxTranslateX * (0.5 - relativeX) * 2;
-      const translateY = maxTranslateY * (0.5 - relativeY) * 2;
+        // Calculate the maximum translation based on the image size vs container
+        // We want to be able to move the image around to see all parts
+        const maxTranslateX = 15; // Reduced for more subtle, deliberate movement
+        const maxTranslateY = 15; // Reduced for more subtle, deliberate movement
 
-      const newTransform = `translate(${translateX}%, ${translateY}%) scale(1.15)`;
-      currentTransformRef.current = newTransform;
+        // Calculate the actual translation with smooth interpolation
+        const translateX = maxTranslateX * (0.5 - relativeX) * 2;
+        const translateY = maxTranslateY * (0.5 - relativeY) * 2;
 
-      // Use React Spring API directly for smooth, deliberate panning
-      imageApi.start({
-        transform: newTransform,
-        immediate: false, // Ensure smooth animation
-        config: {
-          tension: 25, // Increased for more responsive feel
-          friction: 60, // Reduced friction for smoother movement
-          mass: 2.0, // Reduced mass for better responsiveness
-        },
+        const newTransform = `translate(${translateX}%, ${translateY}%) scale(1.15)`;
+
+        // Only update if the transform has changed significantly
+        if (currentTransformRef.current !== newTransform) {
+          currentTransformRef.current = newTransform;
+
+          // Use React Spring API directly for smooth, deliberate panning
+          imageApi.start({
+            transform: newTransform,
+            immediate: false, // Ensure smooth animation
+            config: {
+              tension: 25, // Reduced tension for slower, more deliberate movement
+              friction: 90, // Higher friction for smoother, more controlled movement
+              mass: 2.0, // Higher mass for more deliberate, weighted feel
+            },
+          });
+        }
       });
     },
-    [isHovering, imageApi, throttleDelay]
+    [isHovering, imageApi]
   );
 
   const handleImageMouseEnter = useCallback(() => {
     // Only enable hover effects on desktop (not on mobile devices)
     if (window.innerWidth >= window.innerHeight && window.innerWidth >= 768) {
+      // Cancel any pending leave timeout to prevent race conditions
+      if (hoverLeaveTimeoutRef.current) {
+        clearTimeout(hoverLeaveTimeoutRef.current);
+        hoverLeaveTimeoutRef.current = null;
+      }
       setIsHovering(true);
     }
   }, []);
 
+  const hoverLeaveTimeoutRef = useRef(null);
+
   const handleImageMouseLeave = useCallback(() => {
-    setIsHovering(false);
-    currentTransformRef.current = 'translate(0%, 0%) scale(1)';
-    // Use React Spring API directly for smooth return to center
-    imageApi.start({
-      transform: 'translate(0%, 0%) scale(1)',
-      immediate: false, // Ensure smooth animation
-      config: {
-        tension: 30, // Balanced return speed
-        friction: 50, // Smooth controlled return
-        mass: 1.5, // Lighter mass for quicker return
-      },
-    });
+    // Use a small delay to prevent flashing when mouse briefly leaves and re-enters
+    hoverLeaveTimeoutRef.current = setTimeout(() => {
+      setIsHovering(false);
+
+      // Cancel any pending animation frame
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+
+      currentTransformRef.current = 'translate(0%, 0%) scale(1)';
+      // Use React Spring API directly for smooth return to center
+      imageApi.start({
+        transform: 'translate(0%, 0%) scale(1)',
+        immediate: false, // Ensure smooth animation
+        config: {
+          tension: 25, // Slower return for more deliberate feel
+          friction: 85, // Higher friction for smoother controlled return
+          mass: 2.0, // Higher mass for more weighted, deliberate return
+        },
+      });
+      hoverLeaveTimeoutRef.current = null;
+    }, 50); // Small delay to prevent flashing
   }, [imageApi]);
 
   // Handle initial hover state change
@@ -962,9 +1003,10 @@ export default function Gallery({
         transform: initialTransform,
         immediate: false, // Ensure smooth animation
         config: {
-          tension: 35, // Smooth initial scale-up
-          friction: 55, // Controlled scaling
-          mass: 1.8, // Balanced mass for scaling
+          tension: 30, // Reduced tension for more deliberate initial scale
+          friction: 85, // Higher friction for controlled scaling
+          mass: 1.8, // Higher mass for more deliberate feel
+          precision: 0.01, // Higher precision
         },
       });
     }
@@ -1238,8 +1280,15 @@ export default function Gallery({
     from: { opacity: 0, position: 'absolute' },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
-    config: { tension: 150, friction: 25 }, // Faster transitions to reduce conflict time
+    config: { tension: 200, friction: 30 }, // Faster transitions to reduce conflict time
     immediate: false, // Ensure smooth transitions
+    onStart: () => {
+      // Reset image transform when starting new image transition to prevent conflicts
+      if (!isHovering) {
+        imageApi.set({ transform: 'translate(0%, 0%) scale(1)' });
+        currentTransformRef.current = 'translate(0%, 0%) scale(1)';
+      }
+    },
   });
 
   // Safari iOS debugging and compatibility
@@ -1411,11 +1460,16 @@ export default function Gallery({
                       position: 'absolute',
                       top: 0,
                       left: 0,
-                      ...(window.innerWidth < window.innerHeight
-                        ? {
-                            transform: `translate(${touchPan.x}px, ${touchPan.y}px) scale(1.15)`,
-                          }
-                        : imageSpring),
+                      // Apply transforms more predictably - always provide a transform value
+                      transform:
+                        window.innerWidth < window.innerHeight
+                          ? `translate(${touchPan.x}px, ${touchPan.y}px) scale(1.15)`
+                          : imageSpring.transform ||
+                            'translate(0%, 0%) scale(1)',
+                      // Ensure stable willChange for performance
+                      willChange: 'transform',
+                      // Force hardware acceleration
+                      backfaceVisibility: 'hidden',
                     }}
                     className="masterImage"
                     src={item}

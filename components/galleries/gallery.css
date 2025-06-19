@@ -583,13 +583,19 @@
     height: 50vw;
     /* Changed from SVW to VW for better Safari support */
     border-radius: 20px;
-    transition: 1s;
+    /* Remove transition to prevent conflicts with React Spring animations */
+    /* transition: 1s; */
     z-index: 99999;
     position: relative;
     margin-top: 15px;
     -webkit-transform: translateZ(0);
     /* Force hardware acceleration */
     transform: translateZ(0);
+    /* Prevent visibility issues during transitions */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    /* Optimize for animations */
+    will-change: transform, opacity;
 }
 
 /* Improved master image styling for tablets and desktops */
