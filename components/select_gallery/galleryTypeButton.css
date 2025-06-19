@@ -11,27 +11,14 @@
     pointer-events: auto;
     /* Enhanced styling for better hover effects */
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(119, 72, 28, 0.1);
-    overflow: hidden;
+    /* REMOVED: backdrop-filter, border, and overflow to eliminate clear box appearance */
+    background: transparent;
+    border: none;
 }
 
 .galleryTypeButton::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-    border-radius: 18px;
-    z-index: -1;
-    transition: opacity 0.3s ease;
-    opacity: 0;
-}
-
-.galleryTypeButton:hover::before {
-    opacity: 1;
+    /* REMOVED: Clear box overlay effect */
+    display: none;
 }
 
 .galleryTypeImage {

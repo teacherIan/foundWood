@@ -317,7 +317,7 @@ export default function GalleryTypeSelector({
               if (isDesktop) {
                 return '50vh'; // Desktop: centered
               } else if (isPortrait && isTablet) {
-                return aspectRatio < 0.7 ? '30vh' : '35vh'; // Tablet: adjust based on aspect ratio
+                return aspectRatio < 0.7 ? '70vh' : '70vh'; // Tablet: adjust based on aspect ratio
               } else if (isPortrait && isSmallMobile) {
                 return '45vh'; // Small mobile: lower position for tight layout
               } else if (isPortrait && isMobile) {
