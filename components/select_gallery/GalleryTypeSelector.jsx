@@ -317,18 +317,26 @@ export default function GalleryTypeSelector({
               if (isDesktop) {
                 return '50vh'; // Desktop: centered
               } else if (isPortrait && isTablet) {
-                return aspectRatio < 0.7 ? '70vh' : '70vh'; // Tablet: adjust based on aspect ratio
+                return aspectRatio < 0.7 ? '70svh' : '70svh'; // Tablet: adjust based on aspect ratio, use svh for mobile devices
               } else if (isPortrait && isSmallMobile) {
-                return '45vh'; // Small mobile: lower position for tight layout
+                return '45svh'; // Small mobile: lower position for tight layout, use svh for true screen size
               } else if (isPortrait && isMobile) {
-                return '45vh'; // Mobile: lower position
+                return '45svh'; // Mobile: lower position, use svh for true screen size
               } else {
                 return '50vh'; // Fallback: centered
               }
             })(),
-            transform: explanationSpring.y.to(
-              (y) => `translateX(-50%) translateY(-50%) translateY(${y}vh)`
-            ),
+            transform: explanationSpring.y.to((y) => {
+              const isPortrait = window.innerWidth < window.innerHeight;
+              const isMobile = window.innerWidth <= 768;
+              const isTablet =
+                window.innerWidth > 768 && window.innerWidth <= 1024;
+              const isDesktop = window.innerWidth > 1024 && !isPortrait;
+
+              // Use svh for mobile devices to account for browser UI
+              const unit = isPortrait && (isMobile || isTablet) ? 'svh' : 'vh';
+              return `translateX(-50%) translateY(-50%) translateY(${y}${unit})`;
+            }),
             opacity: explanationSpring.opacity,
             width: (() => {
               const isPortrait = window.innerWidth < window.innerHeight;
