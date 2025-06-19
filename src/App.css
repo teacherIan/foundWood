@@ -360,16 +360,17 @@ canvas {
         /* Enhanced protection on iPad Pro */
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
-        /* Ensure menu background is distinct */
-        background: rgba(245, 245, 245, 0.95) !important;
-        /* Add subtle backdrop blur to header itself for readability */
+        /* FIXED: Keep menu background transparent */
+        background: transparent !important;
+        background-color: transparent !important;
     }
 
     .header {
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        /* Apply backdrop-filter to header container, not individual items */
-        border-bottom: 1px solid rgba(139, 69, 19, 0.1) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        /* Keep header transparent too */
+        background: transparent !important;
+        background-color: transparent !important;
     }
 }
 
@@ -770,4 +771,72 @@ canvas:active {
 .header-disabled .menu-item:hover {
     transform: none !important;
     scale: 1 !important;
+}
+
+/* ===== IPAD PORTRAIT HEADER FIX ===== */
+/* Ensure header always overlays canvas on iPad portrait mode */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    .header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 10vh !important;
+        z-index: 99999 !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        pointer-events: none !important;
+        /* Force new stacking context */
+        transform: translateZ(0) !important;
+        will-change: transform !important;
+        isolation: isolate !important;
+    }
+
+    .menu {
+        z-index: 99999 !important;
+        position: relative !important;
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+
+    .menu-item {
+        z-index: 99999 !important;
+        position: relative !important;
+        pointer-events: auto !important;
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+
+    /* Ensure app containers don't create problematic stacking contexts on iPad */
+    .app-container,
+    .appContainer {
+        position: static !important;
+        z-index: auto !important;
+        isolation: auto !important;
+        contain: none !important;
+        transform: none !important;
+        will-change: auto !important;
+        filter: none !important;
+    }
+
+    /* Force canvas to stay below header on iPad portrait */
+    canvas,
+    canvas[data-engine] {
+        z-index: 1 !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        /* Remove properties that create stacking contexts */
+        transform: none !important;
+        will-change: auto !important;
+        contain: none !important;
+        isolation: auto !important;
+    }
 }

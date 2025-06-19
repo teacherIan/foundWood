@@ -538,59 +538,6 @@ function reducer(state, action) {
 }
 
 // Utility function to detect iPad Pro portrait mode and return appropriate styles
-const getIPadProPortraitStyles = () => {
-  const isPortrait = window.innerWidth < window.innerHeight;
-  const isIPadPro12 =
-    isPortrait &&
-    window.innerWidth >= 1024 &&
-    window.innerWidth <= 1024 &&
-    window.innerHeight >= 1366;
-  const isIPadPro11 =
-    isPortrait &&
-    window.innerWidth >= 820 &&
-    window.innerWidth <= 834 &&
-    window.innerHeight >= 1180;
-  const isLargeTabletPortrait =
-    isPortrait && window.innerWidth >= 768 && window.innerWidth < 1025;
-  const isIPadProPortrait = isIPadPro12 || isIPadPro11 || isLargeTabletPortrait;
-
-  return {
-    isIPadProPortrait,
-    containerStyles: isIPadProPortrait
-      ? {
-          position: 'static',
-          transform: 'none',
-          contain: 'none',
-          isolation: 'auto',
-          overflow: 'visible',
-          width: '100vw',
-          height: '100vh',
-          zIndex: 'auto',
-        }
-      : {},
-    canvasWrapperStyles: isIPadProPortrait
-      ? {
-          position: 'static',
-          transform: 'none',
-          contain: 'none',
-          isolation: 'auto',
-          overflow: 'visible',
-          width: '100vw',
-          height: '100vh',
-          zIndex: 'auto',
-          // IMPORTANT: Remove all filters since blur is now applied directly to canvas
-          filter: 'none',
-          WebkitFilter: 'none',
-          MozFilter: 'none',
-          willChange: 'auto',
-          transition: 'none', // Remove transition to prevent flicker
-          pointerEvents: 'auto',
-          background: 'transparent',
-        }
-      : null,
-  };
-};
-
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -796,16 +743,11 @@ function App() {
       {/* Always render the main app - use opacity and pointer-events instead of display:none */}
       <div
         className="app-container"
-        style={(() => {
-          const { containerStyles } = getIPadProPortraitStyles();
-          const baseStyles = {
-            opacity: shouldShowLoading ? 0 : 1,
-            pointerEvents: shouldShowLoading ? 'none' : 'auto',
-            transition: 'opacity 0.3s ease-in-out',
-          };
-
-          return { ...baseStyles, ...containerStyles };
-        })()}
+        style={{
+          opacity: shouldShowLoading ? 0 : 1,
+          pointerEvents: shouldShowLoading ? 'none' : 'auto',
+          transition: 'opacity 0.3s ease-in-out',
+        }}
       >
         {window.innerWidth < 1000 || !state.isAnimating ? null : (
           <div className="new_app_header">
@@ -926,10 +868,7 @@ function App() {
           </div>
         </div>
 
-        <div
-          className="appContainer"
-          style={getIPadProPortraitStyles().containerStyles}
-        >
+        <div className="appContainer">
           {state.showContactPage && (
             <Contact
               showContactPage={state.showContactPage}
@@ -947,9 +886,6 @@ function App() {
           {/* Simplified Canvas rendering - no validation needed */}
           <div
             style={(() => {
-              const { isIPadProPortrait, canvasWrapperStyles } =
-                getIPadProPortraitStyles();
-
               const baseStyles = {
                 pointerEvents:
                   state.showContactPage || state.showTypes ? 'none' : 'auto',
@@ -971,11 +907,6 @@ function App() {
                   state.showContactPage || state.showTypes ? 'filter' : 'auto',
                 transform: 'translateZ(0)',
               };
-
-              // CRITICAL FIX: Override with iPad Pro portrait styles to remove stacking contexts
-              if (isIPadProPortrait && canvasWrapperStyles) {
-                return { ...baseStyles, ...canvasWrapperStyles };
-              }
 
               return baseStyles;
             })()}

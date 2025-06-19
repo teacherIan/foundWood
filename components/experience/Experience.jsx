@@ -711,9 +711,9 @@ function Scene({
       };
     } else if (isTablet) {
       // Tablet: Positioned for camera at y=0.9-1.1, looking slightly down
-      titlePosition = [-0.9, -0.3, -0.3];
-      foundPosition = [0, -0.3, 0.6];
-      woodPosition = [1, -0.3, -0.3];
+      titlePosition = [-0.9, -0.1, -0.3];
+      foundPosition = [0, -0.1, 0.6];
+      woodPosition = [1, -0.1, -0.3];
       fontSize = isPortrait ? 0.3 : 0.28;
       effectsLevel = 'medium'; // Moderate effects for tablets
       splatConfig = {
@@ -734,6 +734,14 @@ function Scene({
         position: [0, 0, 0],
       };
     }
+
+    console.log('Frm ian: Device configuration:', {
+      isMobile,
+      isTablet,
+      isDesktop,
+      isHighDPI,
+      isPortrait,
+    });
 
     return {
       titlePosition,
