@@ -585,9 +585,9 @@ export default function Gallery({
   const [imageSpring, imageApi] = useSpring(() => ({
     transform: 'translate(0%, 0%) scale(1)',
     config: {
-      tension: 20, // Extremely low tension for very slow response
-      friction: 60, // Very high friction for maximum smoothness
-      mass: 3.0, // Heavy mass for cinematic, slow movement
+      tension: 30, // Balanced tension for responsiveness
+      friction: 50, // Smooth friction
+      mass: 1.5, // Moderate mass for good feel
     },
   }));
 
@@ -671,16 +671,25 @@ export default function Gallery({
     // Reset to default aspect ratio when photo changes, will be updated by handleImageLoad
     setImgAspect(1.4);
     setImageLoading(true); // Start loading state
-  }, [currentPhoto]); // Handle window resize for responsive behavior
+
+    // Reset hover state and image transform when photo changes
+    setIsHovering(false);
+    currentTransformRef.current = 'translate(0%, 0%) scale(1)';
+    imageApi.start({
+      transform: 'translate(0%, 0%) scale(1)',
+      immediate: true, // Immediate reset to prevent conflicts
+    });
+  }, [currentPhoto, imageApi]); // Handle window resize for responsive behavior
   useEffect(() => {
     const handleResize = () => {
       // Force a re-render on resize to update container dimensions
       // This is especially important for orientation changes
       setIsHovering(false);
+      currentTransformRef.current = 'translate(0%, 0%) scale(1)';
       // Reset image transform using React Spring API
       imageApi.start({
         transform: 'translate(0%, 0%) scale(1)',
-        config: { tension: 170, friction: 26 },
+        immediate: true, // Immediate reset on resize
       });
       if (window.innerWidth < window.innerHeight) {
         setTouchPan({ x: 0, y: 0 });
@@ -694,7 +703,7 @@ export default function Gallery({
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleResize);
     };
-  }, []);
+  }, [imageApi]);
 
   // Keyboard navigation with useCallback to ensure stable function reference
   const handleKeyDown = useCallback(
@@ -868,7 +877,8 @@ export default function Gallery({
 
   // Add refs for throttling mouse movement
   const lastMouseMoveTime = useRef(0);
-  const throttleDelay = 32; // Slower ~30fps throttling for more deliberate movement
+  const throttleDelay = 16; // Reduced throttle for smoother movement
+  const currentTransformRef = useRef('translate(0%, 0%) scale(1)');
 
   // Image hover/pan functionality
   const handleImageMouseMove = useCallback(
@@ -896,20 +906,24 @@ export default function Gallery({
 
       // Calculate the maximum translation based on the image size vs container
       // We want to be able to move the image around to see all parts
-      const maxTranslateX = 40; // percentage
-      const maxTranslateY = 40; // percentage
+      const maxTranslateX = 35; // Reduced percentage for more stability
+      const maxTranslateY = 35; // Reduced percentage for more stability
 
       // Calculate the actual translation
       const translateX = maxTranslateX * (0.5 - relativeX) * 2;
       const translateY = maxTranslateY * (0.5 - relativeY) * 2;
 
+      const newTransform = `translate(${translateX}%, ${translateY}%) scale(1.15)`;
+      currentTransformRef.current = newTransform;
+
       // Use React Spring API directly for smooth, deliberate panning
       imageApi.start({
-        transform: `translate(${translateX}%, ${translateY}%) scale(1.15)`,
+        transform: newTransform,
+        immediate: false, // Ensure smooth animation
         config: {
-          tension: 15, // Extremely slow response for ultra-smooth panning
-          friction: 80, // Very high friction to eliminate any jitter
-          mass: 4.0, // Maximum mass for the slowest possible movement
+          tension: 25, // Increased for more responsive feel
+          friction: 60, // Reduced friction for smoother movement
+          mass: 2.0, // Reduced mass for better responsiveness
         },
       });
     },
@@ -925,13 +939,15 @@ export default function Gallery({
 
   const handleImageMouseLeave = useCallback(() => {
     setIsHovering(false);
+    currentTransformRef.current = 'translate(0%, 0%) scale(1)';
     // Use React Spring API directly for smooth return to center
     imageApi.start({
       transform: 'translate(0%, 0%) scale(1)',
+      immediate: false, // Ensure smooth animation
       config: {
-        tension: 25, // Very slow return to center
-        friction: 70, // High friction for smooth, controlled return
-        mass: 2.5, // Heavy mass for deliberate return movement
+        tension: 30, // Balanced return speed
+        friction: 50, // Smooth controlled return
+        mass: 1.5, // Lighter mass for quicker return
       },
     });
   }, [imageApi]);
@@ -940,12 +956,15 @@ export default function Gallery({
   useEffect(() => {
     if (isHovering) {
       // Start with initial scale-up, position will be handled by mouse move
+      const initialTransform = 'translate(0%, 0%) scale(1.15)';
+      currentTransformRef.current = initialTransform;
       imageApi.start({
-        transform: 'translate(0%, 0%) scale(1.15)',
+        transform: initialTransform,
+        immediate: false, // Ensure smooth animation
         config: {
-          tension: 30, // Very slow initial scale-up
-          friction: 65, // High friction for smooth, controlled scaling
-          mass: 2.0, // Heavy mass for deliberate scaling movement
+          tension: 35, // Smooth initial scale-up
+          friction: 55, // Controlled scaling
+          mass: 1.8, // Balanced mass for scaling
         },
       });
     }
@@ -1219,7 +1238,8 @@ export default function Gallery({
     from: { opacity: 0, position: 'absolute' },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
-    config: { tension: 200, friction: 20 },
+    config: { tension: 150, friction: 25 }, // Faster transitions to reduce conflict time
+    immediate: false, // Ensure smooth transitions
   });
 
   // Safari iOS debugging and compatibility
@@ -1378,7 +1398,7 @@ export default function Gallery({
               {imageTransitions((style, item) =>
                 item ? (
                   <animated.img
-                    key={item}
+                    key={`${item}-${currentPhoto}`} // More specific key to force re-mount
                     ref={imageRef}
                     style={{
                       ...style,
