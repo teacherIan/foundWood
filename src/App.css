@@ -7,8 +7,83 @@
  * CSS rules as other devices based purely on viewport size and orientation.
  * 
  * - Portrait mode (any device): Use mobile styles
- * - Landscape mode (any device): Use desktop styles
- * - No special iPad detection or targeting
+ * - Landscape mode (any device): Use de@keyframes seamlessEntranceSpin@keyframes seamlessEntranceStatus {
+    0% {
+        opacity:@keyframes epicFadeOutUp {@keyframes epicFadeOutLef@keyframes epicFadeOutRight {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+    }
+    50% {
+        opacity: 0.5;
+        transform: translate3d(10px, -3px, 0) scale(0.98);
+        filter: blur(1px);
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(30px, -8px, 0) scale(0.9);
+        filter: blur(2px);
+    }
+} {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+    }
+    50% {
+        opacity: 0.5;
+        transform: translate3d(-10px, -3px, 0) scale(0.98);
+        filter: blur(1px);
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(-30px, -8px, 0) scale(0.9);
+        filter: blur(2px);
+    }
+}        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+    }
+    40% {
+        opacity: 0.6;
+        transform: translate3d(0, -8px, 0) scale(1.02);
+        filter: blur(0.5px);
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(0, -25px, 0) scale(0.95);
+        filter: blur(2px);
+    }
+}  transform: translate3d(0, 18px, 0) scale(0.93);
+        filter: blur(1px);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translate3d(0, -2px, 0) scale(1.02);
+        filter: blur(0px);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+    }
+}0% {
+        opacity: 0;
+        transform: translate3d(0, 15px, 0) scale(0.3) rotate(-90deg);
+    }
+    40% {
+        opacity: 0.6;
+        transform: translate3d(0, -3px, 0) scale(1.1) rotate(0deg);
+    }
+    70% {
+        opacity: 0.9;
+        transform: translate3d(0, 1px, 0) scale(0.98) rotate(5deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    }
+}* - No special iPad detection or targeting
  */
 
 /* ===== CSS VARIABLES ===== */
@@ -402,28 +477,230 @@ canvas:active {
     }
 }
 
-/* Elegant loading spinner with refined appearance */
-.loading-spinner {
-    width: 60px;
-    height: 60px;
-    border: 3px solid rgba(119, 72, 28, 0.15);
-    border-radius: 50%;
-    border-top: 3px solid #77481c;
-    border-right: 3px solid rgba(139, 90, 43, 0.8);
-    margin: 0 auto;
-    /* Use transform3d for hardware acceleration */
-    transform: translate3d(0, 0, 0);
-    will-change: transform;
-    /* Add subtle shadow for depth */
-    box-shadow: 0 2px 8px rgba(119, 72, 28, 0.12);
-    /* Smooth edges */
-    filter: drop-shadow(0 1px 2px rgba(119, 72, 28, 0.1));
+/* ===== LOADING SCREEN ANIMATIONS ===== */
+
+/* Seamless Entrance Animations */
+@keyframes seamlessEntranceTitle {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 30px, 0) scale(0.9);
+        filter: blur(3px);
+    }
+
+    60% {
+        opacity: 0.8;
+        transform: translate3d(0, -2px, 0) scale(1.02);
+        filter: blur(0.5px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+    }
 }
 
-/* Ensure animations use hardware acceleration */
-*[style*="animation"] {
-    will-change: transform, opacity;
-    transform: translate3d(0, 0, 0);
+@keyframes seamlessEntranceSubtitle {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 25px, 0) scale(0.92);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: translate3d(0, -1px, 0) scale(1.01);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes seamlessEntranceTagline {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0) scale(0.95);
+        filter: blur(1px);
+    }
+
+    60% {
+        opacity: 0.8;
+        transform: translate3d(0, -1px, 0) scale(1.01);
+        filter: blur(0px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+    }
+}
+
+@keyframes seamlessEntranceSpinner {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 12px, 0) scale(0.8);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: translate3d(0, -2px, 0) scale(1.05);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes seamlessEntranceStatus {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0) scale(0.92);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes seamlessEntranceQuote {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 25px, 0) scale(0.9);
+        filter: blur(2px);
+    }
+
+    30% {
+        opacity: 0.4;
+        transform: translate3d(0, 8px, 0) scale(0.95);
+        filter: blur(1px);
+    }
+
+    70% {
+        opacity: 0.8;
+        transform: translate3d(0, -2px, 0) scale(1.02);
+        filter: blur(0px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+    }
+}
+
+/* Epic Exit Animations */
+@keyframes epicBackgroundExit {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, -20px, 0) scale(0.98);
+    }
+}
+
+@keyframes epicFadeOutUp {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, -24px, 0) scale(0.94);
+    }
+}
+
+@keyframes epicFadeOutLeft {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(-20px, -10px, 0) scale(0.96);
+    }
+}
+
+@keyframes epicFadeOutRight {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(20px, -10px, 0) scale(0.96);
+    }
+}
+
+@keyframes epicFadeOutDown {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: translate3d(0, 8px, 0) scale(0.98);
+        filter: blur(1px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, 25px, 0) scale(0.9);
+        filter: blur(2px);
+    }
+}
+
+@keyframes epicSpinnerExit {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    }
+
+    30% {
+        opacity: 0.8;
+        transform: translate3d(0, -5px, 0) scale(1.05) rotate(90deg);
+    }
+
+    70% {
+        opacity: 0.3;
+        transform: translate3d(0, -12px, 0) scale(1.2) rotate(270deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, -20px, 0) scale(0.3) rotate(360deg);
+    }
+}
+
+@keyframes epicFadeOutScale {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+    }
+
+    40% {
+        opacity: 0.7;
+        transform: translate3d(0, -3px, 0) scale(1.03);
+        filter: blur(0.5px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, -20px, 0) scale(0.85);
+        filter: blur(3px);
+    }
 }
 
 /* ===== REACT SPRING STACKING CONTEXT FIX ===== */

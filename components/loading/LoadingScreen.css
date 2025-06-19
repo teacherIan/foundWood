@@ -1,0 +1,462 @@
+/* ===== LOADING SCREEN STYLES ===== */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    animation: backgroundPulse 6s ease-in-out infinite;
+}
+
+.loading-screen.exiting {
+    animation: screenExit 0.5s ease-out 1.5s forwards;
+}
+
+@keyframes screenExit {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+}
+
+@keyframes backgroundPulse {
+
+    0%,
+    100% {
+        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+    }
+
+    50% {
+        background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+    }
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 500px;
+    width: 100%;
+    padding: 0 20px;
+    text-align: center;
+}
+
+/* ===== TITLE ANIMATIONS ===== */
+.loading-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #77481c;
+    margin: 0 0 10px 0;
+    opacity: 0;
+    font-family: 'CustomFont', 'Poppins', sans-serif;
+    transform: translate3d(0, 20px, 0) scale(0.95);
+}
+
+.loading-title.enter {
+    animation: titleEnter 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s forwards;
+}
+
+/* Remove unused complete states that could cause conflicts */
+
+.loading-title.exit {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    animation: titleExit 1.2s ease-in forwards !important;
+}
+
+@keyframes titleEnter {
+    0% {
+        opacity: 0;
+        transform: translate3d(-50px, -30px, 0) scale(0.8) rotateX(90deg);
+    }
+
+    60% {
+        opacity: 0.8;
+        transform: translate3d(5px, -5px, 0) scale(1.05) rotateX(0deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateX(0deg);
+    }
+}
+
+/* ===== SUBTITLE ANIMATIONS ===== */
+.loading-subtitle {
+    font-size: 1.1rem;
+    color: #8b5a2b;
+    margin-bottom: 8px;
+    opacity: 0;
+    font-family: 'CustomFont', 'Poppins', sans-serif;
+    transform: translate3d(0, 18px, 0) scale(0.96);
+}
+
+.loading-subtitle.enter {
+    animation: subtitleEnter 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s forwards;
+}
+
+/* Remove unused complete states that could cause conflicts */
+
+.loading-subtitle.exit {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    animation: subtitleExit 1.2s ease-in 0.1s forwards !important;
+}
+
+@keyframes subtitleEnter {
+    0% {
+        opacity: 0;
+        transform: translate3d(30px, 20px, 0) scale(0.9);
+    }
+
+    70% {
+        opacity: 0.9;
+        transform: translate3d(-3px, -3px, 0) scale(1.02);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+/* ===== TAGLINE ANIMATIONS ===== */
+.loading-tagline {
+    font-size: 0.9rem;
+    color: #a67c52;
+    margin-bottom: 30px;
+    opacity: 0;
+    font-family: 'CustomFont', 'Poppins', sans-serif;
+    transform: translate3d(0, 16px, 0) scale(0.97);
+}
+
+.loading-tagline.enter {
+    animation: taglineEnter 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s forwards;
+}
+
+/* Remove unused complete states that could cause conflicts */
+
+.loading-tagline.exit {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    animation: taglineExit 1.2s ease-in 0.2s forwards !important;
+}
+
+@keyframes taglineEnter {
+    0% {
+        opacity: 0;
+        transform: translate3d(-40px, 0, 0) scale(0.8) rotateY(45deg);
+    }
+
+    80% {
+        opacity: 0.9;
+        transform: translate3d(4px, 0, 0) scale(1.05) rotateY(-5deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateY(0deg);
+    }
+}
+
+/* ===== SPINNER ANIMATIONS ===== */
+.loading-spinner-wrapper {
+    margin-bottom: 30px;
+    opacity: 0;
+    transform: translate3d(0, 15px, 0) scale(0.8);
+}
+
+.loading-spinner-wrapper.enter {
+    animation: spinnerEnter 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s forwards;
+}
+
+/* Remove unused complete states that could cause conflicts */
+
+.loading-spinner-wrapper.exit {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    animation: spinnerExit 1.2s ease-in 0.3s forwards !important;
+}
+
+.loading-spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+}
+
+.loading-spinner {
+    border: 4px solid rgba(119, 72, 28, 0.15);
+    border-radius: 50%;
+    border-top: 4px solid #8b5a2b;
+    border-right: 4px solid #d2b48c;
+    width: 60px;
+    height: 60px;
+    animation: spin 1.2s ease-in-out infinite, spinnerPulse 2s ease-in-out infinite;
+}
+
+@keyframes spinnerEnter {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 30px, 0) scale(0.3) rotateY(180deg);
+    }
+
+    70% {
+        opacity: 0.8;
+        transform: translate3d(0, -5px, 0) scale(1.1) rotateY(0deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateY(0deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinnerPulse {
+
+    0%,
+    100% {
+        border-top-color: #8b5a2b;
+        border-right-color: #d2b48c;
+    }
+
+    50% {
+        border-top-color: #d2b48c;
+        border-right-color: #8b5a2b;
+    }
+}
+
+/* ===== STATUS ANIMATIONS ===== */
+.loading-status {
+    font-size: 0.95rem;
+    color: #9d7856;
+    font-weight: 500;
+    margin-bottom: 25px;
+    opacity: 0;
+    font-family: 'CustomFont', 'Poppins', sans-serif;
+    transform: translate3d(0, 14px, 0) scale(0.96);
+}
+
+.loading-status.enter {
+    animation: statusEnter 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s forwards;
+}
+
+/* Remove unused complete states that could cause conflicts */
+
+.loading-status.exit {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    animation: statusExit 1.2s ease-in 0.4s forwards !important;
+}
+
+@keyframes statusEnter {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 25px, 0) scale(0.7) rotateX(45deg);
+    }
+
+    60% {
+
+        transform: translate3d(0, -3px, 0) scale(1.05) rotateX(-5deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateX(0deg);
+    }
+}
+
+/* ===== QUOTE ANIMATIONS ===== */
+.loading-quote {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0) scale(0.94);
+}
+
+.loading-quote.enter {
+    animation: quoteEnter 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s forwards;
+}
+
+/* Remove unused complete states that could cause conflicts */
+
+.loading-quote.exit {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    animation: quoteExit 1.2s ease-in 0.5s forwards !important;
+}
+
+.quote-text {
+    font-style: italic;
+    font-size: 1.2rem;
+    color: #8b5a2b;
+    max-width: 380px;
+    line-height: 1.5;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    font-family: 'CustomFont', 'Poppins', sans-serif;
+}
+
+@keyframes quoteEnter {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 40px, 0) scale(0.7) rotateZ(-10deg);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: translate3d(0, -5px, 0) scale(1.08) rotateZ(2deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateZ(0deg);
+    }
+}
+
+/* ===== REVERSE EXIT ANIMATIONS ===== */
+@keyframes titleExit {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateX(0deg);
+    }
+
+    40% {
+        opacity: 0.8;
+        transform: translate3d(5px, -5px, 0) scale(1.05) rotateX(0deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(-50px, -30px, 0) scale(0.8) rotateX(90deg);
+    }
+}
+
+@keyframes subtitleExit {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    30% {
+        opacity: 0.9;
+        transform: translate3d(-3px, -3px, 0) scale(1.02);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(30px, 20px, 0) scale(0.9);
+    }
+}
+
+@keyframes taglineExit {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateY(0deg);
+    }
+
+    20% {
+        opacity: 0.9;
+        transform: translate3d(4px, 0, 0) scale(1.05) rotateY(-5deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(-40px, 0, 0) scale(0.8) rotateY(45deg);
+    }
+}
+
+@keyframes spinnerExit {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateY(0deg);
+    }
+
+    30% {
+        opacity: 0.8;
+        transform: translate3d(0, -5px, 0) scale(1.1) rotateY(0deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, 30px, 0) scale(0.3) rotateY(180deg);
+    }
+}
+
+@keyframes statusExit {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateX(0deg);
+    }
+
+    40% {
+        opacity: 0.8;
+        transform: translate3d(0, -3px, 0) scale(1.05) rotateX(-5deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, 25px, 0) scale(0.7) rotateX(45deg);
+    }
+}
+
+@keyframes quoteExit {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotateZ(0deg);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: translate3d(0, -5px, 0) scale(1.08) rotateZ(2deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, 40px, 0) scale(0.7) rotateZ(-10deg);
+    }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .loading-title {
+        font-size: 1.4rem;
+    }
+
+    .loading-subtitle {
+        font-size: 1rem;
+    }
+
+    .quote-text {
+        font-size: 1.1rem;
+        max-width: 300px;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+    }
+}
