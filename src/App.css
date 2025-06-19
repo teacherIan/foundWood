@@ -729,3 +729,19 @@ canvas:active {
     filter: none !important;
     box-shadow: 1px 1px 0px #1c5077, 2px 2px 2px #77481c !important;
 }
+
+/* Disable menu interactions when contact page is active */
+.header-disabled * {
+    pointer-events: none !important;
+    cursor: default !important;
+}
+
+.header-disabled {
+    opacity: 0.5;
+    transition: opacity 0.3s ease-out;
+}
+
+.header-disabled .menu-item:hover {
+    transform: none !important;
+    scale: 1 !important;
+}
