@@ -233,8 +233,11 @@ export default function Gallery({
   const galleryLengthRef = useRef(0);
   const prevGalleryTypeRef = useRef(null);
 
-  // Platform detection
-  const isMobile = window.innerWidth < window.innerHeight;
+  // Platform detection - Enhanced mobile detection
+  const isMobile =
+    window.innerWidth < 768 ||
+    'ontouchstart' in window ||
+    navigator.maxTouchPoints > 0;
   const isDesktop = !isMobile;
 
   // Track aspect ratio for dynamic container sizing
@@ -284,35 +287,38 @@ export default function Gallery({
     },
   }));
 
-  // Unified bounds calculation
-  const getBounds = useCallback(() => {
-    const container = imageContainerRef.current;
-    if (!container) return { minX: 0, maxX: 0, minY: 0, maxY: 0 };
+  // Unified bounds calculation with scale parameter
+  const getBounds = useCallback(
+    (scale = gestureState.scale) => {
+      const container = imageContainerRef.current;
+      if (!container) return { minX: 0, maxX: 0, minY: 0, maxY: 0 };
 
-    if (isMobile) {
-      // Mobile: pixel-based bounds for touch gestures
-      const rect = container.getBoundingClientRect();
-      const scaledWidth = rect.width * gestureState.scale;
-      const scaledHeight = rect.height * gestureState.scale;
-      const overflowX = Math.max(0, scaledWidth - rect.width);
-      const overflowY = Math.max(0, scaledHeight - rect.height);
+      if (isMobile) {
+        // Mobile: pixel-based bounds for touch gestures
+        const rect = container.getBoundingClientRect();
+        const scaledWidth = rect.width * scale;
+        const scaledHeight = rect.height * scale;
+        const overflowX = Math.max(0, scaledWidth - rect.width);
+        const overflowY = Math.max(0, scaledHeight - rect.height);
 
-      return {
-        minX: -(overflowX / 2) - 60,
-        maxX: overflowX / 2 + 60,
-        minY: -(overflowY / 2) - 60,
-        maxY: overflowY / 2 + 60,
-      };
-    } else {
-      // Desktop: percentage-based bounds for subtle hover effect
-      return {
-        minX: -15,
-        maxX: 15,
-        minY: -15,
-        maxY: 15,
-      };
-    }
-  }, [isMobile, gestureState.scale]);
+        return {
+          minX: -(overflowX / 2) - 60,
+          maxX: overflowX / 2 + 60,
+          minY: -(overflowY / 2) - 60,
+          maxY: overflowY / 2 + 60,
+        };
+      } else {
+        // Desktop: percentage-based bounds for subtle hover effect
+        return {
+          minX: -15,
+          maxX: 15,
+          minY: -15,
+          maxY: 15,
+        };
+      }
+    },
+    [isMobile, gestureState.scale]
+  );
 
   // Reset function
   const resetGesture = useCallback(() => {
@@ -339,7 +345,25 @@ export default function Gallery({
       onDrag: ({ offset: [x, y], pinching, cancel, velocity, distance }) => {
         if (pinching) return cancel();
 
-        const bounds = getBounds();
+        console.log('Drag gesture:', { x, y, isMobile, pinching, distance });
+
+        // Get fresh bounds on each drag using current state
+        const container = imageContainerRef.current;
+        if (!container) return;
+
+        // Use a function to get current scale to avoid stale closures
+        const getCurrentScale = () => {
+          if (isMobile) {
+            // For mobile, get the current scale from state
+            return gestureState.scale;
+          } else {
+            return 1.15; // Desktop uses fixed scale for hover
+          }
+        };
+
+        const currentScale = getCurrentScale();
+        const bounds = getBounds(currentScale);
+
         const clampedX = Math.max(bounds.minX, Math.min(bounds.maxX, x));
         const clampedY = Math.max(bounds.minY, Math.min(bounds.maxY, y));
 
@@ -348,7 +372,7 @@ export default function Gallery({
         if (isMobile) {
           // Mobile: pixel-based translation
           imageApi.start({
-            transform: `translate(${clampedX}px, ${clampedY}px) scale(${gestureState.scale})`,
+            transform: `translate(${clampedX}px, ${clampedY}px) scale(${currentScale})`,
             immediate: true,
           });
         } else {
@@ -365,6 +389,8 @@ export default function Gallery({
       onPinch: ({ offset: [scale], origin: [ox, oy] }) => {
         if (!isMobile) return;
 
+        console.log('Pinch gesture:', { scale, origin: [ox, oy], isMobile });
+
         const constrainedScale = Math.max(1.0, Math.min(3.0, scale));
 
         // Calculate pan adjustment for zoom-to-point
@@ -376,22 +402,38 @@ export default function Gallery({
           const offsetX = ox - rect.left - centerX;
           const offsetY = oy - rect.top - centerY;
 
-          const scaleChange = constrainedScale - gestureState.scale;
-          const panAdjustX = (-offsetX * scaleChange) / constrainedScale;
-          const panAdjustY = (-offsetY * scaleChange) / constrainedScale;
+          // Get current state to avoid stale closures
+          setGestureState((prevState) => {
+            const scaleChange = constrainedScale - prevState.scale;
+            const panAdjustX = (-offsetX * scaleChange) / constrainedScale;
+            const panAdjustY = (-offsetY * scaleChange) / constrainedScale;
 
-          let newX = gestureState.x + panAdjustX;
-          let newY = gestureState.y + panAdjustY;
+            let newX = prevState.x + panAdjustX;
+            let newY = prevState.y + panAdjustY;
 
-          const bounds = getBounds();
-          newX = Math.max(bounds.minX, Math.min(bounds.maxX, newX));
-          newY = Math.max(bounds.minY, Math.min(bounds.maxY, newY));
+            // Calculate bounds with new scale
+            const scaledWidth = rect.width * constrainedScale;
+            const scaledHeight = rect.height * constrainedScale;
+            const overflowX = Math.max(0, scaledWidth - rect.width);
+            const overflowY = Math.max(0, scaledHeight - rect.height);
 
-          setGestureState({ x: newX, y: newY, scale: constrainedScale });
+            const bounds = {
+              minX: -(overflowX / 2) - 60,
+              maxX: overflowX / 2 + 60,
+              minY: -(overflowY / 2) - 60,
+              maxY: overflowY / 2 + 60,
+            };
 
-          imageApi.start({
-            transform: `translate(${newX}px, ${newY}px) scale(${constrainedScale})`,
-            immediate: true,
+            newX = Math.max(bounds.minX, Math.min(bounds.maxX, newX));
+            newY = Math.max(bounds.minY, Math.min(bounds.maxY, newY));
+
+            // Update animation immediately
+            imageApi.start({
+              transform: `translate(${newX}px, ${newY}px) scale(${constrainedScale})`,
+              immediate: true,
+            });
+
+            return { x: newX, y: newY, scale: constrainedScale };
           });
         }
       },
@@ -401,19 +443,30 @@ export default function Gallery({
         if (!isDesktop) return;
 
         event.preventDefault();
-        const newScale = Math.max(
-          1.0,
-          Math.min(2.0, gestureState.scale - dy * 0.002)
-        );
-        setGestureState((prev) => ({ ...prev, scale: newScale }));
 
-        imageApi.start({
-          transform: `translate(${gestureState.x}%, ${gestureState.y}%) scale(${newScale})`,
+        setGestureState((prevState) => {
+          const newScale = Math.max(
+            1.0,
+            Math.min(2.0, prevState.scale - dy * 0.002)
+          );
+
+          imageApi.start({
+            transform: `translate(${prevState.x}%, ${prevState.y}%) scale(${newScale})`,
+          });
+
+          return { ...prevState, scale: newScale };
         });
       },
 
       // Swipe navigation (both platforms)
       onSwipe: ({ direction: [dx], velocity, distance }) => {
+        console.log('Swipe gesture:', {
+          direction: dx,
+          velocity,
+          distance,
+          threshold: Math.abs(dx) > 0.5 && velocity > 0.5 && distance > 100,
+        });
+
         if (Math.abs(dx) > 0.5 && velocity > 0.5 && distance > 100) {
           const newIndex =
             dx > 0
@@ -424,6 +477,11 @@ export default function Gallery({
               ? currentPhoto + 1
               : 0;
 
+          console.log('Swipe navigation:', {
+            currentPhoto,
+            newIndex,
+            direction: dx > 0 ? 'right' : 'left',
+          });
           setCurrentPhoto(newIndex);
           resetGesture();
         }
@@ -443,7 +501,7 @@ export default function Gallery({
       drag: {
         enabled: true,
         from: () => [gestureState.x, gestureState.y],
-        bounds: getBounds,
+        bounds: () => getBounds(),
         rubberband: true,
       },
       pinch: {
@@ -466,19 +524,29 @@ export default function Gallery({
     }
   );
 
-  // Double-tap to reset (mobile only)
+  // Double-tap to reset (mobile only) - Enhanced detection
   const [lastTap, setLastTap] = useState(0);
   const handleImageTap = useCallback(
     (e) => {
       if (!isMobile) return;
 
+      // Prevent default to avoid any conflicts
+      e.preventDefault();
+      e.stopPropagation();
+
       const now = Date.now();
-      if (now - lastTap < 300) {
+      const timeDiff = now - lastTap;
+
+      console.log('Mobile tap detected:', { timeDiff, isMobile, gestureState });
+
+      if (timeDiff < 300 && timeDiff > 50) {
+        // Double-tap detected
+        console.log('Double-tap detected - resetting gesture');
         resetGesture();
       }
       setLastTap(now);
     },
-    [lastTap, isMobile, resetGesture]
+    [lastTap, isMobile, resetGesture, gestureState]
   );
 
   // Reset gesture when image changes
@@ -584,14 +652,14 @@ export default function Gallery({
   );
 
   const handleMasterImageClick = useCallback(() => {
-    // Only show mobile-style info panel on actual mobile devices (portrait orientation + small screen)
-    if (window.innerWidth < window.innerHeight && window.innerWidth < 768) {
+    // Only show mobile-style info panel on actual mobile devices
+    if (isMobile) {
       // For mobile, just log the click - remove info panel functionality to simplify
       console.log('Mobile image clicked');
       // setShowDetails(!showDetails);
       // setShowInfographic(!showInfographic);
     }
-  }, []);
+  }, [isMobile]);
 
   const handleThumbnailClick = useCallback(
     (index) => {
@@ -617,12 +685,7 @@ export default function Gallery({
   // Image hover/pan functionality
   const handleImageMouseMove = useCallback(
     (e) => {
-      if (
-        !imageContainerRef.current ||
-        window.innerWidth < window.innerHeight ||
-        !isHovering
-      )
-        return;
+      if (!imageContainerRef.current || isMobile || !isHovering) return;
 
       // Cancel any pending animation frame
       if (animationFrameRef.current) {
@@ -678,8 +741,8 @@ export default function Gallery({
   );
 
   const handleImageMouseEnter = useCallback(() => {
-    // Only enable hover effects on desktop (not on mobile devices)
-    if (window.innerWidth >= window.innerHeight && window.innerWidth >= 768) {
+    // Only enable hover effects on desktop
+    if (isDesktop) {
       // Cancel any pending leave timeout to prevent race conditions
       if (hoverLeaveTimeoutRef.current) {
         clearTimeout(hoverLeaveTimeoutRef.current);
@@ -687,7 +750,7 @@ export default function Gallery({
       }
       setIsHovering(true);
     }
-  }, []);
+  }, [isDesktop]);
 
   const hoverLeaveTimeoutRef = useRef(null);
 
@@ -898,20 +961,8 @@ export default function Gallery({
     return { minPanX, maxPanX, minPanY, maxPanY };
   }
 
-  // Reset transform when image changes with immediate state and animation sync
-  useEffect(() => {
-    const resetTransform = { x: 0, y: 0, scale: 1.15 };
-    setTouchTransform(resetTransform);
-    setIsGestureActive(false);
-
-    if (window.innerWidth < window.innerHeight) {
-      // Immediate reset for mobile
-      mobileImageApi.start({
-        transform: `translate(0px, 0px) scale(1.15)`,
-        immediate: true, // Immediate reset when changing images
-      });
-    }
-  }, [currentPhoto, mobileImageApi]);
+  // Reset transform when image changes (handled by resetGesture)
+  // This effect is already handled by the resetGesture useEffect above
 
   const currentItem = galleryTypeArr[currentPhoto] || galleryTypeArr[0];
 
@@ -1009,11 +1060,12 @@ export default function Gallery({
     config: { tension: 200, friction: 30 }, // Faster transitions to reduce conflict time
     immediate: false, // Ensure smooth transitions
     onStart: () => {
-      // Reset image transform when starting new image transition to prevent conflicts
-      if (!isHovering) {
+      // Don't reset transforms during hover for desktop
+      if (!isHovering && !isMobile) {
         imageApi.set({ transform: 'translate(0%, 0%) scale(1)' });
         currentTransformRef.current = 'translate(0%, 0%) scale(1)';
       }
+      // For mobile, let the gesture system handle transforms
     },
   });
 
@@ -1080,7 +1132,7 @@ export default function Gallery({
         touchAction: 'pan-x pan-y',
       }}
     >
-      {/* Debug info for Safari - remove in production */}
+      {/* Debug info for Safari - enhanced with gesture state */}
       {process.env.NODE_ENV !== 'production' && (
         <div
           style={{
@@ -1093,11 +1145,17 @@ export default function Gallery({
             fontSize: '12px',
             zIndex: 99999,
             borderRadius: '3px',
+            maxWidth: '300px',
           }}
         >
-          Safari Debug: {galleryTypeArr?.length || 0} items | Current:{' '}
-          {currentPhoto} | Browser:{' '}
+          Debug: {galleryTypeArr?.length || 0} items | Current: {currentPhoto}
+          <br />
+          Browser:{' '}
           {isiOSSafari() ? 'iOS Safari' : isSafari() ? 'Safari' : 'Other'}
+          <br />
+          Mobile: {isMobile ? 'YES' : 'NO'} | Gesture: x:
+          {gestureState.x.toFixed(0)} y:{gestureState.y.toFixed(0)} scale:
+          {gestureState.scale.toFixed(1)}
         </div>
       )}
 
@@ -1133,22 +1191,25 @@ export default function Gallery({
               {...bind()} // Apply unified gesture handlers
               style={{
                 position: 'relative',
-                width:
-                  window.innerWidth < window.innerHeight
-                    ? '100vw'
-                    : `${calculateImageDimensions().width}px`,
-                height:
-                  window.innerWidth < window.innerHeight
-                    ? '40vh'
-                    : `${calculateImageDimensions().height}px`,
+                width: isMobile
+                  ? '100vw'
+                  : `${calculateImageDimensions().width}px`,
+                height: isMobile
+                  ? '40vh'
+                  : `${calculateImageDimensions().height}px`,
                 margin: '0 auto',
                 zIndex: 1,
                 overflow: 'hidden',
-                cursor:
-                  window.innerWidth >= window.innerHeight ? 'zoom-in' : 'grab',
+                cursor: isDesktop ? 'zoom-in' : 'grab',
                 touchAction: 'none', // Unified: prevent default gestures
+                userSelect: 'none',
+                WebkitUserSelect: 'none',
               }}
               onClick={handleImageTap} // Double-tap handler for mobile
+              // Remove mouse event handlers on mobile to prevent conflicts
+              onMouseMove={isMobile ? undefined : handleImageMouseMove}
+              onMouseEnter={isMobile ? undefined : handleImageMouseEnter}
+              onMouseLeave={isMobile ? undefined : handleImageMouseLeave}
             >
               {imageTransitions((style, item) =>
                 item ? (
@@ -1159,10 +1220,7 @@ export default function Gallery({
                       ...style,
                       width: '100%',
                       height: '100%',
-                      objectFit:
-                        window.innerWidth < window.innerHeight
-                          ? 'cover'
-                          : 'contain',
+                      objectFit: isMobile ? 'cover' : 'contain',
                       position: 'absolute',
                       top: 0,
                       left: 0,
@@ -1183,8 +1241,8 @@ export default function Gallery({
                 ) : null
               )}
 
-              {/* Enhanced gesture indicator for mobile */}
-              {window.innerWidth < window.innerHeight && (
+              {/* Enhanced gesture indicator for mobile with debug info */}
+              {isMobile && (
                 <div
                   className="gestureIndicator"
                   style={{
@@ -1227,11 +1285,24 @@ export default function Gallery({
                   <div style={{ fontSize: '6px', opacity: 0.8 }}>
                     Swipe ← → navigate
                   </div>
+                  {/* Debug info */}
+                  {process.env.NODE_ENV !== 'production' && (
+                    <div
+                      style={{
+                        fontSize: '5px',
+                        marginTop: '2px',
+                        opacity: 0.6,
+                      }}
+                    >
+                      x:{gestureState.x.toFixed(0)} y:
+                      {gestureState.y.toFixed(0)}
+                    </div>
+                  )}
                 </div>
               )}
 
               {/* Desktop zoom indicator */}
-              {window.innerWidth >= window.innerHeight && (
+              {isDesktop && (
                 <div
                   className="zoomIndicator"
                   style={{
