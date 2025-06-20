@@ -3,7 +3,7 @@ import imgData from './imgData';
 import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { useSpring, animated, useTransition } from '@react-spring/web';
 import { useImagePreloader } from './useImagePreloader';
-import { usePinch, useGesture } from '@use-gesture/react';
+import { useGesture } from '@use-gesture/react';
 
 const images = imgData;
 
@@ -71,315 +71,53 @@ const Thumbnail = memo(({ image, index, currentPhoto, onClick, isLoaded }) => {
   );
 });
 
-// Draggable thumbnail container component
+// Enhanced DraggableThumbnails with @use-gesture/react
 const DraggableThumbnails = memo(
   ({ galleryTypeArr, currentPhoto, onThumbnailClick, isImageLoaded }) => {
     const containerRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
-    const [startX, setStartX] = useState(0);
-    const [startY, setStartY] = useState(0);
-    const [scrollLeft, setScrollLeft] = useState(0);
-    const [scrollTop, setScrollTop] = useState(0);
-    const [dragDistance, setDragDistance] = useState(0);
-    const dragThreshold = 5; // Minimum pixels to consider as dragging
-
-    // Detect if we're on a mobile device
     const isMobile = window.innerWidth < 768 || 'ontouchstart' in window;
 
-    // Detect if we need vertical dragging (very small landscape screens)
-    const needsVerticalDrag =
-      window.innerWidth <= 600 &&
-      window.innerHeight <= 480 &&
-      window.innerWidth > window.innerHeight;
+    // Unified gesture handling for thumbnails
+    const bind = useGesture(
+      {
+        onDrag: ({ offset: [x], dragging, cancel, distance }) => {
+          if (!containerRef.current) return;
 
-    // Use refs to store the latest values for closures
-    const stateRef = useRef({
-      startX: 0,
-      startY: 0,
-      scrollLeft: 0,
-      scrollTop: 0,
-      isMobile: isMobile,
-      needsVerticalDrag: needsVerticalDrag,
-      dragThreshold: 5,
-    });
-
-    // Update state ref whenever state changes
-    useEffect(() => {
-      stateRef.current = {
-        startX,
-        startY,
-        scrollLeft,
-        scrollTop,
-        isMobile,
-        needsVerticalDrag,
-        dragThreshold,
-      };
-    }, [
-      startX,
-      startY,
-      scrollLeft,
-      scrollTop,
-      isMobile,
-      needsVerticalDrag,
-      dragThreshold,
-    ]);
-
-    // Global mouse move handler
-    const handleGlobalMouseMove = useCallback((e) => {
-      const {
-        startX: currentStartX,
-        startY: currentStartY,
-        scrollLeft: currentScrollLeft,
-        scrollTop: currentScrollTop,
-        isMobile: currentIsMobile,
-        needsVerticalDrag: currentNeedsVerticalDrag,
-        dragThreshold: currentDragThreshold,
-      } = stateRef.current;
-
-      if (
-        !containerRef.current ||
-        (currentStartX === 0 && currentStartY === 0) ||
-        currentIsMobile
-      )
-        return;
-
-      e.preventDefault();
-      const x = e.pageX - containerRef.current.offsetLeft;
-      const y = e.pageY - containerRef.current.offsetTop;
-      const distanceX = Math.abs(x - currentStartX);
-      const distanceY = Math.abs(y - currentStartY);
-
-      // For x-direction only dragging, prioritize horizontal movement
-      // Only register as dragging if horizontal movement is significant OR
-      // if we're on a very small landscape screen that allows vertical dragging
-      let totalDistance;
-      if (currentNeedsVerticalDrag) {
-        // On very small landscape screens, allow both directions
-        totalDistance = Math.max(distanceX, distanceY);
-      } else {
-        // On all other screens, prioritize x-direction dragging
-        // Only consider horizontal distance for drag threshold
-        totalDistance = distanceX;
-      }
-
-      if (totalDistance > currentDragThreshold) {
-        setIsDragging(true);
-
-        const container = containerRef.current;
-
-        // Always handle horizontal dragging (x-direction)
-        const walkX = (x - currentStartX) * 2;
-        const newScrollLeft = currentScrollLeft - walkX;
-        const maxScrollLeft = Math.max(
-          0,
-          container.scrollWidth - container.clientWidth
-        );
-        const boundedScrollLeft = Math.max(
-          0,
-          Math.min(newScrollLeft, maxScrollLeft)
-        );
-        container.scrollLeft = boundedScrollLeft;
-
-        // Handle vertical dragging (y-direction) only on very small landscape screens
-        if (currentNeedsVerticalDrag) {
-          const walkY = (y - currentStartY) * 2;
-          const newScrollTop = currentScrollTop - walkY;
-          const maxScrollTop = Math.max(
+          const container = containerRef.current;
+          const maxScrollLeft = Math.max(
             0,
-            container.scrollHeight - container.clientHeight
+            container.scrollWidth - container.clientWidth
           );
-          const boundedScrollTop = Math.max(
-            0,
-            Math.min(newScrollTop, maxScrollTop)
-          );
-          container.scrollTop = boundedScrollTop;
-        }
 
-        setDragDistance(totalDistance);
-      }
-    }, []);
+          // Convert drag offset to scroll position
+          const newScrollLeft = Math.max(0, Math.min(-x, maxScrollLeft));
+          container.scrollLeft = newScrollLeft;
 
-    // Global mouse up handler
-    const handleGlobalMouseUp = useCallback(() => {
-      const { isMobile: currentIsMobile } = stateRef.current;
-
-      if (currentIsMobile) return;
-
-      setStartX(0);
-      setStartY(0);
-      if (containerRef.current) {
-        containerRef.current.style.cursor = 'grab';
-      }
-      setIsDragging(false);
-      setTimeout(() => setDragDistance(0), 50);
-
-      // Remove global event listeners
-      document.removeEventListener('mousemove', handleGlobalMouseMove);
-      document.removeEventListener('mouseup', handleGlobalMouseUp);
-    }, [handleGlobalMouseMove]);
-
-    const handleMouseDown = useCallback(
-      (e) => {
-        if (!containerRef.current || isMobile) return;
-
-        setIsDragging(false);
-        setDragDistance(0);
-        const newStartX = e.pageX - containerRef.current.offsetLeft;
-        const newStartY = e.pageY - containerRef.current.offsetTop;
-        const newScrollLeft = containerRef.current.scrollLeft;
-        const newScrollTop = containerRef.current.scrollTop;
-        setStartX(newStartX);
-        setStartY(newStartY);
-        setScrollLeft(newScrollLeft);
-        setScrollTop(newScrollTop);
-
-        // Set cursor to grabbing with directional hint
-        if (needsVerticalDrag) {
-          containerRef.current.style.cursor = 'grabbing'; // Both directions on very small landscape
-        } else {
-          containerRef.current.style.cursor = 'grabbing'; // Primarily x-direction
-        }
-
-        e.preventDefault();
-
-        // Add global mouse event listeners for proper drag handling
-        document.addEventListener('mousemove', handleGlobalMouseMove);
-        document.addEventListener('mouseup', handleGlobalMouseUp);
+          // Set dragging state based on distance threshold
+          setIsDragging(distance > 5);
+        },
+        onDragEnd: () => {
+          setTimeout(() => setIsDragging(false), 50);
+        },
       },
-      [isMobile, needsVerticalDrag, handleGlobalMouseMove, handleGlobalMouseUp]
-    );
-
-    const handleMouseMove = useCallback((e) => {
-      // This is now handled by the global event listener
-      return;
-    }, []);
-
-    const handleMouseUp = useCallback(() => {
-      // This is now handled by the global event listener
-      return;
-    }, []);
-
-    const handleMouseLeave = useCallback(() => {
-      if (isMobile) return;
-      // Clean up any ongoing drag when mouse leaves
-      if (startX !== 0 || startY !== 0) {
-        setStartX(0);
-        setStartY(0);
-        if (containerRef.current) {
-          containerRef.current.style.cursor = 'grab';
-        }
-        setIsDragging(false);
-        setDragDistance(0);
-
-        // Remove global event listeners
-        document.removeEventListener('mousemove', handleGlobalMouseMove);
-        document.removeEventListener('mouseup', handleGlobalMouseUp);
+      {
+        drag: {
+          from: () => [-containerRef.current?.scrollLeft || 0, 0],
+          axis: 'x',
+          enabled: !isMobile, // Use native scrolling on mobile
+        },
       }
-    }, [isMobile, startX, startY, handleGlobalMouseMove, handleGlobalMouseUp]);
-
-    // Touch events for mobile - use native scrolling
-    const handleTouchStart = useCallback(
-      (e) => {
-        if (!isMobile || !containerRef.current) return;
-        // For mobile, just reset any previous dragging state
-        setIsDragging(false);
-        setDragDistance(0);
-      },
-      [isMobile]
     );
-
-    const handleTouchMove = useCallback(
-      (e) => {
-        // Let native scrolling handle touch moves on mobile
-        if (isMobile) return;
-      },
-      [isMobile]
-    );
-
-    const handleTouchEnd = useCallback(() => {
-      // Reset state on mobile
-      if (isMobile) {
-        setIsDragging(false);
-        setDragDistance(0);
-      }
-    }, [isMobile]);
 
     const handleThumbnailClick = useCallback(
       (index) => {
-        // On mobile or when drag distance is small, allow the click
-        if (isMobile || dragDistance <= dragThreshold) {
+        if (!isDragging) {
           onThumbnailClick(index);
         }
       },
-      [dragDistance, dragThreshold, onThumbnailClick, isMobile]
+      [isDragging, onThumbnailClick]
     );
-
-    // Add keyboard support for scrolling thumbnails - only when focused
-    const handleKeyDown = useCallback((e) => {
-      if (!containerRef.current) return;
-
-      // Only handle thumbnail scrolling if the thumbnails container is focused
-      // This prevents conflicts with the main gallery navigation
-      if (document.activeElement !== containerRef.current) return;
-
-      const container = containerRef.current;
-      const scrollAmount = 150; // Scroll distance in pixels
-      const maxScrollLeft = Math.max(
-        0,
-        container.scrollWidth - container.clientWidth
-      );
-
-      switch (e.key) {
-        case 'ArrowLeft':
-          e.preventDefault();
-          e.stopPropagation(); // Prevent the main gallery from handling this
-          const newLeftScroll = Math.max(
-            0,
-            container.scrollLeft - scrollAmount
-          );
-          container.scrollTo({
-            left: newLeftScroll,
-            behavior: 'smooth',
-          });
-          break;
-        case 'ArrowRight':
-          e.preventDefault();
-          e.stopPropagation(); // Prevent the main gallery from handling this
-          const newRightScroll = Math.min(
-            maxScrollLeft,
-            container.scrollLeft + scrollAmount
-          );
-          container.scrollTo({
-            left: newRightScroll,
-            behavior: 'smooth',
-          });
-          break;
-        default:
-          break;
-      }
-    }, []);
-
-    // Add keyboard event listener when component mounts
-    useEffect(() => {
-      const container = containerRef.current;
-      if (!container) return;
-
-      // Make container focusable and add keyboard listener
-      container.tabIndex = 0;
-      container.addEventListener('keydown', handleKeyDown);
-
-      return () => {
-        container.removeEventListener('keydown', handleKeyDown);
-      };
-    }, [handleKeyDown]);
-
-    // Cleanup global event listeners on unmount
-    useEffect(() => {
-      return () => {
-        document.removeEventListener('mousemove', handleGlobalMouseMove);
-        document.removeEventListener('mouseup', handleGlobalMouseUp);
-      };
-    }, [handleGlobalMouseMove, handleGlobalMouseUp]);
 
     // Auto-center the active thumbnail
     const centerActiveThumbnail = useCallback(() => {
@@ -393,96 +131,42 @@ const DraggableThumbnails = memo(
 
       const containerRect = container.getBoundingClientRect();
       const thumbnailRect = activeThumbnail.getBoundingClientRect();
-
-      // Calculate the position to center the thumbnail
       const containerCenter = containerRect.width / 2;
       const thumbnailCenter =
         thumbnailRect.left - containerRect.left + thumbnailRect.width / 2;
       const scrollOffset = thumbnailCenter - containerCenter;
-
-      // Calculate the target scroll position
       const targetScrollLeft = container.scrollLeft + scrollOffset;
-
-      // Ensure we don't scroll beyond boundaries
       const maxScrollLeft = Math.max(
         0,
         container.scrollWidth - container.clientWidth
       );
-      let boundedScrollLeft = Math.max(
+      const boundedScrollLeft = Math.max(
         0,
         Math.min(targetScrollLeft, maxScrollLeft)
       );
 
-      // Special handling for first and last thumbnails to ensure they're fully visible
-      if (currentPhoto === 0) {
-        // For the first thumbnail, always scroll to the very beginning
-        boundedScrollLeft = 0;
-      } else if (currentPhoto === thumbnails.length - 1) {
-        // For the last thumbnail, ensure it's fully visible
-        const thumbnailRight = thumbnailRect.right - containerRect.left;
-        const containerWidth = containerRect.width;
-        if (thumbnailRight > containerWidth) {
-          boundedScrollLeft = Math.min(
-            maxScrollLeft,
-            container.scrollLeft + (thumbnailRight - containerWidth) + 10
-          );
-        }
-      }
-
-      // Only scroll if we're not already in the right position
-      const threshold = 5;
-      const currentScrollDiff = Math.abs(
-        container.scrollLeft - boundedScrollLeft
-      );
-      if (currentScrollDiff > threshold) {
-        container.scrollTo({
-          left: boundedScrollLeft,
-          behavior: 'smooth',
-        });
-      }
+      container.scrollTo({
+        left: boundedScrollLeft,
+        behavior: 'smooth',
+      });
     }, [currentPhoto]);
 
-    // Center the thumbnail when currentPhoto changes
     useEffect(() => {
-      // Use a slightly longer delay to ensure DOM and CSS have updated
       const timeoutId = setTimeout(centerActiveThumbnail, 150);
       return () => clearTimeout(timeoutId);
     }, [currentPhoto, centerActiveThumbnail]);
-
-    // Force scroll to beginning when component mounts or gallery changes
-    useEffect(() => {
-      const container = containerRef.current;
-      if (container && galleryTypeArr.length > 0) {
-        // Force immediate scroll to position 0 without animation
-        container.scrollLeft = 0;
-        // Also ensure the container is properly positioned
-        setTimeout(() => {
-          container.scrollLeft = 0;
-        }, 100);
-      }
-    }, [galleryTypeArr]);
 
     return (
       <div
         ref={containerRef}
         className="thumbNails"
+        {...bind()}
         style={{
-          cursor: isMobile ? 'default' : 'grab',
+          cursor: isMobile ? 'default' : isDragging ? 'grabbing' : 'grab',
           userSelect: 'none',
-          WebkitUserSelect: 'none',
-          msUserSelect: 'none',
-          outline: 'none', // Remove default focus outline
-          // Enhanced dragging behavior: x-direction primary, y-direction on very small landscape only
-          touchAction: isMobile ? 'pan-x' : 'none', // Native x-scroll on mobile, custom on desktop
+          touchAction: isMobile ? 'pan-x' : 'none',
+          outline: 'none',
         }}
-        tabIndex={isMobile ? -1 : 0} // Only focusable on desktop
-        onMouseDown={isMobile ? undefined : handleMouseDown}
-        onMouseMove={isMobile ? undefined : handleMouseMove}
-        onMouseUp={isMobile ? undefined : handleMouseUp}
-        onMouseLeave={isMobile ? undefined : handleMouseLeave}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
         {galleryTypeArr.map((image, index) => (
           <Thumbnail
@@ -490,7 +174,7 @@ const DraggableThumbnails = memo(
             image={image}
             index={index}
             currentPhoto={currentPhoto}
-            onClick={(clickedIndex) => handleThumbnailClick(clickedIndex)}
+            onClick={handleThumbnailClick}
             isLoaded={isImageLoaded(image.img)}
           />
         ))}
@@ -546,169 +230,23 @@ export default function Gallery({
   const [isHovering, setIsHovering] = useState(false);
   const imageContainerRef = useRef(null);
   const imageRef = useRef(null);
-  const galleryLengthRef = useRef(0); // Add ref to track gallery length
-  const prevGalleryTypeRef = useRef(null); // Track previous gallery type
+  const galleryLengthRef = useRef(0);
+  const prevGalleryTypeRef = useRef(null);
 
-  // Track aspect ratio for dynamic container sizing (desktop)
-  const [imgAspect, setImgAspect] = useState(1.4); // default aspect ratio
+  // Platform detection
+  const isMobile = window.innerWidth < window.innerHeight;
+  const isDesktop = !isMobile;
 
-  // Loading state for smooth transitions
+  // Track aspect ratio for dynamic container sizing
+  const [imgAspect, setImgAspect] = useState(1.4);
   const [imageLoading, setImageLoading] = useState(false);
 
-  // Enhanced touch state for master image (mobile) with @use-gesture
-  const [touchTransform, setTouchTransform] = useState({ 
-    x: 0, 
-    y: 0, 
-    scale: 1.15 
-  });
-  const [isGestureActive, setIsGestureActive] = useState(false);
-  const PAN_MARGIN = 60;
-  const MIN_SCALE = 1.0;
-  const MAX_SCALE = 3.0;
-
-  // Animated transform state using react-spring for smooth gestures
-  const [mobileImageSpring, mobileImageApi] = useSpring(() => ({
+  // Unified gesture state
+  const [gestureState, setGestureState] = useState({
     x: 0,
     y: 0,
     scale: 1.15,
-    config: {
-      tension: 300,
-      friction: 40,
-      mass: 1,
-      precision: 0.01,
-    },
-  }));
-
-  // Use-gesture pinch and drag handlers
-  const bind = useGesture(
-    {
-      onDrag: ({ offset: [x, y], pinching, cancel, ...state }) => {
-        // Don't drag while pinching
-        if (pinching) return cancel();
-        
-        // Apply boundaries
-        const container = imageContainerRef.current;
-        if (container) {
-          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBoundsWithScale(
-            container,
-            imageRef.current,
-            touchTransform.scale,
-            PAN_MARGIN
-          );
-          
-          const boundedX = Math.max(Math.min(x, maxPanX), minPanX);
-          const boundedY = Math.max(Math.min(y, maxPanY), minPanY);
-          
-          setTouchTransform(prev => ({ ...prev, x: boundedX, y: boundedY }));
-          mobileImageApi.start({ x: boundedX, y: boundedY, immediate: state.dragging });
-        }
-      },
-      onPinch: ({ origin: [ox, oy], offset: [scale], ...state }) => {
-        setIsGestureActive(state.pinching);
-        
-        // Constrain scale with rubber band effect
-        let constrainedScale = scale;
-        if (scale < MIN_SCALE) {
-          const overshoot = MIN_SCALE - scale;
-          constrainedScale = MIN_SCALE - (overshoot * 0.3);
-        } else if (scale > MAX_SCALE) {
-          const overshoot = scale - MAX_SCALE;
-          constrainedScale = MAX_SCALE + (overshoot * 0.3);
-        }
-        
-        // Calculate pan adjustment to zoom around the pinch point
-        const container = imageContainerRef.current;
-        if (container) {
-          const containerRect = container.getBoundingClientRect();
-          
-          // Convert origin to container-relative coordinates
-          const originX = ox - containerRect.left;
-          const originY = oy - containerRect.top;
-          
-          // Calculate offset from center
-          const centerX = containerRect.width / 2;
-          const centerY = containerRect.height / 2;
-          const offsetX = originX - centerX;
-          const offsetY = originY - centerY;
-          
-          // Calculate pan adjustment based on scale change
-          const scaleChange = constrainedScale - touchTransform.scale;
-          const panAdjustX = -offsetX * scaleChange / constrainedScale;
-          const panAdjustY = -offsetY * scaleChange / constrainedScale;
-          
-          let newX = touchTransform.x + panAdjustX;
-          let newY = touchTransform.y + panAdjustY;
-          
-          // Apply boundaries
-          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBoundsWithScale(
-            container,
-            imageRef.current,
-            constrainedScale,
-            PAN_MARGIN
-          );
-          
-          newX = Math.max(Math.min(newX, maxPanX), minPanX);
-          newY = Math.max(Math.min(newY, maxPanY), minPanY);
-          
-          setTouchTransform({ x: newX, y: newY, scale: constrainedScale });
-          mobileImageApi.start({ 
-            x: newX, 
-            y: newY, 
-            scale: constrainedScale,
-            immediate: state.pinching 
-          });
-        }
-      },
-      onWheelEnd: () => {
-        // Smooth finish when gesture ends
-        mobileImageApi.start({ 
-          x: touchTransform.x, 
-          y: touchTransform.y, 
-          scale: touchTransform.scale,
-          immediate: false 
-        });
-      }
-    },
-    {
-      drag: {
-        from: () => [touchTransform.x, touchTransform.y],
-        enabled: window.innerWidth < window.innerHeight, // Only on mobile portrait
-      },
-      pinch: {
-        scaleBounds: { min: MIN_SCALE * 0.5, max: MAX_SCALE * 1.5 },
-        rubberband: true,
-        from: () => [touchTransform.scale, 0],
-        enabled: window.innerWidth < window.innerHeight, // Only on mobile portrait
-      },
-    }
-  );
-
-  // Double-tap to reset (we'll handle this separately)
-  const [lastTap, setLastTap] = useState(0);
-  const handleImageTap = useCallback((e) => {
-    if (window.innerWidth >= window.innerHeight) return; // Only on mobile
-    
-    const now = Date.now();
-    if (now - lastTap < 300) {
-      // Double tap - reset
-      const resetTransform = { x: 0, y: 0, scale: 1.15 };
-      setTouchTransform(resetTransform);
-      setIsGestureActive(false);
-      
-      mobileImageApi.start({
-        x: 0,
-        y: 0,
-        scale: 1.15,
-        immediate: false,
-        config: {
-          tension: 160,
-          friction: 20,
-          mass: 1.2,
-        },
-      });
-    }
-    setLastTap(now);
-  }, [lastTap, mobileImageApi]);
+  });
 
   // Initialize image preloader
   const {
@@ -719,7 +257,7 @@ export default function Gallery({
     isPreloading,
   } = useImagePreloader(showGalleryString, showGallery);
 
-  // Spring animations - must be declared before any callbacks that use them
+  // Spring animations
   const [gallerySpring, galleryApi] = useSpring(() => ({
     opacity: 1,
   }));
@@ -733,483 +271,291 @@ export default function Gallery({
     transform: 'translateY(0px)',
   }));
 
+  // Unified image spring for both mobile and desktop
   const [imageSpring, imageApi] = useSpring(() => ({
-    transform: 'translate(0%, 0%) scale(1)',
+    transform: isMobile
+      ? 'translate(0px, 0px) scale(1.15)'
+      : 'translate(0%, 0%) scale(1)',
     config: {
-      tension: 25, // Reduced tension for slower, more deliberate movement
-      friction: 90, // Higher friction for smoother control
-      mass: 2.0, // Higher mass for more weighted, deliberate feel
-      precision: 0.01, // Higher precision to reduce micro-animations
+      tension: isMobile ? 300 : 25,
+      friction: isMobile ? 40 : 90,
+      mass: isMobile ? 1 : 2.0,
+      precision: 0.01,
     },
   }));
 
-  // Update aspect ratio when image loads
-  const handleImageLoad = useCallback(
-    (e) => {
-      const img = e.target;
-      const aspectRatio = img.naturalWidth / img.naturalHeight;
-      // Only log in development
-      if (process.env.NODE_ENV !== 'production') {
-        console.log('Image loaded:', {
-          src: img.src,
-          naturalWidth: img.naturalWidth,
-          naturalHeight: img.naturalHeight,
-          aspectRatio,
-          currentAspect: imgAspect,
-          preloaded: isImageLoaded(img.src) ? '✅' : '❌',
-        });
-      }
-      setImgAspect(aspectRatio);
-      setImageLoading(false); // Image finished loading
+  // Unified bounds calculation
+  const getBounds = useCallback(() => {
+    const container = imageContainerRef.current;
+    if (!container) return { minX: 0, maxX: 0, minY: 0, maxY: 0 };
 
-      // Ensure transform is reset after image loads to prevent conflicts
-      if (!isHovering) {
-        imageApi.set({ transform: 'translate(0%, 0%) scale(1)' });
-        currentTransformRef.current = 'translate(0%, 0%) scale(1)';
-      }
+    if (isMobile) {
+      // Mobile: pixel-based bounds for touch gestures
+      const rect = container.getBoundingClientRect();
+      const scaledWidth = rect.width * gestureState.scale;
+      const scaledHeight = rect.height * gestureState.scale;
+      const overflowX = Math.max(0, scaledWidth - rect.width);
+      const overflowY = Math.max(0, scaledHeight - rect.height);
+
+      return {
+        minX: -(overflowX / 2) - 60,
+        maxX: overflowX / 2 + 60,
+        minY: -(overflowY / 2) - 60,
+        maxY: overflowY / 2 + 60,
+      };
+    } else {
+      // Desktop: percentage-based bounds for subtle hover effect
+      return {
+        minX: -15,
+        maxX: 15,
+        minY: -15,
+        maxY: 15,
+      };
+    }
+  }, [isMobile, gestureState.scale]);
+
+  // Reset function
+  const resetGesture = useCallback(() => {
+    const resetState = { x: 0, y: 0, scale: 1.15 };
+    setGestureState(resetState);
+
+    imageApi.start({
+      transform: isMobile
+        ? 'translate(0px, 0px) scale(1.15)'
+        : 'translate(0%, 0%) scale(1)',
+      immediate: false,
+      config: {
+        tension: 160,
+        friction: 20,
+        mass: 1.2,
+      },
+    });
+  }, [isMobile, imageApi]);
+
+  // Unified gesture handlers with @use-gesture/react
+  const bind = useGesture(
+    {
+      // Unified drag handling (mouse on desktop, touch on mobile)
+      onDrag: ({ offset: [x, y], pinching, cancel, velocity, distance }) => {
+        if (pinching) return cancel();
+
+        const bounds = getBounds();
+        const clampedX = Math.max(bounds.minX, Math.min(bounds.maxX, x));
+        const clampedY = Math.max(bounds.minY, Math.min(bounds.maxY, y));
+
+        setGestureState((prev) => ({ ...prev, x: clampedX, y: clampedY }));
+
+        if (isMobile) {
+          // Mobile: pixel-based translation
+          imageApi.start({
+            transform: `translate(${clampedX}px, ${clampedY}px) scale(${gestureState.scale})`,
+            immediate: true,
+          });
+        } else {
+          // Desktop: percentage-based hover effect
+          imageApi.start({
+            transform: `translate(${clampedX}%, ${clampedY}%) scale(1.15)`,
+            immediate: false,
+            config: { tension: 25, friction: 90, mass: 2.0 },
+          });
+        }
+      },
+
+      // Pinch handling (mobile only)
+      onPinch: ({ offset: [scale], origin: [ox, oy] }) => {
+        if (!isMobile) return;
+
+        const constrainedScale = Math.max(1.0, Math.min(3.0, scale));
+
+        // Calculate pan adjustment for zoom-to-point
+        const container = imageContainerRef.current;
+        if (container) {
+          const rect = container.getBoundingClientRect();
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const offsetX = ox - rect.left - centerX;
+          const offsetY = oy - rect.top - centerY;
+
+          const scaleChange = constrainedScale - gestureState.scale;
+          const panAdjustX = (-offsetX * scaleChange) / constrainedScale;
+          const panAdjustY = (-offsetY * scaleChange) / constrainedScale;
+
+          let newX = gestureState.x + panAdjustX;
+          let newY = gestureState.y + panAdjustY;
+
+          const bounds = getBounds();
+          newX = Math.max(bounds.minX, Math.min(bounds.maxX, newX));
+          newY = Math.max(bounds.minY, Math.min(bounds.maxY, newY));
+
+          setGestureState({ x: newX, y: newY, scale: constrainedScale });
+
+          imageApi.start({
+            transform: `translate(${newX}px, ${newY}px) scale(${constrainedScale})`,
+            immediate: true,
+          });
+        }
+      },
+
+      // Wheel handling (desktop only)
+      onWheel: ({ delta: [, dy], event }) => {
+        if (!isDesktop) return;
+
+        event.preventDefault();
+        const newScale = Math.max(
+          1.0,
+          Math.min(2.0, gestureState.scale - dy * 0.002)
+        );
+        setGestureState((prev) => ({ ...prev, scale: newScale }));
+
+        imageApi.start({
+          transform: `translate(${gestureState.x}%, ${gestureState.y}%) scale(${newScale})`,
+        });
+      },
+
+      // Swipe navigation (both platforms)
+      onSwipe: ({ direction: [dx], velocity, distance }) => {
+        if (Math.abs(dx) > 0.5 && velocity > 0.5 && distance > 100) {
+          const newIndex =
+            dx > 0
+              ? currentPhoto > 0
+                ? currentPhoto - 1
+                : galleryTypeArr.length - 1
+              : currentPhoto < galleryTypeArr.length - 1
+              ? currentPhoto + 1
+              : 0;
+
+          setCurrentPhoto(newIndex);
+          resetGesture();
+        }
+      },
+
+      // Hover handling (desktop only)
+      onHover: ({ hovering }) => {
+        if (!isDesktop) return;
+
+        setIsHovering(hovering);
+        if (!hovering) {
+          resetGesture();
+        }
+      },
     },
-    [imgAspect, isImageLoaded, isHovering, imageApi]
+    {
+      drag: {
+        enabled: true,
+        from: () => [gestureState.x, gestureState.y],
+        bounds: getBounds,
+        rubberband: true,
+      },
+      pinch: {
+        enabled: isMobile,
+        scaleBounds: { min: 0.5, max: 4.0 },
+        from: () => [gestureState.scale, 0],
+        rubberband: true,
+      },
+      wheel: {
+        enabled: isDesktop,
+      },
+      swipe: {
+        enabled: true,
+        distance: 100,
+        velocity: 0.5,
+      },
+      hover: {
+        enabled: isDesktop,
+      },
+    }
   );
 
-  // Enhanced touch handling with gesture support
+  // Double-tap to reset (mobile only)
+  const [lastTap, setLastTap] = useState(0);
+  const handleImageTap = useCallback(
+    (e) => {
+      if (!isMobile) return;
+
+      const now = Date.now();
+      if (now - lastTap < 300) {
+        resetGesture();
+      }
+      setLastTap(now);
+    },
+    [lastTap, isMobile, resetGesture]
+  );
+
+  // Reset gesture when image changes
   useEffect(() => {
-    const imageContainer = imageContainerRef.current;
-    if (!imageContainer || window.innerWidth >= window.innerHeight) return;
+    resetGesture();
+  }, [currentPhoto, resetGesture]);
 
-    let initialTouchDistance = null;
-    let initialScale = 1.15;
-    let lastTouchCenter = null;
-    let gestureStartTransform = null;
-    let lastTapTime = 0;
-    let tapTimeout = null;
-
-    // Calculate distance between two touches
-    const getTouchDistance = (touches) => {
-      if (touches.length < 2) return null;
-      const dx = touches[0].clientX - touches[1].clientX;
-      const dy = touches[0].clientY - touches[1].clientY;
-      return Math.sqrt(dx * dx + dy * dy);
-    };
-
-    // Calculate center point between touches
-    const getTouchCenter = (touches) => {
-      if (touches.length === 1) {
-        return { x: touches[0].clientX, y: touches[0].clientY };
-      }
-      if (touches.length === 2) {
-        return {
-          x: (touches[0].clientX + touches[1].clientX) / 2,
-          y: (touches[0].clientY + touches[1].clientY) / 2,
-        };
-      }
-      return null;
-    };
-
-    // Double-tap to reset zoom and pan only (not navigation)
-    const handleDoubleTap = () => {
-      const resetTransform = { x: 0, y: 0, scale: 1.15 };
-      setTouchTransform(resetTransform);
-      setIsGestureActive(false);
-      
-      // Smooth reset animation (no navigation change)
-      mobileImageApi.start({
-        transform: `translate(0px, 0px) scale(1.15)`,
-        immediate: false,
-        config: {
-          tension: 160,
-          friction: 20,
-          mass: 1.2,
-        },
-      });
-    };
-
-    // Enhanced touchmove handler with smooth real-time zoom
-    const handleTouchMove = (e) => {
-      if (!isMobileDevice()) return;
-
-      const touches = e.touches;
-      if (touches.length === 0) return;
-
-      e.preventDefault(); // Prevent default browser gestures
-
-      const currentTouchCenter = getTouchCenter(touches);
-      if (!currentTouchCenter) return;
-
-      // Handle pinch-to-zoom with two fingers - REAL-TIME SCALING
-      if (touches.length === 2) {
-        const currentDistance = getTouchDistance(touches);
-        
-        if (initialTouchDistance && currentDistance && gestureStartTransform) {
-          // Calculate scale change directly from finger distance
-          const scaleChange = currentDistance / initialTouchDistance;
-          let newScale = gestureStartTransform.scale * scaleChange;
-          
-          // Add resistance near limits for natural feel
-          const rawScale = newScale;
-          if (rawScale < MIN_SCALE) {
-            // Rubber band effect when zooming out too far
-            const overshoot = MIN_SCALE - rawScale;
-            newScale = MIN_SCALE - (overshoot * 0.3); // 30% resistance
-          } else if (rawScale > MAX_SCALE) {
-            // Rubber band effect when zooming in too far
-            const overshoot = rawScale - MAX_SCALE;
-            newScale = MAX_SCALE + (overshoot * 0.3); // 30% resistance
-          }
-          
-          // Final hard constraints (in case resistance isn't enough)
-          newScale = Math.max(MIN_SCALE * 0.8, Math.min(MAX_SCALE * 1.2, newScale));
-          
-          // Proper zoom-to-point calculation
-          const container = imageContainer.getBoundingClientRect();
-          
-          // Get the touch point relative to the current image position
-          const touchX = currentTouchCenter.x - container.left;
-          const touchY = currentTouchCenter.y - container.top;
-          
-          // Calculate the point in the image coordinate system (before scaling)
-          const imagePointX = (touchX - gestureStartTransform.x) / gestureStartTransform.scale;
-          const imagePointY = (touchY - gestureStartTransform.y) / gestureStartTransform.scale;
-          
-          // Calculate where this point should be after scaling
-          const newImagePointX = imagePointX * newScale;
-          const newImagePointY = imagePointY * newScale;
-          
-          // Calculate the new pan to keep the touch point in the same screen position
-          let newX = touchX - newImagePointX;
-          let newY = touchY - newImagePointY;
-
-          // Apply boundaries for panning with current scale
-          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBoundsWithScale(
-            imageContainer,
-            imageRef.current,
-            newScale,
-            PAN_MARGIN
-          );
-
-          newX = Math.max(Math.min(newX, maxPanX), minPanX);
-          newY = Math.max(Math.min(newY, maxPanY), minPanY);
-
-          // Update state and animate immediately for real-time feel
-          const newTransform = `translate(${newX}px, ${newY}px) scale(${newScale})`;
-          
-          setTouchTransform({ x: newX, y: newY, scale: newScale });
-          
-          // Use immediate update for real-time gesture tracking with slight smoothing
-          mobileImageApi.start({
-            transform: newTransform,
-            immediate: false, // Use slight smoothing for more natural feel
-            config: {
-              tension: 400, // Higher tension for more responsive feel
-              friction: 50,  // Balanced friction
-              mass: 0.5,     // Lower mass for quicker response
-              precision: 0.001, // Higher precision for smooth scaling
-            },
-          });
-          
-          setIsGestureActive(true);
-        }
-      }
-      // Handle single finger panning - SMOOTH AND RESPONSIVE
-      else if (touches.length === 1 && lastTouchCenter) {
-        const dx = currentTouchCenter.x - lastTouchCenter.x;
-        const dy = currentTouchCenter.y - lastTouchCenter.y;
-
-        setTouchTransform((prev) => {
-          const dampingFactor = 1.0; // Full responsiveness for panning
-          const newX = prev.x + dx * dampingFactor;
-          const newY = prev.y + dy * dampingFactor;
-
-          // Apply boundaries with current scale
-          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBoundsWithScale(
-            imageContainer,
-            imageRef.current,
-            prev.scale,
-            PAN_MARGIN
-          );
-
-          const boundedX = Math.max(Math.min(newX, maxPanX), minPanX);
-          const boundedY = Math.max(Math.min(newY, maxPanY), minPanY);
-
-          // Update spring animation with slight smoothing for natural panning
-          const newTransform = `translate(${boundedX}px, ${boundedY}px) scale(${prev.scale})`;
-          mobileImageApi.start({
-            transform: newTransform,
-            immediate: false, // Slight smoothing for more natural panning
-            config: {
-              tension: 350,
-              friction: 45,
-              mass: 0.6,
-              precision: 0.01,
-            },
-          });
-
-          return {
-            x: boundedX,
-            y: boundedY,
-            scale: prev.scale,
-          };
-        });
-      }
-
-      lastTouchCenter = currentTouchCenter;
-    };
-
-    // Touch start handler
-    const handleTouchStart = (e) => {
-      if (!isMobileDevice()) return;
-
-      const touches = e.touches;
-      const currentTime = Date.now();
-      lastTouchCenter = getTouchCenter(touches);
-      
-      if (touches.length === 2) {
-        // Start pinch gesture
-        initialTouchDistance = getTouchDistance(touches);
-        gestureStartTransform = { ...touchTransform }; // Use state directly
-        setIsGestureActive(true);
-      } else if (touches.length === 1) {
-        // Handle double-tap detection
-        if (currentTime - lastTapTime < 300) {
-          // Double tap detected
-          if (tapTimeout) {
-            clearTimeout(tapTimeout);
-            tapTimeout = null;
-          }
-          handleDoubleTap();
-        } else {
-          // Single tap - wait to see if it becomes a double tap
-          tapTimeout = setTimeout(() => {
-            // Single tap confirmed - start pan gesture
-            gestureStartTransform = { ...touchTransform }; // Use state directly
-            setIsGestureActive(false);
-            tapTimeout = null;
-          }, 300);
-        }
-        lastTapTime = currentTime;
-      }
-    };
-
-    // Touch end handler with smooth finish animations
-    const handleTouchEnd = (e) => {
-      if (!isMobileDevice()) return;
-
-      const touches = e.touches;
-      
-      if (touches.length === 0) {
-        // All touches ended - add smooth finish animation
-        const currentTransform = `translate(${touchTransform.x}px, ${touchTransform.y}px) scale(${touchTransform.scale})`;
-        
-        // Smooth animation when gesture completes
-        mobileImageApi.start({
-          transform: currentTransform,
-          immediate: false, // Enable smooth animation on release
-          config: {
-            tension: 180,
-            friction: 25,
-            mass: 1,
-          },
-        });
-        
-        initialTouchDistance = null;
-        lastTouchCenter = null;
-        gestureStartTransform = null;
-        setIsGestureActive(false);
-      } else if (touches.length === 1 && initialTouchDistance) {
-        // Switched from pinch to pan - smooth transition
-        initialTouchDistance = null;
-        gestureStartTransform = { ...touchTransform }; // Use state directly
-        lastTouchCenter = getTouchCenter(touches);
-        
-        // Add a subtle spring animation for the transition
-        const currentTransform = `translate(${touchTransform.x}px, ${touchTransform.y}px) scale(${touchTransform.scale})`;
-        mobileImageApi.start({
-          transform: currentTransform,
-          immediate: false,
-          config: {
-            tension: 220,
-            friction: 30,
-            mass: 0.8,
-          },
-        });
-      }
-    };
-
-    // Add touch event listeners
-    imageContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
-    imageContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
-    imageContainer.addEventListener('touchend', handleTouchEnd, { passive: false });
-    imageContainer.addEventListener('touchcancel', handleTouchEnd, { passive: false });
-
-    return () => {
-      if (tapTimeout) {
-        clearTimeout(tapTimeout);
-      }
-      imageContainer.removeEventListener('touchstart', handleTouchStart);
-      imageContainer.removeEventListener('touchmove', handleTouchMove);
-      imageContainer.removeEventListener('touchend', handleTouchEnd);
-      imageContainer.removeEventListener('touchcancel', handleTouchEnd);
-    };
-  }, [showGallery, currentPhoto, touchTransform, mobileImageApi]); // Restore proper dependencies
-
-  // Reset aspect ratio when current photo changes
-  useEffect(() => {
-    // Reset to default aspect ratio when photo changes, will be updated by handleImageLoad
-    setImgAspect(1.4);
-    setImageLoading(true); // Start loading state
-
-    // Reset hover state and image transform when photo changes
-    setIsHovering(false);
-    currentTransformRef.current = 'translate(0%, 0%) scale(1)';
-
-    // Use set instead of start to avoid animation conflicts during image transitions
-    imageApi.set({
-      transform: 'translate(0%, 0%) scale(1)',
-    });
-  }, [currentPhoto, imageApi]); // Handle window resize for responsive behavior
+  // Update bounds on resize
   useEffect(() => {
     const handleResize = () => {
-      // Force a re-render on resize to update container dimensions
-      // This is especially important for orientation changes
-      setIsHovering(false);
-      currentTransformRef.current = 'translate(0%, 0%) scale(1)';
-
-      // Use set instead of start to avoid animation conflicts during resize
-      imageApi.set({
-        transform: 'translate(0%, 0%) scale(1)',
-      });
-
-      if (window.innerWidth < window.innerHeight) {
-        setTouchPan({ x: 0, y: 0 });
-      }
+      resetGesture();
     };
 
     window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [resetGesture]);
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleResize);
-    };
-  }, [imageApi]);
+  // Update aspect ratio when image loads
+  const handleImageLoad = useCallback((e) => {
+    const img = e.target;
+    const aspectRatio = img.naturalWidth / img.naturalHeight;
+    setImgAspect(aspectRatio);
+    setImageLoading(false);
+  }, []);
 
-  // Keyboard navigation with useCallback to ensure stable function reference
+  // Keyboard navigation
   const handleKeyDown = useCallback(
     (e) => {
-      if (!showGallery) return; // Only handle keys when gallery is open
-
-      console.log(
-        'Key pressed:',
-        e.key,
-        'showGallery:',
-        showGallery,
-        'galleryLength:',
-        galleryLengthRef.current,
-        'currentPhoto:',
-        currentPhoto
-      );
+      if (!showGallery) return;
 
       switch (e.key) {
         case 'ArrowLeft':
         case 'ArrowUp':
           e.preventDefault();
-          const currentLength = galleryLengthRef.current;
-          if (currentLength === 0) return;
           const newLeftIndex =
-            currentPhoto > 0 ? currentPhoto - 1 : currentLength - 1;
-          console.log(
-            'Arrow Left/Up: current =',
-            currentPhoto,
-            'length =',
-            currentLength,
-            'new =',
-            newLeftIndex
-          );
+            currentPhoto > 0 ? currentPhoto - 1 : galleryTypeArr.length - 1;
           setCurrentPhoto(newLeftIndex);
           break;
         case 'ArrowRight':
         case 'ArrowDown':
           e.preventDefault();
-          const currentLength2 = galleryLengthRef.current;
-          if (currentLength2 === 0) return;
           const newRightIndex =
-            currentPhoto < currentLength2 - 1 ? currentPhoto + 1 : 0;
-          console.log(
-            'Arrow Right/Down: current =',
-            currentPhoto,
-            'length =',
-            currentLength2,
-            'new =',
-            newRightIndex
-          );
+            currentPhoto < galleryTypeArr.length - 1 ? currentPhoto + 1 : 0;
           setCurrentPhoto(newRightIndex);
           break;
         case 'Escape':
           e.preventDefault();
-          console.log('Escape pressed - closing gallery');
-          if (onClose) {
-            onClose();
-          }
+          if (onClose) onClose();
           break;
       }
     },
-    [showGallery, setCurrentPhoto, currentPhoto]
+    [showGallery, setCurrentPhoto, currentPhoto, galleryTypeArr.length, onClose]
   );
 
   useEffect(() => {
-    console.log('Setting up keyboard listener, showGallery:', showGallery);
     window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      console.log('Cleaning up keyboard listener');
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [handleKeyDown]); // Depend on the memoized callback
-
-  // Memoized gallery type filtering
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+  // Gallery type filtering
   useEffect(() => {
     const newGalleryTypeArr = images.filter(
       (image) => image.type === showGalleryString
     );
 
-    // Debug: log what is being compared
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('Filtering gallery:', {
-        showGalleryString,
-        prevGalleryType: prevGalleryTypeRef.current,
-        typesInImages: Array.from(new Set(images.map((img) => img.type))),
-        newGalleryTypeArr,
-      });
-    }
-
-    // Only update if the gallery type has actually changed
     if (prevGalleryTypeRef.current !== showGalleryString) {
-      console.log(
-        'Gallery type changed, updating array and resetting to first photo'
-      );
       setGalleryTypeArr(newGalleryTypeArr);
-      galleryLengthRef.current = newGalleryTypeArr.length; // Update ref
-      setCurrentPhoto(0); // Only reset when gallery type actually changes
-      prevGalleryTypeRef.current = showGalleryString; // Update ref
-      // Reset aspect ratio to default when gallery type changes
+      galleryLengthRef.current = newGalleryTypeArr.length;
+      setCurrentPhoto(0);
+      prevGalleryTypeRef.current = showGalleryString;
       setImgAspect(1.4);
-    } else {
-      console.log('Gallery type unchanged, keeping current photo');
     }
-  }, [
-    galleryType,
-    showGalleryString,
-    // Removed setGalleryTypeArr, setCurrentPhoto, and galleryTypeArr to prevent unnecessary re-runs
-  ]);
+  }, [galleryType, showGalleryString, setGalleryTypeArr, setCurrentPhoto]);
 
   // Keep ref in sync with array length
   useEffect(() => {
     galleryLengthRef.current = galleryTypeArr.length;
-    console.log('Gallery length updated:', galleryTypeArr.length);
   }, [galleryTypeArr.length]);
-
-  // Debug: log currentPhoto changes
-  useEffect(() => {
-    console.log('Current photo changed to:', currentPhoto);
-  }, [currentPhoto]);
 
   // Animate gallery visibility
   useEffect(() => {
@@ -1532,10 +878,10 @@ export default function Gallery({
       return { minPanX: 0, maxPanX: 0, minPanY: 0, maxPanY: 0 };
 
     const containerRect = container.getBoundingClientRect();
-    
+
     // Calculate effective image dimensions with scale
-    const baseImageWidth = containerRect.width; 
-    const baseImageHeight = containerRect.height; 
+    const baseImageWidth = containerRect.width;
+    const baseImageHeight = containerRect.height;
     const scaledImageWidth = baseImageWidth * scale;
     const scaledImageHeight = baseImageHeight * scale;
 
@@ -1544,9 +890,9 @@ export default function Gallery({
     const overflowY = Math.max(0, scaledImageHeight - containerRect.height);
 
     // Pan bounds are half the overflow (since image is centered) plus margin
-    const maxPanX = (overflowX / 2) + margin;
+    const maxPanX = overflowX / 2 + margin;
     const minPanX = -maxPanX;
-    const maxPanY = (overflowY / 2) + margin;
+    const maxPanY = overflowY / 2 + margin;
     const minPanY = -maxPanY;
 
     return { minPanX, maxPanX, minPanY, maxPanY };
@@ -1557,7 +903,7 @@ export default function Gallery({
     const resetTransform = { x: 0, y: 0, scale: 1.15 };
     setTouchTransform(resetTransform);
     setIsGestureActive(false);
-    
+
     if (window.innerWidth < window.innerHeight) {
       // Immediate reset for mobile
       mobileImageApi.start({
@@ -1781,9 +1127,10 @@ export default function Gallery({
       >
         {galleryTypeArr.length > 0 && (
           <>
-            {/* Crossfade transition for master image with hover functionality */}
+            {/* Enhanced Photo Section with gesture support */}
             <div
               ref={imageContainerRef}
+              {...bind()} // Apply unified gesture handlers
               style={{
                 position: 'relative',
                 width:
@@ -1792,42 +1139,21 @@ export default function Gallery({
                     : `${calculateImageDimensions().width}px`,
                 height:
                   window.innerWidth < window.innerHeight
-                    ? '40vh' // Further reduced to 40vh to match CSS for more text space
+                    ? '40vh'
                     : `${calculateImageDimensions().height}px`,
                 margin: '0 auto',
                 zIndex: 1,
                 overflow: 'hidden',
                 cursor:
-                  window.innerWidth >= window.innerHeight &&
-                  window.innerWidth >= 768
-                    ? 'zoom-in'
-                    : 'pointer',
-                touchAction:
-                  window.innerWidth < window.innerHeight ? 'none' : 'auto', // Prevents browser gestures like pull-to-refresh on mobile only
+                  window.innerWidth >= window.innerHeight ? 'zoom-in' : 'grab',
+                touchAction: 'none', // Unified: prevent default gestures
               }}
-              onMouseMove={handleImageMouseMove}
-              onMouseEnter={handleImageMouseEnter}
-              onMouseLeave={handleImageMouseLeave}
-              onTouchStart={
-                window.innerWidth < window.innerHeight
-                  ? undefined // Touch handling is now managed by useEffect
-                  : undefined
-              }
-              onTouchEnd={
-                window.innerWidth < window.innerHeight
-                  ? undefined // Touch handling is now managed by useEffect
-                  : undefined
-              }
-              onTouchCancel={
-                window.innerWidth < window.innerHeight
-                  ? undefined // Touch handling is now managed by useEffect
-                  : undefined
-              }
+              onClick={handleImageTap} // Double-tap handler for mobile
             >
               {imageTransitions((style, item) =>
                 item ? (
                   <animated.img
-                    key={`${item}-${currentPhoto}`} // More specific key to force re-mount
+                    key={`${item}-${currentPhoto}`}
                     ref={imageRef}
                     style={{
                       ...style,
@@ -1840,34 +1166,27 @@ export default function Gallery({
                       position: 'absolute',
                       top: 0,
                       left: 0,
-                      // Apply transforms with smooth animations on mobile, static transforms on desktop
-                      transform:
-                        window.innerWidth < window.innerHeight
-                          ? mobileImageSpring.transform // Use animated spring transform
-                          : imageSpring.transform ||
-                            'translate(0%, 0%) scale(1)',
-                      // Ensure stable willChange for performance
+                      // Apply unified gesture transforms
+                      transform: imageSpring.transform,
                       willChange: 'transform',
-                      // Force hardware acceleration
                       backfaceVisibility: 'hidden',
+                      userSelect: 'none',
+                      WebkitUserSelect: 'none',
                     }}
                     className="masterImage"
                     src={item}
                     loading="lazy"
                     alt={currentItem?.name}
                     onLoad={handleImageLoad}
+                    draggable={false}
                   />
                 ) : null
               )}
 
-              {/* Loading indicator */}
-              {imageLoading && <div className="imageLoading" />}
-
-              {/* Show enhanced movement indicator (pan + zoom) on mobile, magnifying glass on desktop */}
-              {window.innerWidth < 700 &&
-              window.innerWidth < window.innerHeight ? (
+              {/* Enhanced gesture indicator for mobile */}
+              {window.innerWidth < window.innerHeight && (
                 <div
-                  className="moveIndicator"
+                  className="gestureIndicator"
                   style={{
                     position: 'absolute',
                     top: '10px',
@@ -1881,28 +1200,40 @@ export default function Gallery({
                     justifyContent: 'center',
                     boxShadow: '0 3px 8px rgba(0,0,0,0.25)',
                     zIndex: 300000,
-                    opacity: isGestureActive ? 0.4 : 0.8,
-                    transition: 'opacity 0.3s ease',
+                    opacity: 0.8,
                     pointerEvents: 'none',
                     fontSize: '8px',
                     color: '#774728',
                     fontWeight: 'bold',
                     textAlign: 'center',
                     lineHeight: '1.1',
-                    maxWidth: '60px',
+                    maxWidth: '70px',
                   }}
                 >
-                  {/* Pan + Zoom + Double-tap indicator with zoom level */}
-                  <div style={{ fontSize: '16px', marginBottom: '2px' }}>🤏</div>
-                  <div style={{ fontSize: '9px' }}>{(touchTransform.scale).toFixed(1)}x</div>
-                  <div style={{ fontSize: '7px', opacity: 0.8 }}>ZOOM</div>
-                  <div style={{ fontSize: '6px', marginTop: '1px', opacity: 0.8 }}>
-                    Tap×2 reset view
+                  <div style={{ fontSize: '16px', marginBottom: '2px' }}>
+                    🤏
+                  </div>
+                  <div style={{ fontSize: '9px' }}>
+                    {gestureState.scale.toFixed(1)}x
+                  </div>
+                  <div style={{ fontSize: '7px', opacity: 0.8 }}>
+                    PINCH • PAN
+                  </div>
+                  <div
+                    style={{ fontSize: '6px', marginTop: '1px', opacity: 0.8 }}
+                  >
+                    Double-tap reset
+                  </div>
+                  <div style={{ fontSize: '6px', opacity: 0.8 }}>
+                    Swipe ← → navigate
                   </div>
                 </div>
-              ) : (
+              )}
+
+              {/* Desktop zoom indicator */}
+              {window.innerWidth >= window.innerHeight && (
                 <div
-                  className="magnifyIndicator"
+                  className="zoomIndicator"
                   style={{
                     position: 'absolute',
                     top: '10px',
@@ -1918,24 +1249,10 @@ export default function Gallery({
                     zIndex: 300000,
                     opacity: isHovering ? 0.3 : 0.8,
                     transition: 'opacity 0.3s ease',
-                    pointerEvents: 'none', // allow touches/clicks to pass through
+                    pointerEvents: 'none',
                   }}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="feather feather-search"
-                  >
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                  </svg>
+                  🔍
                 </div>
               )}
             </div>
@@ -1943,21 +1260,21 @@ export default function Gallery({
         )}
       </div>
 
-      {/* 3. Mobile-Only Product Info Section (separate for mobile three-section layout) */}
+      {/* Mobile-Only Product Info Section */}
       <div className="productInfo mobile-only">
         <div className="furnitureName">{currentItem?.name}</div>
         <div className="furnitureDescription">{currentItem?.description}</div>
       </div>
 
-      {/* Legacy Mobile Info Panel (swipe-up overlay) - Hidden by default in three-section layout */}
+      {/* Legacy Mobile Info Panel (swipe-up overlay) */}
       <MobileInfoPanel
         infoSpring={infoSpring}
         infoRef={infoRef}
-        showDetails={false} // Always hidden for three-section layout
+        showDetails={false}
         currentItem={currentItem}
       />
 
-      {/* Swipe indicator for legacy mobile info panel - Hidden by default */}
+      {/* Swipe indicator for legacy mobile info panel */}
       <animated.div
         className="swipeIndicator"
         style={{
@@ -1967,7 +1284,7 @@ export default function Gallery({
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 20002,
-          display: 'none', // Hidden for three-section layout
+          display: 'none',
         }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
