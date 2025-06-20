@@ -3,6 +3,7 @@ import imgData from './imgData';
 import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { useSpring, animated, useTransition } from '@react-spring/web';
 import { useImagePreloader } from './useImagePreloader';
+import { usePinch, useGesture } from '@use-gesture/react';
 
 const images = imgData;
 
@@ -554,19 +555,160 @@ export default function Gallery({
   // Loading state for smooth transitions
   const [imageLoading, setImageLoading] = useState(false);
 
-  // Enhanced touch state for master image (mobile)
+  // Enhanced touch state for master image (mobile) with @use-gesture
   const [touchTransform, setTouchTransform] = useState({ 
     x: 0, 
     y: 0, 
     scale: 1.15 
   });
   const [isGestureActive, setIsGestureActive] = useState(false);
-  const lastTouchRef = useRef(null);
-  const initialDistanceRef = useRef(null);
-  const initialScaleRef = useRef(1.15);
-  const PAN_MARGIN = 60; // pixels of extra space beyond the strict edge
+  const PAN_MARGIN = 60;
   const MIN_SCALE = 1.0;
   const MAX_SCALE = 3.0;
+
+  // Animated transform state using react-spring for smooth gestures
+  const [mobileImageSpring, mobileImageApi] = useSpring(() => ({
+    x: 0,
+    y: 0,
+    scale: 1.15,
+    config: {
+      tension: 300,
+      friction: 40,
+      mass: 1,
+      precision: 0.01,
+    },
+  }));
+
+  // Use-gesture pinch and drag handlers
+  const bind = useGesture(
+    {
+      onDrag: ({ offset: [x, y], pinching, cancel, ...state }) => {
+        // Don't drag while pinching
+        if (pinching) return cancel();
+        
+        // Apply boundaries
+        const container = imageContainerRef.current;
+        if (container) {
+          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBoundsWithScale(
+            container,
+            imageRef.current,
+            touchTransform.scale,
+            PAN_MARGIN
+          );
+          
+          const boundedX = Math.max(Math.min(x, maxPanX), minPanX);
+          const boundedY = Math.max(Math.min(y, maxPanY), minPanY);
+          
+          setTouchTransform(prev => ({ ...prev, x: boundedX, y: boundedY }));
+          mobileImageApi.start({ x: boundedX, y: boundedY, immediate: state.dragging });
+        }
+      },
+      onPinch: ({ origin: [ox, oy], offset: [scale], ...state }) => {
+        setIsGestureActive(state.pinching);
+        
+        // Constrain scale with rubber band effect
+        let constrainedScale = scale;
+        if (scale < MIN_SCALE) {
+          const overshoot = MIN_SCALE - scale;
+          constrainedScale = MIN_SCALE - (overshoot * 0.3);
+        } else if (scale > MAX_SCALE) {
+          const overshoot = scale - MAX_SCALE;
+          constrainedScale = MAX_SCALE + (overshoot * 0.3);
+        }
+        
+        // Calculate pan adjustment to zoom around the pinch point
+        const container = imageContainerRef.current;
+        if (container) {
+          const containerRect = container.getBoundingClientRect();
+          
+          // Convert origin to container-relative coordinates
+          const originX = ox - containerRect.left;
+          const originY = oy - containerRect.top;
+          
+          // Calculate offset from center
+          const centerX = containerRect.width / 2;
+          const centerY = containerRect.height / 2;
+          const offsetX = originX - centerX;
+          const offsetY = originY - centerY;
+          
+          // Calculate pan adjustment based on scale change
+          const scaleChange = constrainedScale - touchTransform.scale;
+          const panAdjustX = -offsetX * scaleChange / constrainedScale;
+          const panAdjustY = -offsetY * scaleChange / constrainedScale;
+          
+          let newX = touchTransform.x + panAdjustX;
+          let newY = touchTransform.y + panAdjustY;
+          
+          // Apply boundaries
+          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBoundsWithScale(
+            container,
+            imageRef.current,
+            constrainedScale,
+            PAN_MARGIN
+          );
+          
+          newX = Math.max(Math.min(newX, maxPanX), minPanX);
+          newY = Math.max(Math.min(newY, maxPanY), minPanY);
+          
+          setTouchTransform({ x: newX, y: newY, scale: constrainedScale });
+          mobileImageApi.start({ 
+            x: newX, 
+            y: newY, 
+            scale: constrainedScale,
+            immediate: state.pinching 
+          });
+        }
+      },
+      onWheelEnd: () => {
+        // Smooth finish when gesture ends
+        mobileImageApi.start({ 
+          x: touchTransform.x, 
+          y: touchTransform.y, 
+          scale: touchTransform.scale,
+          immediate: false 
+        });
+      }
+    },
+    {
+      drag: {
+        from: () => [touchTransform.x, touchTransform.y],
+        enabled: window.innerWidth < window.innerHeight, // Only on mobile portrait
+      },
+      pinch: {
+        scaleBounds: { min: MIN_SCALE * 0.5, max: MAX_SCALE * 1.5 },
+        rubberband: true,
+        from: () => [touchTransform.scale, 0],
+        enabled: window.innerWidth < window.innerHeight, // Only on mobile portrait
+      },
+    }
+  );
+
+  // Double-tap to reset (we'll handle this separately)
+  const [lastTap, setLastTap] = useState(0);
+  const handleImageTap = useCallback((e) => {
+    if (window.innerWidth >= window.innerHeight) return; // Only on mobile
+    
+    const now = Date.now();
+    if (now - lastTap < 300) {
+      // Double tap - reset
+      const resetTransform = { x: 0, y: 0, scale: 1.15 };
+      setTouchTransform(resetTransform);
+      setIsGestureActive(false);
+      
+      mobileImageApi.start({
+        x: 0,
+        y: 0,
+        scale: 1.15,
+        immediate: false,
+        config: {
+          tension: 160,
+          friction: 20,
+          mass: 1.2,
+        },
+      });
+    }
+    setLastTap(now);
+  }, [lastTap, mobileImageApi]);
 
   // Initialize image preloader
   const {
@@ -663,13 +805,25 @@ export default function Gallery({
       return null;
     };
 
-    // Double-tap to reset zoom
+    // Double-tap to reset zoom and pan only (not navigation)
     const handleDoubleTap = () => {
-      setTouchTransform({ x: 0, y: 0, scale: 1.15 });
+      const resetTransform = { x: 0, y: 0, scale: 1.15 };
+      setTouchTransform(resetTransform);
       setIsGestureActive(false);
+      
+      // Smooth reset animation (no navigation change)
+      mobileImageApi.start({
+        transform: `translate(0px, 0px) scale(1.15)`,
+        immediate: false,
+        config: {
+          tension: 160,
+          friction: 20,
+          mass: 1.2,
+        },
+      });
     };
 
-    // Enhanced touchmove handler with pinch-to-zoom
+    // Enhanced touchmove handler with smooth real-time zoom
     const handleTouchMove = (e) => {
       if (!isMobileDevice()) return;
 
@@ -681,37 +835,48 @@ export default function Gallery({
       const currentTouchCenter = getTouchCenter(touches);
       if (!currentTouchCenter) return;
 
-      // Handle pinch-to-zoom with two fingers
+      // Handle pinch-to-zoom with two fingers - REAL-TIME SCALING
       if (touches.length === 2) {
         const currentDistance = getTouchDistance(touches);
         
         if (initialTouchDistance && currentDistance && gestureStartTransform) {
+          // Calculate scale change directly from finger distance
           const scaleChange = currentDistance / initialTouchDistance;
           let newScale = gestureStartTransform.scale * scaleChange;
           
-          // Constrain scale within bounds
-          newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, newScale));
+          // Add resistance near limits for natural feel
+          const rawScale = newScale;
+          if (rawScale < MIN_SCALE) {
+            // Rubber band effect when zooming out too far
+            const overshoot = MIN_SCALE - rawScale;
+            newScale = MIN_SCALE - (overshoot * 0.3); // 30% resistance
+          } else if (rawScale > MAX_SCALE) {
+            // Rubber band effect when zooming in too far
+            const overshoot = rawScale - MAX_SCALE;
+            newScale = MAX_SCALE + (overshoot * 0.3); // 30% resistance
+          }
           
-          // Calculate pan adjustment to keep zoom centered on gesture
+          // Final hard constraints (in case resistance isn't enough)
+          newScale = Math.max(MIN_SCALE * 0.8, Math.min(MAX_SCALE * 1.2, newScale));
+          
+          // Proper zoom-to-point calculation
           const container = imageContainer.getBoundingClientRect();
-          const centerX = container.left + container.width / 2;
-          const centerY = container.top + container.height / 2;
           
-          // Get gesture center relative to container
-          const gestureX = currentTouchCenter.x - container.left;
-          const gestureY = currentTouchCenter.y - container.top;
+          // Get the touch point relative to the current image position
+          const touchX = currentTouchCenter.x - container.left;
+          const touchY = currentTouchCenter.y - container.top;
           
-          // Calculate offset from container center
-          const offsetX = gestureX - container.width / 2;
-          const offsetY = gestureY - container.height / 2;
+          // Calculate the point in the image coordinate system (before scaling)
+          const imagePointX = (touchX - gestureStartTransform.x) / gestureStartTransform.scale;
+          const imagePointY = (touchY - gestureStartTransform.y) / gestureStartTransform.scale;
           
-          // Adjust pan to keep gesture point stable during zoom
-          const scaleRatio = newScale / gestureStartTransform.scale;
-          const panAdjustX = offsetX * (1 - scaleRatio);
-          const panAdjustY = offsetY * (1 - scaleRatio);
+          // Calculate where this point should be after scaling
+          const newImagePointX = imagePointX * newScale;
+          const newImagePointY = imagePointY * newScale;
           
-          let newX = gestureStartTransform.x + panAdjustX;
-          let newY = gestureStartTransform.y + panAdjustY;
+          // Calculate the new pan to keep the touch point in the same screen position
+          let newX = touchX - newImagePointX;
+          let newY = touchY - newImagePointY;
 
           // Apply boundaries for panning with current scale
           const { minPanX, maxPanX, minPanY, maxPanY } = getPanBoundsWithScale(
@@ -724,17 +889,33 @@ export default function Gallery({
           newX = Math.max(Math.min(newX, maxPanX), minPanX);
           newY = Math.max(Math.min(newY, maxPanY), minPanY);
 
+          // Update state and animate immediately for real-time feel
+          const newTransform = `translate(${newX}px, ${newY}px) scale(${newScale})`;
+          
           setTouchTransform({ x: newX, y: newY, scale: newScale });
+          
+          // Use immediate update for real-time gesture tracking with slight smoothing
+          mobileImageApi.start({
+            transform: newTransform,
+            immediate: false, // Use slight smoothing for more natural feel
+            config: {
+              tension: 400, // Higher tension for more responsive feel
+              friction: 50,  // Balanced friction
+              mass: 0.5,     // Lower mass for quicker response
+              precision: 0.001, // Higher precision for smooth scaling
+            },
+          });
+          
           setIsGestureActive(true);
         }
       }
-      // Handle single finger panning
+      // Handle single finger panning - SMOOTH AND RESPONSIVE
       else if (touches.length === 1 && lastTouchCenter) {
         const dx = currentTouchCenter.x - lastTouchCenter.x;
         const dy = currentTouchCenter.y - lastTouchCenter.y;
 
         setTouchTransform((prev) => {
-          const dampingFactor = 0.9; // Slightly more responsive
+          const dampingFactor = 1.0; // Full responsiveness for panning
           const newX = prev.x + dx * dampingFactor;
           const newY = prev.y + dy * dampingFactor;
 
@@ -746,9 +927,25 @@ export default function Gallery({
             PAN_MARGIN
           );
 
+          const boundedX = Math.max(Math.min(newX, maxPanX), minPanX);
+          const boundedY = Math.max(Math.min(newY, maxPanY), minPanY);
+
+          // Update spring animation with slight smoothing for natural panning
+          const newTransform = `translate(${boundedX}px, ${boundedY}px) scale(${prev.scale})`;
+          mobileImageApi.start({
+            transform: newTransform,
+            immediate: false, // Slight smoothing for more natural panning
+            config: {
+              tension: 350,
+              friction: 45,
+              mass: 0.6,
+              precision: 0.01,
+            },
+          });
+
           return {
-            x: Math.max(Math.min(newX, maxPanX), minPanX),
-            y: Math.max(Math.min(newY, maxPanY), minPanY),
+            x: boundedX,
+            y: boundedY,
             scale: prev.scale,
           };
         });
@@ -768,7 +965,7 @@ export default function Gallery({
       if (touches.length === 2) {
         // Start pinch gesture
         initialTouchDistance = getTouchDistance(touches);
-        gestureStartTransform = { ...touchTransform };
+        gestureStartTransform = { ...touchTransform }; // Use state directly
         setIsGestureActive(true);
       } else if (touches.length === 1) {
         // Handle double-tap detection
@@ -783,7 +980,7 @@ export default function Gallery({
           // Single tap - wait to see if it becomes a double tap
           tapTimeout = setTimeout(() => {
             // Single tap confirmed - start pan gesture
-            gestureStartTransform = { ...touchTransform };
+            gestureStartTransform = { ...touchTransform }; // Use state directly
             setIsGestureActive(false);
             tapTimeout = null;
           }, 300);
@@ -792,23 +989,48 @@ export default function Gallery({
       }
     };
 
-    // Touch end handler
+    // Touch end handler with smooth finish animations
     const handleTouchEnd = (e) => {
       if (!isMobileDevice()) return;
 
       const touches = e.touches;
       
       if (touches.length === 0) {
-        // All touches ended
+        // All touches ended - add smooth finish animation
+        const currentTransform = `translate(${touchTransform.x}px, ${touchTransform.y}px) scale(${touchTransform.scale})`;
+        
+        // Smooth animation when gesture completes
+        mobileImageApi.start({
+          transform: currentTransform,
+          immediate: false, // Enable smooth animation on release
+          config: {
+            tension: 180,
+            friction: 25,
+            mass: 1,
+          },
+        });
+        
         initialTouchDistance = null;
         lastTouchCenter = null;
         gestureStartTransform = null;
         setIsGestureActive(false);
       } else if (touches.length === 1 && initialTouchDistance) {
-        // Switched from pinch to pan
+        // Switched from pinch to pan - smooth transition
         initialTouchDistance = null;
-        gestureStartTransform = { ...touchTransform };
+        gestureStartTransform = { ...touchTransform }; // Use state directly
         lastTouchCenter = getTouchCenter(touches);
+        
+        // Add a subtle spring animation for the transition
+        const currentTransform = `translate(${touchTransform.x}px, ${touchTransform.y}px) scale(${touchTransform.scale})`;
+        mobileImageApi.start({
+          transform: currentTransform,
+          immediate: false,
+          config: {
+            tension: 220,
+            friction: 30,
+            mass: 0.8,
+          },
+        });
       }
     };
 
@@ -827,7 +1049,7 @@ export default function Gallery({
       imageContainer.removeEventListener('touchend', handleTouchEnd);
       imageContainer.removeEventListener('touchcancel', handleTouchEnd);
     };
-  }, [showGallery, currentPhoto, touchTransform]);
+  }, [showGallery, currentPhoto, touchTransform, mobileImageApi]); // Restore proper dependencies
 
   // Reset aspect ratio when current photo changes
   useEffect(() => {
@@ -1312,35 +1534,38 @@ export default function Gallery({
     const containerRect = container.getBoundingClientRect();
     
     // Calculate effective image dimensions with scale
-    const baseImageWidth = containerRect.width; // Image is styled to fill container width
-    const baseImageHeight = containerRect.height; // Image is styled to fill container height
+    const baseImageWidth = containerRect.width; 
+    const baseImageHeight = containerRect.height; 
     const scaledImageWidth = baseImageWidth * scale;
     const scaledImageHeight = baseImageHeight * scale;
 
     // Calculate how much the scaled image overflows the container
-    const overflowX = scaledImageWidth - containerRect.width;
-    const overflowY = scaledImageHeight - containerRect.height;
+    const overflowX = Math.max(0, scaledImageWidth - containerRect.width);
+    const overflowY = Math.max(0, scaledImageHeight - containerRect.height);
 
-    // Pan bounds are the overflow amounts (with margin)
-    const maxPanX = Math.max(0, overflowX / 2 + margin);
+    // Pan bounds are half the overflow (since image is centered) plus margin
+    const maxPanX = (overflowX / 2) + margin;
     const minPanX = -maxPanX;
-    const maxPanY = Math.max(0, overflowY / 2 + margin);
+    const maxPanY = (overflowY / 2) + margin;
     const minPanY = -maxPanY;
 
     return { minPanX, maxPanX, minPanY, maxPanY };
   }
 
-  // Reset transform when image changes or orientation changes
+  // Reset transform when image changes with immediate state and animation sync
   useEffect(() => {
+    const resetTransform = { x: 0, y: 0, scale: 1.15 };
+    setTouchTransform(resetTransform);
+    setIsGestureActive(false);
+    
     if (window.innerWidth < window.innerHeight) {
-      // Reset to default scale and center position on mobile
-      setTouchTransform({ x: 0, y: 0, scale: 1.15 });
-      setIsGestureActive(false);
-    } else {
-      // Reset desktop state
-      setTouchTransform({ x: 0, y: 0, scale: 1.15 });
+      // Immediate reset for mobile
+      mobileImageApi.start({
+        transform: `translate(0px, 0px) scale(1.15)`,
+        immediate: true, // Immediate reset when changing images
+      });
     }
-  }, [currentPhoto]);
+  }, [currentPhoto, mobileImageApi]);
 
   const currentItem = galleryTypeArr[currentPhoto] || galleryTypeArr[0];
 
@@ -1615,10 +1840,10 @@ export default function Gallery({
                       position: 'absolute',
                       top: 0,
                       left: 0,
-                      // Apply transforms more predictably - always provide a transform value
+                      // Apply transforms with smooth animations on mobile, static transforms on desktop
                       transform:
                         window.innerWidth < window.innerHeight
-                          ? `translate(${touchTransform.x}px, ${touchTransform.y}px) scale(${touchTransform.scale})`
+                          ? mobileImageSpring.transform // Use animated spring transform
                           : imageSpring.transform ||
                             'translate(0%, 0%) scale(1)',
                       // Ensure stable willChange for performance
@@ -1667,12 +1892,12 @@ export default function Gallery({
                     maxWidth: '60px',
                   }}
                 >
-                  {/* Pan + Zoom + Double-tap indicator */}
+                  {/* Pan + Zoom + Double-tap indicator with zoom level */}
                   <div style={{ fontSize: '16px', marginBottom: '2px' }}>🤏</div>
-                  <div>PINCH</div>
-                  <div>ZOOM</div>
+                  <div style={{ fontSize: '9px' }}>{(touchTransform.scale).toFixed(1)}x</div>
+                  <div style={{ fontSize: '7px', opacity: 0.8 }}>ZOOM</div>
                   <div style={{ fontSize: '6px', marginTop: '1px', opacity: 0.8 }}>
-                    Double-tap reset
+                    Tap×2 reset view
                   </div>
                 </div>
               ) : (
