@@ -554,10 +554,19 @@ export default function Gallery({
   // Loading state for smooth transitions
   const [imageLoading, setImageLoading] = useState(false);
 
-  // Touch pan state for master image (mobile)
-  const [touchPan, setTouchPan] = useState({ x: 0, y: 0 });
+  // Enhanced touch state for master image (mobile)
+  const [touchTransform, setTouchTransform] = useState({ 
+    x: 0, 
+    y: 0, 
+    scale: 1.15 
+  });
+  const [isGestureActive, setIsGestureActive] = useState(false);
   const lastTouchRef = useRef(null);
+  const initialDistanceRef = useRef(null);
+  const initialScaleRef = useRef(1.15);
   const PAN_MARGIN = 60; // pixels of extra space beyond the strict edge
+  const MIN_SCALE = 1.0;
+  const MAX_SCALE = 3.0;
 
   // Initialize image preloader
   const {
@@ -620,58 +629,205 @@ export default function Gallery({
     [imgAspect, isImageLoaded, isHovering, imageApi]
   );
 
-  // Manual touch event registration for non-passive touchmove
+  // Enhanced touch handling with gesture support
   useEffect(() => {
     const imageContainer = imageContainerRef.current;
     if (!imageContainer || window.innerWidth >= window.innerHeight) return;
 
-    // Register touchmove as non-passive so we can preventDefault
+    let initialTouchDistance = null;
+    let initialScale = 1.15;
+    let lastTouchCenter = null;
+    let gestureStartTransform = null;
+    let lastTapTime = 0;
+    let tapTimeout = null;
+
+    // Calculate distance between two touches
+    const getTouchDistance = (touches) => {
+      if (touches.length < 2) return null;
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    };
+
+    // Calculate center point between touches
+    const getTouchCenter = (touches) => {
+      if (touches.length === 1) {
+        return { x: touches[0].clientX, y: touches[0].clientY };
+      }
+      if (touches.length === 2) {
+        return {
+          x: (touches[0].clientX + touches[1].clientX) / 2,
+          y: (touches[0].clientY + touches[1].clientY) / 2,
+        };
+      }
+      return null;
+    };
+
+    // Double-tap to reset zoom
+    const handleDoubleTap = () => {
+      setTouchTransform({ x: 0, y: 0, scale: 1.15 });
+      setIsGestureActive(false);
+    };
+
+    // Enhanced touchmove handler with pinch-to-zoom
     const handleTouchMove = (e) => {
-      if (!isMobileDevice() || !lastTouchRef.current) return;
+      if (!isMobileDevice()) return;
 
-      e.preventDefault(); // This will work now since it's non-passive
+      const touches = e.touches;
+      if (touches.length === 0) return;
 
-      const touch = e.touches[0];
-      const dx = touch.clientX - lastTouchRef.current.x;
-      const dy = touch.clientY - lastTouchRef.current.y;
+      e.preventDefault(); // Prevent default browser gestures
 
-      setTouchPan((prev) => {
-        // Apply some momentum damping for smoother feel
-        const dampingFactor = 0.8;
-        const newX = prev.x + dx * dampingFactor;
-        const newY = prev.y + dy * dampingFactor;
+      const currentTouchCenter = getTouchCenter(touches);
+      if (!currentTouchCenter) return;
 
-        // Get better boundary constraints
-        const container = imageContainerRef.current;
-        const image = imageRef.current;
-        if (container && image) {
-          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBounds(
-            container,
-            image,
+      // Handle pinch-to-zoom with two fingers
+      if (touches.length === 2) {
+        const currentDistance = getTouchDistance(touches);
+        
+        if (initialTouchDistance && currentDistance && gestureStartTransform) {
+          const scaleChange = currentDistance / initialTouchDistance;
+          let newScale = gestureStartTransform.scale * scaleChange;
+          
+          // Constrain scale within bounds
+          newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, newScale));
+          
+          // Calculate pan adjustment to keep zoom centered on gesture
+          const container = imageContainer.getBoundingClientRect();
+          const centerX = container.left + container.width / 2;
+          const centerY = container.top + container.height / 2;
+          
+          // Get gesture center relative to container
+          const gestureX = currentTouchCenter.x - container.left;
+          const gestureY = currentTouchCenter.y - container.top;
+          
+          // Calculate offset from container center
+          const offsetX = gestureX - container.width / 2;
+          const offsetY = gestureY - container.height / 2;
+          
+          // Adjust pan to keep gesture point stable during zoom
+          const scaleRatio = newScale / gestureStartTransform.scale;
+          const panAdjustX = offsetX * (1 - scaleRatio);
+          const panAdjustY = offsetY * (1 - scaleRatio);
+          
+          let newX = gestureStartTransform.x + panAdjustX;
+          let newY = gestureStartTransform.y + panAdjustY;
+
+          // Apply boundaries for panning with current scale
+          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBoundsWithScale(
+            imageContainer,
+            imageRef.current,
+            newScale,
+            PAN_MARGIN
+          );
+
+          newX = Math.max(Math.min(newX, maxPanX), minPanX);
+          newY = Math.max(Math.min(newY, maxPanY), minPanY);
+
+          setTouchTransform({ x: newX, y: newY, scale: newScale });
+          setIsGestureActive(true);
+        }
+      }
+      // Handle single finger panning
+      else if (touches.length === 1 && lastTouchCenter) {
+        const dx = currentTouchCenter.x - lastTouchCenter.x;
+        const dy = currentTouchCenter.y - lastTouchCenter.y;
+
+        setTouchTransform((prev) => {
+          const dampingFactor = 0.9; // Slightly more responsive
+          const newX = prev.x + dx * dampingFactor;
+          const newY = prev.y + dy * dampingFactor;
+
+          // Apply boundaries with current scale
+          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBoundsWithScale(
+            imageContainer,
+            imageRef.current,
+            prev.scale,
             PAN_MARGIN
           );
 
           return {
             x: Math.max(Math.min(newX, maxPanX), minPanX),
             y: Math.max(Math.min(newY, maxPanY), minPanY),
+            scale: prev.scale,
           };
-        }
+        });
+      }
 
-        return { x: newX, y: newY };
-      });
-
-      lastTouchRef.current = { x: touch.clientX, y: touch.clientY };
+      lastTouchCenter = currentTouchCenter;
     };
 
-    // Add non-passive touchmove listener
-    imageContainer.addEventListener('touchmove', handleTouchMove, {
-      passive: false,
-    });
+    // Touch start handler
+    const handleTouchStart = (e) => {
+      if (!isMobileDevice()) return;
+
+      const touches = e.touches;
+      const currentTime = Date.now();
+      lastTouchCenter = getTouchCenter(touches);
+      
+      if (touches.length === 2) {
+        // Start pinch gesture
+        initialTouchDistance = getTouchDistance(touches);
+        gestureStartTransform = { ...touchTransform };
+        setIsGestureActive(true);
+      } else if (touches.length === 1) {
+        // Handle double-tap detection
+        if (currentTime - lastTapTime < 300) {
+          // Double tap detected
+          if (tapTimeout) {
+            clearTimeout(tapTimeout);
+            tapTimeout = null;
+          }
+          handleDoubleTap();
+        } else {
+          // Single tap - wait to see if it becomes a double tap
+          tapTimeout = setTimeout(() => {
+            // Single tap confirmed - start pan gesture
+            gestureStartTransform = { ...touchTransform };
+            setIsGestureActive(false);
+            tapTimeout = null;
+          }, 300);
+        }
+        lastTapTime = currentTime;
+      }
+    };
+
+    // Touch end handler
+    const handleTouchEnd = (e) => {
+      if (!isMobileDevice()) return;
+
+      const touches = e.touches;
+      
+      if (touches.length === 0) {
+        // All touches ended
+        initialTouchDistance = null;
+        lastTouchCenter = null;
+        gestureStartTransform = null;
+        setIsGestureActive(false);
+      } else if (touches.length === 1 && initialTouchDistance) {
+        // Switched from pinch to pan
+        initialTouchDistance = null;
+        gestureStartTransform = { ...touchTransform };
+        lastTouchCenter = getTouchCenter(touches);
+      }
+    };
+
+    // Add touch event listeners
+    imageContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+    imageContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+    imageContainer.addEventListener('touchend', handleTouchEnd, { passive: false });
+    imageContainer.addEventListener('touchcancel', handleTouchEnd, { passive: false });
 
     return () => {
+      if (tapTimeout) {
+        clearTimeout(tapTimeout);
+      }
+      imageContainer.removeEventListener('touchstart', handleTouchStart);
       imageContainer.removeEventListener('touchmove', handleTouchMove);
+      imageContainer.removeEventListener('touchend', handleTouchEnd);
+      imageContainer.removeEventListener('touchcancel', handleTouchEnd);
     };
-  }, [showGallery, currentPhoto]);
+  }, [showGallery, currentPhoto, touchTransform]);
 
   // Reset aspect ratio when current photo changes
   useEffect(() => {
@@ -1129,7 +1285,7 @@ export default function Gallery({
     );
   }
 
-  // Calculate pan boundaries for mobile image panning
+  // Calculate pan boundaries for mobile image panning with scale support
   function getPanBounds(container, image, margin = 0) {
     if (!container || !image)
       return { minPanX: 0, maxPanX: 0, minPanY: 0, maxPanY: 0 };
@@ -1148,42 +1304,41 @@ export default function Gallery({
     return { minPanX, maxPanX, minPanY, maxPanY };
   }
 
-  const handleImageTouchStart = (e) => {
-    if (!isMobileDevice()) return; // Only on mobile devices
-    const touch = e.touches[0];
-    lastTouchRef.current = { x: touch.clientX, y: touch.clientY };
-  };
+  // Enhanced pan boundaries calculation with scale factor
+  function getPanBoundsWithScale(container, image, scale = 1, margin = 0) {
+    if (!container || !image)
+      return { minPanX: 0, maxPanX: 0, minPanY: 0, maxPanY: 0 };
 
-  const handleImageTouchEnd = () => {
-    lastTouchRef.current = null;
-  };
+    const containerRect = container.getBoundingClientRect();
+    
+    // Calculate effective image dimensions with scale
+    const baseImageWidth = containerRect.width; // Image is styled to fill container width
+    const baseImageHeight = containerRect.height; // Image is styled to fill container height
+    const scaledImageWidth = baseImageWidth * scale;
+    const scaledImageHeight = baseImageHeight * scale;
 
-  // Reset pan when image changes (mobile)
+    // Calculate how much the scaled image overflows the container
+    const overflowX = scaledImageWidth - containerRect.width;
+    const overflowY = scaledImageHeight - containerRect.height;
+
+    // Pan bounds are the overflow amounts (with margin)
+    const maxPanX = Math.max(0, overflowX / 2 + margin);
+    const minPanX = -maxPanX;
+    const maxPanY = Math.max(0, overflowY / 2 + margin);
+    const minPanY = -maxPanY;
+
+    return { minPanX, maxPanX, minPanY, maxPanY };
+  }
+
+  // Reset transform when image changes or orientation changes
   useEffect(() => {
-    // Center the image initially on mobile using DOM measurements
     if (window.innerWidth < window.innerHeight) {
-      setTimeout(() => {
-        const container = imageContainerRef.current;
-        const image = imageRef.current;
-        if (container && image) {
-          const containerRect = container.getBoundingClientRect();
-          const imageRect = image.getBoundingClientRect();
-          const centerX = (containerRect.width - imageRect.width) / 2;
-          const centerY = (containerRect.height - imageRect.height) / 2;
-          // Clamp to bounds with margin
-          const { minPanX, maxPanX, minPanY, maxPanY } = getPanBounds(
-            container,
-            image,
-            PAN_MARGIN
-          );
-          setTouchPan({
-            x: Math.max(Math.min(centerX, maxPanX), minPanX),
-            y: Math.max(Math.min(centerY, maxPanY), minPanY),
-          });
-        }
-      }, 0);
+      // Reset to default scale and center position on mobile
+      setTouchTransform({ x: 0, y: 0, scale: 1.15 });
+      setIsGestureActive(false);
     } else {
-      setTouchPan({ x: 0, y: 0 });
+      // Reset desktop state
+      setTouchTransform({ x: 0, y: 0, scale: 1.15 });
     }
   }, [currentPhoto]);
 
@@ -1430,17 +1585,17 @@ export default function Gallery({
               onMouseLeave={handleImageMouseLeave}
               onTouchStart={
                 window.innerWidth < window.innerHeight
-                  ? handleImageTouchStart
+                  ? undefined // Touch handling is now managed by useEffect
                   : undefined
               }
               onTouchEnd={
                 window.innerWidth < window.innerHeight
-                  ? handleImageTouchEnd
+                  ? undefined // Touch handling is now managed by useEffect
                   : undefined
               }
               onTouchCancel={
                 window.innerWidth < window.innerHeight
-                  ? handleImageTouchEnd
+                  ? undefined // Touch handling is now managed by useEffect
                   : undefined
               }
             >
@@ -1463,7 +1618,7 @@ export default function Gallery({
                       // Apply transforms more predictably - always provide a transform value
                       transform:
                         window.innerWidth < window.innerHeight
-                          ? `translate(${touchPan.x}px, ${touchPan.y}px) scale(1.15)`
+                          ? `translate(${touchTransform.x}px, ${touchTransform.y}px) scale(${touchTransform.scale})`
                           : imageSpring.transform ||
                             'translate(0%, 0%) scale(1)',
                       // Ensure stable willChange for performance
@@ -1483,7 +1638,7 @@ export default function Gallery({
               {/* Loading indicator */}
               {imageLoading && <div className="imageLoading" />}
 
-              {/* Show movement indicator (four-way arrows) on mobile, magnifying glass on desktop */}
+              {/* Show enhanced movement indicator (pan + zoom) on mobile, magnifying glass on desktop */}
               {window.innerWidth < 700 &&
               window.innerWidth < window.innerHeight ? (
                 <div
@@ -1492,38 +1647,33 @@ export default function Gallery({
                     position: 'absolute',
                     top: '10px',
                     right: '10px',
-                    background: 'rgba(255, 255, 255, 0.7)',
-                    borderRadius: '50%',
-                    width: '40px',
-                    height: '40px',
+                    background: 'rgba(255, 255, 255, 0.90)',
+                    borderRadius: '12px',
+                    padding: '8px 12px',
                     display: 'flex',
+                    flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+                    boxShadow: '0 3px 8px rgba(0,0,0,0.25)',
                     zIndex: 300000,
-                    opacity: 0.8,
+                    opacity: isGestureActive ? 0.4 : 0.8,
                     transition: 'opacity 0.3s ease',
                     pointerEvents: 'none',
+                    fontSize: '8px',
+                    color: '#774728',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    lineHeight: '1.1',
+                    maxWidth: '60px',
                   }}
                 >
-                  {/* Four-way arrow SVG */}
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="5 9 2 12 5 15" />
-                    <polyline points="9 5 12 2 15 5" />
-                    <polyline points="15 19 12 22 9 19" />
-                    <polyline points="19 9 22 12 19 15" />
-                    <line x1="2" y1="12" x2="22" y2="12" />
-                    <line x1="12" y1="2" x2="12" y2="22" />
-                  </svg>
+                  {/* Pan + Zoom + Double-tap indicator */}
+                  <div style={{ fontSize: '16px', marginBottom: '2px' }}>🤏</div>
+                  <div>PINCH</div>
+                  <div>ZOOM</div>
+                  <div style={{ fontSize: '6px', marginTop: '1px', opacity: 0.8 }}>
+                    Double-tap reset
+                  </div>
                 </div>
               ) : (
                 <div

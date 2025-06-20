@@ -83,11 +83,11 @@
     background-color: #f5f5f5;
     /* Improve wide-screen layout with proper gap */
     gap: 1vw;
-    /* Add small gap between left panel and main image area */
-    /* Prevent pull-to-refresh on mobile devices */
-    overscroll-behavior: none;
-    -webkit-overscroll-behavior: none;
-    touch-action: pan-x pan-y;
+    /* Add small gap between left panel and main image area */        /* Prevent pull-to-refresh on mobile devices */
+        overscroll-behavior: none;
+        -webkit-overscroll-behavior: none;
+        /* Allow pan and zoom gestures, but prevent browser's built-in zoom */
+        touch-action: pan-x pan-y;
 }
 
 /* DESKTOP FIX: Allow canvas to remain visible behind gallery on larger screens */
@@ -1597,4 +1597,32 @@
         border: 2px solid var(--brown) !important;
         box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
     }
+}
+
+/* Enhanced mobile touch handling for image container */
+.currentPhoto {
+    /* Allow all touch gestures to be handled by our custom JavaScript */
+    touch-action: none;
+    -webkit-touch-action: none;
+    /* Prevent text selection during gestures */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /* Optimize for touch interactions */
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure the master image doesn't interfere with touch events */
+.masterImage {
+    /* Let container handle all touch events */
+    pointer-events: none;
+    /* Enable hardware acceleration for smooth transforms */
+    will-change: transform;
+    transform-origin: center center;
+}
+
+/* Re-enable pointer events for the image container */
+.currentPhoto > div {
+    pointer-events: auto;
 }
