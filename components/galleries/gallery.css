@@ -167,6 +167,29 @@
     }
 }
 
+/* Specific iPad Pro landscape optimization */
+@media (min-width: 1024px) and (max-width: 1400px) and (orientation: landscape) {
+    .galleryContainer {
+        padding-top: 1vh !important;
+        /* Minimal padding for iPad Pro - reduced from 2vh to 1vh */
+    }
+    
+    .currentPhoto {
+        height: calc(100vh - 2vh) !important;
+        /* Maximize height on iPad Pro - increased from calc(100vh - 4vh) */
+        max-height: 97vh !important;
+        /* Nearly full screen height - increased from 94vh to 97vh */
+        width: 100% !important;
+        /* Use full available width */
+    }
+    
+    .productPanel {
+        min-width: 220px !important;
+        /* Ensure left panel doesn't take too much space */
+        max-width: 280px !important;
+    }
+}
+
 .galleryHeader {
     position: absolute;
     top: var(--space-8);

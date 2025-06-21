@@ -400,11 +400,45 @@ export default function Gallery({
   const bind = useGesture(
     {
       // Unified drag handling (mouse on desktop, touch on mobile)
-      onDrag: ({ offset: [x, y], pinching, cancel, velocity, distance }) => {
+      onDrag: ({ offset: [x, y], pinching, cancel, velocity, distance, direction }) => {
         if (pinching) return cancel();
 
         console.log('Drag gesture:', { x, y, isMobile, pinching, distance });
 
+        // Check for swipe gesture (fast movement with sufficient distance)
+        if (direction && velocity && distance > 100) {
+          const [dx] = direction;
+          const [vx] = velocity;
+          
+          if (Math.abs(dx) > 0.5 && Math.abs(vx) > 0.5) {
+            console.log('Swipe detected:', {
+              direction: dx,
+              velocity: vx,
+              distance,
+              threshold: Math.abs(dx) > 0.5 && Math.abs(vx) > 0.5 && distance > 100,
+            });
+
+            const newIndex =
+              dx > 0
+                ? currentPhoto > 0
+                  ? currentPhoto - 1
+                  : galleryTypeArr.length - 1
+                : currentPhoto < galleryTypeArr.length - 1
+                ? currentPhoto + 1
+                : 0;
+
+            console.log('Swipe navigation:', {
+              currentPhoto,
+              newIndex,
+              direction: dx > 0 ? 'right' : 'left',
+            });
+            setCurrentPhoto(newIndex);
+            resetGesture();
+            return; // Exit early for swipe
+          }
+        }
+
+        // Regular drag handling for pan/zoom
         // Get fresh bounds on each drag using current state
         const container = imageContainerRef.current;
         if (!container) return;
@@ -516,35 +550,6 @@ export default function Gallery({
         });
       },
 
-      // Swipe navigation (both platforms)
-      onSwipe: ({ direction: [dx], velocity, distance }) => {
-        console.log('Swipe gesture:', {
-          direction: dx,
-          velocity,
-          distance,
-          threshold: Math.abs(dx) > 0.5 && velocity > 0.5 && distance > 100,
-        });
-
-        if (Math.abs(dx) > 0.5 && velocity > 0.5 && distance > 100) {
-          const newIndex =
-            dx > 0
-              ? currentPhoto > 0
-                ? currentPhoto - 1
-                : galleryTypeArr.length - 1
-              : currentPhoto < galleryTypeArr.length - 1
-              ? currentPhoto + 1
-              : 0;
-
-          console.log('Swipe navigation:', {
-            currentPhoto,
-            newIndex,
-            direction: dx > 0 ? 'right' : 'left',
-          });
-          setCurrentPhoto(newIndex);
-          resetGesture();
-        }
-      },
-
       // Hover handling (desktop only)
       onHover: ({ hovering }) => {
         if (!isDesktop) return;
@@ -571,11 +576,6 @@ export default function Gallery({
       wheel: {
         enabled: isDesktop,
         eventOptions: { passive: false }, // Allow preventDefault for wheel events
-      },
-      swipe: {
-        enabled: true,
-        distance: 100,
-        velocity: 0.5,
       },
       hover: {
         enabled: isDesktop,
@@ -1035,29 +1035,6 @@ export default function Gallery({
 
   const currentItem = galleryTypeArr[currentPhoto] || galleryTypeArr[0];
 
-  // Debug logging for Safari
-  useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('Gallery component state:', {
-        showGallery,
-        galleryTypeArr: galleryTypeArr?.length || 0,
-        currentPhoto,
-        currentItem: currentItem?.name || 'none',
-        windowDimensions:
-          typeof window !== 'undefined'
-            ? {
-                width: window.innerWidth,
-                height: window.innerHeight,
-                orientation:
-                  window.innerWidth > window.innerHeight
-                    ? 'landscape'
-                    : 'portrait',
-              }
-            : 'no window',
-      });
-    }
-  }, [showGallery, galleryTypeArr, currentPhoto, currentItem]);
-
   // Helper function to calculate container dimensions
   const calculateImageDimensions = useCallback(() => {
     const screenWidth = window.innerWidth;
@@ -1069,6 +1046,8 @@ export default function Gallery({
     const isMobileLandscape =
       screenWidth >= 600 && screenWidth <= 768 && !isPortrait;
     const isTablet = screenWidth >= 768 && screenWidth <= 1024;
+    const isTabletLandscape = screenWidth >= 768 && screenWidth <= 1024 && !isPortrait;
+    const isPadPro = screenWidth >= 1024 && screenWidth <= 1400 && !isPortrait; // iPad Pro landscape
     const isSmallLaptop = screenWidth >= 1200 && screenWidth <= 1439;
     const isLargeDesktop = screenWidth >= 1440 && screenWidth <= 1919;
     const isUltraWide = screenWidth >= 1920;
@@ -1082,8 +1061,16 @@ export default function Gallery({
       // Mobile landscape - compact layout
       maxW = screenWidth * 0.75;
       maxH = screenHeight * 0.9;
+    } else if (isPadPro) {
+      // iPad Pro landscape - maximize the image area, accounting for left sidebar
+      maxW = screenWidth * 0.85; // Much larger percentage for iPad Pro
+      maxH = screenHeight * 0.98; // Maximum height - increased from 0.95 to 0.98
+    } else if (isTabletLandscape) {
+      // Regular tablet landscape - more space than portrait
+      maxW = screenWidth * 0.75;
+      maxH = screenHeight * 0.92; // Increased for tablet landscape too
     } else if (isTablet) {
-      // Tablet - balanced layout
+      // Tablet portrait - balanced layout
       maxW = screenWidth * 0.65;
       maxH = screenHeight * 0.8;
     } else if (isSmallLaptop) {
@@ -1101,7 +1088,7 @@ export default function Gallery({
     } else {
       // Default fallback
       maxW = screenWidth * 0.85;
-      maxH = screenHeight * 0.8;
+      maxH = screenHeight * 0.8; // Fixed typo: was screenWidth, should be screenHeight
     }
 
     // Ensure we have a valid aspect ratio
@@ -1117,8 +1104,50 @@ export default function Gallery({
       containerW = maxH * safeAspectRatio;
     }
 
+    // Special case for iPad Pro: prioritize using full height if available
+    if (isPadPro && containerH < maxH * 0.9) {
+      // If we're not using at least 90% of available height, recalculate to use more height
+      const heightBasedW = maxH * safeAspectRatio;
+      if (heightBasedW <= maxW) {
+        containerW = heightBasedW;
+        containerH = maxH;
+      }
+    }
+
     return { width: containerW, height: containerH };
   }, [imgAspect]);
+
+  // Debug logging for Safari
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'production') {
+      const dimensions = calculateImageDimensions();
+      console.log('Gallery component state:', {
+        showGallery,
+        galleryTypeArr: galleryTypeArr?.length || 0,
+        currentPhoto,
+        currentItem: currentItem?.name || 'none',
+        windowDimensions:
+          typeof window !== 'undefined'
+            ? {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                orientation:
+                  window.innerWidth > window.innerHeight
+                    ? 'landscape'
+                    : 'portrait',
+              }
+            : 'no window',
+        calculatedDimensions: dimensions,
+        heightUtilization: dimensions ? `${((dimensions.height / window.innerHeight) * 100).toFixed(1)}%` : 'N/A',
+        widthUtilization: dimensions ? `${((dimensions.width / window.innerWidth) * 100).toFixed(1)}%` : 'N/A',
+        deviceDetection: {
+          isTablet: window.innerWidth >= 768 && window.innerWidth <= 1024,
+          isPadPro: window.innerWidth >= 1024 && window.innerWidth <= 1400 && window.innerWidth > window.innerHeight,
+          isLandscape: window.innerWidth > window.innerHeight,
+        },
+      });
+    }
+  }, [showGallery, galleryTypeArr, currentPhoto, currentItem, calculateImageDimensions]);
 
   // Crossfade transition for master image
   const imageTransitions = useTransition(currentItem?.img, {
@@ -1265,10 +1294,28 @@ export default function Gallery({
                   ? '100vw'
                   : `${calculateImageDimensions().width}px`,
                 height: isMobile
-                  ? '40vh' // Fallback for browsers without svh support
-                  : `${calculateImageDimensions().height}px`,
-                height: isMobile
-                  ? '40svh'
+                  ? (() => {
+                      const screenWidth = window.innerWidth;
+                      const screenHeight = window.innerHeight;
+                      const isPortrait = screenHeight > screenWidth;
+                      const isPadPro = screenWidth >= 1024 && screenWidth <= 1400 && !isPortrait;
+                      const isTabletLandscape = screenWidth >= 768 && screenWidth <= 1024 && !isPortrait;
+                      const isLargeMobile = screenWidth >= 600 && screenWidth <= 768 && !isPortrait;
+                      
+                      let dynamicHeight;
+                      if (isPadPro) {
+                        dynamicHeight = '90svh'; // iPad Pro landscape gets more height
+                      } else if (isTabletLandscape) {
+                        dynamicHeight = '80svh'; // Tablet landscape gets more height
+                      } else if (isLargeMobile) {
+                        dynamicHeight = '65svh'; // Large mobile landscape gets more height
+                      } else {
+                        dynamicHeight = '40svh'; // Small mobile portrait stays the same
+                      }
+                      
+                      console.log(`Dynamic height calculation - Screen: ${screenWidth}x${screenHeight}, isPadPro: ${isPadPro}, isTabletLandscape: ${isTabletLandscape}, isLargeMobile: ${isLargeMobile}, Height: ${dynamicHeight}`);
+                      return dynamicHeight;
+                    })()
                   : `${calculateImageDimensions().height}px`,
                 margin: '0 auto',
                 zIndex: 1,
