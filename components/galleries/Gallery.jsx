@@ -194,7 +194,8 @@ const MobileInfoPanel = memo(
         bottom: 0,
         left: 0,
         right: 0,
-        maxHeight: showDetails ? '90vh' : '0%', // Use VH for Safari compatibility
+        maxHeight: showDetails ? '90vh' : '0%', // Fallback for browsers without svh support
+        maxHeight: showDetails ? '90svh' : '0%', // Use SVH for better mobile viewport handling
         overflowY: showDetails ? 'auto' : 'hidden',
         zIndex: 10000,
         background: 'rgba(245, 245, 245, 0.95)',
@@ -897,7 +898,7 @@ export default function Gallery({
   const MOBILE_IMAGE_WIDTH = 1.3; // 130vw
   const MOBILE_IMAGE_HEIGHT = 1.3; // 130% of container height (relative to 50svh container, so 65svh)
   const MOBILE_CONTAINER_WIDTH = 1.0; // 100vw
-  const MOBILE_CONTAINER_HEIGHT = 0.5; // 50vh (Safari compatible)
+  const MOBILE_CONTAINER_HEIGHT = 0.5; // 50svh (small viewport height for mobile)
 
   // Utility to detect Safari browser
   function isSafari() {
@@ -1138,7 +1139,8 @@ export default function Gallery({
       style={{
         ...gallerySpring,
         width: '100vw', // Use standard viewport units for better compatibility
-        height: '100vh', // Use standard viewport units for better compatibility
+        height: '100vh', // Fallback for browsers without svh support
+        height: '100svh', // Use small viewport height for mobile compatibility
         opacity: showGallery ? 1 : 0,
         zIndex: showGallery ? 20000 : 0, // Use CSS media queries to control z-index
         /* Prevent pull-to-refresh on mobile devices */
@@ -1210,7 +1212,10 @@ export default function Gallery({
                   ? '100vw'
                   : `${calculateImageDimensions().width}px`,
                 height: isMobile
-                  ? '40vh'
+                  ? '40vh' // Fallback for browsers without svh support
+                  : `${calculateImageDimensions().height}px`,
+                height: isMobile
+                  ? '40svh'
                   : `${calculateImageDimensions().height}px`,
                 margin: '0 auto',
                 zIndex: 1,

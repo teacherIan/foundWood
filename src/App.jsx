@@ -762,6 +762,31 @@ function App() {
     state.isAnimating,
   ]);
 
+  // Prevent body scrolling when gallery is open (mobile fix)
+  useEffect(() => {
+    if (state.showGallery) {
+      // Prevent body from scrolling when gallery is open
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
+    } else {
+      // Restore normal scrolling when gallery is closed
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+    }
+
+    // Cleanup function to restore scrolling on unmount
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+    };
+  }, [state.showGallery]);
+
   return (
     <>
       {/* Always render the main app - use opacity and pointer-events instead of display:none */}

@@ -2,7 +2,7 @@ import { useSpring, animated } from '@react-spring/web';
 import GalleryTypeButton from './GalleryTypeButton';
 import './galleryTypeSelector.css';
 import './galleryTypeButton.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import chair from '../../src/assets/noBG/double_chair_final_noBG.png';
 // import table from '../../src/assets/noBG/plantStand_new.png';
 import table from '../../src/assets/noBG/glass-table.png';
@@ -18,7 +18,50 @@ const configAnimation = {
   ease: true,
 };
 
-function useTypeSpring(showTypes, index) {
+// Custom hook to manage delayed unmounting after exit animation
+function useDelayedUnmount(showTypes) {
+  const [shouldRender, setShouldRender] = useState(showTypes);
+  const [animationState, setAnimationState] = useState(
+    showTypes ? 'entering' : 'hidden'
+  );
+
+  useEffect(() => {
+    if (showTypes) {
+      console.log('showTypes became true - mounting and starting entrance');
+      setShouldRender(true);
+      setAnimationState('entering');
+
+      // Small delay to ensure component is mounted before starting entrance animation
+      setTimeout(() => {
+        setAnimationState('visible');
+      }, 50);
+    } else {
+      console.log('showTypes became false - starting exit animation');
+      // Start exit animation immediately
+      setAnimationState('exiting');
+
+      // Calculate the maximum exit animation duration more conservatively
+      const maxExitDuration = 1000;
+
+      const timer = setTimeout(() => {
+        console.log('Exit animation should be complete - unmounting');
+        setShouldRender(false);
+        setAnimationState('hidden');
+      }, maxExitDuration);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showTypes]);
+
+  return {
+    shouldRender,
+    internalShowTypes:
+      animationState === 'visible' || animationState === 'entering',
+    isExiting: animationState === 'exiting',
+  };
+}
+
+function useTypeSpring(internalShowTypes, index) {
   const [spring, setSpring] = useSpring(() => ({
     opacity: 0,
     y: -100, // Start above screen
@@ -27,7 +70,13 @@ function useTypeSpring(showTypes, index) {
   }));
 
   useEffect(() => {
-    if (showTypes) {
+    console.log(
+      `Button ${index} useEffect - internalShowTypes:`,
+      internalShowTypes
+    );
+
+    if (internalShowTypes) {
+      console.log(`Button ${index} starting entrance animation`);
       const isPortrait = window.innerWidth < window.innerHeight;
       const isMobile = window.innerWidth <= 768;
       const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
@@ -58,6 +107,7 @@ function useTypeSpring(showTypes, index) {
           x: targetX,
           opacity: 1,
           delay: 200 + index * 120,
+          immediate: false,
         });
       } else if (isPortrait && isTablet) {
         // All tablets in portrait (including iPads): centered layout
@@ -82,6 +132,7 @@ function useTypeSpring(showTypes, index) {
           x: targetX,
           opacity: 1,
           delay: 200 + index * 120,
+          immediate: false,
         });
       } else if (isPortrait && isSmallMobile) {
         // Very small mobile devices: tighter layout
@@ -106,6 +157,7 @@ function useTypeSpring(showTypes, index) {
           x: targetX,
           opacity: 1,
           delay: 200 + index * 120,
+          immediate: false,
         });
       } else if (isPortrait && isMobile) {
         // Mobile portrait: optimized for phone screens
@@ -130,6 +182,7 @@ function useTypeSpring(showTypes, index) {
           x: targetX,
           opacity: 1,
           delay: 200 + index * 120,
+          immediate: false,
         });
       } else {
         // Fallback: landscape or other cases
@@ -154,22 +207,29 @@ function useTypeSpring(showTypes, index) {
           x: targetX,
           opacity: 1,
           delay: 200 + index * 120,
+          immediate: false,
         });
       }
     } else {
+      console.log(`Button ${index} starting exit animation`);
       setSpring.start({
         y: -100,
         x: 0,
         opacity: 0,
         delay: index * 80,
+        immediate: false, // Ensure animation runs
+        config: {
+          ...configAnimation,
+          precision: 0.01, // Lower precision for faster completion
+        },
       });
     }
-  }, [showTypes]);
+  }, [internalShowTypes, index, setSpring]);
 
   return spring;
 }
 
-function useExplanationTextSpring(showTypes) {
+function useExplanationTextSpring(internalShowTypes) {
   const [spring, setSpring] = useSpring(() => ({
     opacity: 0,
     y: -100,
@@ -177,7 +237,13 @@ function useExplanationTextSpring(showTypes) {
   }));
 
   useEffect(() => {
-    if (showTypes) {
+    console.log(
+      'Explanation text useEffect - internalShowTypes:',
+      internalShowTypes
+    );
+
+    if (internalShowTypes) {
+      console.log('Explanation text starting entrance animation');
       const isPortrait = window.innerWidth < window.innerHeight;
       const isMobile = window.innerWidth <= 768;
       const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
@@ -204,15 +270,22 @@ function useExplanationTextSpring(showTypes) {
         y: targetY,
         opacity: 1,
         delay: 680, // Animate in after all buttons
+        immediate: false,
       });
     } else {
+      console.log('Explanation text starting exit animation');
       setSpring.start({
         y: -100,
         opacity: 0,
         delay: 0,
+        immediate: false, // Ensure animation runs
+        config: {
+          ...configAnimation,
+          precision: 0.01, // Lower precision for faster completion
+        },
       });
     }
-  }, [showTypes]);
+  }, [internalShowTypes, setSpring]);
 
   return spring;
 }
@@ -225,6 +298,9 @@ export default function GalleryTypeSelector({
   setActiveGalleryType,
   setActiveGalleryTypeString,
 }) {
+  const { shouldRender, internalShowTypes, isExiting } =
+    useDelayedUnmount(showTypes);
+
   const types = {
     chairs: 'chairs',
     smallTable: 'smallTable',
@@ -242,10 +318,23 @@ export default function GalleryTypeSelector({
   ];
 
   const springs = Array.from({ length: 4 }, (_, index) =>
-    useTypeSpring(showTypes, index)
+    useTypeSpring(internalShowTypes, index)
   );
 
-  const explanationSpring = useExplanationTextSpring(showTypes);
+  const explanationSpring = useExplanationTextSpring(internalShowTypes);
+
+  // Don't render if component should be unmounted
+  if (!shouldRender) {
+    console.log('Component returning null - not rendering');
+    return null;
+  }
+
+  console.log(
+    'Component rendering with internalShowTypes:',
+    internalShowTypes,
+    'isExiting:',
+    isExiting
+  );
 
   return (
     <>
@@ -255,7 +344,7 @@ export default function GalleryTypeSelector({
           height: '100svh',
         }}
         className="galleryTypeSelector"
-        data-visible={showTypes}
+        data-visible={internalShowTypes}
       >
         {springs.map((spring, index) => (
           <animated.div

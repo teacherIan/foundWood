@@ -10,8 +10,11 @@
     /* Safari iOS specific fixes */
     .galleryContainer {
         height: 100vh;
-        /* Fallback for SVH issues */
+        /* Fallback for browsers without svh support */
+        height: 100svh;
+        /* Use svh for true viewport height on mobile Safari */
         min-height: -webkit-fill-available;
+        /* Additional Safari iOS fallback */
         /* Prevent pull-to-refresh on iOS Safari */
         overscroll-behavior: none;
         -webkit-overscroll-behavior: none;
@@ -20,7 +23,9 @@
 
     .currentPhoto {
         height: calc(100vh - 8vh) !important;
-        /* Override SVH */
+        /* Fallback for browsers without svh support */
+        height: calc(100svh - 8svh) !important;
+        /* Use svh for better viewport calculation */
         /* Prevent pull-to-refresh on iOS Safari */
         overscroll-behavior: none;
         -webkit-overscroll-behavior: none;
@@ -28,9 +33,14 @@
 
     .masterImage {
         height: 50vh !important;
-        /* Use VH instead of SVW/SVH */
+        /* Fallback for browsers without svh support */
+        height: 50svh !important;
+        /* Use svh for better mobile viewport handling */
         width: auto !important;
         max-height: calc(100vh - 16vh) !important;
+        /* Fallback for browsers without svh support */
+        max-height: calc(100svh - 16svh) !important;
+        /* Use svh for better viewport calculation */
     }
 
     .thumbNails {
@@ -1289,7 +1299,9 @@
         width: 100vw;
         margin: 0;
         padding: 12vh 0 0 0;
-        /* Increased padding to give more space from menu */
+        /* Fallback for browsers without svh support */
+        padding: 12svh 0 0 0;
+        /* Use svh for better mobile viewport handling */
         box-sizing: border-box;
         z-index: auto;
         background-color: #f5f5f5;
@@ -1299,9 +1311,15 @@
         transform: translateZ(0);
         -webkit-overflow-scrolling: touch;
         min-height: 100vh;
-        /* Fallback for Safari iOS */
-        min-height: 100vh;
-        /* Progressive enhancement */
+        /* Fallback for browsers without svh support */
+        min-height: 100svh;
+        /* Use svh (small viewport height) for true mobile viewport */
+        height: 100vh;
+        /* Fallback for browsers without svh support */
+        height: 100svh;
+        /* Fixed height to prevent page scrolling */
+        overflow: hidden;
+        /* Prevent the entire page from scrolling */
         /* Three-section layout distribution */
         display: flex;
         align-items: stretch;
@@ -1314,9 +1332,13 @@
         height: auto;
         /* Let content determine height */
         max-height: 18vh;
-        /* Slightly increased for better thumbnail spacing */
+        /* Fallback for browsers without svh support */
+        max-height: 18svh;
+        /* Use svh for better mobile viewport handling */
         padding: 1vh 0 !important;
-        /* Add vertical padding for better spacing from menu */
+        /* Fallback for browsers without svh support */
+        padding: 1svh 0 !important;
+        /* Use svh for vertical padding */
         order: 1;
         /* Thumbnails at the top */
         z-index: auto;
@@ -1344,7 +1366,9 @@
         flex-direction: column;
         width: 100vw;
         padding: 2vh 1.5em 3vh 1.5em;
-        /* Increased bottom padding and horizontal padding */
+        /* Fallback for browsers without svh support */
+        padding: 2svh 1.5em 3svh 1.5em;
+        /* Use svh for vertical padding and increased bottom padding */
         margin: 0;
         text-align: center;
         order: 3;
@@ -1355,6 +1379,12 @@
         /* Take up all remaining space in the container */
         min-height: 0;
         /* Allow flex shrinking if needed */
+        max-height: calc(100vh - 30vh);
+        /* Fallback for browsers without svh support */
+        max-height: calc(100svh - 30svh);
+        /* Constrain height using svh, leaving space for thumbnails and image */
+        overflow: hidden;
+        /* Prevent the section itself from scrolling */
         /* Add subtle background for better text readability */
         background: linear-gradient(to bottom,
                 rgba(245, 245, 245, 0.8) 0%,
@@ -1367,7 +1397,9 @@
         font-size: clamp(18px, 4.5vw, 24px);
         /* Slightly larger for better readability */
         margin-bottom: 0.8vh;
-        /* More space between name and description */
+        /* Fallback for browsers without svh support */
+        margin-bottom: 0.8svh;
+        /* Use svh for better mobile viewport handling */
         color: var(--brown);
         font-weight: bold;
         line-height: 1.2;
@@ -1383,6 +1415,8 @@
         filter: none !important;
         /* Add subtle text shadow for better readability */
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
+        /* Prevent name from shrinking */
     }
 
     /* Mobile-specific styling for furniture description */
@@ -1397,7 +1431,9 @@
         padding: 0 1em;
         /* Increased horizontal padding for better readability */
         margin-top: 0.8vh;
-        /* More margin between name and description */
+        /* Fallback for browsers without svh support */
+        margin-top: 0.8svh;
+        /* Use svh for margin */
         flex: 1;
         /* Take up all remaining space in productInfo container */
         min-height: 0;
@@ -1415,6 +1451,11 @@
         /* Better text spacing */
         word-spacing: 0.5px;
         letter-spacing: 0.3px;
+        /* Improve touch scrolling */
+        -webkit-overflow-scrolling: touch;
+        /* Ensure proper scrolling behavior */
+        overscroll-behavior: contain;
+        -webkit-overscroll-behavior: contain;
     }
 
     /* Custom scrollbar for description on webkit browsers */
@@ -1437,9 +1478,13 @@
         width: 100vw;
         height: auto;
         max-height: 45vh;
-        /* Slightly more space for the main image */
+        /* Fallback for browsers without svh support */
+        max-height: 45svh;
+        /* Use svh for better mobile viewport handling */
         min-height: 35vh;
-        /* Ensure minimum height for usability */
+        /* Fallback for browsers without svh support */
+        min-height: 35svh;
+        /* Use svh for minimum height */
         text-align: center;
         box-sizing: border-box;
         z-index: auto;
