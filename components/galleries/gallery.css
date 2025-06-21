@@ -83,11 +83,12 @@
     background-color: #f5f5f5;
     /* Improve wide-screen layout with proper gap */
     gap: 1vw;
-    /* Add small gap between left panel and main image area */        /* Prevent pull-to-refresh on mobile devices */
-        overscroll-behavior: none;
-        -webkit-overscroll-behavior: none;
-        /* Allow pan and zoom gestures, but prevent browser's built-in zoom */
-        touch-action: pan-x pan-y;
+    /* Add small gap between left panel and main image area */
+    /* Prevent pull-to-refresh on mobile devices */
+    overscroll-behavior: none;
+    -webkit-overscroll-behavior: none;
+    /* Allow pan and zoom gestures, but prevent browser's built-in zoom */
+    touch-action: pan-x pan-y;
 }
 
 /* DESKTOP FIX: Allow canvas to remain visible behind gallery on larger screens */
@@ -1287,8 +1288,8 @@
         justify-content: flex-start;
         width: 100vw;
         margin: 0;
-        padding: 7vh 0 0 0;
-        /* Adjust for mobile header */
+        padding: 12vh 0 0 0;
+        /* Increased padding to give more space from menu */
         box-sizing: border-box;
         z-index: auto;
         background-color: #f5f5f5;
@@ -1312,10 +1313,10 @@
         /* Full width on mobile */
         height: auto;
         /* Let content determine height */
-        max-height: 15vh;
-        /* Limit thumbnail section height */
-        padding: 0 !important;
-        /* Remove ALL padding to allow true edge-to-edge thumbnails */
+        max-height: 18vh;
+        /* Slightly increased for better thumbnail spacing */
+        padding: 1vh 0 !important;
+        /* Add vertical padding for better spacing from menu */
         order: 1;
         /* Thumbnails at the top */
         z-index: auto;
@@ -1342,8 +1343,8 @@
         display: flex;
         flex-direction: column;
         width: 100vw;
-        padding: 1vh 1em 2vh 1em;
-        /* Added bottom padding for spacing */
+        padding: 2vh 1.5em 3vh 1.5em;
+        /* Increased bottom padding and horizontal padding */
         margin: 0;
         text-align: center;
         order: 3;
@@ -1354,13 +1355,19 @@
         /* Take up all remaining space in the container */
         min-height: 0;
         /* Allow flex shrinking if needed */
+        /* Add subtle background for better text readability */
+        background: linear-gradient(to bottom,
+                rgba(245, 245, 245, 0.8) 0%,
+                rgba(245, 245, 245, 0.95) 100%);
+        border-top: 1px solid rgba(119, 72, 28, 0.1);
     }
 
     /* Mobile-specific styling for furniture name */
     .furnitureName {
         font-size: clamp(18px, 4.5vw, 24px);
         /* Slightly larger for better readability */
-        margin-bottom: 0.5vh;
+        margin-bottom: 0.8vh;
+        /* More space between name and description */
         color: var(--brown);
         font-weight: bold;
         line-height: 1.2;
@@ -1374,21 +1381,23 @@
         -webkit-text-stroke: none !important;
         -webkit-text-fill-color: var(--brown) !important;
         filter: none !important;
+        /* Add subtle text shadow for better readability */
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
 
     /* Mobile-specific styling for furniture description */
     .furnitureDescription {
-        font-size: clamp(14px, 3.5vw, 18px);
+        font-size: clamp(14px, 3.8vw, 18px);
         /* Slightly larger for better readability */
-        line-height: 1.5;
-        /* Better line spacing */
+        line-height: 1.6;
+        /* Better line spacing for easier reading */
         color: var(--brown);
         overflow-y: auto;
         /* Enable scrolling only when content exceeds container */
-        padding: 0 0.5em;
-        /* Small horizontal padding */
-        margin-top: 0.5vh;
-        /* Small margin between name and description */
+        padding: 0 1em;
+        /* Increased horizontal padding for better readability */
+        margin-top: 0.8vh;
+        /* More margin between name and description */
         flex: 1;
         /* Take up all remaining space in productInfo container */
         min-height: 0;
@@ -1401,6 +1410,11 @@
         /* Custom scrollbar styling for mobile */
         scrollbar-width: thin;
         scrollbar-color: rgba(119, 72, 28, 0.4) transparent;
+        /* Add subtle text shadow for better readability */
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        /* Better text spacing */
+        word-spacing: 0.5px;
+        letter-spacing: 0.3px;
     }
 
     /* Custom scrollbar for description on webkit browsers */
@@ -1422,8 +1436,8 @@
         /* Image comes after thumbnails on mobile */
         width: 100vw;
         height: auto;
-        max-height: 40vh;
-        /* Further reduced to leave more space for text */
+        max-height: 45vh;
+        /* Slightly more space for the main image */
         min-height: 35vh;
         /* Ensure minimum height for usability */
         text-align: center;
@@ -1440,6 +1454,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        /* Add subtle border for visual separation */
+        border-top: 1px solid rgba(119, 72, 28, 0.1);
+        border-bottom: 1px solid rgba(119, 72, 28, 0.1);
+        margin: 0.25vh 0;
+        /* Small vertical margins for breathing room */
     }
 
     .thumbNails {
@@ -1472,14 +1491,14 @@
         /* Override grid for mobile */
         align-items: center;
         /* Center thumbnails vertically */
-        min-height: 60px;
-        /* Reduced minimum height for more space */
+        min-height: 70px;
+        /* Increased minimum height for better touch targets */
         box-sizing: border-box;
         /* Ensure padding is included in width calculation */
         order: 1;
         /* Thumbnails appear first */
-        margin-bottom: 0.25em;
-        /* Reduced space between thumbnails and image */
+        margin-bottom: 0.5em;
+        /* Slightly more space between thumbnails and image */
         /* Safari iOS specific fixes */
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
@@ -1494,6 +1513,9 @@
         /* Remove any separator lines on mobile */
         border-bottom: none !important;
         border-top: none !important;
+        /* Add subtle top border to separate from menu */
+        padding-top: 0.5vh !important;
+        /* Small padding at top for visual separation */
     }
 
     .thumbNails::-webkit-scrollbar {
@@ -1501,27 +1523,61 @@
         /* Hide scrollbar for Chrome, Safari, and Opera */
     }
 
+    /* Add subtle scroll indicator for mobile thumbnails */
+    .thumbNails::after {
+        content: '← swipe →';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 10px;
+        color: rgba(119, 72, 28, 0.5);
+        font-weight: 300;
+        letter-spacing: 1px;
+        animation: fadeInOut 3s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    @keyframes fadeInOut {
+
+        0%,
+        100% {
+            opacity: 0.3;
+        }
+
+        50% {
+            opacity: 0.7;
+        }
+    }
+
     .thumbNailPhoto {
-        width: 50px;
-        height: 50px;
-        /* Reduced size for more space */
+        width: 55px;
+        height: 55px;
+        /* Slightly larger for better touch targets */
         border-radius: 50%;
         /* Keep perfect circles on mobile */
         flex: 0 0 auto;
         /* Prevent flex shrinking */
-        border: none !important;
-        /* Remove border on mobile for cleaner look */
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        /* Subtle neutral border by default */
         background: transparent !important;
         /* Override any brown background on mobile */
         cursor: pointer;
-        transition: 0.4s ease-in-out;
-        filter: grayscale(50%);
-        opacity: 0.8;
+        transition: all 0.3s ease-in-out;
+        /* Smoother transitions */
+        filter: grayscale(60%);
+        /* Slightly more grayscale for better contrast */
+        opacity: 0.75;
+        /* Slightly more transparent for inactive state */
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
         /* Override any brown box-shadow */
         object-fit: cover;
-        margin: 0 3px;
-        /* Add small margin between thumbnails */
+        margin: 0 4px;
+        /* Slightly more margin between thumbnails */
+        /* Better touch target for mobile */
+        min-width: 44px;
+        min-height: 44px;
+        /* Apple's recommended minimum touch target size */
     }
 
     .thumbNailPhoto:first-child {
@@ -1537,11 +1593,12 @@
     .thumbNailPhoto.grayscale {
         filter: none !important;
         opacity: 1 !important;
-        transform: scale(1.05) !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
-        /* Use neutral shadow instead of brown on mobile */
-        border: none !important;
-        /* Ensure no border on active state for mobile */
+        transform: scale(1.1) !important;
+        /* Slightly larger scale for better visual feedback */
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+        /* Enhanced shadow for active state */
+        border: 2px solid #ffffff !important;
+        /* Clean white border for active state instead of brown */
         background: transparent !important;
         /* Ensure no brown background on active state for mobile */
     }
@@ -1550,8 +1607,10 @@
     .thumbNailPhoto,
     .thumbNailPhoto:hover,
     .thumbNailPhoto:active,
-    .thumbNailPhoto:focus {
-        border: none !important;
+    .thumbNailPhoto:focus,
+    .thumbNailPhoto:visited {
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        /* Subtle neutral border */
         background: transparent !important;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     }
@@ -1559,10 +1618,13 @@
     .thumbNailPhoto.grayscale,
     .thumbNailPhoto.grayscale:hover,
     .thumbNailPhoto.grayscale:active,
-    .thumbNailPhoto.grayscale:focus {
-        border: none !important;
+    .thumbNailPhoto.grayscale:focus,
+    .thumbNailPhoto.grayscale:visited {
+        border: 2px solid #ffffff !important;
+        /* Clean white border for all active states */
         background: transparent !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+        /* Enhanced shadow for all active states */
     }
 }
 
@@ -1623,6 +1685,57 @@
 }
 
 /* Re-enable pointer events for the image container */
-.currentPhoto > div {
+.currentPhoto>div {
     pointer-events: auto;
 }
+
+/* ========== MOBILE TOUCH ENHANCEMENTS ========== */
+@media (max-width: 767px) {
+
+    /* Add haptic feedback simulation for thumbnail taps */
+    .thumbNailPhoto:active {
+        transform: scale(0.95) !important;
+        transition: transform 0.1s ease !important;
+    }
+
+    /* Improve touch target area around thumbnails */
+    .thumbNailPhoto::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        z-index: -1;
+    }
+
+    /* Add subtle pull-to-refresh indicator */
+    .galleryContainer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(119, 72, 28, 0.3) 50%,
+                transparent 100%);
+        z-index: 1;
+    }
+
+    /* Improve image loading experience */
+    .masterImage {
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: opacity 0.3s ease;
+    }
+
+    /* Loading state for images */
+    .masterImage[src=""] {
+        opacity: 0.5;
+        filter: blur(2px);
+    }
+}
+
+/* ========== ADDITIONAL MOBILE REFINEMENTS ========== */
