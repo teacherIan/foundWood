@@ -7,14 +7,14 @@
     bottom: 0;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+    /* background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%); */
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 999999;
     overflow: hidden;
     font-family: 'Poppins', sans-serif;
-    animation: backgroundPulse 6s ease-in-out infinite;
+    /* animation: backgroundPulse 6s ease-in-out infinite; */
 }
 
 .loading-screen.exiting {

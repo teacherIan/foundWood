@@ -102,11 +102,15 @@
 /* Fallback for devices that don't support backdrop-filter */
 @supports not (backdrop-filter: blur(12px)) {
     .explanationContent {
-        background: rgba(119, 72, 28, 0.3) !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
     }
 
     .explanationContent::before {
-        display: none;
+        background: linear-gradient(135deg,
+                rgba(119, 72, 28, 0.08) 0%,
+                rgba(119, 72, 28, 0.04) 50%,
+                rgba(119, 72, 28, 0.06) 100%) !important;
     }
 }
 
@@ -130,12 +134,12 @@
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
 }
 
-/* Mobile portrait optimizations - glass effect with anti-flickering */
+/* Mobile portrait optimizations - enhanced glass effect with better mobile support */
 @media (orientation: portrait) and (max-width: 768px) {
     .explanationContent {
-        background: rgba(255, 255, 255, 0.12) !important;
-        backdrop-filter: blur(10px) saturate(160%) !important;
-        -webkit-backdrop-filter: blur(10px) saturate(160%) !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(10px) saturate(160%) brightness(1.1) !important;
+        -webkit-backdrop-filter: blur(10px) saturate(160%) brightness(1.1) !important;
         padding: 12px;
         min-height: 120px;
         max-width: 280px;
@@ -153,9 +157,9 @@
 
     .explanationContent::before {
         background: linear-gradient(135deg,
-                rgba(119, 72, 28, 0.15) 0%,
-                rgba(119, 72, 28, 0.08) 50%,
-                rgba(119, 72, 28, 0.12) 100%) !important;
+                rgba(119, 72, 28, 0.08) 0%,
+                rgba(119, 72, 28, 0.04) 50%,
+                rgba(119, 72, 28, 0.06) 100%) !important;
     }
 
     .explanationText {
@@ -171,6 +175,21 @@
         font-size: 9px;
         line-height: 1.4;
         margin: 0 0 8px 0;
+    }
+
+    /* Special fallback for mobile devices with poor backdrop-filter support */
+    @supports not (backdrop-filter: blur(10px)) {
+        .explanationContent {
+            background: rgba(255, 255, 255, 0.15) !important;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15) !important;
+        }
+
+        .explanationContent::before {
+            background: linear-gradient(135deg,
+                    rgba(119, 72, 28, 0.06) 0%,
+                    rgba(119, 72, 28, 0.03) 50%,
+                    rgba(119, 72, 28, 0.05) 100%) !important;
+        }
     }
 }
 
@@ -271,12 +290,12 @@
 
 /* Remove duplicate mobile portrait rule that was causing conflicts */
 
-/* Small screen adjustments (very small phones) - enhanced glass effect */
+/* Small screen adjustments (very small phones) - lighter glass effect */
 @media (max-width: 480px) and (orientation: portrait) {
     .explanationContent {
-        background: rgba(255, 255, 255, 0.15) !important;
-        backdrop-filter: blur(8px) saturate(140%) !important;
-        -webkit-backdrop-filter: blur(8px) saturate(140%) !important;
+        background: rgba(255, 255, 255, 0.12) !important;
+        backdrop-filter: blur(8px) saturate(140%) brightness(1.05) !important;
+        -webkit-backdrop-filter: blur(8px) saturate(140%) brightness(1.05) !important;
         padding: 8px 12px;
         border-radius: 10px;
         max-width: 250px;
@@ -294,9 +313,9 @@
 
     .explanationContent::before {
         background: linear-gradient(135deg,
-                rgba(119, 72, 28, 0.18) 0%,
-                rgba(119, 72, 28, 0.1) 50%,
-                rgba(119, 72, 28, 0.15) 100%) !important;
+                rgba(119, 72, 28, 0.06) 0%,
+                rgba(119, 72, 28, 0.03) 50%,
+                rgba(119, 72, 28, 0.05) 100%) !important;
     }
 
     .explanationContent .galleryTypeHeader {
@@ -309,14 +328,29 @@
         line-height: 1.3;
         margin-bottom: 6px;
     }
+
+    /* Fallback for very small phones with poor backdrop-filter support */
+    @supports not (backdrop-filter: blur(8px)) {
+        .explanationContent {
+            background: rgba(255, 255, 255, 0.18) !important;
+            box-shadow: 0 4px 20px rgba(31, 38, 135, 0.1) !important;
+        }
+
+        .explanationContent::before {
+            background: linear-gradient(135deg,
+                    rgba(119, 72, 28, 0.05) 0%,
+                    rgba(119, 72, 28, 0.02) 50%,
+                    rgba(119, 72, 28, 0.04) 100%) !important;
+        }
+    }
 }
 
-/* Very small screens (older iPhones, Android phones) - optimized glass effect */
+/* Very small screens (older iPhones, Android phones) - minimal glass effect */
 @media (max-width: 375px) and (orientation: portrait) {
     .explanationContent {
-        background: rgba(255, 255, 255, 0.18) !important;
-        backdrop-filter: blur(6px) saturate(120%) !important;
-        -webkit-backdrop-filter: blur(6px) saturate(120%) !important;
+        background: rgba(255, 255, 255, 0.15) !important;
+        backdrop-filter: blur(6px) saturate(120%) brightness(1.02) !important;
+        -webkit-backdrop-filter: blur(6px) saturate(120%) brightness(1.02) !important;
         padding: 6px 10px;
         border-radius: 8px;
         max-width: 220px;
@@ -334,9 +368,9 @@
 
     .explanationContent::before {
         background: linear-gradient(135deg,
-                rgba(119, 72, 28, 0.2) 0%,
-                rgba(119, 72, 28, 0.12) 50%,
-                rgba(119, 72, 28, 0.18) 100%) !important;
+                rgba(119, 72, 28, 0.05) 0%,
+                rgba(119, 72, 28, 0.02) 50%,
+                rgba(119, 72, 28, 0.04) 100%) !important;
     }
 
     .explanationContent .galleryTypeHeader {
@@ -348,6 +382,21 @@
         font-size: 7px;
         line-height: 1.2;
         margin-bottom: 4px;
+    }
+
+    /* Fallback for older devices with no backdrop-filter support */
+    @supports not (backdrop-filter: blur(6px)) {
+        .explanationContent {
+            background: rgba(255, 255, 255, 0.22) !important;
+            box-shadow: 0 2px 15px rgba(31, 38, 135, 0.08) !important;
+        }
+
+        .explanationContent::before {
+            background: linear-gradient(135deg,
+                    rgba(119, 72, 28, 0.04) 0%,
+                    rgba(119, 72, 28, 0.02) 50%,
+                    rgba(119, 72, 28, 0.03) 100%) !important;
+        }
     }
 }
 
