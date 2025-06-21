@@ -173,7 +173,7 @@
         padding-top: 1vh !important;
         /* Minimal padding for iPad Pro - reduced from 2vh to 1vh */
     }
-    
+
     .currentPhoto {
         height: calc(100vh - 2vh) !important;
         /* Maximize height on iPad Pro - increased from calc(100vh - 4vh) */
@@ -182,7 +182,7 @@
         width: 100% !important;
         /* Use full available width */
     }
-    
+
     .productPanel {
         min-width: 220px !important;
         /* Ensure left panel doesn't take too much space */

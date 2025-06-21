@@ -333,12 +333,33 @@ export default function Gallery({
         const overflowX = Math.max(0, scaledWidth - rect.width);
         const overflowY = Math.max(0, scaledHeight - rect.height);
 
-        return {
-          minX: -(overflowX / 2) - 60,
-          maxX: overflowX / 2 + 60,
-          minY: -(overflowY / 2) - 60,
-          maxY: overflowY / 2 + 60,
+        // More generous bounds calculation for better accessibility
+        // Use different margins for X and Y to account for different scaling behaviors
+        const marginX = Math.min(40, overflowX * 0.1); // 10% of overflow or 40px max
+        const marginY = Math.min(60, overflowY * 0.15); // 15% of overflow or 60px max for better vertical access
+
+        const bounds = {
+          minX: -(overflowX / 2) - marginX,
+          maxX: overflowX / 2 + marginX,
+          minY: -(overflowY / 2) - marginY,
+          maxY: overflowY / 2 + marginY,
         };
+
+        // Debug logging for bounds calculation - only when bounds change significantly
+        if (process.env.NODE_ENV !== 'production' && Math.abs(overflowY) > 10) {
+          console.log('Pan bounds calculation:', {
+            containerSize: { width: rect.width, height: rect.height },
+            scaledSize: { width: scaledWidth, height: scaledHeight },
+            overflow: { x: overflowX, y: overflowY },
+            margins: { x: marginX, y: marginY },
+            bounds,
+            scale,
+            'Can pan to top?': bounds.maxY > 0,
+            'Can pan to bottom?': bounds.minY < 0,
+          });
+        }
+
+        return bounds;
       } else {
         // Desktop: percentage-based bounds for subtle hover effect
         return {
@@ -400,22 +421,33 @@ export default function Gallery({
   const bind = useGesture(
     {
       // Unified drag handling (mouse on desktop, touch on mobile)
-      onDrag: ({ offset: [x, y], pinching, cancel, velocity, distance, direction }) => {
+      onDrag: ({
+        offset: [x, y],
+        pinching,
+        cancel,
+        velocity,
+        distance,
+        direction,
+      }) => {
         if (pinching) return cancel();
 
-        console.log('Drag gesture:', { x, y, isMobile, pinching, distance });
+        // Reduce console noise - only log important events
+        if (distance > 50) {
+          console.log('Drag gesture:', { x, y, isMobile, pinching, distance });
+        }
 
         // Check for swipe gesture (fast movement with sufficient distance)
         if (direction && velocity && distance > 100) {
           const [dx] = direction;
           const [vx] = velocity;
-          
+
           if (Math.abs(dx) > 0.5 && Math.abs(vx) > 0.5) {
             console.log('Swipe detected:', {
               direction: dx,
               velocity: vx,
               distance,
-              threshold: Math.abs(dx) > 0.5 && Math.abs(vx) > 0.5 && distance > 100,
+              threshold:
+                Math.abs(dx) > 0.5 && Math.abs(vx) > 0.5 && distance > 100,
             });
 
             const newIndex =
@@ -458,6 +490,20 @@ export default function Gallery({
 
         const clampedX = Math.max(bounds.minX, Math.min(bounds.maxX, x));
         const clampedY = Math.max(bounds.minY, Math.min(bounds.maxY, y));
+
+        // Debug pan clamping when trying to reach extremes
+        if (
+          process.env.NODE_ENV !== 'production' &&
+          (Math.abs(y) > 50 || Math.abs(clampedY - y) > 5)
+        ) {
+          console.log('Pan clamping:', {
+            originalY: y,
+            clampedY,
+            boundsY: { min: bounds.minY, max: bounds.maxY },
+            wasClamped: clampedY !== y,
+            scale: getCurrentScale(),
+          });
+        }
 
         setGestureState((prev) => ({ ...prev, x: clampedX, y: clampedY }));
 
@@ -503,17 +549,20 @@ export default function Gallery({
             let newX = prevState.x + panAdjustX;
             let newY = prevState.y + panAdjustY;
 
-            // Calculate bounds with new scale
+            // Calculate bounds with new scale - use consistent calculation
             const scaledWidth = rect.width * constrainedScale;
             const scaledHeight = rect.height * constrainedScale;
             const overflowX = Math.max(0, scaledWidth - rect.width);
             const overflowY = Math.max(0, scaledHeight - rect.height);
 
+            // Use same generous bounds as in drag handler
+            const marginX = Math.min(40, overflowX * 0.1);
+            const marginY = Math.min(60, overflowY * 0.15);
             const bounds = {
-              minX: -(overflowX / 2) - 60,
-              maxX: overflowX / 2 + 60,
-              minY: -(overflowY / 2) - 60,
-              maxY: overflowY / 2 + 60,
+              minX: -(overflowX / 2) - marginX,
+              maxX: overflowX / 2 + marginX,
+              minY: -(overflowY / 2) - marginY,
+              maxY: overflowY / 2 + marginY,
             };
 
             newX = Math.max(bounds.minX, Math.min(bounds.maxX, newX));
@@ -1046,7 +1095,8 @@ export default function Gallery({
     const isMobileLandscape =
       screenWidth >= 600 && screenWidth <= 768 && !isPortrait;
     const isTablet = screenWidth >= 768 && screenWidth <= 1024;
-    const isTabletLandscape = screenWidth >= 768 && screenWidth <= 1024 && !isPortrait;
+    const isTabletLandscape =
+      screenWidth >= 768 && screenWidth <= 1024 && !isPortrait;
     const isPadPro = screenWidth >= 1024 && screenWidth <= 1400 && !isPortrait; // iPad Pro landscape
     const isSmallLaptop = screenWidth >= 1200 && screenWidth <= 1439;
     const isLargeDesktop = screenWidth >= 1440 && screenWidth <= 1919;
@@ -1138,16 +1188,29 @@ export default function Gallery({
               }
             : 'no window',
         calculatedDimensions: dimensions,
-        heightUtilization: dimensions ? `${((dimensions.height / window.innerHeight) * 100).toFixed(1)}%` : 'N/A',
-        widthUtilization: dimensions ? `${((dimensions.width / window.innerWidth) * 100).toFixed(1)}%` : 'N/A',
+        heightUtilization: dimensions
+          ? `${((dimensions.height / window.innerHeight) * 100).toFixed(1)}%`
+          : 'N/A',
+        widthUtilization: dimensions
+          ? `${((dimensions.width / window.innerWidth) * 100).toFixed(1)}%`
+          : 'N/A',
         deviceDetection: {
           isTablet: window.innerWidth >= 768 && window.innerWidth <= 1024,
-          isPadPro: window.innerWidth >= 1024 && window.innerWidth <= 1400 && window.innerWidth > window.innerHeight,
+          isPadPro:
+            window.innerWidth >= 1024 &&
+            window.innerWidth <= 1400 &&
+            window.innerWidth > window.innerHeight,
           isLandscape: window.innerWidth > window.innerHeight,
         },
       });
     }
-  }, [showGallery, galleryTypeArr, currentPhoto, currentItem, calculateImageDimensions]);
+  }, [
+    showGallery,
+    galleryTypeArr,
+    currentPhoto,
+    currentItem,
+    calculateImageDimensions,
+  ]);
 
   // Crossfade transition for master image
   const imageTransitions = useTransition(currentItem?.img, {
@@ -1298,10 +1361,17 @@ export default function Gallery({
                       const screenWidth = window.innerWidth;
                       const screenHeight = window.innerHeight;
                       const isPortrait = screenHeight > screenWidth;
-                      const isPadPro = screenWidth >= 1024 && screenWidth <= 1400 && !isPortrait;
-                      const isTabletLandscape = screenWidth >= 768 && screenWidth <= 1024 && !isPortrait;
-                      const isLargeMobile = screenWidth >= 600 && screenWidth <= 768 && !isPortrait;
-                      
+                      const isPadPro =
+                        screenWidth >= 1024 &&
+                        screenWidth <= 1400 &&
+                        !isPortrait;
+                      const isTabletLandscape =
+                        screenWidth >= 768 &&
+                        screenWidth <= 1024 &&
+                        !isPortrait;
+                      const isLargeMobile =
+                        screenWidth >= 600 && screenWidth <= 768 && !isPortrait;
+
                       let dynamicHeight;
                       if (isPadPro) {
                         dynamicHeight = '90svh'; // iPad Pro landscape gets more height
@@ -1312,8 +1382,10 @@ export default function Gallery({
                       } else {
                         dynamicHeight = '40svh'; // Small mobile portrait stays the same
                       }
-                      
-                      console.log(`Dynamic height calculation - Screen: ${screenWidth}x${screenHeight}, isPadPro: ${isPadPro}, isTabletLandscape: ${isTabletLandscape}, isLargeMobile: ${isLargeMobile}, Height: ${dynamicHeight}`);
+
+                      console.log(
+                        `Dynamic height calculation - Screen: ${screenWidth}x${screenHeight}, isPadPro: ${isPadPro}, isTabletLandscape: ${isTabletLandscape}, isLargeMobile: ${isLargeMobile}, Height: ${dynamicHeight}`
+                      );
                       return dynamicHeight;
                     })()
                   : `${calculateImageDimensions().height}px`,
@@ -1416,6 +1488,18 @@ export default function Gallery({
                     >
                       x:{gestureState.x.toFixed(0)} y:
                       {gestureState.y.toFixed(0)}
+                      <br />
+                      Scale: {gestureState.scale.toFixed(2)}
+                      <br />
+                      Pan bounds:{' '}
+                      {(() => {
+                        const container = imageContainerRef.current;
+                        if (!container) return 'N/A';
+                        const bounds = getBounds(gestureState.scale);
+                        return `Y: ${bounds.minY.toFixed(
+                          0
+                        )} to ${bounds.maxY.toFixed(0)}`;
+                      })()}
                     </div>
                   )}
                 </div>
