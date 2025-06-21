@@ -767,23 +767,18 @@ function App() {
     if (state.showGallery) {
       // Prevent body from scrolling when gallery is open
       document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.height = '100%';
+      // Allow pan gestures for internal scrolling
+      document.body.style.touchAction = 'pan-y';
     } else {
       // Restore normal scrolling when gallery is closed
       document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.height = '';
+      document.body.style.touchAction = '';
     }
 
     // Cleanup function to restore scrolling on unmount
     return () => {
       document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.height = '';
+      document.body.style.touchAction = '';
     };
   }, [state.showGallery]);
 

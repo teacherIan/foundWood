@@ -851,6 +851,28 @@
     /* Safari smooth scrolling */
 }
 
+/* Add scroll indicator for mobile when content overflows */
+.furnitureDescription::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, rgba(119, 72, 28, 0.3), transparent);
+    border-radius: 2px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Show scroll indicator when content is scrollable */
+.furnitureDescription:hover::after,
+.furnitureDescription:focus::after {
+    opacity: 1;
+}
+
 .arrow {
     animation: bounce 2s infinite;
     display: inline-block;
@@ -1320,6 +1342,8 @@
         /* Fixed height to prevent page scrolling */
         overflow: hidden;
         /* Prevent the entire page from scrolling */
+        /* Allow vertical pan for text scrolling, but prevent horizontal pan */
+        touch-action: pan-y;
         /* Three-section layout distribution */
         display: flex;
         align-items: stretch;
@@ -1379,12 +1403,12 @@
         /* Take up all remaining space in the container */
         min-height: 0;
         /* Allow flex shrinking if needed */
-        max-height: calc(100vh - 30vh);
-        /* Fallback for browsers without svh support */
-        max-height: calc(100svh - 30svh);
-        /* Constrain height using svh, leaving space for thumbnails and image */
-        overflow: hidden;
-        /* Prevent the section itself from scrolling */
+        max-height: calc(100vh - 25vh);
+        /* Fallback - more space for text */
+        max-height: calc(100svh - 25svh);
+        /* Use svh - reduced constraint to give more space for text */
+        overflow: visible;
+        /* Allow the description to handle its own scrolling */
         /* Add subtle background for better text readability */
         background: linear-gradient(to bottom,
                 rgba(245, 245, 245, 0.8) 0%,
@@ -1404,11 +1428,11 @@
         font-weight: bold;
         line-height: 1.2;
         /* Better line spacing */
-        /* Make text non-selectable */
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
+        /* Allow text selection for better accessibility */
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
         /* Override any desktop text-stroke styling on mobile */
         -webkit-text-stroke: none !important;
         -webkit-text-fill-color: var(--brown) !important;
@@ -1428,8 +1452,10 @@
         color: var(--brown);
         overflow-y: auto;
         /* Enable scrolling only when content exceeds container */
-        padding: 0 1em;
-        /* Increased horizontal padding for better readability */
+        overflow-x: hidden;
+        /* Prevent horizontal scrolling */
+        padding: 0 1em 2em 1em;
+        /* Added bottom padding to ensure content is reachable */
         margin-top: 0.8vh;
         /* Fallback for browsers without svh support */
         margin-top: 0.8svh;
@@ -1438,11 +1464,15 @@
         /* Take up all remaining space in productInfo container */
         min-height: 0;
         /* Allow flex shrinking if needed */
-        /* Make text non-selectable */
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
+        max-height: 25vh;
+        /* Fallback - increased height to allow more content */
+        max-height: 25svh;
+        /* Use svh - increased from 30svh to allow more text */
+        /* Allow text selection for better user experience */
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
         /* Custom scrollbar styling for mobile */
         scrollbar-width: thin;
         scrollbar-color: rgba(119, 72, 28, 0.4) transparent;
@@ -1456,6 +1486,14 @@
         /* Ensure proper scrolling behavior */
         overscroll-behavior: contain;
         -webkit-overscroll-behavior: contain;
+        /* Add momentum scrolling for better mobile experience */
+        scroll-behavior: smooth;
+        /* Ensure proper touch interaction - allow vertical scrolling */
+        touch-action: pan-y;
+        /* Prevent text selection from interfering with scrolling */
+        -webkit-user-drag: none;
+        /* Add visual indicator that content is scrollable */
+        position: relative;
     }
 
     /* Custom scrollbar for description on webkit browsers */
