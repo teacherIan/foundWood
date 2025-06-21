@@ -68,23 +68,45 @@
 }
 
 .explanationContent {
-    background: rgba(119, 72, 28, 0.25);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
     border-radius: 20px;
     padding: 24px;
-    border: 2px solid rgba(119, 72, 28, 0.4);
-    box-shadow: 0 8px 32px rgba(119, 72, 28, 0.25);
-    /* Ensure consistent background on mobile */
-    will-change: auto;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    /* Ensure consistent glass effect on mobile */
+    will-change: backdrop-filter;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add subtle colored tint overlay for glass effect */
+.explanationContent::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+            rgba(119, 72, 28, 0.1) 0%,
+            rgba(119, 72, 28, 0.05) 50%,
+            rgba(119, 72, 28, 0.08) 100%);
+    border-radius: inherit;
+    z-index: -1;
 }
 
 /* Fallback for devices that don't support backdrop-filter */
-@supports not (backdrop-filter: blur(8px)) {
+@supports not (backdrop-filter: blur(12px)) {
     .explanationContent {
-        background: rgba(119, 72, 28, 0.4) !important;
+        background: rgba(119, 72, 28, 0.3) !important;
+    }
+
+    .explanationContent::before {
+        display: none;
     }
 }
 
@@ -108,22 +130,32 @@
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
 }
 
-/* Mobile portrait optimizations - consolidated and fixed */
+/* Mobile portrait optimizations - glass effect with anti-flickering */
 @media (orientation: portrait) and (max-width: 768px) {
     .explanationContent {
-        background: rgba(119, 72, 28, 0.35) !important;
-        backdrop-filter: blur(6px) !important;
-        -webkit-backdrop-filter: blur(6px) !important;
+        background: rgba(255, 255, 255, 0.12) !important;
+        backdrop-filter: blur(10px) saturate(160%) !important;
+        -webkit-backdrop-filter: blur(10px) saturate(160%) !important;
         padding: 12px;
         min-height: 120px;
         max-width: 280px;
         margin: 0 auto;
         border-radius: 12px;
-        /* Prevent flickering on mobile */
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
+        /* Prevent flickering on mobile with forced GPU acceleration */
         -webkit-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0);
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
+        will-change: backdrop-filter, transform;
+        isolation: isolate;
+    }
+
+    .explanationContent::before {
+        background: linear-gradient(135deg,
+                rgba(119, 72, 28, 0.15) 0%,
+                rgba(119, 72, 28, 0.08) 50%,
+                rgba(119, 72, 28, 0.12) 100%) !important;
     }
 
     .explanationText {
@@ -239,23 +271,32 @@
 
 /* Remove duplicate mobile portrait rule that was causing conflicts */
 
-/* Small screen adjustments (very small phones) */
+/* Small screen adjustments (very small phones) - enhanced glass effect */
 @media (max-width: 480px) and (orientation: portrait) {
     .explanationContent {
-        background: rgba(119, 72, 28, 0.4) !important;
-        backdrop-filter: blur(4px) !important;
-        -webkit-backdrop-filter: blur(4px) !important;
+        background: rgba(255, 255, 255, 0.15) !important;
+        backdrop-filter: blur(8px) saturate(140%) !important;
+        -webkit-backdrop-filter: blur(8px) saturate(140%) !important;
         padding: 8px 12px;
         border-radius: 10px;
         max-width: 250px;
         min-height: 100px;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
         /* Enhanced anti-flickering for small screens */
         -webkit-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0);
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
-        -webkit-perspective: 1000px;
-        perspective: 1000px;
+        will-change: backdrop-filter, transform;
+        isolation: isolate;
+        contain: layout style paint;
+    }
+
+    .explanationContent::before {
+        background: linear-gradient(135deg,
+                rgba(119, 72, 28, 0.18) 0%,
+                rgba(119, 72, 28, 0.1) 50%,
+                rgba(119, 72, 28, 0.15) 100%) !important;
     }
 
     .explanationContent .galleryTypeHeader {
@@ -270,24 +311,32 @@
     }
 }
 
-/* Very small screens (older iPhones, Android phones) */
+/* Very small screens (older iPhones, Android phones) - optimized glass effect */
 @media (max-width: 375px) and (orientation: portrait) {
     .explanationContent {
-        background: rgba(119, 72, 28, 0.45) !important;
-        backdrop-filter: blur(3px) !important;
-        -webkit-backdrop-filter: blur(3px) !important;
+        background: rgba(255, 255, 255, 0.18) !important;
+        backdrop-filter: blur(6px) saturate(120%) !important;
+        -webkit-backdrop-filter: blur(6px) saturate(120%) !important;
         padding: 6px 10px;
         border-radius: 8px;
         max-width: 220px;
         min-height: 90px;
+        border: 1px solid rgba(255, 255, 255, 0.35) !important;
         /* Maximum anti-flickering for very small screens */
         -webkit-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0);
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
-        -webkit-perspective: 1000px;
-        perspective: 1000px;
-        will-change: transform;
+        will-change: backdrop-filter, transform;
+        isolation: isolate;
+        contain: layout style paint;
+    }
+
+    .explanationContent::before {
+        background: linear-gradient(135deg,
+                rgba(119, 72, 28, 0.2) 0%,
+                rgba(119, 72, 28, 0.12) 50%,
+                rgba(119, 72, 28, 0.18) 100%) !important;
     }
 
     .explanationContent .galleryTypeHeader {
