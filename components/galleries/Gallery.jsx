@@ -262,7 +262,12 @@ export default function Gallery({
 
   // Spring animations
   const [gallerySpring, galleryApi] = useSpring(() => ({
-    opacity: 1,
+    opacity: 0,
+    config: {
+      tension: 80,
+      friction: 30,
+      mass: 1,
+    },
   }));
 
   const [infoSpring, infoApi] = useSpring(() => ({
@@ -627,9 +632,19 @@ export default function Gallery({
 
   // Animate gallery visibility
   useEffect(() => {
-    galleryApi.start({
-      opacity: showGallery ? 1 : 0,
-    });
+    if (showGallery) {
+      // Smooth entrance animation - just a clean fade in
+      galleryApi.start({
+        opacity: 1,
+        delay: 200, // Short delay for seamless transition
+      });
+    } else {
+      // Quick exit animation
+      galleryApi.start({
+        opacity: 0,
+        delay: 0,
+      });
+    }
   }, [showGallery, galleryApi]);
 
   // Memoized handlers

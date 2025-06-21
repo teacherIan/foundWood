@@ -1,0 +1,61 @@
+/* Gallery Loading Screen Custom Styles */
+/* Override loading screen text colors for gallery-specific loading */
+
+.gallery-loading-screen .loading-title {
+    color: white;
+    -webkit-text-stroke: 1px #77481c;
+    -webkit-text-fill-color: white;
+    filter: drop-shadow(0.5px 0.5px 1px rgba(0, 0, 0, 0.6));
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-loading-screen .loading-subtitle {
+    color: white;
+    -webkit-text-stroke: 1px #77481c;
+    -webkit-text-fill-color: white;
+    filter: drop-shadow(0.8px 0.8px 1.5px rgba(0, 0, 0, 0.7));
+    text-shadow: 1.5px 1.5px 3px rgba(0, 0, 0, 0.4);
+}
+
+.gallery-loading-screen .loading-tagline {
+    color: white;
+    -webkit-text-stroke: 1px #77481c;
+    -webkit-text-fill-color: white;
+    filter: drop-shadow(0.5px 0.5px 1px rgba(0, 0, 0, 0.6));
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-loading-screen .loading-status {
+    color: white;
+    -webkit-text-stroke: 1px #77481c;
+    -webkit-text-fill-color: white;
+    filter: drop-shadow(0.5px 0.5px 1px rgba(0, 0, 0, 0.6));
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-loading-screen .loading-quote .quote-text {
+    color: white;
+    -webkit-text-stroke: 1px #77481c;
+    -webkit-text-fill-color: white;
+    filter: drop-shadow(0.5px 0.5px 1px rgba(0, 0, 0, 0.6));
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure spinner maintains good visibility */
+.gallery-loading-screen .loading-spinner {
+    border-top-color: white;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+}
+
+/* Optional: Add subtle background overlay for better text readability */
+.gallery-loading-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    z-index: -1;
+}

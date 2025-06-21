@@ -14,6 +14,7 @@ import Gallery from '../components/galleries/Gallery';
 import GalleryTypeSelector from '../components/select_gallery/GalleryTypeSelector';
 import NewCanvas from '../components/experience/Experience';
 import LoadingScreen from '../components/loading/LoadingScreen';
+import GalleryLoadingScreen from '../components/loading/GalleryLoadingScreen';
 import FontFaceObserver from 'fontfaceobserver';
 import {
   useSpring,
@@ -425,6 +426,7 @@ const initialState = {
   activeGalleryType: 1,
   showTypes: false,
   showGallery: false,
+  showGalleryLoading: false, // NEW: Track gallery loading screen
   showContactPage: false,
   showDetails: true,
   galleryTypeArr: [],
@@ -501,7 +503,21 @@ function reducer(state, action) {
         ...state,
         showGallery: true,
         showTypes: false,
+        showGalleryLoading: false, // Hide gallery loading when showing actual gallery
         showDetails: false,
+      };
+    case 'SHOW_GALLERY_LOADING':
+      return {
+        ...state,
+        showGalleryLoading: true,
+        showTypes: false,
+        showGallery: false,
+        showDetails: false,
+      };
+    case 'HIDE_GALLERY_LOADING':
+      return {
+        ...state,
+        showGalleryLoading: false,
       };
     case 'TOGGLE_CONTACT':
       return {
@@ -517,6 +533,7 @@ function reducer(state, action) {
         isAnimating: true,
         showTypes: false,
         showGallery: false,
+        showGalleryLoading: false, // Hide gallery loading screen when resetting
         showDetails: false,
         showInfographic: false,
       };
@@ -599,6 +616,10 @@ function App() {
   }, []);
 
   const handleGalleryButtonClickCallback = useCallback(() => {
+    dispatch({ type: 'SHOW_GALLERY_LOADING' });
+  }, []);
+
+  const handleGalleryLoadingCompleteCallback = useCallback(() => {
     dispatch({ type: 'SHOW_GALLERY' });
   }, []);
 
@@ -635,9 +656,12 @@ function App() {
     dispatch({ type: 'RESET_VIEW' });
   }, []); // TEMPORARILY DISABLED: Removed isIOSSafariBrowser, triggerCleanup dependencies
 
-  // Home screen logic: not showing gallery, contact, or types
+  // Home screen logic: not showing gallery, contact, types, or gallery loading
   const isHomeScreen =
-    !state.showGallery && !state.showContactPage && !state.showTypes;
+    !state.showGallery &&
+    !state.showContactPage &&
+    !state.showTypes &&
+    !state.showGalleryLoading;
 
   // Debug: Simple state logging
   useEffect(() => {
@@ -888,23 +912,37 @@ function App() {
             style={(() => {
               const baseStyles = {
                 pointerEvents:
-                  state.showContactPage || state.showTypes ? 'none' : 'auto',
+                  state.showContactPage ||
+                  state.showTypes ||
+                  state.showGalleryLoading
+                    ? 'none'
+                    : 'auto',
                 filter:
-                  state.showContactPage || state.showTypes
+                  state.showContactPage ||
+                  state.showTypes ||
+                  state.showGalleryLoading
                     ? 'blur(20px)'
                     : 'none',
                 WebkitFilter:
-                  state.showContactPage || state.showTypes
+                  state.showContactPage ||
+                  state.showTypes ||
+                  state.showGalleryLoading
                     ? 'blur(20px)'
                     : 'none',
                 MozFilter:
-                  state.showContactPage || state.showTypes
+                  state.showContactPage ||
+                  state.showTypes ||
+                  state.showGalleryLoading
                     ? 'blur(20px)'
                     : 'none',
                 transition:
                   'filter 0.2s ease-out, -webkit-filter 0.2s ease-out, -moz-filter 0.2s ease-out',
                 willChange:
-                  state.showContactPage || state.showTypes ? 'filter' : 'auto',
+                  state.showContactPage ||
+                  state.showTypes ||
+                  state.showGalleryLoading
+                    ? 'filter'
+                    : 'auto',
                 transform: 'translateZ(0)',
               };
 
@@ -917,6 +955,7 @@ function App() {
               showContactPage={state.showContactPage}
               showTypes={state.showTypes}
               showGallery={state.showGallery}
+              showGalleryLoading={state.showGalleryLoading}
               onSplatLoaded={handleSplatLoadedCallback}
               imagesLoaded={state.imagesLoaded}
               initialLoadComplete={state.initialLoadComplete}
@@ -929,6 +968,14 @@ function App() {
       {/* Loading Screen Component */}
       {shouldShowLoading && (
         <LoadingScreen onComplete={handleLoadingComplete} />
+      )}
+
+      {/* Gallery Loading Screen Component */}
+      {state.showGalleryLoading && (
+        <GalleryLoadingScreen
+          galleryType={state.activeGalleryTypeString}
+          onComplete={handleGalleryLoadingCompleteCallback}
+        />
       )}
     </>
   );
