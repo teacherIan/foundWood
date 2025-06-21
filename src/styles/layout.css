@@ -80,7 +80,7 @@
     box-shadow: var(--shadow-brand);
     border-radius: var(--radius-full);
     padding: var(--space-2) var(--space-4);
-    -webkit-text-stroke: 2px var(--primary);
+    -webkit-text-stroke: 1px var(--primary);
     color: var(--white);
     background: transparent;
     line-height: 1.2;
@@ -214,5 +214,20 @@ canvas {
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+/* ===== MOBILE OPTIMIZATIONS ===== */
+/* Small mobile devices */
+@media (max-width: 480px) {
+    .menu-item {
+        -webkit-text-stroke: 0.5px var(--primary);
+    }
+}
+
+/* Standard mobile devices */
+@media (max-width: 768px) {
+    .menu-item {
+        -webkit-text-stroke: 0.75px var(--primary);
     }
 }
