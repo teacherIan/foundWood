@@ -78,6 +78,32 @@ const DraggableThumbnails = memo(
     const [isDragging, setIsDragging] = useState(false);
     const isMobile = window.innerWidth < 768 || 'ontouchstart' in window;
 
+    // Filter out non-DOM props from gesture binding
+    const getFilteredBindProps = useCallback((bindProps) => {
+      if (!bindProps) return {};
+
+      const {
+        onSwipe,
+        onPinch,
+        onWheel,
+        onDrag,
+        onHover,
+        onPinchStart,
+        onPinchEnd,
+        onDragStart,
+        onDragEnd,
+        onWheelStart,
+        onWheelEnd,
+        onSwipeStart,
+        onSwipeEnd,
+        onHoverStart,
+        onHoverEnd,
+        ...domProps
+      } = bindProps;
+
+      return domProps;
+    }, []);
+
     // Unified gesture handling for thumbnails
     const bind = useGesture(
       {
@@ -160,11 +186,11 @@ const DraggableThumbnails = memo(
       <div
         ref={containerRef}
         className="thumbNails"
-        {...bind()}
+        {...getFilteredBindProps(bind())}
         style={{
           cursor: isMobile ? 'default' : isDragging ? 'grabbing' : 'grab',
           userSelect: 'none',
-          touchAction: isMobile ? 'pan-x' : 'none',
+          touchAction: isMobile ? 'pan-x pinch-zoom' : 'none',
           outline: 'none',
         }}
       >
@@ -344,6 +370,32 @@ export default function Gallery({
     });
   }, [isMobile, imageApi]);
 
+  // Filter out non-DOM props from gesture binding
+  const getFilteredBindProps = useCallback((bindProps) => {
+    if (!bindProps) return {};
+
+    const {
+      onSwipe,
+      onPinch,
+      onWheel,
+      onDrag,
+      onHover,
+      onPinchStart,
+      onPinchEnd,
+      onDragStart,
+      onDragEnd,
+      onWheelStart,
+      onWheelEnd,
+      onSwipeStart,
+      onSwipeEnd,
+      onHoverStart,
+      onHoverEnd,
+      ...domProps
+    } = bindProps;
+
+    return domProps;
+  }, []);
+
   // Unified gesture handlers with @use-gesture/react
   const bind = useGesture(
     {
@@ -518,6 +570,7 @@ export default function Gallery({
       },
       wheel: {
         enabled: isDesktop,
+        eventOptions: { passive: false }, // Allow preventDefault for wheel events
       },
       swipe: {
         enabled: true,
@@ -1205,7 +1258,7 @@ export default function Gallery({
             {/* Enhanced Photo Section with gesture support */}
             <div
               ref={imageContainerRef}
-              {...bind()} // Apply unified gesture handlers
+              {...getFilteredBindProps(bind())} // Apply filtered gesture handlers
               style={{
                 position: 'relative',
                 width: isMobile

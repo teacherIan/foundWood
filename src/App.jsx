@@ -73,8 +73,7 @@ const AnimatedMenuItem = memo(
         if (!isTouchDevice || disabled) return;
         setTouchStarted(true);
         setPressed(true);
-        // Prevent mouse events from firing after touch
-        e.preventDefault();
+        // Don't preventDefault on passive listeners - let the gesture library handle it
       },
       [isTouchDevice, disabled]
     );
@@ -88,7 +87,7 @@ const AnimatedMenuItem = memo(
 
         // Call onClick directly for touch devices to ensure it fires
         if (onClick) {
-          e.preventDefault();
+          // Don't preventDefault on passive listeners
           e.stopPropagation();
           onClick(e);
         }
