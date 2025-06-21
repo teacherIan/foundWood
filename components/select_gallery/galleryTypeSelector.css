@@ -134,32 +134,28 @@
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
 }
 
-/* Mobile portrait optimizations - enhanced glass effect with better mobile support */
+/* Mobile portrait optimizations - simplified for real iOS devices */
 @media (orientation: portrait) and (max-width: 768px) {
     .explanationContent {
-        background: rgba(255, 255, 255, 0.1) !important;
-        backdrop-filter: blur(10px) saturate(160%) brightness(1.1) !important;
-        -webkit-backdrop-filter: blur(10px) saturate(160%) brightness(1.1) !important;
+        background: rgba(255, 255, 255, 0.25) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
         padding: 12px;
         min-height: 120px;
         max-width: 280px;
         margin: 0 auto;
         border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.25) !important;
-        /* Prevent flickering on mobile with forced GPU acceleration */
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        will-change: backdrop-filter, transform;
-        isolation: isolate;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+        /* Simplified GPU acceleration for iOS */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        will-change: auto;
     }
 
+    /* Disable the gradient overlay on mobile to prevent iOS issues */
     .explanationContent::before {
-        background: linear-gradient(135deg,
-                rgba(119, 72, 28, 0.08) 0%,
-                rgba(119, 72, 28, 0.04) 50%,
-                rgba(119, 72, 28, 0.06) 100%) !important;
+        display: none !important;
     }
 
     .explanationText {
@@ -177,18 +173,11 @@
         margin: 0 0 8px 0;
     }
 
-    /* Special fallback for mobile devices with poor backdrop-filter support */
-    @supports not (backdrop-filter: blur(10px)) {
+    /* Simple fallback for mobile devices without backdrop-filter */
+    @supports not (backdrop-filter: blur(20px)) {
         .explanationContent {
-            background: rgba(255, 255, 255, 0.15) !important;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15) !important;
-        }
-
-        .explanationContent::before {
-            background: linear-gradient(135deg,
-                    rgba(119, 72, 28, 0.06) 0%,
-                    rgba(119, 72, 28, 0.03) 50%,
-                    rgba(119, 72, 28, 0.05) 100%) !important;
+            background: rgba(255, 255, 255, 0.8) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
         }
     }
 }
@@ -290,32 +279,26 @@
 
 /* Remove duplicate mobile portrait rule that was causing conflicts */
 
-/* Small screen adjustments (very small phones) - lighter glass effect */
+/* Small screen adjustments (very small phones) - iOS optimized */
 @media (max-width: 480px) and (orientation: portrait) {
     .explanationContent {
-        background: rgba(255, 255, 255, 0.12) !important;
-        backdrop-filter: blur(8px) saturate(140%) brightness(1.05) !important;
-        -webkit-backdrop-filter: blur(8px) saturate(140%) brightness(1.05) !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(25px) !important;
+        -webkit-backdrop-filter: blur(25px) !important;
         padding: 8px 12px;
         border-radius: 10px;
         max-width: 250px;
         min-height: 100px;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
-        /* Enhanced anti-flickering for small screens */
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        will-change: backdrop-filter, transform;
-        isolation: isolate;
-        contain: layout style paint;
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+        /* Minimal transforms for stability */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
     }
 
+    /* Disable gradient overlay completely on small phones */
     .explanationContent::before {
-        background: linear-gradient(135deg,
-                rgba(119, 72, 28, 0.06) 0%,
-                rgba(119, 72, 28, 0.03) 50%,
-                rgba(119, 72, 28, 0.05) 100%) !important;
+        display: none !important;
     }
 
     .explanationContent .galleryTypeHeader {
@@ -329,48 +312,35 @@
         margin-bottom: 6px;
     }
 
-    /* Fallback for very small phones with poor backdrop-filter support */
-    @supports not (backdrop-filter: blur(8px)) {
+    /* Simple fallback for small phones */
+    @supports not (backdrop-filter: blur(25px)) {
         .explanationContent {
-            background: rgba(255, 255, 255, 0.18) !important;
-            box-shadow: 0 4px 20px rgba(31, 38, 135, 0.1) !important;
-        }
-
-        .explanationContent::before {
-            background: linear-gradient(135deg,
-                    rgba(119, 72, 28, 0.05) 0%,
-                    rgba(119, 72, 28, 0.02) 50%,
-                    rgba(119, 72, 28, 0.04) 100%) !important;
+            background: rgba(255, 255, 255, 0.85) !important;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1) !important;
         }
     }
 }
 
-/* Very small screens (older iPhones, Android phones) - minimal glass effect */
+/* Very small screens (older iPhones, Android phones) - maximum stability */
 @media (max-width: 375px) and (orientation: portrait) {
     .explanationContent {
-        background: rgba(255, 255, 255, 0.15) !important;
-        backdrop-filter: blur(6px) saturate(120%) brightness(1.02) !important;
-        -webkit-backdrop-filter: blur(6px) saturate(120%) brightness(1.02) !important;
+        background: rgba(255, 255, 255, 0.35) !important;
+        backdrop-filter: blur(30px) !important;
+        -webkit-backdrop-filter: blur(30px) !important;
         padding: 6px 10px;
         border-radius: 8px;
         max-width: 220px;
         min-height: 90px;
-        border: 1px solid rgba(255, 255, 255, 0.35) !important;
-        /* Maximum anti-flickering for very small screens */
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        will-change: backdrop-filter, transform;
-        isolation: isolate;
-        contain: layout style paint;
+        border: 1px solid rgba(255, 255, 255, 0.6) !important;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05) !important;
+        /* Absolute minimal transforms */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
     }
 
+    /* Complete removal of gradient overlay on very small screens */
     .explanationContent::before {
-        background: linear-gradient(135deg,
-                rgba(119, 72, 28, 0.05) 0%,
-                rgba(119, 72, 28, 0.02) 50%,
-                rgba(119, 72, 28, 0.04) 100%) !important;
+        display: none !important;
     }
 
     .explanationContent .galleryTypeHeader {
@@ -384,18 +354,11 @@
         margin-bottom: 4px;
     }
 
-    /* Fallback for older devices with no backdrop-filter support */
-    @supports not (backdrop-filter: blur(6px)) {
+    /* High-opacity fallback for older devices */
+    @supports not (backdrop-filter: blur(30px)) {
         .explanationContent {
-            background: rgba(255, 255, 255, 0.22) !important;
-            box-shadow: 0 2px 15px rgba(31, 38, 135, 0.08) !important;
-        }
-
-        .explanationContent::before {
-            background: linear-gradient(135deg,
-                    rgba(119, 72, 28, 0.04) 0%,
-                    rgba(119, 72, 28, 0.02) 50%,
-                    rgba(119, 72, 28, 0.03) 100%) !important;
+            background: rgba(255, 255, 255, 0.9) !important;
+            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.08) !important;
         }
     }
 }
