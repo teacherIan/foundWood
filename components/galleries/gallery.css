@@ -1550,8 +1550,8 @@
         -webkit-flex-direction: row;
         flex-direction: row;
         -webkit-overflow-scrolling: touch;
-        padding: 0 !important;
-        /* Remove all padding to be truly edge-to-edge */
+        padding: 0 8px !important;
+        /* Add horizontal padding to prevent shadow clipping */
         margin: 0 !important;
         /* Remove all margins */
         width: 100vw !important;
@@ -1664,13 +1664,13 @@
     }
 
     .thumbNailPhoto:first-child {
-        margin-left: 5px;
-        /* Small margin from very edge for better touch target */
+        margin-left: 8px;
+        /* Margin from edge to accommodate shadow clipping */
     }
 
     .thumbNailPhoto:last-child {
-        margin-right: 5px;
-        /* Small margin from very edge for better touch target */
+        margin-right: 8px;
+        /* Margin from edge to accommodate shadow clipping */
     }
 
     .thumbNailPhoto.grayscale {
@@ -1678,15 +1678,15 @@
         opacity: 1 !important;
         transform: scale(1.1) !important;
         /* Slightly larger scale for better visual feedback */
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
-        /* Enhanced shadow for active state */
+        box-shadow: 0 6px 20px rgba(119, 72, 28, 0.35) !important;
+        /* Enhanced brown shadow for active state to match website theme */
         border: 2px solid #ffffff !important;
-        /* Clean white border for active state instead of brown */
+        /* Clean white border for active state for contrast */
         background: transparent !important;
         /* Ensure no brown background on active state for mobile */
     }
 
-    /* Additional mobile overrides to kill all brown styling */
+    /* Additional mobile overrides to ensure consistent brown styling */
     .thumbNailPhoto,
     .thumbNailPhoto:hover,
     .thumbNailPhoto:active,
@@ -1695,7 +1695,8 @@
         border: 1px solid rgba(0, 0, 0, 0.1) !important;
         /* Subtle neutral border */
         background: transparent !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
+        /* Subtle brown shadow for inactive state too */
     }
 
     .thumbNailPhoto.grayscale,
@@ -1706,8 +1707,8 @@
         border: 2px solid #ffffff !important;
         /* Clean white border for all active states */
         background: transparent !important;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
-        /* Enhanced shadow for all active states */
+        box-shadow: 0 6px 20px rgba(119, 72, 28, 0.35) !important;
+        /* Enhanced brown shadow for all active states to match website theme */
     }
 }
 
