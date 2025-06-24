@@ -19,8 +19,8 @@
     --text-secondary: var(--brown);
 
     /* ===== TYPOGRAPHY ===== */
-    --font-primary: 'CustomFont', 'Poppins', 'Lobster Two', sans-serif;
-    --font-secondary: 'driftWood', 'CustomFont', 'Poppins', sans-serif;
+    --font-primary: 'CustomFont', sans-serif;
+    --font-secondary: 'driftWood', 'CustomFont', sans-serif;
 
     /* ===== RESPONSIVE FONT SIZES ===== */
     --text-xs: clamp(0.75rem, 1.5vw, 0.875rem);

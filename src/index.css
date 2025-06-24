@@ -4,8 +4,8 @@
 @import "./styles/animations.css";
 
 /* ===== FONTS ===== */
-@import url("https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Redressed&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Redressed&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"); */
 
 /* driftWood font is only used for certain components, so keep it here */
 @font-face {
@@ -23,8 +23,8 @@
     --lightGreen: #d9ebc7;
     --white: #f5f5f5;
     --background: #f5f5f5;
-    --mainFont: "CustomFont", "Poppins", "Lobster Two", sans-serif;
-    --secondaryFont: "driftWood", "CustomFont", "Poppins", sans-serif;
+    --mainFont: "CustomFont", sans-serif;
+    --secondaryFont: "driftWood", "CustomFont", sans-serif;
 }
 
 /* ===== BASE STYLES ===== */

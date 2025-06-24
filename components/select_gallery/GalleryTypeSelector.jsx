@@ -148,7 +148,7 @@ function useTypeSpring(internalShowTypes, index) {
           targetY = 39;
           targetX = 3;
         } else {
-          targetY = 57;
+          targetY = 53;
           targetX = 53;
         }
 

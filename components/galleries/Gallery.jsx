@@ -76,7 +76,8 @@ const DraggableThumbnails = memo(
   ({ galleryTypeArr, currentPhoto, onThumbnailClick, isImageLoaded }) => {
     const containerRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
-    const isMobile = window.innerWidth < 768 || 'ontouchstart' in window;
+    const isPortrait = window.innerHeight > window.innerWidth;
+    const isMobile = isPortrait || 'ontouchstart' in window;
 
     // Filter out non-DOM props from gesture binding
     const getFilteredBindProps = useCallback((bindProps) => {
@@ -260,12 +261,12 @@ export default function Gallery({
   const galleryLengthRef = useRef(0);
   const prevGalleryTypeRef = useRef(null);
 
-  // Platform detection - Enhanced mobile detection
+  // Platform detection - Based on aspect ratio (portrait = mobile-style, landscape = desktop-style)
+  const isPortrait = window.innerHeight > window.innerWidth;
+  const isLandscape = window.innerWidth >= window.innerHeight;
   const isMobile =
-    window.innerWidth < 768 ||
-    'ontouchstart' in window ||
-    navigator.maxTouchPoints > 0;
-  const isDesktop = !isMobile;
+    isPortrait || 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const isDesktop = isLandscape && !('ontouchstart' in window);
 
   // Track aspect ratio for dynamic container sizing
   const [imgAspect, setImgAspect] = useState(1.4);
@@ -333,16 +334,25 @@ export default function Gallery({
         const overflowX = Math.max(0, scaledWidth - rect.width);
         const overflowY = Math.max(0, scaledHeight - rect.height);
 
-        // More generous bounds calculation for better accessibility
-        // Use different margins for X and Y to account for different scaling behaviors
-        const marginX = Math.min(40, overflowX * 0.1); // 10% of overflow or 40px max
-        const marginY = Math.min(60, overflowY * 0.15); // 15% of overflow or 60px max for better vertical access
+        // Enhanced bounds calculation for better accessibility
+        // Even at default scale (1.15), provide some panning capability
+        const baseMarginX = 50; // Base margin for X-axis movement
+        const baseMarginY = 80; // Base margin for Y-axis movement (more generous)
+
+        // Calculate adaptive margins based on overflow
+        const adaptiveMarginX = Math.max(baseMarginX, overflowX * 0.1);
+        const adaptiveMarginY = Math.max(baseMarginY, overflowY * 0.15);
+
+        // For very low scales (close to 1.0), provide minimum panning ability
+        const minPanRange = 30;
+        const finalMarginX = Math.max(minPanRange, adaptiveMarginX);
+        const finalMarginY = Math.max(minPanRange, adaptiveMarginY);
 
         const bounds = {
-          minX: -(overflowX / 2) - marginX,
-          maxX: overflowX / 2 + marginX,
-          minY: -(overflowY / 2) - marginY,
-          maxY: overflowY / 2 + marginY,
+          minX: -(overflowX / 2) - finalMarginX,
+          maxX: overflowX / 2 + finalMarginX,
+          minY: -(overflowY / 2) - finalMarginY,
+          maxY: overflowY / 2 + finalMarginY,
         };
 
         // Debug logging for bounds calculation - only when bounds change significantly
@@ -351,11 +361,16 @@ export default function Gallery({
             containerSize: { width: rect.width, height: rect.height },
             scaledSize: { width: scaledWidth, height: scaledHeight },
             overflow: { x: overflowX, y: overflowY },
-            margins: { x: marginX, y: marginY },
+            margins: {
+              base: { x: baseMarginX, y: baseMarginY },
+              adaptive: { x: adaptiveMarginX, y: adaptiveMarginY },
+              final: { x: finalMarginX, y: finalMarginY },
+            },
             bounds,
             scale,
             'Can pan to top?': bounds.maxY > 0,
             'Can pan to bottom?': bounds.minY < 0,
+            'Pan range Y': bounds.maxY - bounds.minY,
           });
         }
 
@@ -555,14 +570,20 @@ export default function Gallery({
             const overflowX = Math.max(0, scaledWidth - rect.width);
             const overflowY = Math.max(0, scaledHeight - rect.height);
 
-            // Use same generous bounds as in drag handler
-            const marginX = Math.min(40, overflowX * 0.1);
-            const marginY = Math.min(60, overflowY * 0.15);
+            // Use same enhanced bounds as in drag handler
+            const baseMarginX = 50;
+            const baseMarginY = 80;
+            const adaptiveMarginX = Math.max(baseMarginX, overflowX * 0.1);
+            const adaptiveMarginY = Math.max(baseMarginY, overflowY * 0.15);
+            const minPanRange = 30;
+            const finalMarginX = Math.max(minPanRange, adaptiveMarginX);
+            const finalMarginY = Math.max(minPanRange, adaptiveMarginY);
+
             const bounds = {
-              minX: -(overflowX / 2) - marginX,
-              maxX: overflowX / 2 + marginX,
-              minY: -(overflowY / 2) - marginY,
-              maxY: overflowY / 2 + marginY,
+              minX: -(overflowX / 2) - finalMarginX,
+              maxX: overflowX / 2 + finalMarginX,
+              minY: -(overflowY / 2) - finalMarginY,
+              maxY: overflowY / 2 + finalMarginY,
             };
 
             newX = Math.max(bounds.minX, Math.min(bounds.maxX, newX));
@@ -1378,9 +1399,9 @@ export default function Gallery({
                       } else if (isTabletLandscape) {
                         dynamicHeight = '80svh'; // Tablet landscape gets more height
                       } else if (isLargeMobile) {
-                        dynamicHeight = '65svh'; // Large mobile landscape gets more height
+                        dynamicHeight = '80svh'; // Large mobile landscape gets more height
                       } else {
-                        dynamicHeight = '40svh'; // Small mobile portrait stays the same
+                        dynamicHeight = '80svh'; // Small mobile portrait stays the same
                       }
 
                       console.log(
@@ -1412,7 +1433,7 @@ export default function Gallery({
                       ...style,
                       width: '100%',
                       height: '100%',
-                      objectFit: isMobile ? 'cover' : 'contain',
+                      objectFit: isMobile ? 'contain' : 'contain', // Changed from 'cover' to 'contain' for mobile to show full image
                       position: 'absolute',
                       top: 0,
                       left: 0,

@@ -266,6 +266,7 @@
 }
 
 .thumbNails {
+
     padding: 0 20px;
     /* Add horizontal padding to prevent edge clipping */
     width: 100%;
@@ -385,7 +386,7 @@
         overflow-y: hidden;
         /* Hide vertical overflow on desktop - x-direction only */
         /* Fixed width to prevent container resizing */
-        min-width: 300px;
+        /* min-width: 300px; */
         max-width: 400px;
         width: 100%;
     }
@@ -546,6 +547,7 @@
         max-width: 65px;
         /* Medium size for tablets */
         min-width: 50px;
+        /* overflow: visible; */
     }
 
     .thumbNails {
@@ -723,8 +725,8 @@
     /* Allow shrinking if needed */
 }
 
-/* Desktop and tablet styles - keep productInfo inside productPanel and reset mobile layout */
-@media (min-width: 768px) {
+/* Landscape layout (wider than tall) - use horizontal layout like desktop */
+@media (orientation: landscape) {
     .galleryContainer {
         flex-direction: row !important;
         /* Override mobile column layout */
@@ -788,8 +790,8 @@
     }
 }
 
-/* Mobile styles - show mobile product info, hide desktop product info */
-@media (max-width: 767px) {
+/* Portrait layout (taller than wide) - use vertical layout like mobile */
+@media (orientation: portrait) {
 
     /* Hide desktop product info (inside productPanel) */
     .productInfo.desktop-only {
@@ -1335,9 +1337,8 @@
     }
 }
 
-/* ========== MOBILE STYLES ========== */
-@media (orientation: portrait) and (max-width: 767px),
-(max-width: 600px) {
+/* ========== PORTRAIT LAYOUT (Mobile-style) ========== */
+@media (orientation: portrait) {
     .galleryContainer {
         flex-direction: column;
         justify-content: flex-start;
@@ -1378,10 +1379,10 @@
         /* Full width on mobile */
         height: auto;
         /* Let content determine height */
-        max-height: 18vh;
-        /* Fallback for browsers without svh support */
-        max-height: 18svh;
-        /* Use svh for better mobile viewport handling */
+        max-height: 22vh;
+        /* Fallback for browsers without svh support - restored to accommodate generous thumbnails */
+        max-height: 22svh;
+        /* Use svh for better mobile viewport handling - restored from 18svh to 22svh */
         padding: 1vh 0 !important;
         /* Fallback for browsers without svh support */
         padding: 1svh 0 !important;
@@ -1412,10 +1413,10 @@
         display: flex;
         flex-direction: column;
         width: 100vw;
-        padding: 2vh 1.5em 3vh 1.5em;
-        /* Fallback for browsers without svh support */
-        padding: 2svh 1.5em 3svh 1.5em;
-        /* Use svh for vertical padding and increased bottom padding */
+        padding: 1vh 1.5em 2vh 1.5em;
+        /* Fallback for browsers without svh support - further reduced padding to minimize text area */
+        padding: 1svh 1.5em 2svh 1.5em;
+        /* Use svh for vertical padding - further reduced for more compact text area */
         margin: 0;
         text-align: center;
         order: 3;
@@ -1426,10 +1427,10 @@
         /* Take up all remaining space in the container */
         min-height: 0;
         /* Allow flex shrinking if needed */
-        max-height: calc(100vh - 25vh);
-        /* Fallback - more space for text */
-        max-height: calc(100svh - 25svh);
-        /* Use svh - reduced constraint to give more space for text */
+        max-height: calc(100vh - 22vh);
+        /* Fallback - reduced constraint to give much more space to image */
+        max-height: calc(100svh - 22svh);
+        /* Use svh - reduced constraint from 30svh to 22svh to make room for 60vh image */
         overflow: visible;
         /* Allow the description to handle its own scrolling */
         /* Add subtle background for better text readability */
@@ -1538,14 +1539,14 @@
         /* Image comes after thumbnails on mobile */
         width: 100vw;
         height: auto;
-        max-height: 45vh;
-        /* Fallback for browsers without svh support */
-        max-height: 45svh;
-        /* Use svh for better mobile viewport handling */
-        min-height: 35vh;
-        /* Fallback for browsers without svh support */
-        min-height: 35svh;
-        /* Use svh for minimum height */
+        max-height: 60vh;
+        /* Fallback for browsers without svh support - increased from 52vh to 60vh for much larger image */
+        max-height: 60svh;
+        /* Use svh for better mobile viewport handling - increased from 52svh to 60svh */
+        min-height: 45vh;
+        /* Fallback for browsers without svh support - increased from 40vh */
+        min-height: 45svh;
+        /* Use svh for minimum height - increased from 40svh to 45svh */
         text-align: center;
         box-sizing: border-box;
         z-index: auto;
@@ -1573,15 +1574,16 @@
         -webkit-flex-direction: row;
         flex-direction: row;
         -webkit-overflow-scrolling: touch;
-        padding: 0 8px !important;
-        /* Add horizontal padding to prevent shadow clipping */
+        padding: 0 12px !important;
+        /* Increased horizontal padding for better edge spacing */
         margin: 0 !important;
         /* Remove all margins */
         width: 100vw !important;
         /* Force full viewport width */
         max-width: 100vw !important;
         position: relative;
-        justify-content: flex-start;
+        justify-content: center;
+        /* Center thumbnails when they fit, allow scrolling when they don't */
         background: transparent !important;
         /* Override any brown background */
         border-radius: 0 !important;
@@ -1597,31 +1599,14 @@
         /* Override grid for mobile */
         align-items: center;
         /* Center thumbnails vertically */
-        min-height: 70px;
-        /* Increased minimum height for better touch targets */
+        min-height: 90px;
+        /* Increased minimum height to accommodate larger thumbnails */
         box-sizing: border-box;
         /* Ensure padding is included in width calculation */
         order: 1;
         /* Thumbnails appear first */
         margin-bottom: 0.5em;
         /* Slightly more space between thumbnails and image */
-        /* Safari iOS specific fixes */
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-        will-change: scroll-position;
-        /* Enhanced dragging experience */
-        scroll-behavior: smooth;
-        -webkit-scroll-behavior: smooth;
-        scrollbar-width: none;
-        /* Hide scrollbar on mobile */
-        -ms-overflow-style: none;
-        /* Hide scrollbar for IE and Edge */
-        /* Remove any separator lines on mobile */
-        border-bottom: none !important;
-        border-top: none !important;
-        /* Add subtle top border to separate from menu */
-        padding-top: 0.5vh !important;
-        /* Small padding at top for visual separation */
     }
 
     .thumbNails::-webkit-scrollbar {
@@ -1657,9 +1642,9 @@
     }
 
     .thumbNailPhoto {
-        width: 55px;
-        height: 55px;
-        /* Slightly larger for better touch targets */
+        width: 75px;
+        height: 75px;
+        /* Larger size for better visibility and touch targets on iPad/portrait */
         border-radius: 50%;
         /* Keep perfect circles on mobile */
         flex: 0 0 auto;
@@ -1678,22 +1663,22 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
         /* Override any brown box-shadow */
         object-fit: cover;
-        margin: 0 4px;
-        /* Slightly more margin between thumbnails */
+        margin: 0 8px;
+        /* Consistent margin between all thumbnails */
         /* Better touch target for mobile */
-        min-width: 44px;
-        min-height: 44px;
-        /* Apple's recommended minimum touch target size */
+        min-width: 60px;
+        min-height: 60px;
+        /* Larger minimum size for portrait devices */
     }
 
     .thumbNailPhoto:first-child {
         margin-left: 8px;
-        /* Margin from edge to accommodate shadow clipping */
+        /* Same as other margins to prevent pushing off screen */
     }
 
     .thumbNailPhoto:last-child {
         margin-right: 8px;
-        /* Margin from edge to accommodate shadow clipping */
+        /* Same as other margins to prevent pushing off screen */
     }
 
     .thumbNailPhoto.grayscale {
@@ -1732,117 +1717,68 @@
         background: transparent !important;
         box-shadow: 0 6px 20px rgba(119, 72, 28, 0.35) !important;
         /* Enhanced brown shadow for all active states to match website theme */
+
     }
 }
 
-/* ========== TABLET OPTIMIZATIONS ========== */
-@media (min-width: 768px) and (max-width: 1024px) {
-    .productPanel {
-        width: 35vw;
-        /* Slightly wider on tablets */
-        padding: 1.5vh 1.5vw;
-        align-items: center;
-        /* Keep centering on tablets */
-        /* Maintain beautiful brown border styling on tablets */
-        background: rgba(245, 245, 245, 0.85);
-        border: 2px solid var(--brown);
-        border-radius: 15px;
-        box-shadow: 0 6px 25px rgba(119, 72, 28, 0.18);
-    }
-
+/* iPad Portrait specific optimizations for better thumbnail layout */
+@media (orientation: portrait) and (min-width: 768px) and (max-width: 1024px) {
     .thumbNails {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        /* Fixed 3 columns on tablets - prevent squashing */
-        gap: 6px;
-        /* Ensure brown styling on tablets too */
-        box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.5) !important;
-        border-radius: 10px !important;
-        background: rgba(119, 72, 28, 0.05) !important;
+        gap: 25px !important;
+        /* Even more generous spacing between thumbnails on iPad */
+        padding: 30px 35px !important;
+        /* Generous padding restored since we're not taking space from thumbnails */
+        margin-top: 4vh !important;
+        /* Generous top margin restored for proper header clearance */
+        justify-content: center !important;
+        /* Ensure centering on iPad */
+        min-height: 140px !important;
+        /* Generous height restored for comfortable thumbnail layout */
+        align-items: center !important;
+        /* Ensure vertical centering to prevent clipping */
+        overflow: visible !important;
+        /* Ensure thumbnails aren't clipped */
     }
 
-    /* Apply light brown background to individual thumbnails on tablets */
     .thumbNailPhoto {
-        background: rgba(119, 72, 28, 0.05) !important;
-        border: 2px solid var(--brown) !important;
-        box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
+        width: 85px !important;
+        height: 85px !important;
+        /* Slightly smaller to accommodate generous spacing and prevent overlap */
+        min-width: 85px !important;
+        min-height: 85px !important;
+        /* Enhanced styling for iPad */
+        border: 2px solid rgba(0, 0, 0, 0.2) !important;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15) !important;
+        flex-shrink: 0 !important;
+        /* Prevent thumbnails from shrinking and overlapping */
+        margin: 0 !important;
+        /* Remove any conflicting margins that could cause overlap */
+    }
+
+    /* Enhance the active state for iPad */
+    .thumbNailPhoto.grayscale {
+        transform: scale(1.15) !important;
+        /* Slightly larger scale for iPad */
+        box-shadow: 0 8px 25px rgba(119, 72, 28, 0.4) !important;
+        /* More prominent shadow on iPad */
+        border: 3px solid #ffffff !important;
+        /* Thicker white border for iPad */
     }
 }
 
-/* Enhanced mobile touch handling for image container */
-.currentPhoto {
-    /* Allow all touch gestures to be handled by our custom JavaScript */
-    touch-action: none;
-    -webkit-touch-action: none;
-    /* Prevent text selection during gestures */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    /* Optimize for touch interactions */
-    -webkit-tap-highlight-color: transparent;
-}
-
-/* Ensure the master image doesn't interfere with touch events */
-.masterImage {
-    /* Let container handle all touch events */
-    pointer-events: none;
-    /* Enable hardware acceleration for smooth transforms */
-    will-change: transform;
-    transform-origin: center center;
-}
-
-/* Re-enable pointer events for the image container */
-.currentPhoto>div {
-    pointer-events: auto;
-}
-
-/* ========== MOBILE TOUCH ENHANCEMENTS ========== */
-@media (max-width: 767px) {
-
-    /* Add haptic feedback simulation for thumbnail taps */
-    .thumbNailPhoto:active {
-        transform: scale(0.95) !important;
-        transition: transform 0.1s ease !important;
+/* Smaller portrait devices - phones */
+@media (orientation: portrait) and (max-width: 480px) {
+    .thumbNails {
+        gap: 10px !important;
+        padding: 10px 15px !important;
+        min-height: 85px !important;
     }
 
-    /* Improve touch target area around thumbnails */
-    .thumbNailPhoto::before {
-        content: '';
-        position: absolute;
-        top: -10px;
-        left: -10px;
-        right: -10px;
-        bottom: -10px;
-        z-index: -1;
-    }
-
-    /* Add subtle pull-to-refresh indicator */
-    .galleryContainer::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg,
-                transparent 0%,
-                rgba(119, 72, 28, 0.3) 50%,
-                transparent 100%);
-        z-index: 1;
-    }
-
-    /* Improve image loading experience */
-    .masterImage {
-        border-radius: 15px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        transition: opacity 0.3s ease;
-    }
-
-    /* Loading state for images */
-    .masterImage[src=""] {
-        opacity: 0.5;
-        filter: blur(2px);
+    .thumbNailPhoto {
+        width: 65px !important;
+        height: 65px !important;
+        /* Slightly smaller for very small screens to fit more */
+        min-width: 65px !important;
+        min-height: 65px !important;
     }
 }
-
-/* ========== ADDITIONAL MOBILE REFINEMENTS ========== */

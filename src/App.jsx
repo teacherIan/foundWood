@@ -570,8 +570,8 @@ function App() {
     const fonts = [
       new FontFaceObserver('driftWood'),
       new FontFaceObserver('CustomFont'),
-      new FontFaceObserver('Poppins'),
-      new FontFaceObserver('Lobster Two'),
+      // new FontFaceObserver('Poppins'),
+      // new FontFaceObserver('Lobster Two'),
     ];
 
     Promise.all(fonts.map((font) => font.load()))
