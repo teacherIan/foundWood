@@ -14,6 +14,13 @@
     /* REMOVED: backdrop-filter, border, and overflow to eliminate clear box appearance */
     background: transparent;
     border: none;
+
+    /* Performance optimizations for gallery type buttons */
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    /* Prevent repaints during animation */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .galleryTypeButton::before {
@@ -47,6 +54,16 @@
 .galleryTypeButton:hover .galleryTypeHeader {
     filter: drop-shadow(0px 0px 8px rgba(119, 72, 28, 0.6)) drop-shadow(0.5px 0.5px 0.1px #000000dd);
     transform: translateY(-2px);
+}
+
+/* Optimize hover states for better performance */
+.galleryTypeButton:hover {
+    transform: translateZ(0) scale(1.02);
+}
+
+/* Remove will-change after animations to free up GPU memory */
+.galleryTypeButton:not(:hover):not(:active) {
+    will-change: auto;
 }
 
 /* Size variations based on content */

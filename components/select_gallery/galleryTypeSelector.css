@@ -12,25 +12,51 @@
     pointer-events: auto;
     background: transparent;
     overflow: hidden;
+    /* Hardware acceleration and GPU optimizations */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    /* Contain layout and style calculations */
+    contain: layout style paint;
+    /* Optimize transitions for better performance - removed backdrop-filter */
+    transition: background 0.15s ease-out, opacity 0.15s ease-out;
 }
 
-/* Only apply blur when types are visible */
+/* Only apply light backdrop-filter when types are visible for better performance - DISABLED for performance */
 .galleryTypeSelector[data-visible="true"] {
-    backdrop-filter: blur(2px);
-    /* Add subtle blur to background scene when visible */
-    -webkit-backdrop-filter: blur(2px);
-    /* Safari support */
+    /* PERFORMANCE FIX: Remove backdrop-filter since canvas is already blurred */
+    /* backdrop-filter: blur(1px); */
+    /* -webkit-backdrop-filter: blur(1px); */
     background: rgba(245, 245, 245, 0.1);
-    /* Very subtle white overlay as fallback when visible */
+    /* Slightly more opaque since no blur */
+    transition: background 0.15s ease-out;
+    /* Faster transition without blur */
 }
 
-/* Ensure backdrop-filter works properly on all screen sizes when visible */
-@supports (backdrop-filter: blur(2px)) {
+/* Remove mobile blur optimization since we're not using backdrop-filter */
+@media (max-width: 768px) {
     .galleryTypeSelector[data-visible="true"] {
-        background: rgba(245, 245, 245, 0.05) !important;
-        /* Very minimal background when backdrop-filter is supported and visible */
+        /* Removed backdrop-filter for performance */
+        background: rgba(245, 245, 245, 0.08);
+        /* Slightly more visible on mobile */
     }
 }
+
+/* Remove backdrop-filter from reduced motion since we're not using it */
+@media (prefers-reduced-motion: reduce) {
+    .galleryTypeSelector[data-visible="true"] {
+        background: rgba(245, 245, 245, 0.12);
+        /* Slightly more opaque for visibility */
+        transition: none;
+    }
+}
+
+/* Remove backdrop-filter support check since we're not using it */
+/* @supports (backdrop-filter: blur(2px)) {
+    .galleryTypeSelector[data-visible="true"] {
+        background: rgba(245, 245, 245, 0.05) !important;
+    }
+} */
 
 /* Universal tablet and large screen portrait adjustments */
 @media (orientation: portrait) and (min-width: 768px) {
@@ -68,15 +94,16 @@
 }
 
 .explanationContent {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    background: rgba(255, 255, 255, 0.15);
+    /* PERFORMANCE FIX: Remove heavy blur since canvas is already blurred */
+    /* backdrop-filter: blur(12px) saturate(180%); */
+    /* -webkit-backdrop-filter: blur(12px) saturate(180%); */
     border-radius: 20px;
     padding: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    /* More visible border */
     box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-    /* Ensure consistent glass effect on mobile */
-    will-change: backdrop-filter;
+    /* Keep shadow for depth */
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     position: relative;
@@ -99,8 +126,8 @@
     z-index: -1;
 }
 
-/* Fallback for devices that don't support backdrop-filter */
-@supports not (backdrop-filter: blur(12px)) {
+/* Remove backdrop-filter fallback since we're not using it */
+/* @supports not (backdrop-filter: blur(12px)) {
     .explanationContent {
         background: rgba(255, 255, 255, 0.2) !important;
         border: 1px solid rgba(255, 255, 255, 0.3) !important;
@@ -112,7 +139,7 @@
                 rgba(119, 72, 28, 0.04) 50%,
                 rgba(119, 72, 28, 0.06) 100%) !important;
     }
-}
+} */
 
 .explanationContent h3 {
     display: block;
@@ -134,12 +161,12 @@
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
 }
 
-/* Mobile portrait optimizations - simplified for real iOS devices */
+/* Mobile portrait optimizations - remove heavy backdrop-filter for performance */
 @media (orientation: portrait) and (max-width: 768px) {
     .explanationContent {
-        background: rgba(255, 255, 255, 0.25) !important;
-        backdrop-filter: blur(20px) !important;
-        -webkit-backdrop-filter: blur(20px) !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+        /* More opaque since no blur */
+        /* Removed backdrop-filter for performance */
         padding: 12px;
         min-height: 120px;
         max-width: 280px;
@@ -147,7 +174,6 @@
         border-radius: 12px;
         border: 1px solid rgba(255, 255, 255, 0.4) !important;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
-        /* Simplified GPU acceleration for iOS */
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
         will-change: auto;
@@ -173,13 +199,13 @@
         margin: 0 0 8px 0;
     }
 
-    /* Simple fallback for mobile devices without backdrop-filter */
-    @supports not (backdrop-filter: blur(20px)) {
+    /* Remove backdrop-filter fallback since we're not using it */
+    /* @supports not (backdrop-filter: blur(20px)) {
         .explanationContent {
             background: rgba(255, 255, 255, 0.8) !important;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
         }
-    }
+    } */
 }
 
 /* Tablet portrait specific adjustments (iPads, larger tablets) */
@@ -279,19 +305,17 @@
 
 /* Remove duplicate mobile portrait rule that was causing conflicts */
 
-/* Small screen adjustments (very small phones) - iOS optimized */
+/* Small screen adjustments (very small phones) - remove backdrop-filter for performance */
 @media (max-width: 480px) and (orientation: portrait) {
     .explanationContent {
-        background: rgba(255, 255, 255, 0.3) !important;
-        backdrop-filter: blur(25px) !important;
-        -webkit-backdrop-filter: blur(25px) !important;
+        background: rgba(255, 255, 255, 0.35) !important;
+        /* More opaque since no blur */
         padding: 8px 12px;
         border-radius: 10px;
         max-width: 250px;
         min-height: 100px;
         border: 1px solid rgba(255, 255, 255, 0.5) !important;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
-        /* Minimal transforms for stability */
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
     }
@@ -312,28 +336,26 @@
         margin-bottom: 6px;
     }
 
-    /* Simple fallback for small phones */
-    @supports not (backdrop-filter: blur(25px)) {
+    /* Remove backdrop-filter fallback since we're not using it */
+    /* @supports not (backdrop-filter: blur(25px)) {
         .explanationContent {
             background: rgba(255, 255, 255, 0.85) !important;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1) !important;
         }
-    }
+    } */
 }
 
-/* Very small screens (older iPhones, Android phones) - maximum stability */
+/* Very small screens (older iPhones, Android phones) - remove backdrop-filter for maximum performance */
 @media (max-width: 375px) and (orientation: portrait) {
     .explanationContent {
-        background: rgba(255, 255, 255, 0.35) !important;
-        backdrop-filter: blur(30px) !important;
-        -webkit-backdrop-filter: blur(30px) !important;
+        background: rgba(255, 255, 255, 0.4) !important;
+        /* More opaque since no blur */
         padding: 6px 10px;
         border-radius: 8px;
         max-width: 220px;
         min-height: 90px;
         border: 1px solid rgba(255, 255, 255, 0.6) !important;
         box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05) !important;
-        /* Absolute minimal transforms */
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
     }
@@ -354,13 +376,13 @@
         margin-bottom: 4px;
     }
 
-    /* High-opacity fallback for older devices */
-    @supports not (backdrop-filter: blur(30px)) {
+    /* Remove backdrop-filter fallback since we're not using it */
+    /* @supports not (backdrop-filter: blur(30px)) {
         .explanationContent {
             background: rgba(255, 255, 255, 0.9) !important;
             box-shadow: 0 1px 10px rgba(0, 0, 0, 0.08) !important;
         }
-    }
+    } */
 }
 
 /* Very tall screens (iPhone 14 Pro Max, etc.) - aspect ratio adjustments */
@@ -411,4 +433,24 @@
         -webkit-text-stroke: 1.5px #77481c;
         filter: drop-shadow(0.7px 0.7px 0.2px #000000dd);
     }
+}
+
+/* Faster transitions for reduced motion users */
+@media (prefers-reduced-motion: reduce) {
+    .galleryTypeSelector {
+        transition: none;
+    }
+
+    .galleryTypeButton {
+        transition: none;
+    }
+}
+
+/* GPU acceleration for animations */
+.galleryTypeSelector[data-visible="true"] * {
+    will-change: transform, opacity;
+}
+
+.galleryTypeSelector[data-visible="false"] * {
+    will-change: auto;
 }

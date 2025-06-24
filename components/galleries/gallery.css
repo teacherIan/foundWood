@@ -700,6 +700,7 @@
 }
 
 .productInfo {
+    color: #545659;
     height: auto;
     display: flex;
     position: relative;
@@ -747,6 +748,8 @@
     }
 
     .productInfo {
+        font-family: var(--mainFont);
+        color: #545659;
         position: static !important;
         /* Reset positioning for desktop */
         order: unset !important;
@@ -769,6 +772,7 @@
     }
 
     .furnitureDescription {
+        font-family: var(--mainFont);
         overflow-y: auto !important;
         /* Enable scrolling for the description specifically */
         flex: 1 !important;
@@ -848,8 +852,9 @@
 }
 
 .furnitureDescription {
+    font-family: var(--mainFont);
     margin-top: 5px;
-    font-family: "Poppins";
+    color: #545659;
     width: 100%;
     font-size: calc(0.5vw + 0.5vh + 7px);
     /* Slightly smaller font for better text density */
@@ -1239,6 +1244,7 @@
         /* Allow flex shrinking if needed */
         scrollbar-width: thin;
         scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
+        color: #545659;
     }
 }
 
@@ -1469,11 +1475,12 @@
 
     /* Mobile-specific styling for furniture description */
     .furnitureDescription {
+        color: #545659;
         font-size: clamp(14px, 3.8vw, 18px);
         /* Slightly larger for better readability */
         line-height: 1.6;
         /* Better line spacing for easier reading */
-        color: var(--brown);
+        /* color: var(--brown); */
         overflow-y: auto;
         /* Enable scrolling only when content exceeds container */
         overflow-x: hidden;

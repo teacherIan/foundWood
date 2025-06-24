@@ -11,11 +11,10 @@ import house from '../../src/assets/noBG/Play-house-4.png';
 import light from '../../src/assets/noBG/light_noBG.png';
 
 const configAnimation = {
-  mass: 6,
-  tension: 300,
-  friction: 60,
-  precision: 0.0001,
-  ease: true,
+  mass: 3, // Reduced from 6 for faster response
+  tension: 280, // Reduced from 300 for smoother animation
+  friction: 40, // Reduced from 60 for snappier feel
+  precision: 0.01, // Increased from 0.0001 for faster completion
 };
 
 // Custom hook to manage delayed unmounting after exit animation
@@ -41,7 +40,7 @@ function useDelayedUnmount(showTypes) {
       setAnimationState('exiting');
 
       // Calculate the maximum exit animation duration more conservatively
-      const maxExitDuration = 1000;
+      const maxExitDuration = 600; // Reduced from 1000ms for faster unmounting
 
       const timer = setTimeout(() => {
         console.log('Exit animation should be complete - unmounting');
@@ -106,7 +105,7 @@ function useTypeSpring(internalShowTypes, index) {
           y: targetY,
           x: targetX,
           opacity: 1,
-          delay: 200 + index * 120,
+          delay: 50 + index * 60, // Faster entrance for desktop
           immediate: false,
         });
       } else if (isPortrait && isTablet) {
@@ -131,7 +130,7 @@ function useTypeSpring(internalShowTypes, index) {
           y: targetY,
           x: targetX,
           opacity: 1,
-          delay: 200 + index * 120,
+          delay: 50 + index * 60, // Faster entrance for tablets
           immediate: false,
         });
       } else if (isPortrait && isSmallMobile) {
@@ -156,7 +155,7 @@ function useTypeSpring(internalShowTypes, index) {
           y: targetY,
           x: targetX,
           opacity: 1,
-          delay: 200 + index * 120,
+          delay: 50 + index * 60, // Faster entrance for small mobile
           immediate: false,
         });
       } else if (isPortrait && isMobile) {
@@ -181,7 +180,7 @@ function useTypeSpring(internalShowTypes, index) {
           y: targetY,
           x: targetX,
           opacity: 1,
-          delay: 200 + index * 120,
+          delay: 50 + index * 60, // Faster entrance for mobile
           immediate: false,
         });
       } else {
@@ -206,7 +205,7 @@ function useTypeSpring(internalShowTypes, index) {
           y: targetY,
           x: targetX,
           opacity: 1,
-          delay: 200 + index * 120,
+          delay: 50 + index * 60, // Faster entrance for fallback
           immediate: false,
         });
       }
@@ -216,11 +215,12 @@ function useTypeSpring(internalShowTypes, index) {
         y: -100,
         x: 0,
         opacity: 0,
-        delay: index * 80,
-        immediate: false, // Ensure animation runs
+        delay: index * 40, // Faster exit animation
+        immediate: false,
         config: {
           ...configAnimation,
-          precision: 0.01, // Lower precision for faster completion
+          precision: 0.05, // Much lower precision for faster completion
+          tension: 350, // Higher tension for snappier exit
         },
       });
     }
@@ -269,7 +269,7 @@ function useExplanationTextSpring(internalShowTypes) {
       setSpring.start({
         y: targetY,
         opacity: 1,
-        delay: 680, // Animate in after all buttons
+        delay: 300, // Reduced from 680ms - animate in after buttons but faster
         immediate: false,
       });
     } else {

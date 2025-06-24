@@ -596,14 +596,11 @@ function App() {
   }, []); // Remove dependencies to prevent recreation
 
   const handleGalleryTypesClickCallback = useCallback(() => {
-    // TEMPORARILY DISABLED: iOS Safari specific cleanup
-    // if (isIOSSafariBrowser && !state.showTypes) {
-    //   console.log('📱 iOS Safari: Triggering cleanup before Gallery Types');
-    //   triggerCleanup();
-    // }
+    // Prevent rapid successive clicks
+    if (state.showTypes) return;
 
     dispatch({ type: 'SHOW_TYPES' });
-  }, []); // TEMPORARILY DISABLED: Removed isIOSSafariBrowser, triggerCleanup dependencies
+  }, [state.showTypes]);
 
   const handleHideTypesCallback = useCallback(() => {
     dispatch({ type: 'HIDE_TYPES' });
@@ -926,47 +923,15 @@ function App() {
             />
           )}
 
-          {/* Simplified Canvas rendering - no validation needed */}
+          {/* Optimized Canvas rendering with CSS classes for better performance */}
           <div
-            style={(() => {
-              const baseStyles = {
-                pointerEvents:
-                  state.showContactPage ||
-                  state.showTypes ||
-                  state.showGalleryLoading
-                    ? 'none'
-                    : 'auto',
-                filter:
-                  state.showContactPage ||
-                  state.showTypes ||
-                  state.showGalleryLoading
-                    ? 'blur(20px)'
-                    : 'none',
-                WebkitFilter:
-                  state.showContactPage ||
-                  state.showTypes ||
-                  state.showGalleryLoading
-                    ? 'blur(20px)'
-                    : 'none',
-                MozFilter:
-                  state.showContactPage ||
-                  state.showTypes ||
-                  state.showGalleryLoading
-                    ? 'blur(20px)'
-                    : 'none',
-                transition:
-                  'filter 0.2s ease-out, -webkit-filter 0.2s ease-out, -moz-filter 0.2s ease-out',
-                willChange:
-                  state.showContactPage ||
-                  state.showTypes ||
-                  state.showGalleryLoading
-                    ? 'filter'
-                    : 'auto',
-                transform: 'translateZ(0)',
-              };
-
-              return baseStyles;
-            })()}
+            className={`canvas-container ${
+              state.showContactPage ||
+              state.showTypes ||
+              state.showGalleryLoading
+                ? 'canvas-blurred'
+                : ''
+            }`}
           >
             {/* Always mount Canvas with splat URL directly */}
             <NewCanvas

@@ -1048,3 +1048,30 @@ only screen and (min-resolution: 2dppx) {
 }
 
 /* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Performance-optimized canvas blur classes */
+.canvas-container {
+    transform: translateZ(0);
+    transition: filter 0.15s ease-out;
+    will-change: auto;
+}
+
+.canvas-blurred {
+    filter: blur(8px);
+    will-change: filter;
+    pointer-events: none;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    .canvas-container {
+        transition: none;
+    }
+}
+
+/* Use lighter blur on mobile for better performance */
+@media (max-width: 768px) {
+    .canvas-blurred {
+        filter: blur(5px);
+    }
+}
