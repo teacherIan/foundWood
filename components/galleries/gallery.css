@@ -318,27 +318,37 @@
     overflow-y: auto;
     /* Enable vertical scrolling when many thumbnails */
     scrollbar-width: thin;
-    scrollbar-color: rgba(119, 72, 28, 0.3) transparent;
+    scrollbar-color: rgba(119, 72, 28, 0.6) transparent;
+    /* Always show scrollbar */
 }
 
-/* Custom scrollbar for webkit browsers */
+/* Custom scrollbar for webkit browsers - Always visible and more prominent */
 .thumbNails::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-    /* For horizontal scrollbar */
+    width: 8px;
+    height: 8px;
+    /* For horizontal scrollbar - made larger */
 }
 
 .thumbNails::-webkit-scrollbar-track {
-    background: transparent;
+    background: rgba(119, 72, 28, 0.1);
+    border-radius: 4px;
+    /* Make track visible with subtle brown background */
 }
 
 .thumbNails::-webkit-scrollbar-thumb {
-    background: rgba(119, 72, 28, 0.3);
-    border-radius: 3px;
+    background: rgba(119, 72, 28, 0.6);
+    border-radius: 4px;
+    /* More prominent brown color */
 }
 
 .thumbNails::-webkit-scrollbar-thumb:hover {
-    background: rgba(119, 72, 28, 0.5);
+    background: rgba(119, 72, 28, 0.8);
+    /* Darker on hover */
+}
+
+.thumbNails::-webkit-scrollbar-thumb:active {
+    background: var(--brown);
+    /* Full brown when dragging */
 }
 
 /* Custom scrollbar for furniture description */
@@ -398,13 +408,6 @@
         box-shadow: 0 2px 8px rgba(119, 72, 28, 0.15) !important;
     }
 
-    /* Desktop text outline styling for better contrast - DESKTOP ONLY */
-    .furnitureName {
-        filter: drop-shadow(1px 1px 0px black);
-        -webkit-text-stroke: 2px #77481c;
-        -webkit-text-fill-color: #ffffff;
-    }
-
     /* Enhanced scrollbar for desktop description */
     .furnitureDescription::-webkit-scrollbar {
         width: 6px;
@@ -448,31 +451,8 @@
     background: rgba(119, 72, 28, 0.05) !important;
 }
 
-/* Visual hint for keyboard navigation */
+/* Enhanced focus state for better accessibility */
 @media (min-width: 768px) {
-    .thumbNails::before {
-        content: '← → Navigate';
-        position: absolute;
-        top: -25px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(119, 72, 28, 0.9);
-        color: white;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 10px;
-        white-space: nowrap;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-        z-index: 10;
-    }
-
-    .thumbNails:focus::before {
-        opacity: 1;
-    }
-
-    /* Enhanced focus state for better accessibility */
     .thumbNails:focus-visible {
         box-shadow: 0 0 0 3px rgba(119, 72, 28, 0.7);
         background: rgba(119, 72, 28, 0.08);
@@ -1625,26 +1605,34 @@
     .thumbNails::after {
         content: '← swipe →';
         position: absolute;
-        bottom: -15px;
+        bottom: -20px;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 10px;
-        color: rgba(119, 72, 28, 0.5);
-        font-weight: 300;
-        letter-spacing: 1px;
-        animation: fadeInOut 3s ease-in-out infinite;
+        font-size: 12px;
+        color: rgba(119, 72, 28, 0.8);
+        font-weight: 500;
+        letter-spacing: 2px;
+        animation: fadeInOut 4s ease-in-out infinite;
         pointer-events: none;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 4px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(119, 72, 28, 0.3);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        white-space: nowrap;
     }
 
     @keyframes fadeInOut {
 
         0%,
         100% {
-            opacity: 0.3;
+            opacity: 0.6;
+            transform: translateX(-50%) scale(0.95);
         }
 
         50% {
-            opacity: 0.7;
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
         }
     }
 
