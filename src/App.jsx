@@ -735,15 +735,7 @@ function App() {
           )}
 
           {/* Optimized Canvas rendering with CSS classes for better performance */}
-          <div
-            className={`canvas-container ${
-              state.showContactPage ||
-              state.showTypes ||
-              state.showGalleryLoading
-                ? 'canvas-blurred'
-                : ''
-            }`}
-          >
+          <div className="canvas-container">
             {/* Always mount Canvas with splat URL directly */}
             <NewCanvas
               isAnimating={state.isAnimating}

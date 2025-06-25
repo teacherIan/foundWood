@@ -1056,22 +1056,9 @@ only screen and (min-resolution: 2dppx) {
     will-change: auto;
 }
 
-.canvas-blurred {
-    filter: blur(8px);
-    will-change: filter;
-    pointer-events: none;
-}
-
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
     .canvas-container {
         transition: none;
-    }
-}
-
-/* Use lighter blur on mobile for better performance */
-@media (max-width: 768px) {
-    .canvas-blurred {
-        filter: blur(5px);
     }
 }

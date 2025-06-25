@@ -168,11 +168,6 @@ const Header = memo(
       <div
         className={`header ${showContactPage ? 'header-disabled' : ''}`}
         style={{
-          filter: showContactPage ? 'blur(8px)' : 'none',
-          WebkitFilter: showContactPage ? 'blur(8px)' : 'none',
-          MozFilter: showContactPage ? 'blur(8px)' : 'none',
-          transition:
-            'filter 0.3s ease-out, -webkit-filter 0.3s ease-out, -moz-filter 0.3s ease-out',
           pointerEvents: showContactPage ? 'none' : 'auto',
         }}
       >

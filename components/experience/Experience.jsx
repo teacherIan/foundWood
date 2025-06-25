@@ -471,7 +471,7 @@ function Scene({
         console.log(
           `🎭 Overlay detected - animating alpha to 0.8 (showContactPage: ${showContactPage}, showTypes: ${showTypes}, showGallery: ${showGallery})`
         );
-        targetAlpha = 0.8; // Animate to 0.8 when any overlay is shown for cleaner rendering
+        targetAlpha = 0.9; // Animate to 0.8 when any overlay is shown for cleaner rendering
 
         // Slower animation for contact page specifically
         if (showContactPage) {
@@ -1337,14 +1337,6 @@ export default function App({
           outline: 'none', // Remove any potential outlines
           boxSizing: 'border-box', // Ensure proper box model
           transform: isIPadProPortrait ? 'translate3d(0, 0, 0)' : undefined, // Force GPU acceleration on iPad Pro
-          // CRITICAL: Apply blur directly to canvas on iPad Pro portrait mode when overlays are active
-          filter: isIPadProPortrait && hasOverlay ? 'blur(20px)' : undefined,
-          WebkitFilter:
-            isIPadProPortrait && hasOverlay ? 'blur(20px)' : undefined,
-          MozFilter: isIPadProPortrait && hasOverlay ? 'blur(20px)' : undefined,
-          transition: isIPadProPortrait
-            ? 'filter 0.2s ease-out, -webkit-filter 0.2s ease-out, -moz-filter 0.2s ease-out'
-            : undefined,
           // Enhanced iPad Pro portrait specific styles
           ...(isIPadProPortrait && {
             contain: 'layout style paint',
