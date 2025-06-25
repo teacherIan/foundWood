@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Outer ring -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#8B4513" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="50" cy="50" r="38" fill="none" stroke="#A0522D" stroke-width="1" opacity="0.5"/>
+  <circle cx="50" cy="50" r="31" fill="none" stroke="#CD853F" stroke-width="1" opacity="0.4"/>
+  <circle cx="50" cy="50" r="24" fill="none" stroke="#DEB887" stroke-width="1" opacity="0.4"/>
+  <circle cx="50" cy="50" r="17" fill="none" stroke="#F4A460" stroke-width="1" opacity="0.3"/>
+  <circle cx="50" cy="50" r="10" fill="none" stroke="#8B4513" stroke-width="1" opacity="0.3"/>
+  <circle cx="50" cy="50" r="5" fill="#8B4513" opacity="0.2"/>
+  
+  <!-- Radial wood grain lines -->
+  <path d="M50,5 L50,95" stroke="#8B4513" stroke-width="0.5" opacity="0.3"/>
+  <path d="M5,50 L95,50" stroke="#8B4513" stroke-width="0.5" opacity="0.3"/>
+  <path d="M21.5,21.5 L78.5,78.5" stroke="#8B4513" stroke-width="0.5" opacity="0.2"/>
+  <path d="M78.5,21.5 L21.5,78.5" stroke="#8B4513" stroke-width="0.5" opacity="0.2"/>
+</svg>

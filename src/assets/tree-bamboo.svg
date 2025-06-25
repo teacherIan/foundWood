@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+  <!-- Bamboo style with multiple segments -->
+  <line x1="30" y1="80" x2="30" y2="20" stroke-linecap="round"/>
+  <line x1="40" y1="80" x2="40" y2="15" stroke-linecap="round"/>
+  <line x1="50" y1="80" x2="50" y2="25" stroke-linecap="round"/>
+  <line x1="60" y1="80" x2="60" y2="18" stroke-linecap="round"/>
+  <line x1="70" y1="80" x2="70" y2="30" stroke-linecap="round"/>
+  
+  <!-- Bamboo segments -->
+  <line x1="28" y1="30" x2="32" y2="30"/>
+  <line x1="28" y1="45" x2="32" y2="45"/>
+  <line x1="28" y1="60" x2="32" y2="60"/>
+  
+  <line x1="38" y1="25" x2="42" y2="25"/>
+  <line x1="38" y1="40" x2="42" y2="40"/>
+  <line x1="38" y1="55" x2="42" y2="55"/>
+  
+  <line x1="48" y1="35" x2="52" y2="35"/>
+  <line x1="48" y1="50" x2="52" y2="50"/>
+  <line x1="48" y1="65" x2="52" y2="65"/>
+  
+  <line x1="58" y1="28" x2="62" y2="28"/>
+  <line x1="58" y1="43" x2="62" y2="43"/>
+  <line x1="58" y1="58" x2="62" y2="58"/>
+  
+  <line x1="68" y1="40" x2="72" y2="40"/>
+  <line x1="68" y1="55" x2="72" y2="55"/>
+  
+  <!-- Leaves -->
+  <path d="M30 20 Q25 15 20 20 Q25 25 30 20" stroke-linecap="round"/>
+  <path d="M40 15 Q35 10 30 15 Q35 20 40 15" stroke-linecap="round"/>
+  <path d="M60 18 Q55 13 50 18 Q55 23 60 18" stroke-linecap="round"/>
+</svg>

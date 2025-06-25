@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+  <!-- Weeping tree with drooping branches -->
+  <path d="M50 80 Q50 60 45 40 Q40 25 50 20 Q60 25 55 40 Q50 60 50 80" stroke-linecap="round"/>
+  <!-- Drooping branches -->
+  <path d="M45 30 Q40 35 35 40 Q30 45 25 50" stroke-linecap="round"/>
+  <path d="M55 30 Q60 35 65 40 Q70 45 75 50" stroke-linecap="round"/>
+  <path d="M47 35 Q42 40 37 45 Q32 50 27 55" stroke-linecap="round"/>
+  <path d="M53 35 Q58 40 63 45 Q68 50 73 55" stroke-linecap="round"/>
+  <path d="M48 40 Q43 45 38 50 Q33 55 28 60" stroke-linecap="round"/>
+  <path d="M52 40 Q57 45 62 50 Q67 55 72 60" stroke-linecap="round"/>
+  <!-- More drooping foliage -->
+  <path d="M44 45 Q39 50 34 55 Q29 60 24 65" stroke-linecap="round"/>
+  <path d="M56 45 Q61 50 66 55 Q71 60 76 65" stroke-linecap="round"/>
+</svg>

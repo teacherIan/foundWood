@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Simple tree trunk -->
+  <rect x="45" y="70" width="10" height="25" fill="none" stroke="#8B4513" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Layered canopy - simple triangular -->
+  <path d="M50,20 L30,50 L70,50 Z" fill="none" stroke="#A0522D" stroke-width="2" opacity="0.5"/>
+  <path d="M50,30 L35,55 L65,55 Z" fill="none" stroke="#CD853F" stroke-width="1.5" opacity="0.4"/>
+  <path d="M50,40 L40,60 L60,60 Z" fill="none" stroke="#DEB887" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Simple branches -->
+  <path d="M45,75 L40,70" stroke="#8B4513" stroke-width="1" opacity="0.5"/>
+  <path d="M55,75 L60,70" stroke="#8B4513" stroke-width="1" opacity="0.5"/>
+</svg>

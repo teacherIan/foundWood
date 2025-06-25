@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" fill="none">
+  <!-- Dovetail joint pattern -->
+  <!-- Left piece -->
+  <path d="M10,15 L25,15 L30,25 L35,15 L45,15 L45,45 L35,45 L30,35 L25,45 L10,45 Z" 
+        fill="none" stroke="#8B4513" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Right piece -->
+  <path d="M55,20 L55,10 L70,10 L75,20 L80,10 L90,10 L90,50 L80,50 L75,40 L70,50 L55,50 Z" 
+        fill="none" stroke="#A0522D" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Joint lines -->
+  <path d="M45,20 L55,20" stroke="#CD853F" stroke-width="1" opacity="0.4"/>
+  <path d="M45,30 L55,30" stroke="#CD853F" stroke-width="1" opacity="0.4"/>
+  <path d="M45,40 L55,40" stroke="#CD853F" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Wood grain -->
+  <path d="M15,20 Q20,18 25,20 T35,20 T40,20" stroke="#DEB887" stroke-width="0.5" opacity="0.4"/>
+  <path d="M15,30 Q20,28 25,30 T35,30 T40,30" stroke="#DEB887" stroke-width="0.5" opacity="0.4"/>
+  <path d="M60,15 Q65,13 70,15 T80,15 T85,15" stroke="#DEB887" stroke-width="0.5" opacity="0.4"/>
+  <path d="M60,25 Q65,23 70,25 T80,25 T85,25" stroke="#DEB887" stroke-width="0.5" opacity="0.4"/>
+</svg>

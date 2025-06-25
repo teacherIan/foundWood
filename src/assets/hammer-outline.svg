@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Hammer head -->
+  <rect x="30" y="25" width="40" height="15" rx="2" fill="none" stroke="#8B4513" stroke-width="2" opacity="0.6"/>
+  <rect x="25" y="28" width="10" height="9" rx="1" fill="none" stroke="#A0522D" stroke-width="1.5" opacity="0.6"/>
+  
+  <!-- Hammer handle -->
+  <rect x="47" y="40" width="6" height="45" rx="3" fill="none" stroke="#CD853F" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Handle grip -->
+  <rect x="46" y="65" width="8" height="15" rx="4" fill="none" stroke="#DEB887" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Metal details -->
+  <rect x="32" y="27" width="36" height="2" fill="#A0522D" opacity="0.3"/>
+  <rect x="32" y="31" width="36" height="2" fill="#A0522D" opacity="0.3"/>
+  <rect x="32" y="35" width="36" height="2" fill="#A0522D" opacity="0.3"/>
+  
+  <!-- Handle wood grain -->
+  <path d="M49,42 L49,82" stroke="#8B4513" stroke-width="0.5" opacity="0.4"/>
+  <path d="M51,42 L51,82" stroke="#8B4513" stroke-width="0.5" opacity="0.4"/>
+</svg>

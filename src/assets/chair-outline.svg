@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Chair back -->
+  <rect x="20" y="15" width="60" height="35" rx="3" fill="none" stroke="#8B4513" stroke-width="2" opacity="0.6"/>
+  <!-- Chair seat -->
+  <rect x="15" y="45" width="70" height="25" rx="2" fill="none" stroke="#A0522D" stroke-width="2" opacity="0.6"/>
+  <!-- Chair legs -->
+  <rect x="18" y="70" width="4" height="20" fill="none" stroke="#8B4513" stroke-width="1.5" opacity="0.6"/>
+  <rect x="78" y="70" width="4" height="20" fill="none" stroke="#8B4513" stroke-width="1.5" opacity="0.6"/>
+  <rect x="18" y="15" width="4" height="35" fill="none" stroke="#8B4513" stroke-width="1.5" opacity="0.6"/>
+  <rect x="78" y="15" width="4" height="35" fill="none" stroke="#8B4513" stroke-width="1.5" opacity="0.6"/>
+  
+  <!-- Decorative details -->
+  <circle cx="35" cy="32" r="2" fill="none" stroke="#CD853F" stroke-width="1" opacity="0.4"/>
+  <circle cx="65" cy="32" r="2" fill="none" stroke="#CD853F" stroke-width="1" opacity="0.4"/>
+</svg>

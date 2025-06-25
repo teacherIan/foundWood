@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Cherry blossom trunk -->
+  <path d="M50,95 Q48,85 50,75 Q52,65 50,55 Q48,45 50,35" stroke="#8B4513" stroke-width="3" opacity="0.6"/>
+  
+  <!-- Curved branches -->
+  <path d="M50,50 Q35,45 25,35 Q20,30 15,25" stroke="#A0522D" stroke-width="2" opacity="0.5"/>
+  <path d="M50,50 Q65,45 75,35 Q80,30 85,25" stroke="#A0522D" stroke-width="2" opacity="0.5"/>
+  <path d="M50,45 Q40,40 30,30 Q25,25 20,20" stroke="#CD853F" stroke-width="1.5" opacity="0.4"/>
+  <path d="M50,45 Q60,40 70,30 Q75,25 80,20" stroke="#CD853F" stroke-width="1.5" opacity="0.4"/>
+  <path d="M50,40 Q45,35 40,25 Q38,20 35,15" stroke="#DEB887" stroke-width="1" opacity="0.4"/>
+  <path d="M50,40 Q55,35 60,25 Q62,20 65,15" stroke="#DEB887" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Cherry blossoms -->
+  <circle cx="25" cy="32" r="2" fill="none" stroke="#F4A460" stroke-width="1" opacity="0.5"/>
+  <circle cx="75" cy="32" r="2" fill="none" stroke="#F4A460" stroke-width="1" opacity="0.5"/>
+  <circle cx="30" cy="27" r="1.5" fill="none" stroke="#F4A460" stroke-width="1" opacity="0.5"/>
+  <circle cx="70" cy="27" r="1.5" fill="none" stroke="#F4A460" stroke-width="1" opacity="0.5"/>
+  <circle cx="38" cy="18" r="1.5" fill="none" stroke="#DEB887" stroke-width="1" opacity="0.4"/>
+  <circle cx="62" cy="18" r="1.5" fill="none" stroke="#DEB887" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Blossom petals -->
+  <path d="M23,30 L27,30 M25,28 L25,32" stroke="#F4A460" stroke-width="0.5" opacity="0.4"/>
+  <path d="M73,30 L77,30 M75,28 L75,32" stroke="#F4A460" stroke-width="0.5" opacity="0.4"/>
+  <path d="M28,25 L32,25 M30,23 L30,27" stroke="#F4A460" stroke-width="0.5" opacity="0.4"/>
+  <path d="M68,25 L72,25 M70,23 L70,27" stroke="#F4A460" stroke-width="0.5" opacity="0.4"/>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Oak trunk -->
+  <path d="M50,95 Q48,85 50,75 Q52,65 50,55 Q48,45 50,35" stroke="#8B4513" stroke-width="4" opacity="0.6"/>
+  
+  <!-- Major branches -->
+  <path d="M50,45 Q40,40 30,35 Q25,33 20,30" stroke="#A0522D" stroke-width="3" opacity="0.5"/>
+  <path d="M50,45 Q60,40 70,35 Q75,33 80,30" stroke="#A0522D" stroke-width="3" opacity="0.5"/>
+  <path d="M50,55 Q35,50 25,45 Q20,43 15,40" stroke="#A0522D" stroke-width="2.5" opacity="0.5"/>
+  <path d="M50,55 Q65,50 75,45 Q80,43 85,40" stroke="#A0522D" stroke-width="2.5" opacity="0.5"/>
+  
+  <!-- Oak leaf clusters -->
+  <path d="M25,32 Q20,28 22,25 Q25,22 28,25 Q30,28 28,32 Q25,35 22,32 Q20,30 22,28" 
+        fill="none" stroke="#CD853F" stroke-width="1" opacity="0.4"/>
+  <path d="M75,32 Q70,28 72,25 Q75,22 78,25 Q80,28 78,32 Q75,35 72,32 Q70,30 72,28" 
+        fill="none" stroke="#CD853F" stroke-width="1" opacity="0.4"/>
+  <path d="M20,42 Q15,38 17,35 Q20,32 23,35 Q25,38 23,42 Q20,45 17,42 Q15,40 17,38" 
+        fill="none" stroke="#DEB887" stroke-width="1" opacity="0.4"/>
+  <path d="M80,42 Q75,38 77,35 Q80,32 83,35 Q85,38 83,42 Q80,45 77,42 Q75,40 77,38" 
+        fill="none" stroke="#DEB887" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Small twigs -->
+  <path d="M30,33 L28,30 M32,35 L30,32" stroke="#CD853F" stroke-width="0.5" opacity="0.4"/>
+  <path d="M70,33 L72,30 M68,35 L70,32" stroke="#CD853F" stroke-width="0.5" opacity="0.4"/>
+</svg>

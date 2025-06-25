@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" fill="none">
+  <!-- Table top -->
+  <rect x="10" y="15" width="80" height="15" rx="2" fill="none" stroke="#8B4513" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Table legs -->
+  <rect x="15" y="30" width="6" height="25" fill="none" stroke="#A0522D" stroke-width="1.5" opacity="0.6"/>
+  <rect x="79" y="30" width="6" height="25" fill="none" stroke="#A0522D" stroke-width="1.5" opacity="0.6"/>
+  
+  <!-- Cross support -->
+  <rect x="20" y="45" width="60" height="3" rx="1" fill="none" stroke="#CD853F" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Wood grain on top -->
+  <path d="M15,20 Q25,18 35,20 T55,20 T75,20 T85,20" stroke="#CD853F" stroke-width="0.5" opacity="0.4"/>
+  <path d="M15,25 Q25,23 35,25 T55,25 T75,25 T85,25" stroke="#CD853F" stroke-width="0.5" opacity="0.4"/>
+  
+  <!-- Corner details -->
+  <circle cx="15" cy="20" r="1" fill="#DEB887" opacity="0.3"/>
+  <circle cx="85" cy="20" r="1" fill="#DEB887" opacity="0.3"/>
+  <circle cx="15" cy="25" r="1" fill="#DEB887" opacity="0.3"/>
+  <circle cx="85" cy="25" r="1" fill="#DEB887" opacity="0.3"/>
+</svg>

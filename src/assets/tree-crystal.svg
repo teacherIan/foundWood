@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+  <!-- Crystal formation background -->
+  <polygon points="50,10 70,30 70,70 50,90 30,70 30,30" stroke-width="1.5" opacity="0.4"/>
+  <polygon points="50,15 65,32 65,68 50,85 35,68 35,32" stroke-width="1" opacity="0.3"/>
+  
+  <!-- Crystalline tree structure -->
+  <polygon points="50,70 48,55 52,55" stroke-width="1.5" stroke-linejoin="round"/>
+  
+  <!-- Crystal branch formations -->
+  <polygon points="50,55 40,45 45,40 55,40 60,45" stroke-width="1" stroke-linejoin="round"/>
+  <polygon points="50,45 35,35 40,30 60,30 65,35" stroke-width="1" stroke-linejoin="round"/>
+  <polygon points="50,35 30,25 35,20 65,20 70,25" stroke-width="1" stroke-linejoin="round"/>
+  
+  <!-- Crystal facets -->
+  <line x1="40" y1="45" x2="50" y2="40" stroke-width="0.8" opacity="0.7"/>
+  <line x1="60" y1="45" x2="50" y2="40" stroke-width="0.8" opacity="0.7"/>
+  <line x1="35" y1="35" x2="50" y2="30" stroke-width="0.8" opacity="0.6"/>
+  <line x1="65" y1="35" x2="50" y2="30" stroke-width="0.8" opacity="0.6"/>
+  <line x1="30" y1="25" x2="50" y2="20" stroke-width="0.8" opacity="0.5"/>
+  <line x1="70" y1="25" x2="50" y2="20" stroke-width="0.8" opacity="0.5"/>
+  
+  <!-- Crystal points and vertices -->
+  <circle cx="30" cy="25" r="1.5" stroke-width="1" opacity="0.8"/>
+  <circle cx="70" cy="25" r="1.5" stroke-width="1" opacity="0.8"/>
+  <circle cx="35" cy="35" r="1.2" stroke-width="1" opacity="0.7"/>
+  <circle cx="65" cy="35" r="1.2" stroke-width="1" opacity="0.7"/>
+  <circle cx="40" cy="45" r="1" stroke-width="1" opacity="0.6"/>
+  <circle cx="60" cy="45" r="1" stroke-width="1" opacity="0.6"/>
+  <circle cx="50" cy="20" r="2" stroke-width="1" opacity="0.9"/>
+  
+  <!-- Outer crystal framework -->
+  <line x1="30" y1="30" x2="25" y2="35" stroke-width="0.8" opacity="0.4"/>
+  <line x1="70" y1="30" x2="75" y2="35" stroke-width="0.8" opacity="0.4"/>
+  <line x1="30" y1="70" x2="25" y2="65" stroke-width="0.8" opacity="0.4"/>
+  <line x1="70" y1="70" x2="75" y2="65" stroke-width="0.8" opacity="0.4"/>
+</svg>

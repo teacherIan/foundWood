@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+  <!-- Spiral tree trunk -->
+  <path d="M50 80 Q45 70 50 60 Q55 50 45 40 Q35 30 50 20 Q65 25 60 35 Q55 45 60 55 Q65 65 55 75" stroke-linecap="round"/>
+  
+  <!-- Spiral branches following the twist -->
+  <path d="M45 70 Q40 65 35 70" stroke-linecap="round"/>
+  <path d="M55 65 Q60 60 65 65" stroke-linecap="round"/>
+  <path d="M50 60 Q45 55 40 60" stroke-linecap="round"/>
+  <path d="M45 50 Q50 45 55 50" stroke-linecap="round"/>
+  <path d="M40 45 Q35 40 30 45" stroke-linecap="round"/>
+  <path d="M60 40 Q65 35 70 40" stroke-linecap="round"/>
+  <path d="M50 35 Q55 30 60 35" stroke-linecap="round"/>
+  <path d="M55 25 Q60 20 65 25" stroke-linecap="round"/>
+  
+  <!-- Small foliage clusters -->
+  <circle cx="35" cy="70" r="3" stroke-width="1"/>
+  <circle cx="65" cy="65" r="3" stroke-width="1"/>
+  <circle cx="40" cy="60" r="2" stroke-width="1"/>
+  <circle cx="55" cy="50" r="2" stroke-width="1"/>
+  <circle cx="30" cy="45" r="3" stroke-width="1"/>
+  <circle cx="70" cy="40" r="3" stroke-width="1"/>
+  <circle cx="60" cy="35" r="2" stroke-width="1"/>
+  <circle cx="65" cy="25" r="2" stroke-width="1"/>
+</svg>

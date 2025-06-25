@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+  <!-- Cactus tree with multiple arms -->
+  <rect x="47" y="40" width="6" height="40" rx="3" stroke-linecap="round"/>
+  
+  <!-- Left arm -->
+  <rect x="25" y="25" width="6" height="35" rx="3" stroke-linecap="round"/>
+  <path d="M31 45 Q35 45 40 45 Q45 45 47 48" stroke-linecap="round" fill="none"/>
+  
+  <!-- Right arm -->
+  <rect x="69" y="30" width="6" height="30" rx="3" stroke-linecap="round"/>
+  <path d="M69 50 Q65 50 60 50 Q55 50 53 53" stroke-linecap="round" fill="none"/>
+  
+  <!-- Higher left arm -->
+  <rect x="15" y="15" width="5" height="25" rx="2.5" stroke-linecap="round"/>
+  <path d="M20 30 Q23 30 26 30 Q29 30 31 33" stroke-linecap="round" fill="none"/>
+  
+  <!-- Cactus segments (horizontal lines) -->
+  <line x1="45" y1="50" x2="52" y2="50"/>
+  <line x1="45" y1="60" x2="52" y2="60"/>
+  <line x1="45" y1="70" x2="52" y2="70"/>
+  
+  <line x1="23" y1="35" x2="28" y2="35"/>
+  <line x1="23" y1="45" x2="28" y2="45"/>
+  <line x1="23" y1="55" x2="28" y2="55"/>
+  
+  <line x1="67" y1="40" x2="72" y2="40"/>
+  <line x1="67" y1="50" x2="72" y2="50"/>
+  
+  <line x1="13" y1="25" x2="17" y2="25"/>
+  <line x1="13" y1="35" x2="17" y2="35"/>
+  
+  <!-- Small spines -->
+  <circle cx="46" cy="45" r="0.5" stroke-width="0.5"/>
+  <circle cx="53" cy="45" r="0.5" stroke-width="0.5"/>
+  <circle cx="46" cy="55" r="0.5" stroke-width="0.5"/>
+  <circle cx="53" cy="55" r="0.5" stroke-width="0.5"/>
+  <circle cx="46" cy="65" r="0.5" stroke-width="0.5"/>
+  <circle cx="53" cy="65" r="0.5" stroke-width="0.5"/>
+</svg>

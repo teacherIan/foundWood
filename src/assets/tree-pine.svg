@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Pine trunk -->
+  <rect x="47" y="60" width="6" height="35" fill="none" stroke="#8B4513" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Pine needle layers (triangular) -->
+  <path d="M50,15 L35,30 L65,30 Z" fill="none" stroke="#A0522D" stroke-width="2" opacity="0.6"/>
+  <path d="M50,25 L38,40 L62,40 Z" fill="none" stroke="#A0522D" stroke-width="2" opacity="0.5"/>
+  <path d="M50,35 L40,50 L60,50 Z" fill="none" stroke="#CD853F" stroke-width="2" opacity="0.5"/>
+  <path d="M50,45 L42,60 L58,60 Z" fill="none" stroke="#CD853F" stroke-width="2" opacity="0.4"/>
+  
+  <!-- Needle details -->
+  <path d="M40,28 L38,25 M42,28 L40,25 M44,28 L42,25" stroke="#DEB887" stroke-width="0.5" opacity="0.4"/>
+  <path d="M56,28 L58,25 M58,28 L60,25 M60,28 L62,25" stroke="#DEB887" stroke-width="0.5" opacity="0.4"/>
+  <path d="M45,38 L43,35 M47,38 L45,35 M49,38 L47,35" stroke="#DEB887" stroke-width="0.5" opacity="0.4"/>
+  <path d="M51,38 L53,35 M53,38 L55,35 M55,38 L57,35" stroke="#DEB887" stroke-width="0.5" opacity="0.4"/>
+</svg>

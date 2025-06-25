@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 40" fill="none">
+  <path d="M10,35 L90,35 L88,32 L12,32 Z" fill="#8B4513" opacity="0.6"/>
+  <path d="M10,28 L90,28 L88,25 L12,25 Z" fill="#A0522D" opacity="0.5"/>
+  <path d="M10,21 L90,21 L88,18 L12,18 Z" fill="#CD853F" opacity="0.4"/>
+  <path d="M10,14 L90,14 L88,11 L12,11 Z" fill="#DEB887" opacity="0.3"/>
+  <path d="M10,7 L90,7 L88,4 L12,4 Z" fill="#F4A460" opacity="0.2"/>
+  <!-- Wood grain lines -->
+  <path d="M15,5 Q25,8 35,5 T55,5 T75,5 T85,5" stroke="#8B4513" stroke-width="0.5" fill="none" opacity="0.4"/>
+  <path d="M15,12 Q25,15 35,12 T55,12 T75,12 T85,12" stroke="#8B4513" stroke-width="0.5" fill="none" opacity="0.4"/>
+  <path d="M15,19 Q25,22 35,19 T55,19 T75,19 T85,19" stroke="#8B4513" stroke-width="0.5" fill="none" opacity="0.4"/>
+  <path d="M15,26 Q25,29 35,26 T55,26 T75,26 T85,26" stroke="#8B4513" stroke-width="0.5" fill="none" opacity="0.4"/>
+  <path d="M15,33 Q25,36 35,33 T55,33 T75,33 T85,33" stroke="#8B4513" stroke-width="0.5" fill="none" opacity="0.4"/>
+</svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Palm trunk -->
+  <path d="M50,95 Q48,80 50,65 Q52,50 50,35 Q48,25 50,15" stroke="#CD853F" stroke-width="3" opacity="0.6"/>
+  
+  <!-- Palm fronds -->
+  <path d="M50,20 Q35,15 25,10 Q20,8 15,5" stroke="#A0522D" stroke-width="2" opacity="0.5"/>
+  <path d="M50,20 Q65,15 75,10 Q80,8 85,5" stroke="#A0522D" stroke-width="2" opacity="0.5"/>
+  <path d="M50,18 Q40,12 30,8 Q25,6 20,3" stroke="#CD853F" stroke-width="2" opacity="0.5"/>
+  <path d="M50,18 Q60,12 70,8 Q75,6 80,3" stroke="#CD853F" stroke-width="2" opacity="0.5"/>
+  <path d="M50,22 Q45,18 40,15 Q35,13 30,12" stroke="#DEB887" stroke-width="1.5" opacity="0.4"/>
+  <path d="M50,22 Q55,18 60,15 Q65,13 70,12" stroke="#DEB887" stroke-width="1.5" opacity="0.4"/>
+  
+  <!-- Palm leaves -->
+  <path d="M25,8 L23,6 L27,4 L29,6 L25,8 M25,8 L21,10 L19,8 L23,6" 
+        stroke="#DEB887" stroke-width="0.5" opacity="0.4"/>
+  <path d="M75,8 L73,6 L77,4 L79,6 L75,8 M75,8 L79,10 L81,8 L77,6" 
+        stroke="#DEB887" stroke-width="0.5" opacity="0.4"/>
+  <path d="M30,6 L28,4 L32,2 L34,4 L30,6" 
+        stroke="#CD853F" stroke-width="0.5" opacity="0.4"/>
+  <path d="M70,6 L68,4 L72,2 L74,4 L70,6" 
+        stroke="#CD853F" stroke-width="0.5" opacity="0.4"/>
+  
+  <!-- Trunk texture -->
+  <path d="M48,30 L52,30 M48,45 L52,45 M48,60 L52,60 M48,75 L52,75" 
+        stroke="#8B4513" stroke-width="0.5" opacity="0.4"/>
+</svg>

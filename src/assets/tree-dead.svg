@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+  <!-- Dead tree with bare branches -->
+  <path d="M50 80 L50 45" stroke-linecap="round"/>
+  <!-- Main branches -->
+  <path d="M50 45 L35 30" stroke-linecap="round"/>
+  <path d="M50 45 L65 30" stroke-linecap="round"/>
+  <path d="M50 55 L40 40" stroke-linecap="round"/>
+  <path d="M50 55 L60 40" stroke-linecap="round"/>
+  
+  <!-- Secondary branches -->
+  <path d="M35 30 L25 20" stroke-linecap="round"/>
+  <path d="M35 30 L30 35" stroke-linecap="round"/>
+  <path d="M65 30 L75 20" stroke-linecap="round"/>
+  <path d="M65 30 L70 35" stroke-linecap="round"/>
+  
+  <!-- Tertiary branches -->
+  <path d="M40 40 L30 30" stroke-linecap="round"/>
+  <path d="M40 40 L35 45" stroke-linecap="round"/>
+  <path d="M60 40 L70 30" stroke-linecap="round"/>
+  <path d="M60 40 L65 45" stroke-linecap="round"/>
+  
+  <!-- Small twigs -->
+  <path d="M25 20 L20 15" stroke-linecap="round"/>
+  <path d="M25 20 L22 25" stroke-linecap="round"/>
+  <path d="M75 20 L80 15" stroke-linecap="round"/>
+  <path d="M75 20 L78 25" stroke-linecap="round"/>
+  
+  <!-- Broken branch -->
+  <path d="M30 35 L25 40" stroke-linecap="round"/>
+  <path d="M25 40 L22 42" stroke-linecap="round" stroke-dasharray="2,2"/>
+</svg>

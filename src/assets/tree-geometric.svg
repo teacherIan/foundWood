@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+  <!-- Abstract geometric tree -->
+  <polygon points="50,80 45,60 55,60" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="50,60 40,40 60,40" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="50,40 35,25 65,25" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Geometric branch extensions -->
+  <polygon points="35,25 25,15 35,15" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="65,25 65,15 75,15" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Side triangular branches -->
+  <polygon points="40,50 30,40 40,40" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="60,50 70,40 60,40" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Lower side branches -->
+  <polygon points="45,70 35,60 45,60" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="55,70 65,60 55,60" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Decorative geometric elements -->
+  <circle cx="30" cy="15" r="2" stroke-width="1"/>
+  <circle cx="70" cy="15" r="2" stroke-width="1"/>
+  <circle cx="25" cy="40" r="1.5" stroke-width="1"/>
+  <circle cx="75" cy="40" r="1.5" stroke-width="1"/>
+  <circle cx="30" cy="60" r="1.5" stroke-width="1"/>
+  <circle cx="70" cy="60" r="1.5" stroke-width="1"/>
+  
+  <!-- Central diamond -->
+  <polygon points="50,30 52,28 50,26 48,28" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

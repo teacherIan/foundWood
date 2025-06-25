@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+  <!-- Art Deco circular frame -->
+  <circle cx="50" cy="50" r="45" stroke-width="2" opacity="0.5"/>
+  <circle cx="50" cy="50" r="40" stroke-width="1" opacity="0.3"/>
+  
+  <!-- Art Deco rays -->
+  <path d="M50 5 L52 15 L48 15 Z" stroke-linejoin="round" opacity="0.7"/>
+  <path d="M50 95 L52 85 L48 85 Z" stroke-linejoin="round" opacity="0.7"/>
+  <path d="M5 50 L15 52 L15 48 Z" stroke-linejoin="round" opacity="0.7"/>
+  <path d="M95 50 L85 52 L85 48 Z" stroke-linejoin="round" opacity="0.7"/>
+  
+  <!-- Stylized tree with geometric leaves -->
+  <rect x="48" y="60" width="4" height="20" stroke-linejoin="round"/>
+  
+  <!-- Geometric foliage -->
+  <polygon points="50,55 40,45 60,45" stroke-linejoin="round"/>
+  <polygon points="50,50 35,40 65,40" stroke-linejoin="round"/>
+  <polygon points="50,45 30,35 70,35" stroke-linejoin="round"/>
+  
+  <!-- Art Deco corner decorations -->
+  <path d="M20 20 L25 15 L30 20 L25 25 Z" stroke-linejoin="round" opacity="0.4"/>
+  <path d="M80 20 L75 15 L70 20 L75 25 Z" stroke-linejoin="round" opacity="0.4"/>
+  <path d="M20 80 L25 75 L30 80 L25 85 Z" stroke-linejoin="round" opacity="0.4"/>
+  <path d="M80 80 L75 75 L70 80 L75 85 Z" stroke-linejoin="round" opacity="0.4"/>
+  
+  <!-- Central starburst -->
+  <circle cx="50" cy="30" r="3" stroke-width="0.8"/>
+  <line x1="47" y1="27" x2="53" y2="33" stroke-width="0.5" opacity="0.6"/>
+  <line x1="53" y1="27" x2="47" y2="33" stroke-width="0.5" opacity="0.6"/>
+</svg>

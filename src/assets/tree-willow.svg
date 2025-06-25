@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Willow trunk -->
+  <path d="M50,95 Q48,80 50,65 Q52,50 50,35" stroke="#8B4513" stroke-width="3" opacity="0.6"/>
+  
+  <!-- Drooping branches -->
+  <path d="M45,40 Q30,45 25,65 Q20,75 15,85" stroke="#A0522D" stroke-width="2" opacity="0.5"/>
+  <path d="M55,40 Q70,45 75,65 Q80,75 85,85" stroke="#A0522D" stroke-width="2" opacity="0.5"/>
+  <path d="M48,45 Q35,55 30,75 Q25,85 20,95" stroke="#CD853F" stroke-width="1.5" opacity="0.4"/>
+  <path d="M52,45 Q65,55 70,75 Q75,85 80,95" stroke="#CD853F" stroke-width="1.5" opacity="0.4"/>
+  <path d="M50,50 Q40,65 35,85" stroke="#DEB887" stroke-width="1" opacity="0.4"/>
+  <path d="M50,50 Q60,65 65,85" stroke="#DEB887" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Small leaves -->
+  <ellipse cx="20" cy="80" rx="2" ry="4" fill="#CD853F" opacity="0.3"/>
+  <ellipse cx="80" cy="80" rx="2" ry="4" fill="#CD853F" opacity="0.3"/>
+  <ellipse cx="30" cy="90" rx="2" ry="4" fill="#DEB887" opacity="0.3"/>
+  <ellipse cx="70" cy="90" rx="2" ry="4" fill="#DEB887" opacity="0.3"/>
+</svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+  <!-- Baobab tree with thick trunk -->
+  <path d="M35 80 L35 45 Q35 35 50 35 Q65 35 65 45 L65 80" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Thick branches at top -->
+  <path d="M40 40 Q30 30 20 25" stroke-width="2" stroke-linecap="round"/>
+  <path d="M45 38 Q35 25 25 20" stroke-width="2" stroke-linecap="round"/>
+  <path d="M50 37 Q50 25 50 15" stroke-width="2" stroke-linecap="round"/>
+  <path d="M55 38 Q65 25 75 20" stroke-width="2" stroke-linecap="round"/>
+  <path d="M60 40 Q70 30 80 25" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Small branch details -->
+  <path d="M20 25 L15 20" stroke-linecap="round"/>
+  <path d="M25 20 L20 15" stroke-linecap="round"/>
+  <path d="M50 15 L45 10" stroke-linecap="round"/>
+  <path d="M50 15 L55 10" stroke-linecap="round"/>
+  <path d="M75 20 L80 15" stroke-linecap="round"/>
+  <path d="M80 25 L85 20" stroke-linecap="round"/>
+  
+  <!-- Sparse foliage -->
+  <circle cx="15" cy="20" r="2" stroke-width="1"/>
+  <circle cx="20" cy="15" r="2" stroke-width="1"/>
+  <circle cx="45" cy="10" r="2" stroke-width="1"/>
+  <circle cx="55" cy="10" r="2" stroke-width="1"/>
+  <circle cx="80" cy="15" r="2" stroke-width="1"/>
+  <circle cx="85" cy="20" r="2" stroke-width="1"/>
+</svg>
