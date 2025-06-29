@@ -471,11 +471,11 @@ function Scene({
         console.log(
           `🎭 Overlay detected - animating alpha to 0.8 (showContactPage: ${showContactPage}, showTypes: ${showTypes}, showGallery: ${showGallery})`
         );
-        targetAlpha = 0.9; // Animate to 0.8 when any overlay is shown for cleaner rendering
+        targetAlpha = 0.8; // Animate to 0.8 when any overlay is shown for cleaner rendering
 
         // Slower animation for contact page specifically
         if (showContactPage) {
-          duration = 1200; // 1.2 seconds for contact page - slower, more elegant
+          duration = 1600; // 1.2 seconds for contact page - slower, more elegant
         } else {
           duration = 600; // 600ms for other overlays (types, gallery)
         }
@@ -498,9 +498,10 @@ function Scene({
       }
 
       const startTime = Date.now();
+      const delay = 0; // Delay before starting the animation
 
       const animateAlpha = () => {
-        const elapsedTime = Date.now() - startTime;
+        const elapsedTime = Math.max(Date.now() - startTime - delay, 0); // Subtract delay from elapsed time
         const progress = Math.min(elapsedTime / duration, 1); // Ensure progress doesn't exceed 1
 
         setManualAlphaTest(startAlpha + (targetAlpha - startAlpha) * progress);
@@ -1336,6 +1337,10 @@ export default function App({
           border: 'none', // Remove any potential borders
           outline: 'none', // Remove any potential outlines
           boxSizing: 'border-box', // Ensure proper box model
+          filter: showGallery || showTypes ? 'blur(8px)' : 'none', // Combined filter logic
+          transition: 'filter 0.3s ease-in-out',
+          transitionDelay: showGallery || showTypes ? '0.2s' : '0s', // Add delay when blur is applied
+
           transform: isIPadProPortrait ? 'translate3d(0, 0, 0)' : undefined, // Force GPU acceleration on iPad Pro
           // Enhanced iPad Pro portrait specific styles
           ...(isIPadProPortrait && {

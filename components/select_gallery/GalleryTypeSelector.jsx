@@ -105,7 +105,7 @@ function useTypeSpring(internalShowTypes, index) {
           y: targetY,
           x: targetX,
           opacity: 1,
-          delay: 50 + index * 60, // Faster entrance for desktop
+          delay: 1000 + index * 500, // Faster entrance for desktop
           immediate: false,
         });
       } else if (isPortrait && isTablet) {
@@ -233,6 +233,7 @@ function useExplanationTextSpring(internalShowTypes) {
   const [spring, setSpring] = useSpring(() => ({
     opacity: 0,
     y: -100,
+    delay: 6000, // Faster entrance for fallback
     config: configAnimation,
   }));
 
@@ -269,8 +270,9 @@ function useExplanationTextSpring(internalShowTypes) {
       setSpring.start({
         y: targetY,
         opacity: 1,
-        delay: 300, // Reduced from 680ms - animate in after buttons but faster
+        delay: 3000, // Reduced from 680ms - animate in after buttons but faster
         immediate: false,
+        config: configAnimation,
       });
     } else {
       console.log('Explanation text starting exit animation');
