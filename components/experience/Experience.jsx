@@ -473,21 +473,21 @@ function Scene({
         );
         targetAlpha = 0.8; // Animate to 0.8 when any overlay is shown for cleaner rendering
 
-        // Slower animation for contact page specifically
-        if (showContactPage) {
-          duration = 1600; // 1.2 seconds for contact page - slower, more elegant
+        // Slower animation for contact page and gallery specifically
+        if (showContactPage || showGallery) {
+          duration = 1600; // 1.6 seconds for contact page and gallery - smoother, more elegant
         } else {
-          duration = 600; // 600ms for other overlays (types, gallery)
+          duration = 1600; // 600ms for other overlays (types)
         }
       } else {
         console.log('🎭 No overlay - animating alpha back to 0.1');
         targetAlpha = 0.1; // Animate back to 0.1 when all overlays are hidden for optimal rendering
 
-        // Slower return animation for contact page specifically
-        if (showContactPage === false) {
-          duration = 800; // 800ms for contact page closing - smooth transition
+        // Slower return animation for contact page or gallery specifically
+        if (showContactPage === false || showGallery === false) {
+          duration = 1600; // 800ms for contact page or gallery closing - smooth transition
         } else {
-          duration = 400; // 400ms for other overlays
+          duration = 1600; // 400ms for other overlays
         }
       }
 
