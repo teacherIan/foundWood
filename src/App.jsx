@@ -32,7 +32,8 @@ import {
 // - CDN-ready (static assets can be served from CDN)
 
 // OPTIMIZED: Large splat files moved to public directory to avoid bundling (~39MB)
-const splat = '/assets/experience/new_fixed_PLY.splat'; // Served statically, not bundled
+// PRODUCTION FIX: Using smaller splat file due to Vercel 38MB static asset limitations
+const splat = '/assets/experience/fixed_model.splat'; // Served statically, not bundled
 
 // TEMPORARILY DISABLED: Image preloading to reduce memory pressure
 // import { useImagePreloader } from '../components/galleries/useImagePreloader';
@@ -559,7 +560,8 @@ function App() {
 
   // **SIMPLIFIED**: Skip splat validation since we have a 3-second timeout
   // Just provide the splat URL directly - no pre-validation needed
-  const splatUrl = '/assets/experience/new_fixed_PLY.splat';
+  // PRODUCTION FIX: Using smaller splat file due to Vercel 38MB static asset limitations
+  const splatUrl = '/assets/experience/fixed_model.splat';
 
   // **SIMPLIFIED**: No internal timeout - let LoadingScreen component control timing
   // The LoadingScreen will call onComplete when it's ready to be dismissed
