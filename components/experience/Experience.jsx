@@ -148,7 +148,7 @@ const MemoizedText = memo(({ position, children, fontSize, delay = 0 }) => (
   </Text>
 ));
 
-// Simplified Splat component that uses pre-validated splat URL
+// Robust Splat component with multiple fallback URLs for production reliability
 const SplatWithErrorHandling = memo(
   ({
     alphaTest,
@@ -158,24 +158,46 @@ const SplatWithErrorHandling = memo(
     validatedSplatUrl,
     ...props
   }) => {
-    // Use the pre-validated splat URL instead of trying multiple sources
-    const splatSource = validatedSplatUrl; // SIMPLIFIED: Always use prop, no fallback needed
+    // Multiple fallback splat files in order of preference
+    const [currentSplatIndex, setCurrentSplatIndex] = useState(0);
+    const fallbackUrls = useMemo(() => [
+      validatedSplatUrl,                              // Primary: passed from parent
+      '/assets/experience/fixed_model.splat',         // Fallback 1: alternative file
+      '/assets/experience/new_fixed_PLY.splat',       // Fallback 2: original file
+    ], [validatedSplatUrl]);
+
+    const currentSplatUrl = fallbackUrls[currentSplatIndex];
 
     console.log(
-      '🎯 SplatWithErrorHandling: Using pre-validated splat file:',
-      splatSource
+      '🎯 SplatWithErrorHandling: Trying splat file:',
+      currentSplatUrl,
+      `(attempt ${currentSplatIndex + 1}/${fallbackUrls.length})`
     );
 
     const handleLoad = useCallback(() => {
-      console.log('✅ Splat onLoad callback fired successfully');
-    }, []);
+      console.log('✅ Splat onLoad callback fired successfully for:', currentSplatUrl);
+      if (onSplatLoaded) {
+        onSplatLoaded();
+      }
+    }, [currentSplatUrl, onSplatLoaded]);
 
     const handleError = useCallback(
       (error) => {
-        console.error('❌ Splat loading error:', error);
-        // Simply log the error without any reload logic
+        console.error('❌ Splat loading error for:', currentSplatUrl, error);
+        
+        // Try next fallback URL if available
+        if (currentSplatIndex < fallbackUrls.length - 1) {
+          console.log('🔄 Trying next fallback splat file...');
+          setCurrentSplatIndex(prev => prev + 1);
+        } else {
+          console.error('❌ All splat files failed to load. Showing fallback geometry.');
+          // Still call onSplatLoaded to prevent infinite loading
+          if (onSplatLoaded) {
+            onSplatLoaded();
+          }
+        }
       },
-      [splatSource]
+      [currentSplatUrl, currentSplatIndex, fallbackUrls.length, onSplatLoaded]
     );
 
     try {
@@ -183,7 +205,7 @@ const SplatWithErrorHandling = memo(
         <Splat
           alphaTest={alphaTest}
           chunkSize={chunkSize}
-          src={splatSource}
+          src={currentSplatUrl}
           splatSize={splatSize}
           onError={handleError}
           onLoad={handleLoad}
