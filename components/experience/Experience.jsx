@@ -148,7 +148,130 @@ const MemoizedText = memo(({ position, children, fontSize, delay = 0 }) => (
   </Text>
 ));
 
-// Robust Splat component with multiple fallback URLs for production reliability
+// Utility function to detect splat parsing errors that require page reload
+const isSplatParsingError = (errorMessage, context = {}) => {
+  const message = errorMessage.toLowerCase();
+  
+  // Common splat parsing error patterns that require reload
+  const parseErrors = [
+    'failed to parse file',
+    'parse file',  
+    'parsing error',
+    'failed to load splat',
+    'splat loading failed',
+    'invalid splat format',
+    'corrupted splat file',
+    'splat decode error',
+    'splat parse failed',
+    'could not load',
+    'undefined'
+  ];
+  
+  // Check if error message contains any critical parsing error patterns
+  const hasParseError = parseErrors.some(pattern => message.includes(pattern));
+  
+  // Additional checks for splat-related errors
+  const isSplatRelated = message.includes('splat') || 
+                         context.filename?.includes('Splat.js') ||
+                         context.filename?.includes('splat') ||
+                         context.stack?.includes('Splat');
+  
+  return hasParseError || (isSplatRelated && (
+    message.includes('network error') ||
+    message.includes('loading failed') ||
+    message.includes('decode') ||
+    message.includes('buffer') ||
+    message.includes('format')
+  ));
+};
+
+// Smart automatic reload system for production splat loading issues
+const initiateSplatReload = (errorDetails) => {
+  if (window.splatReloadInProgress) return;
+  
+  window.splatReloadInProgress = true;
+  
+  console.error('🚨 Critical splat parsing error - initiating smart reload');
+  console.log('📄 Error details:', {
+    ...errorDetails,
+    timestamp: new Date().toISOString(),
+    userAgent: navigator.userAgent,
+    url: window.location.href,
+    viewport: {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      devicePixelRatio: window.devicePixelRatio
+    },
+    connection: navigator.connection ? {
+      effectiveType: navigator.connection.effectiveType,
+      downlink: navigator.connection.downlink,
+      rtt: navigator.connection.rtt
+    } : 'unknown',
+    memory: navigator.deviceMemory || 'unknown'
+  });
+  
+  // Create user-friendly reload overlay
+  const reloadOverlay = document.createElement('div');
+  reloadOverlay.id = 'splat-reload-overlay';
+  reloadOverlay.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 999999999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    color: #77481c;
+    text-align: center;
+    padding: 20px;
+  `;
+  
+  reloadOverlay.innerHTML = `
+    <div style="margin-bottom: 20px;">
+      <div style="
+        border: 5px solid rgba(119, 72, 28, 0.2);
+        border-radius: 50%;
+        border-top: 5px solid #77481c;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px auto;
+      "></div>
+      <h2 style="margin: 0 0 10px 0; font-size: 1.5rem; font-weight: 500;">
+        Optimizing 3D Scene
+      </h2>
+      <p style="margin: 0; font-size: 1.1rem; color: #8b5a2b; max-width: 400px;">
+        Refreshing to ensure the best 3D experience...
+      </p>
+    </div>
+  `;
+  
+  // Add spinner animation
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  `;
+  document.head.appendChild(style);
+  
+  document.body.appendChild(reloadOverlay);
+  
+  // Smart reload with brief delay
+  setTimeout(() => {
+    console.log('🔄 Smart reload: Refreshing page for optimal splat loading...');
+    window.location.reload();
+  }, 1500);
+};
+
+// Robust Splat component with multiple fallback URLs AND smart reload for production reliability
 const SplatWithErrorHandling = memo(
   ({
     alphaTest,
@@ -190,8 +313,27 @@ const SplatWithErrorHandling = memo(
     const handleError = useCallback(
       (error) => {
         console.error('❌ Splat loading error for:', currentSplatUrl, error);
+        
+        // Check if this is a critical splat parsing error that requires page reload
+        const errorMessage = error?.message || error?.toString() || '';
+        const isParseFileError = isSplatParsingError(errorMessage, { 
+          stack: error?.stack,
+          splatSource: currentSplatUrl 
+        });
+        
+        if (isParseFileError) {
+          console.error('🚨 Critical splat parsing error detected - initiating smart reload');
+          initiateSplatReload({
+            source: 'SplatWithErrorHandling',
+            message: errorMessage,
+            error: error,
+            splatSource: currentSplatUrl,
+            attemptNumber: currentSplatIndex + 1
+          });
+          return; // Don't proceed with normal fallback handling
+        }
 
-        // Try next fallback URL if available
+        // Try next fallback URL if available (for non-critical errors)
         if (currentSplatIndex < fallbackUrls.length - 1) {
           console.log('🔄 Trying next fallback splat file...');
           setCurrentSplatIndex((prev) => prev + 1);
@@ -353,17 +495,55 @@ function Scene({
     }
   }, [scene]);
 
-  // Enhanced error boundary for scene rendering - simplified without splat reload detection
+  // Enhanced error boundary for scene rendering with smart splat reload detection
   useEffect(() => {
     const handleError = (event) => {
       console.error('❌ Scene error caught:', event.error);
-      // Simply log the error without any reload logic
+      
+      // Check for critical splat parsing errors that require smart reload
+      const errorMessage = event.error?.message || event.error?.toString() || '';
+      const isParseFileError = isSplatParsingError(errorMessage, {
+        filename: event.filename,
+        stack: event.error?.stack
+      });
+      
+      if (isParseFileError) {
+        console.error('🚨 Critical splat parsing error detected in global error handler');
+        
+        initiateSplatReload({
+          source: 'Global Error Handler',
+          message: errorMessage,
+          filename: event.filename,
+          lineno: event.lineno,
+          colno: event.colno,
+          error: event.error
+        });
+        
+        return;
+      }
+      
+      // Normal error handling for non-critical errors
       setSceneError(event.error);
     };
 
     const handleUnhandledRejection = (event) => {
       console.error('❌ Unhandled promise rejection caught:', event.reason);
-      // Simply log the error without any reload logic
+      
+      // Check for critical splat parsing errors in promise rejections
+      const errorMessage = event.reason?.message || event.reason?.toString() || '';
+      const isParseFileError = isSplatParsingError(errorMessage, {
+        stack: event.reason?.stack
+      });
+      
+      if (isParseFileError) {
+        console.error('🚨 Critical splat parsing error in promise rejection');
+        
+        initiateSplatReload({
+          source: 'Promise Rejection',
+          message: errorMessage,
+          reason: event.reason
+        });
+      }
     };
 
     window.addEventListener('error', handleError);
