@@ -280,31 +280,52 @@ const initiateSplatReload = (errorDetails) => {
   }, 1500);
 };
 
-// Simple Splat component with Vercel Blob loading
+// Smart Splat component with local/Blob fallback system
 const SplatWithErrorHandling = memo(
   ({ alphaTest, chunkSize, splatSize, onSplatLoaded, ...props }) => {
-    // Use Vercel Blob URL for production deployment
-    const splatUrl =
-      'https://fviowx5xpfafqmye.public.blob.vercel-storage.com/fixed_model.splat';
+    const [currentUrlIndex, setCurrentUrlIndex] = useState(0);
+    
+    // Try local first for dev, then Blob for production
+    const splatUrls = useMemo(() => [
+      '/assets/experience/fixed_model.splat', // Local file for dev
+      'https://fviowx5xpfafqmye.public.blob.vercel-storage.com/fixed_model.splat', // Blob for production
+    ], []);
 
-    console.log('🎯 Loading splat file from Blob storage:', splatUrl);
+    const currentSplatUrl = splatUrls[currentUrlIndex];
+
+    console.log('🎯 Loading splat file:', currentSplatUrl, `(attempt ${currentUrlIndex + 1}/${splatUrls.length})`);
 
     const handleLoad = useCallback(() => {
-      console.log('✅ Splat loaded successfully:', splatUrl);
+      console.log('✅ Splat loaded successfully:', currentSplatUrl);
       if (onSplatLoaded) {
         onSplatLoaded();
       }
-    }, [splatUrl, onSplatLoaded]);
+    }, [currentSplatUrl, onSplatLoaded]);
 
     const handleError = useCallback(
       (error) => {
-        console.error('❌ Splat loading error for:', splatUrl, error);
-        // For now, still call onSplatLoaded to prevent infinite loading
-        if (onSplatLoaded) {
-          onSplatLoaded();
+        console.error('❌ Splat loading error for:', currentSplatUrl);
+        console.error('❌ Error details:', {
+          message: error?.message,
+          name: error?.name,
+          stack: error?.stack,
+          toString: error?.toString(),
+          type: typeof error,
+        });
+        
+        // Try next URL if available
+        if (currentUrlIndex < splatUrls.length - 1) {
+          console.log('🔄 Trying next splat URL...');
+          setCurrentUrlIndex(prev => prev + 1);
+        } else {
+          console.error('❌ All splat URLs failed. Calling onSplatLoaded to prevent infinite loading.');
+          // Still call onSplatLoaded to prevent infinite loading
+          if (onSplatLoaded) {
+            onSplatLoaded();
+          }
         }
       },
-      [splatUrl, onSplatLoaded]
+      [currentSplatUrl, currentUrlIndex, splatUrls.length, onSplatLoaded]
     );
 
     try {
@@ -312,7 +333,7 @@ const SplatWithErrorHandling = memo(
         <Splat
           alphaTest={alphaTest}
           chunkSize={chunkSize}
-          src={splatUrl}
+          src={currentSplatUrl}
           splatSize={splatSize}
           onError={handleError}
           onLoad={handleLoad}
