@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "upload-splats": "node scripts/upload-splats-to-blob.js",
     "css:analyze": "echo 'CSS Bundle Analysis:' && npm run build 2>&1 | grep -E '(css|CSS)'",
     "css:format": "prettier --write 'src/**/*.css' 'components/**/*.css'",
     "css:validate": "echo 'Checking CSS syntax...' && node -e \"console.log('✅ CSS PostCSS setup is working!')\""
@@ -20,6 +21,7 @@
     "@types/three": "^0.161.2",
     "@use-gesture/react": "^10.3.1",
     "@vercel/analytics": "^1.5.0",
+    "@vercel/blob": "^1.1.1",
     "fontfaceobserver": "^2.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

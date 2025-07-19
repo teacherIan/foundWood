@@ -24,16 +24,15 @@ import {
   useSpringRef,
 } from '@react-spring/web';
 
-// PERFORMANCE OPTIMIZATION: Large splat files (39MB+) are now served from public directory
+// PERFORMANCE OPTIMIZATION: Large splat files (39MB+) are served from public directory
 // instead of being bundled. This provides:
 // - Faster builds (Vite doesn't process large files)
 // - Smaller JS bundles (no embedded 39MB assets)
 // - Better loading (browser can stream large files efficiently)
 // - CDN-ready (static assets can be served from CDN)
 
-// OPTIMIZED: Large splat files moved to public directory to avoid bundling (~39MB)
-// REVERTED: Back to original working file - issue likely with Vercel deployment not file size
-const splat = '/assets/experience/new_fixed_PLY.splat'; // Served statically, not bundled
+// NOTE: The actual splat URL is defined in the App component (line ~564)
+// This allows for dynamic URL assignment (e.g., switching to Vercel Blob URLs)
 
 // TEMPORARILY DISABLED: Image preloading to reduce memory pressure
 // import { useImagePreloader } from '../components/galleries/useImagePreloader';
@@ -558,10 +557,10 @@ function reducer(state, action) {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // **SIMPLIFIED**: Skip splat validation since we have a 3-second timeout
-  // Just provide the splat URL directly - no pre-validation needed
-  // REVERTED: Back to original working file - issue likely with Vercel deployment not file size
-  const splatUrl = '/assets/experience/new_fixed_PLY.splat';
+  // SPLAT FILE URL: This is the actual URL passed to the 3D Canvas component
+  // CURRENT: Using public directory path (fails on Vercel due to 38MB limit)
+  // TODO: Replace with Vercel Blob URL after running upload script
+  const splatUrl = '/assets/experience/fixed_model.splat';
 
   // **SIMPLIFIED**: No internal timeout - let LoadingScreen component control timing
   // The LoadingScreen will call onComplete when it's ready to be dismissed
