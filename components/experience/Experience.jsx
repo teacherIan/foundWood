@@ -160,11 +160,14 @@ const SplatWithErrorHandling = memo(
   }) => {
     // Multiple fallback splat files in order of preference
     const [currentSplatIndex, setCurrentSplatIndex] = useState(0);
-    const fallbackUrls = useMemo(() => [
-      validatedSplatUrl,                              // Primary: passed from parent
-      '/assets/experience/fixed_model.splat',         // Fallback 1: alternative file
-      '/assets/experience/new_fixed_PLY.splat',       // Fallback 2: original file
-    ], [validatedSplatUrl]);
+    const fallbackUrls = useMemo(
+      () => [
+        validatedSplatUrl, // Primary: passed from parent
+        '/assets/experience/fixed_model.splat', // Fallback 1: alternative file
+        '/assets/experience/new_fixed_PLY.splat', // Fallback 2: original file
+      ],
+      [validatedSplatUrl]
+    );
 
     const currentSplatUrl = fallbackUrls[currentSplatIndex];
 
@@ -175,7 +178,10 @@ const SplatWithErrorHandling = memo(
     );
 
     const handleLoad = useCallback(() => {
-      console.log('✅ Splat onLoad callback fired successfully for:', currentSplatUrl);
+      console.log(
+        '✅ Splat onLoad callback fired successfully for:',
+        currentSplatUrl
+      );
       if (onSplatLoaded) {
         onSplatLoaded();
       }
@@ -184,13 +190,15 @@ const SplatWithErrorHandling = memo(
     const handleError = useCallback(
       (error) => {
         console.error('❌ Splat loading error for:', currentSplatUrl, error);
-        
+
         // Try next fallback URL if available
         if (currentSplatIndex < fallbackUrls.length - 1) {
           console.log('🔄 Trying next fallback splat file...');
-          setCurrentSplatIndex(prev => prev + 1);
+          setCurrentSplatIndex((prev) => prev + 1);
         } else {
-          console.error('❌ All splat files failed to load. Showing fallback geometry.');
+          console.error(
+            '❌ All splat files failed to load. Showing fallback geometry.'
+          );
           // Still call onSplatLoaded to prevent infinite loading
           if (onSplatLoaded) {
             onSplatLoaded();
