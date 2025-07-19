@@ -2,6 +2,21 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
+// Custom plugin to set proper MIME type for .splat files
+const splatMimePlugin = () => ({
+  name: 'splat-mime-type',
+  configureServer(server) {
+    server.middlewares.use('/assets/experience/', (req, res, next) => {
+      if (req.url && req.url.endsWith('.splat')) {
+        res.setHeader('Content-Type', 'application/octet-stream');
+        res.setHeader('Cache-Control', 'public, max-age=31536000');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+      }
+      next();
+    });
+  },
+});
+
 // https://vitejs.dev/config/
 export default defineConfig({
   // Include all image formats that are actually imported via ES6 modules
@@ -14,7 +29,7 @@ export default defineConfig({
     '**/*.png',
     '**/*.PNG',
   ],
-  plugins: [react()],
+  plugins: [react(), splatMimePlugin()],
   server: {
     host: true,
     force: true, // Force dependency re-optimization
