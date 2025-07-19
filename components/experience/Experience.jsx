@@ -284,7 +284,8 @@ const initiateSplatReload = (errorDetails) => {
 const SplatWithErrorHandling = memo(
   ({ alphaTest, chunkSize, splatSize, onSplatLoaded, ...props }) => {
     // Use Vercel Blob URL for production deployment
-    const splatUrl = 'https://fviowx5xpfafqmye.public.blob.vercel-storage.com/fixed_model.splat';
+    const splatUrl =
+      'https://fviowx5xpfafqmye.public.blob.vercel-storage.com/fixed_model.splat';
 
     console.log('🎯 Loading splat file from Blob storage:', splatUrl);
 
