@@ -280,13 +280,13 @@ const initiateSplatReload = (errorDetails) => {
   }, 1500);
 };
 
-// Simple Splat component with direct file loading
+// Simple Splat component with Vercel Blob loading
 const SplatWithErrorHandling = memo(
   ({ alphaTest, chunkSize, splatSize, onSplatLoaded, ...props }) => {
-    // Direct file path - no complex URL passing
-    const splatUrl = '/assets/experience/fixed_model.splat';
+    // Use Vercel Blob URL for production deployment
+    const splatUrl = 'https://fviowx5xpfafqmye.public.blob.vercel-storage.com/fixed_model.splat';
 
-    console.log('🎯 Loading splat file directly:', splatUrl);
+    console.log('🎯 Loading splat file from Blob storage:', splatUrl);
 
     const handleLoad = useCallback(() => {
       console.log('✅ Splat loaded successfully:', splatUrl);
