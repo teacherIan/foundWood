@@ -287,14 +287,35 @@ const SplatWithErrorHandling = memo(
     const [blobUrl, setBlobUrl] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Try local first for dev, then Blob for production
-    const splatUrls = useMemo(
-      () => [
-        '/assets/experience/fixed_model.splat', // Local file for dev
-        'https://fviowx5xpfafqmye.public.blob.vercel-storage.com/fixed_model.splat', // Blob for production
-      ],
-      []
-    );
+    // Detect production environment
+    const isProduction =
+      process.env.NODE_ENV === 'production' ||
+      (window.location.hostname !== 'localhost' &&
+        !window.location.hostname.includes('127.0.0.1'));
+
+    console.log('🔍 SplatWithErrorHandling initialized:', {
+      isProduction,
+      hostname: window.location.hostname,
+      nodeEnv: process.env.NODE_ENV,
+      userAgent: navigator.userAgent.substring(0, 50),
+    });
+
+    // Try Blob first for production, then local for dev fallback
+    const splatUrls = useMemo(() => {
+      if (isProduction) {
+        console.log('🚀 Production mode: prioritizing Blob URL');
+        return [
+          'https://fviowx5xpfafqmye.public.blob.vercel-storage.com/fixed_model.splat', // Blob for production (priority)
+          '/assets/experience/fixed_model.splat', // Local file fallback (unlikely to work in production)
+        ];
+      } else {
+        console.log('🛠️ Development mode: prioritizing local file');
+        return [
+          '/assets/experience/fixed_model.splat', // Local file for dev (priority)
+          'https://fviowx5xpfafqmye.public.blob.vercel-storage.com/fixed_model.splat', // Blob fallback
+        ];
+      }
+    }, [isProduction]);
 
     const currentSplatUrl = splatUrls[currentUrlIndex];
 
@@ -307,10 +328,18 @@ const SplatWithErrorHandling = memo(
           !isLoading
         ) {
           setIsLoading(true);
-          console.log('🔄 Fetching Blob URL and creating object URL...');
+          console.log('🔄 Fetching Blob URL and creating object URL...', {
+            url: currentSplatUrl,
+            attempt: currentUrlIndex + 1,
+            total: splatUrls.length,
+          });
 
           try {
-            const response = await fetch(currentSplatUrl);
+            const response = await fetch(currentSplatUrl, {
+              mode: 'cors',
+              cache: 'default',
+            });
+
             if (!response.ok) {
               throw new Error(
                 `HTTP ${response.status}: ${response.statusText}`
@@ -320,13 +349,30 @@ const SplatWithErrorHandling = memo(
             const blob = await response.blob();
             const objectUrl = URL.createObjectURL(blob);
             setBlobUrl(objectUrl);
-            console.log('✅ Blob object URL created:', objectUrl);
+            console.log('✅ Blob object URL created successfully:', {
+              originalUrl: currentSplatUrl,
+              objectUrl: objectUrl,
+              blobSize: blob.size,
+              blobType: blob.type,
+            });
           } catch (error) {
-            console.error('❌ Failed to fetch Blob URL:', error);
+            console.error('❌ Failed to fetch Blob URL:', {
+              error: error.message,
+              url: currentSplatUrl,
+              attempt: currentUrlIndex + 1,
+            });
             setIsLoading(false);
             // Try next URL
             if (currentUrlIndex < splatUrls.length - 1) {
+              console.log('🔄 Blob fetch failed, trying next URL...');
               setCurrentUrlIndex((prev) => prev + 1);
+            } else {
+              console.error(
+                '❌ All URLs failed, calling onSplatLoaded to prevent infinite loading'
+              );
+              if (onSplatLoaded) {
+                onSplatLoaded();
+              }
             }
           }
         }
@@ -346,6 +392,7 @@ const SplatWithErrorHandling = memo(
       isLoading,
       currentUrlIndex,
       splatUrls.length,
+      onSplatLoaded,
     ]);
 
     // Determine which URL to use for the Splat component
@@ -356,7 +403,17 @@ const SplatWithErrorHandling = memo(
     console.log(
       '🎯 Loading splat file:',
       finalSplatUrl || currentSplatUrl,
-      `(attempt ${currentUrlIndex + 1}/${splatUrls.length})`
+      `(attempt ${currentUrlIndex + 1}/${splatUrls.length})`,
+      {
+        isProduction,
+        isBlob: (finalSplatUrl || currentSplatUrl).includes(
+          'blob.vercel-storage.com'
+        ),
+        isLocal: (finalSplatUrl || currentSplatUrl).startsWith('/assets/'),
+        environment: isProduction ? 'production' : 'development',
+        hostname: window.location.hostname,
+        currentUrl: finalSplatUrl || currentSplatUrl,
+      }
     );
 
     const handleLoad = useCallback(() => {
@@ -382,13 +439,22 @@ const SplatWithErrorHandling = memo(
           stack: error?.stack,
           toString: error?.toString(),
           type: typeof error,
+          url: finalSplatUrl || currentSplatUrl,
+          isBlob: (finalSplatUrl || currentSplatUrl).includes(
+            'blob.vercel-storage.com'
+          ),
+          isLocal: (finalSplatUrl || currentSplatUrl).startsWith('/assets/'),
         });
 
         setIsLoading(false);
 
         // Try next URL if available
         if (currentUrlIndex < splatUrls.length - 1) {
-          console.log('🔄 Trying next splat URL...');
+          console.log(
+            `🔄 Trying next splat URL (${currentUrlIndex + 2}/${
+              splatUrls.length
+            })...`
+          );
           setBlobUrl(null); // Reset blob URL for next attempt
           setCurrentUrlIndex((prev) => prev + 1);
         } else {
@@ -417,8 +483,22 @@ const SplatWithErrorHandling = memo(
         return null; // Loading Blob URL
       } else {
         // Blob URL failed, try next one
+        console.log(
+          '❌ Blob URL failed, trying next URL or showing fallback...'
+        );
         return null;
       }
+    }
+
+    // Additional safety check: ensure we have a valid URL before rendering
+    if (!finalSplatUrl) {
+      console.error('❌ No valid splat URL available, showing fallback mesh');
+      return (
+        <mesh>
+          <boxGeometry args={[2, 2, 2]} />
+          <meshBasicMaterial color="#77481c" transparent opacity={0.3} />
+        </mesh>
+      );
     }
 
     try {
