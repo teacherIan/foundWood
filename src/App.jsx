@@ -558,9 +558,9 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // SPLAT FILE URL: This is the actual URL passed to the 3D Canvas component
-  // CURRENT: Using public directory path (fails on Vercel due to 38MB limit)
-  // TODO: Replace with Vercel Blob URL after running upload script
-  const splatUrl = '/assets/experience/fixed_model.splat';
+  // UPDATED: Using Vercel Blob URL to serve large 38MB splat file
+  // This bypasses Vercel's 100MB static file upload limit
+  const splatUrl = 'https://fviowx5xpfafqmye.public.blob.vercel-storage.com/fixed_model.splat';
 
   // **SIMPLIFIED**: No internal timeout - let LoadingScreen component control timing
   // The LoadingScreen will call onComplete when it's ready to be dismissed
