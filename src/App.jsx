@@ -557,10 +557,6 @@ function reducer(state, action) {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // SPLAT FILE URL: This is the actual URL passed to the 3D Canvas component
-  // TEMPORARY: Testing with local file to compare with Blob behavior
-  const splatUrl = '/assets/experience/fixed_model.splat';
-
   // **SIMPLIFIED**: No internal timeout - let LoadingScreen component control timing
   // The LoadingScreen will call onComplete when it's ready to be dismissed
 
@@ -978,7 +974,6 @@ function App() {
               onSplatLoaded={handleSplatLoadedCallback}
               imagesLoaded={state.imagesLoaded}
               initialLoadComplete={state.initialLoadComplete}
-              validatedSplatUrl={splatUrl}
             />
           </div>
         </div>

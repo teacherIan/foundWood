@@ -280,85 +280,30 @@ const initiateSplatReload = (errorDetails) => {
   }, 1500);
 };
 
-// Robust Splat component with multiple fallback URLs AND smart reload for production reliability
+// Simple Splat component with direct file loading
 const SplatWithErrorHandling = memo(
-  ({
-    alphaTest,
-    chunkSize,
-    splatSize,
-    onSplatLoaded,
-    validatedSplatUrl,
-    ...props
-  }) => {
-    // Multiple fallback splat files in order of preference
-    const [currentSplatIndex, setCurrentSplatIndex] = useState(0);
-    const fallbackUrls = useMemo(
-      () => [
-        validatedSplatUrl, // Primary: passed from parent
-        '/assets/experience/fixed_model.splat', // Fallback 1: alternative file
-        '/assets/experience/new_fixed_PLY.splat', // Fallback 2: original file
-      ],
-      [validatedSplatUrl]
-    );
+  ({ alphaTest, chunkSize, splatSize, onSplatLoaded, ...props }) => {
+    // Direct file path - no complex URL passing
+    const splatUrl = '/assets/experience/fixed_model.splat';
 
-    const currentSplatUrl = fallbackUrls[currentSplatIndex];
-
-    console.log(
-      '🎯 SplatWithErrorHandling: Trying splat file:',
-      currentSplatUrl,
-      `(attempt ${currentSplatIndex + 1}/${fallbackUrls.length})`
-    );
+    console.log('🎯 Loading splat file directly:', splatUrl);
 
     const handleLoad = useCallback(() => {
-      console.log(
-        '✅ Splat onLoad callback fired successfully for:',
-        currentSplatUrl
-      );
+      console.log('✅ Splat loaded successfully:', splatUrl);
       if (onSplatLoaded) {
         onSplatLoaded();
       }
-    }, [currentSplatUrl, onSplatLoaded]);
+    }, [splatUrl, onSplatLoaded]);
 
     const handleError = useCallback(
       (error) => {
-        console.error('❌ Splat loading error for:', currentSplatUrl, error);
-
-        // Check if this is a critical splat parsing error that requires page reload
-        const errorMessage = error?.message || error?.toString() || '';
-        const isParseFileError = isSplatParsingError(errorMessage, {
-          stack: error?.stack,
-          splatSource: currentSplatUrl,
-        });
-
-        if (isParseFileError) {
-          console.error(
-            '🚨 Critical splat parsing error detected - initiating smart reload'
-          );
-          initiateSplatReload({
-            source: 'SplatWithErrorHandling',
-            message: errorMessage,
-            error: error,
-            splatSource: currentSplatUrl,
-            attemptNumber: currentSplatIndex + 1,
-          });
-          return; // Don't proceed with normal fallback handling
-        }
-
-        // Try next fallback URL if available (for non-critical errors)
-        if (currentSplatIndex < fallbackUrls.length - 1) {
-          console.log('🔄 Trying next fallback splat file...');
-          setCurrentSplatIndex((prev) => prev + 1);
-        } else {
-          console.error(
-            '❌ All splat files failed to load. Showing fallback geometry.'
-          );
-          // Still call onSplatLoaded to prevent infinite loading
-          if (onSplatLoaded) {
-            onSplatLoaded();
-          }
+        console.error('❌ Splat loading error for:', splatUrl, error);
+        // For now, still call onSplatLoaded to prevent infinite loading
+        if (onSplatLoaded) {
+          onSplatLoaded();
         }
       },
-      [currentSplatUrl, currentSplatIndex, fallbackUrls.length, onSplatLoaded]
+      [splatUrl, onSplatLoaded]
     );
 
     try {
@@ -366,7 +311,7 @@ const SplatWithErrorHandling = memo(
         <Splat
           alphaTest={alphaTest}
           chunkSize={chunkSize}
-          src={currentSplatUrl}
+          src={splatUrl}
           splatSize={splatSize}
           onError={handleError}
           onLoad={handleLoad}
@@ -480,7 +425,6 @@ function Scene({
   onSplatLoaded,
   imagesLoaded,
   initialLoadComplete,
-  validatedSplatUrl, // NEW: Pre-validated splat URL
 }) {
   const [targetX, setTargetX] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -574,10 +518,9 @@ function Scene({
   }, []); // Scene component mounted - setup cleanup and debugging
   useEffect(() => {
     console.log('🚀 Scene component mounted and ready');
-    console.log('🎯 Splat file info:', {
-      validatedSplatUrl,
-      splatType: typeof validatedSplatUrl,
-    });
+    console.log(
+      '🎯 Splat file: Loading from /assets/experience/fixed_model.splat'
+    );
 
     // TEMPORARILY DISABLED: WebGL cleanup to rely on R3F's built-in memory management
     /*
@@ -1082,7 +1025,6 @@ function Scene({
                   chunkSize={0.01}
                   splatSize={deviceConfig.splatConfig.size}
                   onSplatLoaded={onSplatLoaded}
-                  validatedSplatUrl={validatedSplatUrl}
                 />
               </mesh>
             </>
@@ -1124,7 +1066,6 @@ export default function App({
   onSplatLoaded,
   imagesLoaded,
   initialLoadComplete,
-  validatedSplatUrl, // NEW: Pre-validated splat URL from parent
 }) {
   // Protect against WebGL context loss extension errors globally
   useEffect(() => {
@@ -1667,7 +1608,6 @@ export default function App({
           onSplatLoaded={onSplatLoaded}
           imagesLoaded={imagesLoaded}
           initialLoadComplete={initialLoadComplete}
-          validatedSplatUrl={validatedSplatUrl}
         />
       </Canvas>
     </>
