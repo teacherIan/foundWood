@@ -280,31 +280,102 @@ const initiateSplatReload = (errorDetails) => {
   }, 1500);
 };
 
-// Smart Splat component with local/Blob fallback system
+// Enhanced Splat component with custom fetch handling for Blob URLs
 const SplatWithErrorHandling = memo(
   ({ alphaTest, chunkSize, splatSize, onSplatLoaded, ...props }) => {
     const [currentUrlIndex, setCurrentUrlIndex] = useState(0);
-    
+    const [blobUrl, setBlobUrl] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+
     // Try local first for dev, then Blob for production
-    const splatUrls = useMemo(() => [
-      '/assets/experience/fixed_model.splat', // Local file for dev
-      'https://fviowx5xpfafqmye.public.blob.vercel-storage.com/fixed_model.splat', // Blob for production
-    ], []);
+    const splatUrls = useMemo(
+      () => [
+        '/assets/experience/fixed_model.splat', // Local file for dev
+        'https://fviowx5xpfafqmye.public.blob.vercel-storage.com/fixed_model.splat', // Blob for production
+      ],
+      []
+    );
 
     const currentSplatUrl = splatUrls[currentUrlIndex];
 
-    console.log('🎯 Loading splat file:', currentSplatUrl, `(attempt ${currentUrlIndex + 1}/${splatUrls.length})`);
+    // For Blob URLs, fetch and create object URL to avoid Content-Disposition issues
+    useEffect(() => {
+      const loadBlobUrl = async () => {
+        if (
+          currentSplatUrl.includes('blob.vercel-storage.com') &&
+          !blobUrl &&
+          !isLoading
+        ) {
+          setIsLoading(true);
+          console.log('🔄 Fetching Blob URL and creating object URL...');
+
+          try {
+            const response = await fetch(currentSplatUrl);
+            if (!response.ok) {
+              throw new Error(
+                `HTTP ${response.status}: ${response.statusText}`
+              );
+            }
+
+            const blob = await response.blob();
+            const objectUrl = URL.createObjectURL(blob);
+            setBlobUrl(objectUrl);
+            console.log('✅ Blob object URL created:', objectUrl);
+          } catch (error) {
+            console.error('❌ Failed to fetch Blob URL:', error);
+            setIsLoading(false);
+            // Try next URL
+            if (currentUrlIndex < splatUrls.length - 1) {
+              setCurrentUrlIndex((prev) => prev + 1);
+            }
+          }
+        }
+      };
+
+      loadBlobUrl();
+
+      // Cleanup object URL when component unmounts or URL changes
+      return () => {
+        if (blobUrl) {
+          URL.revokeObjectURL(blobUrl);
+        }
+      };
+    }, [
+      currentSplatUrl,
+      blobUrl,
+      isLoading,
+      currentUrlIndex,
+      splatUrls.length,
+    ]);
+
+    // Determine which URL to use for the Splat component
+    const finalSplatUrl = currentSplatUrl.includes('blob.vercel-storage.com')
+      ? blobUrl
+      : currentSplatUrl;
+
+    console.log(
+      '🎯 Loading splat file:',
+      finalSplatUrl || currentSplatUrl,
+      `(attempt ${currentUrlIndex + 1}/${splatUrls.length})`
+    );
 
     const handleLoad = useCallback(() => {
-      console.log('✅ Splat loaded successfully:', currentSplatUrl);
+      console.log(
+        '✅ Splat loaded successfully:',
+        finalSplatUrl || currentSplatUrl
+      );
+      setIsLoading(false);
       if (onSplatLoaded) {
         onSplatLoaded();
       }
-    }, [currentSplatUrl, onSplatLoaded]);
+    }, [finalSplatUrl, currentSplatUrl, onSplatLoaded]);
 
     const handleError = useCallback(
       (error) => {
-        console.error('❌ Splat loading error for:', currentSplatUrl);
+        console.error(
+          '❌ Splat loading error for:',
+          finalSplatUrl || currentSplatUrl
+        );
         console.error('❌ Error details:', {
           message: error?.message,
           name: error?.name,
@@ -312,28 +383,50 @@ const SplatWithErrorHandling = memo(
           toString: error?.toString(),
           type: typeof error,
         });
-        
+
+        setIsLoading(false);
+
         // Try next URL if available
         if (currentUrlIndex < splatUrls.length - 1) {
           console.log('🔄 Trying next splat URL...');
-          setCurrentUrlIndex(prev => prev + 1);
+          setBlobUrl(null); // Reset blob URL for next attempt
+          setCurrentUrlIndex((prev) => prev + 1);
         } else {
-          console.error('❌ All splat URLs failed. Calling onSplatLoaded to prevent infinite loading.');
+          console.error(
+            '❌ All splat URLs failed. Calling onSplatLoaded to prevent infinite loading.'
+          );
           // Still call onSplatLoaded to prevent infinite loading
           if (onSplatLoaded) {
             onSplatLoaded();
           }
         }
       },
-      [currentSplatUrl, currentUrlIndex, splatUrls.length, onSplatLoaded]
+      [
+        finalSplatUrl,
+        currentSplatUrl,
+        currentUrlIndex,
+        splatUrls.length,
+        onSplatLoaded,
+      ]
     );
+
+    // Don't render Splat until we have a valid URL
+    if (currentSplatUrl.includes('blob.vercel-storage.com') && !blobUrl) {
+      if (isLoading) {
+        console.log('⏳ Waiting for Blob URL to be processed...');
+        return null; // Loading Blob URL
+      } else {
+        // Blob URL failed, try next one
+        return null;
+      }
+    }
 
     try {
       return (
         <Splat
           alphaTest={alphaTest}
           chunkSize={chunkSize}
-          src={currentSplatUrl}
+          src={finalSplatUrl}
           splatSize={splatSize}
           onError={handleError}
           onLoad={handleLoad}
