@@ -3,21 +3,25 @@
 ## Quick Setup
 
 1. **Create a Vercel Blob Store**
+
    - Go to [Vercel Dashboard](https://vercel.com/dashboard)
    - Navigate to Storage → Create Database → Blob
    - Choose a name like "foundwood-assets"
    - Select region closest to your users
 
 2. **Get Your Blob Token**
+
    - In your new blob store, go to Settings
    - Copy the BLOB_READ_WRITE_TOKEN
 
 3. **Set Environment Variable**
+
    ```bash
    export BLOB_READ_WRITE_TOKEN="your_token_here"
    ```
 
 4. **Upload Your Splat Files**
+
    ```bash
    npm run upload-splats
    ```
@@ -37,6 +41,7 @@
 ## File Locations
 
 After upload, your files will be available at:
+
 - `https://[blob-id].public.blob.vercel-storage.com/experience/new_fixed_PLY.splat`
 - `https://[blob-id].public.blob.vercel-storage.com/experience/fixed_model.splat`
 - `https://[blob-id].public.blob.vercel-storage.com/experience/full_dontuse.splat`

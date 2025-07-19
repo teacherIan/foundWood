@@ -28,12 +28,12 @@ export function getSplatUrl(options = {}) {
 export async function preloadSplatBlob(url) {
   try {
     console.log(`🔄 Preloading splat from Vercel Blob: ${url}`);
-    
+
     const response = await fetch(url, {
       method: 'HEAD', // Just check if the file exists
-      cache: 'default'
+      cache: 'default',
     });
-    
+
     if (response.ok) {
       console.log('✅ Splat file available on Vercel Blob');
       return true;
@@ -56,15 +56,15 @@ export function getDeviceMemory() {
   if ('deviceMemory' in navigator) {
     return navigator.deviceMemory;
   }
-  
+
   // Fallback estimation based on other factors
   const userAgent = navigator.userAgent;
-  
+
   // Mobile devices typically have less memory
   if (/Mobile|Android|iPhone|iPad/i.test(userAgent)) {
     return 4; // Assume 4GB for mobile devices
   }
-  
+
   // Desktop fallback
   return 8; // Assume 8GB for desktop devices
 }
@@ -76,9 +76,9 @@ export function getDeviceMemory() {
  */
 export function useOptimalSplatUrl(options = {}) {
   const deviceMemory = getDeviceMemory();
-  
+
   return getSplatUrl({
     ...options,
-    memoryLimit: deviceMemory
+    memoryLimit: deviceMemory,
   });
 }
