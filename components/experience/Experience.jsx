@@ -510,6 +510,7 @@ const SplatWithErrorHandling = memo(
           splatSize={splatSize}
           onError={handleError}
           onLoad={handleLoad}
+          renderOrder={1}
           {...props}
         />
       );
