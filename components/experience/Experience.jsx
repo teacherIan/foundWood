@@ -10,42 +10,14 @@ import {
   Splat,
   Text,
   PresentationControls,
-  useProgress,
   Preload,
 } from '@react-three/drei';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three'; // Import useSpring and animated
 import * as THREE from 'three'; // Import Three.js for Color
 import './experienceStyles.css';
-// REMOVED: Duplicate splat import - now using validatedSplatUrl prop from parent
-
-/**
- * PRODUCTION SAFETY NOTE:
- *
- * This Experience component includes sophisticated splat reload functionality that is designed
- * to be production-safe. The reload mechanism:
- *
- * ✅ ONLY reloads during initial loading phase (when loading screen is visible)
- * ✅ NEVER reloads after users reach the interactive experience
- * ✅ Can be completely disabled via window.DISABLE_SPLAT_RELOAD = true
- * ✅ Provides comprehensive error logging for debugging
- *
- * This ensures users never see unexpected page reloads during normal usage while still
- * providing automatic recovery from critical loading failures.
- */
 import driftwood from '../../src/assets/fonts/DriftWood-z8W4.ttf';
-// TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
-/*
-import {
-  WebGLCleanupManager,
-  cleanupThreeJSScene,
-  logMemoryUsage,
-  isIOSSafari,
-  getIOSSafariConfig,
-  isWebGLLoseContextSupported,
-  safeForceContextLoss,
-} from './WebGLCleanup.js';
-*/
+
 
 // Mock functions to replace disabled WebGL cleanup
 const WebGLCleanupManager = class {
@@ -56,8 +28,8 @@ const WebGLCleanupManager = class {
   registerEventListener() {}
   cleanup() {}
 };
-const cleanupThreeJSScene = () => {};
-const logMemoryUsage = () => {};
+
+
 const isIOSSafari = () => false;
 const getIOSSafariConfig = () => ({
   pixelRatio: 1,
@@ -70,10 +42,10 @@ const getIOSSafariConfig = () => ({
   preserveDrawingBuffer: false,
   failIfMajorPerformanceCaveat: false,
 });
-const isWebGLLoseContextSupported = () => false;
-const safeForceContextLoss = () => {};
 
-// Removed post-processing effects for better performance and simplified visuals
+
+
+
 
 // Animated Text component with upward animation support
 const AnimatedText = memo(

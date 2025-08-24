@@ -54,10 +54,6 @@ document.addEventListener(
 // Loading screen centering check
 document.addEventListener('DOMContentLoaded', ensureLoadingScreenCentering);
 
-window.addEventListener('resize', () => {
-  // location.reload();
-});
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />

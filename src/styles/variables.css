@@ -19,7 +19,7 @@
     --text-secondary: var(--brown);
 
     /* ===== TYPOGRAPHY ===== */
-    --font-primary: 'CustomFont', 'Poppins', 'Lobster Two', sans-serif;
+    --font-primary: 'CustomFont', 'Poppins', sans-serif;
     --font-secondary: 'driftWood', 'CustomFont', 'Poppins', sans-serif;
 
     /* ===== RESPONSIVE FONT SIZES ===== */

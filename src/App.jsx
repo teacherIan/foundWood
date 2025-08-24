@@ -6,7 +6,6 @@ import {
   useEffect,
   useReducer,
   memo,
-  useRef,
 } from 'react';
 import found_wood from './assets/found_wood_final_all.png';
 import Contact from '../components/contact/Contact';
@@ -19,26 +18,7 @@ import FontFaceObserver from 'fontfaceobserver';
 import {
   useSpring,
   animated,
-  useSpringValue,
-  useChain,
-  useSpringRef,
 } from '@react-spring/web';
-
-// PERFORMANCE OPTIMIZATION: Large splat files (39MB+) are served from public directory
-// instead of being bundled. This provides:
-// - Faster builds (Vite doesn't process large files)
-// - Smaller JS bundles (no embedded 39MB assets)
-// - Better loading (browser can stream large files efficiently)
-// - CDN-ready (static assets can be served from CDN)
-
-// NOTE: The actual splat URL is defined in the App component (line ~564)
-// This allows for dynamic URL assignment (e.g., switching to Vercel Blob URLs)
-
-// TEMPORARILY DISABLED: Image preloading to reduce memory pressure
-// import { useImagePreloader } from '../components/galleries/useImagePreloader';
-// TEMPORARILY DISABLED: Custom WebGL cleanup to rely on R3F's built-in memory management
-// import { useWebGLCleanup } from '../components/experience/useWebGLCleanup.js';
-// import { logMemoryUsage } from '../components/experience/WebGLCleanup.js';
 
 const configAnimation = {
   mass: 2,
@@ -264,7 +244,7 @@ const AnimatedLoadingTitle = memo(({ children, delay = 0 }) => {
         fontSize: '1.6rem',
         fontWeight: '600',
         color: '#77481c',
-        fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+        fontFamily: '"CustomFont", "Poppins", sans-serif',
       }}
     >
       {children}
@@ -292,7 +272,7 @@ const AnimatedLoadingSubtitle = memo(({ children, delay = 0 }) => {
         ...subtitleSpring,
         fontSize: '1.1rem',
         color: '#8b5a2b',
-        fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+        fontFamily: '"CustomFont", "Poppins", sans-serif',
         marginBottom: '8px',
       }}
     >
@@ -321,7 +301,7 @@ const AnimatedLoadingTagline = memo(({ children, delay = 0 }) => {
         ...taglineSpring,
         fontSize: '0.9rem',
         color: '#a67c52',
-        fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+        fontFamily: '"CustomFont", "Poppins", sans-serif',
         fontStyle: 'italic',
       }}
     >
@@ -350,7 +330,7 @@ const AnimatedLoadingStatus = memo(({ children, delay = 0 }) => {
         ...statusSpring,
         fontSize: '0.95rem',
         color: '#9d7856',
-        fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+        fontFamily: '"CustomFont", "Poppins", sans-serif',
         fontWeight: '500',
       }}
     >
@@ -383,7 +363,7 @@ const AnimatedLoadingSaying = memo(({ children, opacity, delay = 0 }) => {
         fontWeight: '500',
         margin: '0 auto',
         padding: '0 20px',
-        fontFamily: '"CustomFont", "Poppins", "Lobster Two", sans-serif',
+        fontFamily: '"CustomFont", "Poppins", sans-serif',
         letterSpacing: '0.3px',
         minHeight: '2.4rem',
         // Use runtime opacity after initial animation, otherwise use CSS animation
@@ -418,14 +398,14 @@ const retrySayings = [
 const initialState = {
   fontsLoaded: false,
   splatLoaded: false,
-  imagesLoaded: true, // UPDATED: Set to true since we disabled image preloading
-  initialLoadComplete: false, // Track if the entire initial load sequence is done
+  imagesLoaded: true, 
+  initialLoadComplete: false, 
   isAnimating: true,
   activeGalleryTypeString: 'chairs',
   activeGalleryType: 1,
   showTypes: false,
   showGallery: false,
-  showGalleryLoading: false, // NEW: Track gallery loading screen
+  showGalleryLoading: false, 
   showContactPage: false,
   showDetails: true,
   galleryTypeArr: [],
@@ -434,11 +414,6 @@ const initialState = {
 };
 
 function reducer(state, action) {
-  console.log('🔄 Reducer called with action:', action.type, action);
-  console.log('🔄 Current state before action:', {
-    fontsLoaded: state.fontsLoaded,
-    splatLoaded: state.splatLoaded,
-  });
 
   switch (action.type) {
     case 'SET_FONTS_LOADED':
@@ -553,21 +528,17 @@ function reducer(state, action) {
   }
 }
 
-// Utility function to detect iPad Pro portrait mode and return appropriate styles
+
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // **SIMPLIFIED**: No internal timeout - let LoadingScreen component control timing
-  // The LoadingScreen will call onComplete when it's ready to be dismissed
-
-  // Font loading detection with improved error handling
   useEffect(() => {
     console.log('🎨 Starting font loading...');
     const fonts = [
       new FontFaceObserver('driftWood'),
       new FontFaceObserver('CustomFont'),
       new FontFaceObserver('Poppins'),
-      new FontFaceObserver('Lobster Two'),
+      
     ];
 
     Promise.all(fonts.map((font) => font.load()))
@@ -583,8 +554,7 @@ function App() {
   }, []);
 
   const handleSplatLoadedCallback = useCallback(() => {
-    console.log('🎯 Splat loaded callback triggered in App.jsx');
-    console.log('🎬 3D SCENE LOADED: Ready to dismiss loading screen');
+
     console.log('Current state before splat loaded:', {
       splatLoaded: state.splatLoaded,
     });
@@ -678,38 +648,6 @@ function App() {
     state.splatLoaded,
   ]);
 
-  // TEMPORARILY DISABLED: iOS Safari specific cleanup monitoring
-  /*
-  useEffect(() => {
-    if (isIOSSafariBrowser) {
-      // When leaving Contact page, trigger additional cleanup
-      if (!state.showContactPage && state.initialLoadComplete) {
-        console.log(
-          '📱 iOS Safari: Contact page closed, performing additional cleanup'
-        );
-        setTimeout(() => {
-          triggerCleanup();
-        }, 200);
-      }
-
-      // When leaving gallery, trigger additional cleanup
-      if (!state.showGallery && state.initialLoadComplete) {
-        console.log(
-          '📱 iOS Safari: Gallery closed, performing additional cleanup'
-        );
-        setTimeout(() => {
-          triggerCleanup();
-        }, 200);
-      }
-    }
-  }, [
-    isIOSSafariBrowser,
-    state.showContactPage,
-    state.showGallery,
-    state.initialLoadComplete,
-    triggerCleanup,
-  ]);
-  */
 
   const iconSpring = useSpring({
     width: isHomeScreen ? '1.8em' : '1.2em',
