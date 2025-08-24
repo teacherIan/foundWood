@@ -9,7 +9,7 @@ import {
 } from 'react';
 import found_wood from './assets/found_wood_final_all.png';
 import Contact from '../components/contact/Contact';
-import Gallery from '../components/galleries/Gallery';
+import ImageGallery from '../components/galleries/ImageGallery';
 import GalleryTypeSelector from '../components/select_gallery/GalleryTypeSelector';
 import NewCanvas from '../components/experience/Experience';
 import LoadingScreen from '../components/loading/LoadingScreen';
@@ -739,26 +739,10 @@ function App() {
         ) : null}
 
         {state.showGallery && (
-          <Gallery
-            galleryType={state.activeGalleryType}
+          <ImageGallery
+            galleryType={state.activeGalleryTypeString}
             showGallery={state.showGallery}
             showGalleryString={state.activeGalleryTypeString}
-            showDetails={state.showDetails}
-            setShowDetails={(value) =>
-              dispatch({ type: 'SET_SHOW_DETAILS', payload: value })
-            }
-            galleryTypeArr={state.galleryTypeArr}
-            setGalleryTypeArr={(arr) =>
-              dispatch({ type: 'SET_GALLERY_TYPE_ARR', payload: arr })
-            }
-            currentPhoto={state.currentPhoto}
-            setCurrentPhoto={(photo) =>
-              dispatch({ type: 'SET_CURRENT_PHOTO', payload: photo })
-            }
-            setShowInfographic={(value) =>
-              dispatch({ type: 'SET_SHOW_INFOGraphic', payload: value })
-            }
-            showInfographic={state.showInfographic}
             onClose={handleHideGalleryCallback}
           />
         )}
