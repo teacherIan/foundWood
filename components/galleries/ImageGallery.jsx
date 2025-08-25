@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import ImageGallery from 'react-image-gallery';
 import imgData from './imgData';
-import './imageGallery.css';
+import styles from './ImageGallery.module.css';
 import 'react-image-gallery/styles/css/image-gallery.css';
 
 const ImageGalleryComponent = ({
@@ -28,16 +28,8 @@ const ImageGalleryComponent = ({
     return filteredImages.map((item, index) => ({
       original: item.img,
       thumbnail: item.img,
-      description: (
-        <div className="image-description">
-          <h3 className="image-title">{item.name}</h3>
-          <p className="image-details">{item.description}</p>
-          <div className="image-metadata">
-            <span className="order-number">Order #{item.orderNumber}</span>
-            {item.price && <span className="price">{item.price}</span>}
-          </div>
-        </div>
-      ),
+      // Remove description overlay for clean image viewing
+      description: null,
       alt: item.name,
       originalAlt: item.name,
       thumbnailAlt: item.name,
@@ -72,12 +64,12 @@ const ImageGalleryComponent = ({
   const renderLeftNav = (onClick, disabled) => {
     return (
       <button
-        className="image-gallery-icon image-gallery-left-nav"
+        className={styles.navLeft}
         disabled={disabled}
         onClick={onClick}
         aria-label="Previous Image"
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
           <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
         </svg>
       </button>
@@ -88,12 +80,12 @@ const ImageGalleryComponent = ({
   const renderRightNav = (onClick, disabled) => {
     return (
       <button
-        className="image-gallery-icon image-gallery-right-nav"
+        className={styles.navRight}
         disabled={disabled}
         onClick={onClick}
         aria-label="Next Image"
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
           <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
         </svg>
       </button>
@@ -149,26 +141,8 @@ const ImageGalleryComponent = ({
   }
 
   return (
-    <div className="image-gallery-wrapper">
-      <div className="image-gallery-header">
-        <h2 className="gallery-title">
-          {showGalleryString || 'Gallery'}
-          <span className="image-count">
-            ({galleryImages.length} item{galleryImages.length !== 1 ? 's' : ''})
-          </span>
-        </h2>
-        <button 
-          className="gallery-close-button"
-          onClick={onClose}
-          aria-label="Close Gallery"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          </svg>
-        </button>
-      </div>
-
-      <div className="image-gallery-container">
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
         <ImageGallery
           items={galleryImages}
           startIndex={currentIndex}
@@ -188,12 +162,35 @@ const ImageGalleryComponent = ({
           renderRightNav={renderRightNav}
           renderPlayPauseButton={renderPlayPauseButton}
           renderFullscreenButton={renderFullscreenButton}
-          lazyLoad={true}
+          lazyLoad={false}
           infinite={true}
           showNav={true}
-          additionalClass="custom-image-gallery"
+          additionalClass={styles.gallery}
+          useBrowserFullscreen={false}
+          useWindowKeyDown={true}
+          disableSwipe={false}
+          disableThumbnailSwipe={false}
+          onImageLoad={() => console.log('Image loaded')}
+          onImageError={() => console.log('Image error')}
         />
       </div>
+      
+      {/* Close button moved to corner */}
+      <button 
+        className={styles.closeButton}
+        onClick={onClose}
+        aria-label="Close Gallery"
+        style={{
+          position: 'absolute',
+          top: '1rem',
+          right: '1rem',
+          zIndex: 200
+        }}
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+        </svg>
+      </button>
     </div>
   );
 };
