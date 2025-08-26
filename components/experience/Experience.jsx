@@ -283,21 +283,21 @@ function Scene({
   const getTextPositions = () => {
     if (deviceConfig.isMobile) {
       return {
-        title: [0, -0.1, 0],
+        title: [0, 0, 0],
         subtitle: [0, -0.4, 0],
         titleSize: 0.25,
         subtitleSize: 0.12,
       };
     } else if (deviceConfig.isTablet) {
       return {
-        title: [0, -0.1, 0.6],
+        title: [0, 0, 0.6],
         subtitle: [0, -0.4, 0.3],
         titleSize: 0.3,
         subtitleSize: 0.15,
       };
     } else {
       return {
-        title: [0, -0.1, 0.6],
+        title: [0, 1, 0.6],
         subtitle: [0, -0.4, 0.3],
         titleSize: 0.35,
         subtitleSize: 0.18,
