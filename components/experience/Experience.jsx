@@ -207,7 +207,7 @@ function Scene({
 
     if (isInitialMountRef.current && initialLoadComplete) {
       const startTime = Date.now();
-      const animationDuration = 20000; // 20 seconds for very slow, elegant transition
+      const animationDuration = 60000; // 60 seconds for extremely slow, imperceptible transition
 
       const animateAlpha = () => {
         const elapsedTime = Date.now() - startTime;
