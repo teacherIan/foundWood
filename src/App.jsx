@@ -12,8 +12,6 @@ import Contact from '../components/contact/Contact';
 import ImageGallery from '../components/galleries/ImageGallery';
 import GalleryTypeSelector from '../components/select_gallery/GalleryTypeSelector';
 import NewCanvas from '../components/experience/Experience';
-import LoadingScreen from '../components/loading/LoadingScreen';
-import GalleryLoadingScreen from '../components/loading/GalleryLoadingScreen';
 import FontFaceObserver from 'fontfaceobserver';
 import {
   useSpring,
@@ -405,7 +403,6 @@ const initialState = {
   activeGalleryType: 1,
   showTypes: false,
   showGallery: false,
-  showGalleryLoading: false, 
   showContactPage: false,
   showDetails: true,
   galleryTypeArr: [],
@@ -477,21 +474,7 @@ function reducer(state, action) {
         ...state,
         showGallery: true,
         showTypes: false,
-        showGalleryLoading: false, // Hide gallery loading when showing actual gallery
         showDetails: false,
-      };
-    case 'SHOW_GALLERY_LOADING':
-      return {
-        ...state,
-        showGalleryLoading: true,
-        showTypes: false,
-        showGallery: false,
-        showDetails: false,
-      };
-    case 'HIDE_GALLERY_LOADING':
-      return {
-        ...state,
-        showGalleryLoading: false,
       };
     case 'TOGGLE_CONTACT':
       return {
@@ -507,7 +490,6 @@ function reducer(state, action) {
         isAnimating: true,
         showTypes: false,
         showGallery: false,
-        showGalleryLoading: false, // Hide gallery loading screen when resetting
         showDetails: false,
         showInfographic: false,
       };
@@ -581,10 +563,6 @@ function App() {
   }, []);
 
   const handleGalleryButtonClickCallback = useCallback(() => {
-    dispatch({ type: 'SHOW_GALLERY_LOADING' });
-  }, []);
-
-  const handleGalleryLoadingCompleteCallback = useCallback(() => {
     dispatch({ type: 'SHOW_GALLERY' });
   }, []);
 
@@ -621,12 +599,23 @@ function App() {
     dispatch({ type: 'RESET_VIEW' });
   }, []); // TEMPORARILY DISABLED: Removed isIOSSafariBrowser, triggerCleanup dependencies
 
-  // Home screen logic: not showing gallery, contact, types, or gallery loading
+  // Auto-complete initial loading since we removed loading screens
+  useEffect(() => {
+    if (!state.initialLoadComplete && state.fontsLoaded) {
+      console.log('🚀 Auto-completing initial load after fonts are loaded');
+      // Add a small delay to ensure components are properly mounted
+      const timer = setTimeout(() => {
+        dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [state.initialLoadComplete, state.fontsLoaded]);
+
+  // Home screen logic: not showing gallery, contact, or types
   const isHomeScreen =
     !state.showGallery &&
     !state.showContactPage &&
-    !state.showTypes &&
-    !state.showGalleryLoading;
+    !state.showTypes;
 
   // Debug: Simple state logging
   useEffect(() => {
@@ -660,14 +649,6 @@ function App() {
     },
     immediate: !state.initialLoadComplete, // Only animate after loading is complete
   });
-
-  // Simple loading state - show LoadingScreen component until complete
-  const shouldShowLoading = !state.initialLoadComplete;
-
-  // Callback to handle loading completion
-  const handleLoadingComplete = useCallback(() => {
-    dispatch({ type: 'SET_INITIAL_LOAD_COMPLETE' });
-  }, [dispatch]);
 
   // Enhanced state logging
   useEffect(() => {
@@ -717,15 +698,8 @@ function App() {
 
   return (
     <>
-      {/* Always render the main app - use opacity and pointer-events instead of display:none */}
-      <div
-        className="app-container"
-        style={{
-          opacity: shouldShowLoading ? 0 : 1,
-          pointerEvents: shouldShowLoading ? 'none' : 'auto',
-          transition: 'opacity 0.3s ease-in-out',
-        }}
-      >
+      {/* Main app container */}
+      <div className="app-container">
         {window.innerWidth < 1000 || !state.isAnimating ? null : (
           <div className="new_app_header">
             <div className="new_app_info" />
@@ -850,34 +824,29 @@ function App() {
               const baseStyles = {
                 pointerEvents:
                   state.showContactPage ||
-                  state.showTypes ||
-                  state.showGalleryLoading
+                  state.showTypes
                     ? 'none'
                     : 'auto',
                 filter:
                   state.showContactPage ||
-                  state.showTypes ||
-                  state.showGalleryLoading
+                  state.showTypes
                     ? 'blur(20px)'
                     : 'none',
                 WebkitFilter:
                   state.showContactPage ||
-                  state.showTypes ||
-                  state.showGalleryLoading
+                  state.showTypes
                     ? 'blur(20px)'
                     : 'none',
                 MozFilter:
                   state.showContactPage ||
-                  state.showTypes ||
-                  state.showGalleryLoading
+                  state.showTypes
                     ? 'blur(20px)'
                     : 'none',
                 transition:
                   'filter 0.2s ease-out, -webkit-filter 0.2s ease-out, -moz-filter 0.2s ease-out',
                 willChange:
                   state.showContactPage ||
-                  state.showTypes ||
-                  state.showGalleryLoading
+                  state.showTypes
                     ? 'filter'
                     : 'auto',
                 transform: 'translateZ(0)',
@@ -892,7 +861,6 @@ function App() {
               showContactPage={state.showContactPage}
               showTypes={state.showTypes}
               showGallery={state.showGallery}
-              showGalleryLoading={state.showGalleryLoading}
               onSplatLoaded={handleSplatLoadedCallback}
               imagesLoaded={state.imagesLoaded}
               initialLoadComplete={state.initialLoadComplete}
@@ -900,19 +868,6 @@ function App() {
           </div>
         </div>
       </div>
-
-      {/* Loading Screen Component */}
-      {shouldShowLoading && (
-        <LoadingScreen onComplete={handleLoadingComplete} />
-      )}
-
-      {/* Gallery Loading Screen Component */}
-      {state.showGalleryLoading && (
-        <GalleryLoadingScreen
-          galleryType={state.activeGalleryTypeString}
-          onComplete={handleGalleryLoadingCompleteCallback}
-        />
-      )}
     </>
   );
 }

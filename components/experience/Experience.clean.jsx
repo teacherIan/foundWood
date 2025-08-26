@@ -36,7 +36,7 @@ const AnimatedText = memo(({
   alphaAnimationComplete,
 }) => {
   const deviceConfig = getDeviceConfig();
-  const grassLevel = deviceConfig.isMobile ? -0.8 : deviceConfig.isTablet ? -0.7 : -0.6;
+  const grassLevel = deviceConfig.isMobile ? -1.5 : deviceConfig.isTablet ? -1.2 : -1.0;
   const startPosition = [position[0], grassLevel, position[2]];
   const shouldAnimateText = initialLoadComplete && alphaAnimationComplete;
 
@@ -54,7 +54,7 @@ const AnimatedText = memo(({
   return (
     <animated.group position={animatedPosition}>
       <Text
-        color="#77481C"
+        color="#ffffff"
         anchorX="center"
         anchorY="middle"
         font={driftwood}
@@ -64,7 +64,7 @@ const AnimatedText = memo(({
         maxWidth={200}
         lineHeight={1.2}
       >
-        <meshBasicMaterial color="#77481C" />
+        <meshBasicMaterial color="#ffffff" />
         {children}
       </Text>
     </animated.group>
@@ -188,62 +188,16 @@ function Scene({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Camera animation logic - orbital rotation around the seat
+  // Camera animation logic
   const deviceConfig = getDeviceConfig();
   const hasOverlay = showContactPage || showTypes || showGallery;
 
   useFrame((state, delta) => {
     if (!userInteracting && !hasOverlay && isAnimating) {
       const time = state.clock.getElapsedTime();
-      
-      // Orbital rotation around the seat (assumed to be at [0, 0, 0])
-      const radius = 5; // Distance from the seat
-      const rotationSpeed = 0.1; // Base rotation speed
-      const baseHeight = 1.5; // Base camera height above ground (increased for safety)
-      const heightVariation = 0.2; // Reduced height variation for stability
-      const minHeight = 1.0; // Absolute minimum height above grass level
-      const maxHeight = 2.5; // Maximum height to prevent extreme angles
-      
-      // Calculate orbital position with mouse influence
-      const mouseInfluence = targetX * 0.3; // Reduced mouse influence for stability
-      const angle = time * rotationSpeed + mouseInfluence;
-      const x = Math.cos(angle) * radius;
-      const z = Math.sin(angle) * radius;
-      
-      // Calculate Y position with proper constraints
-      const yVariation = Math.sin(time * 0.3) * heightVariation;
-      const targetY = baseHeight + yVariation;
-      const y = Math.max(minHeight, Math.min(maxHeight, targetY));
-      
-      // Smoothly move camera to orbital position
-      camera.position.x += (x - camera.position.x) * 0.02;
-      camera.position.y += (y - camera.position.y) * 0.02;
-      camera.position.z += (z - camera.position.z) * 0.02;
-      
-      // Ensure camera never goes below grass level (extra safety check)
-      if (camera.position.y < minHeight) {
-        camera.position.y = minHeight;
-      }
-      
-      // Stable look-at with angle constraints
-      const seatPosition = new THREE.Vector3(0, 0, 0);
-      const cameraToSeat = seatPosition.clone().sub(camera.position);
-      
-      // Calculate angle to prevent extreme tilting
-      const horizontalDistance = Math.sqrt(cameraToSeat.x * cameraToSeat.x + cameraToSeat.z * cameraToSeat.z);
-      const maxTiltAngle = Math.PI / 6; // 30 degrees maximum tilt
-      const currentTiltAngle = Math.atan2(Math.abs(cameraToSeat.y), horizontalDistance);
-      
-      // Adjust seat look-at position if tilt would be too extreme
-      let adjustedSeatY = 0;
-      if (currentTiltAngle > maxTiltAngle) {
-        const maxYDiff = horizontalDistance * Math.tan(maxTiltAngle);
-        adjustedSeatY = camera.position.y > 0 ? camera.position.y - maxYDiff : camera.position.y + maxYDiff;
-      }
-      
-      // Look at the seat with controlled tilt
-      const lookAtTarget = new THREE.Vector3(0, adjustedSeatY, 0);
-      camera.lookAt(lookAtTarget);
+      const targetRotation = Math.sin(time * 0.1) * 0.02;
+      camera.rotation.z += (targetRotation - camera.rotation.z) * 0.01;
+      camera.position.x += (targetX - camera.position.x) * 0.01;
     }
   });
 
@@ -255,7 +209,7 @@ function Scene({
 
     if (isInitialMountRef.current && initialLoadComplete) {
       const startTime = Date.now();
-      const animationDuration = 20000; // 20 seconds for very slow, elegant transition
+      const animationDuration = 5000;
 
       const animateAlpha = () => {
         const elapsedTime = Date.now() - startTime;
@@ -318,12 +272,8 @@ function Scene({
 
   const handlePointerMove = useCallback((event) => {
     if (!hasOverlay && isAnimating) {
-      // When user moves mouse, temporarily adjust the orbital rotation speed
       const normalizedX = (event.clientX / windowWidth - 0.5) * 2;
-      const normalizedY = (event.clientY / window.innerHeight - 0.5) * 2;
-      
-      // Influence the camera's orbital position slightly based on mouse movement
-      setTargetX(normalizedX * 1.5); // This will be used to offset the orbital angle
+      setTargetX(normalizedX * 0.5);
     }
   }, [hasOverlay, isAnimating, windowWidth]);
 
@@ -331,24 +281,24 @@ function Scene({
   const getTextPositions = () => {
     if (deviceConfig.isMobile) {
       return {
-        title: [0, -0.1, 0],
-        subtitle: [0, -0.4, 0],
-        titleSize: 0.25,
-        subtitleSize: 0.12,
+        title: [0, 1.8, 0],
+        subtitle: [0, 1.4, 0],
+        titleSize: 0.15,
+        subtitleSize: 0.08,
       };
     } else if (deviceConfig.isTablet) {
       return {
-        title: [0, -0.1, 0.6],
-        subtitle: [0, -0.4, 0.3],
-        titleSize: 0.3,
-        subtitleSize: 0.15,
+        title: [0, 2.2, 0],
+        subtitle: [0, 1.7, 0],
+        titleSize: 0.2,
+        subtitleSize: 0.1,
       };
     } else {
       return {
-        title: [0, -0.1, 0.6],
-        subtitle: [0, -0.4, 0.3],
-        titleSize: 0.35,
-        subtitleSize: 0.18,
+        title: [0, 2.5, 0],
+        subtitle: [0, 2.0, 0],
+        titleSize: 0.25,
+        subtitleSize: 0.12,
       };
     }
   };
