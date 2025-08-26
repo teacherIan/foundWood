@@ -71,83 +71,35 @@ const AnimatedText = memo(({
   );
 });
 
-// Error Fallback Component
+// Error Fallback Component - invisible placeholder instead of red cube
 const ErrorFallback = () => (
-  <mesh position={[0, 0, 0]}>
-    <boxGeometry args={[1, 1, 1]} />
-    <meshBasicMaterial color="red" opacity={0.5} transparent />
-  </mesh>
+  <group position={[0, 0, 0]} />
 );
 
-// Smart Splat Component with URL handling
+// Simple Splat Component - uses local file only
 const SmartSplat = memo(({ onSplatLoaded, alphaTest, ...props }) => {
-  const [currentSplatUrl, setCurrentSplatUrl] = useState('');
-  const [isProcessingBlob, setIsProcessingBlob] = useState(false);
-
-  const urls = [
-    'https://foundwoodstorage.blob.core.windows.net/splatfiles/fixed_model.splat',
-    '/assets/experience/fixed_model.splat'
-  ];
-
-  // URL Priority Logic
-  useEffect(() => {
-    const selectUrl = async () => {
-      const isProduction = import.meta.env.PROD;
-      const prioritizedUrls = isProduction ? urls : [...urls].reverse();
-
-      for (const url of prioritizedUrls) {
-        try {
-          if (url.includes('blob.core.windows.net')) {
-            setIsProcessingBlob(true);
-            const response = await fetch(url, { method: 'HEAD' });
-            if (response.ok) {
-              const blobResponse = await fetch(url);
-              const blob = await blobResponse.blob();
-              const objectUrl = URL.createObjectURL(blob);
-              setCurrentSplatUrl(objectUrl);
-              setIsProcessingBlob(false);
-              return;
-            }
-          } else {
-            setCurrentSplatUrl(url);
-            return;
-          }
-        } catch (error) {
-          continue;
-        }
-      }
-      
-      // Fallback if all URLs fail
-      setCurrentSplatUrl(urls[1]);
-      setIsProcessingBlob(false);
-    };
-
-    selectUrl();
-  }, []);
+  const localSplatUrl = '/assets/experience/fixed_model.splat';
 
   // Progress Checker
   useEffect(() => {
-    if (currentSplatUrl && !isProcessingBlob && onSplatLoaded) {
+    if (onSplatLoaded) {
       const timer = setTimeout(() => {
         onSplatLoaded();
-      }, 2000);
+      }, 1000); // Reduced timeout since it's local
       return () => clearTimeout(timer);
     }
-  }, [currentSplatUrl, isProcessingBlob, onSplatLoaded]);
-
-  if (!currentSplatUrl || isProcessingBlob) {
-    return <ErrorFallback />;
-  }
+  }, [onSplatLoaded]);
 
   try {
     return (
       <Splat
-        src={currentSplatUrl}
+        src={localSplatUrl}
         alphaTest={alphaTest}
         {...props}
       />
     );
   } catch (error) {
+    console.warn('Failed to load local splat file:', error);
     return <ErrorFallback />;
   }
 });
