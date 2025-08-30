@@ -6,18 +6,12 @@ import React, {
   useCallback,
   memo,
 } from 'react';
-import {
-  Splat,
-  Text,
-  PresentationControls,
-  Preload,
-} from '@react-three/drei';
+import { Splat, Text, PresentationControls, Preload } from '@react-three/drei';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three'; // Import useSpring and animated
 import * as THREE from 'three'; // Import Three.js for Color
 import './experienceStyles.css';
 import driftwood from '../../src/assets/fonts/DriftWood-z8W4.ttf';
-
 
 // Mock functions to replace disabled WebGL cleanup
 const WebGLCleanupManager = class {
@@ -28,7 +22,6 @@ const WebGLCleanupManager = class {
   registerEventListener() {}
   cleanup() {}
 };
-
 
 const isIOSSafari = () => false;
 const getIOSSafariConfig = () => ({
@@ -42,10 +35,6 @@ const getIOSSafariConfig = () => ({
   preserveDrawingBuffer: false,
   failIfMajorPerformanceCaveat: false,
 });
-
-
-
-
 
 // Animated Text component with upward animation support
 const AnimatedText = memo(
@@ -1189,11 +1178,11 @@ function Scene({
                 scale={deviceConfig.splatConfig.scale}
               >
                 <SplatWithErrorHandling
-                  alphaTest={ manualAlphaTest}
+                  alphaTest={manualAlphaTest}
                   chunkSize={16}
                   splatSize={deviceConfig.splatConfig.size}
                   onSplatLoaded={onSplatLoaded}
-
+                  renderOrder={1}
                 />
               </mesh>
             </>
