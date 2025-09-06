@@ -78,7 +78,7 @@ const ErrorFallback = () => (
 
 // Simple Splat Component - uses local file only
 const SmartSplat = memo(({ onSplatLoaded, alphaTest, ...props }) => {
-  const localSplatUrl = '/assets/experience/fixed_model.splat';
+  const localSplatUrl = 'src/assets/3d/fixed_model.splat';
 
   // Progress Checker
   useEffect(() => {
@@ -94,7 +94,8 @@ const SmartSplat = memo(({ onSplatLoaded, alphaTest, ...props }) => {
     return (
       <Splat
         src={localSplatUrl}
-        alphaTest={alphaTest}
+        alphaTest={0.9}
+        // alphaHash
         {...props}
       />
     );
@@ -116,7 +117,7 @@ function Scene({
   const [targetX, setTargetX] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [userInteracting, setUserInteracting] = useState(false);
-  const [manualAlphaTest, setManualAlphaTest] = useState(0.8);
+  const [manualAlphaTest, setManualAlphaTest] = useState(0.5);
   const [alphaAnimationComplete, setAlphaAnimationComplete] = useState(false);
   
   const animationRef = useRef();
@@ -127,7 +128,7 @@ function Scene({
   // Set scene background
   useEffect(() => {
     if (scene) {
-      scene.background = new THREE.Color('#f5f5f5');
+      scene.background = new THREE.Color('#f8f8f8');
     }
   }, [scene]);
 
@@ -212,7 +213,7 @@ function Scene({
       const animateAlpha = () => {
         const elapsedTime = Date.now() - startTime;
         const progress = Math.min(elapsedTime / animationDuration, 1);
-        const currentAlpha = 0.8 + (0.3 - 0.8) * progress;
+        const currentAlpha = 0.5 + (0.2 - 0.5) * progress;
 
         setManualAlphaTest(currentAlpha);
 
@@ -228,7 +229,7 @@ function Scene({
       isInitialMountRef.current = false;
     } else if (!isInitialMountRef.current) {
       // Handle overlay changes
-      const targetAlpha = hasOverlay ? 0.8 : 0.3;
+      const targetAlpha = hasOverlay ? 0.6 : 0.2;
       const duration = hasOverlay ? 600 : 400;
 
       if (manualAlphaTest !== targetAlpha) {
@@ -392,6 +393,8 @@ export default function Experience({
         antialias: true,
         alpha: false,
         powerPreference: 'high-performance',
+        stencil: false,
+        depth: true,
       }}
     >
       <Scene

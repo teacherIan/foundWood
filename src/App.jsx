@@ -11,7 +11,7 @@ import found_wood from './assets/found_wood_final_all.png';
 import Contact from '../components/contact/Contact';
 import ImageGallery from '../components/galleries/ImageGallery';
 import GalleryTypeSelector from '../components/select_gallery/GalleryTypeSelector';
-import NewCanvas from '../components/experience/Experience';
+import NewCanvas from '../components/experience/Experience_ian';
 import FontFaceObserver from 'fontfaceobserver';
 import {
   useSpring,
