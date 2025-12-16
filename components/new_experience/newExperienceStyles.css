@@ -1,0 +1,84 @@
+/* New Experience Styles - SparkJS Edition */
+
+/* Canvas container */
+.new-experience-container {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+/* Smooth transitions for overlays */
+.new-experience-container.has-overlay {
+  filter: blur(2px);
+  transition: filter 0.4s ease-in-out;
+}
+
+.new-experience-container:not(.has-overlay) {
+  filter: blur(0);
+  transition: filter 0.4s ease-in-out;
+}
+
+/* Loading state */
+.spark-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  z-index: 10;
+  opacity: 0;
+  animation: fadeInOut 2s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .new-experience-container {
+    /* Mobile optimizations */
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .new-experience-container {
+    /* Tablet optimizations */
+  }
+}
+
+@media (min-width: 1025px) {
+  .new-experience-container {
+    /* Desktop optimizations */
+  }
+}
+
+/* Performance hint for browsers */
+.new-experience-container canvas {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .new-experience-container,
+  .new-experience-container * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

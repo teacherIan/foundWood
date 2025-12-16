@@ -11,7 +11,8 @@ import found_wood from './assets/found_wood_final_all.png';
 import Contact from '../components/contact/Contact';
 import ImageGallery from '../components/galleries/ImageGallery';
 import GalleryTypeSelector from '../components/select_gallery/GalleryTypeSelector';
-import NewCanvas from '../components/experience/Experience_ian';
+// Switched to SparkJS experience!
+import NewCanvas from '../components/new_experience/NewExperience';
 import FontFaceObserver from 'fontfaceobserver';
 import {
   useSpring,
